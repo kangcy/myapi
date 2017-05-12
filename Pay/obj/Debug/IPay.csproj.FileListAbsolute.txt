@@ -1,0 +1,10 @@
+F:\网站\Web\APP\my\接口\Pay\bin\Debug\IPay.dll
+F:\网站\Web\APP\my\接口\Pay\bin\Debug\IPay.pdb
+F:\网站\Web\APP\my\接口\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
+F:\网站\Web\APP\my\接口\Pay\obj\Debug\IPay.dll
+F:\网站\Web\APP\my\接口\Pay\obj\Debug\IPay.pdb
+F:\HBuider\Home\接口\Pay\bin\Debug\IPay.dll
+F:\HBuider\Home\接口\Pay\bin\Debug\IPay.pdb
+F:\HBuider\Home\接口\Pay\obj\Debug\IPay.dll
+F:\HBuider\Home\接口\Pay\obj\Debug\IPay.pdb
+F:\HBuider\Home\接口\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache

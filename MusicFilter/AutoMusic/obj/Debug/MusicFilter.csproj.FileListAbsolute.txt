@@ -1,0 +1,9 @@
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\bin\Debug\MusicFilter.exe.config
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\bin\Debug\MusicFilter.exe
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\bin\Debug\MusicFilter.pdb
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\bin\Debug\Castle.Core.dll
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\bin\Debug\Newtonsoft.Json.dll
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\bin\Debug\SubSonic.Core.dll
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\bin\Debug\Tools.dll
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\obj\Debug\MusicFilter.exe
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\obj\Debug\MusicFilter.pdb

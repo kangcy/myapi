@@ -1,0 +1,4 @@
+F:\网站\Web\APP\my\接口\Pay\bin\Debug\Pay.dll
+F:\网站\Web\APP\my\接口\Pay\bin\Debug\Pay.pdb
+F:\网站\Web\APP\my\接口\Pay\obj\Debug\Pay.dll
+F:\网站\Web\APP\my\接口\Pay\obj\Debug\Pay.pdb

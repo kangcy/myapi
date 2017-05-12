@@ -1,0 +1,57 @@
+[异常时间]：2017-05-04 13:53:57,460 [ThreadID:8] 
+[异常级别]：ERROR
+[日志类型]：ErrorLoger
+[异常信息]：
+错误页面：http://localhost/app/init/build
+错误信息：值不能为 null。
+参数名: value
+追踪信息：(Trace)
+   在 System.Web.Caching.CacheEntry..ctor(String key, Object value, CacheDependency dependency, CacheItemRemovedCallback onRemovedHandler, DateTime utcAbsoluteExpiration, TimeSpan slidingExpiration, CacheItemPriority priority, Boolean isPublic)
+   在 System.Web.Caching.CacheInternal.DoInsert(Boolean isPublic, String key, Object value, CacheDependency dependencies, DateTime utcAbsoluteExpiration, TimeSpan slidingExpiration, CacheItemPriority priority, CacheItemRemovedCallback onRemoveCallback, Boolean replace)
+   在 System.Web.Caching.Cache.Insert(String key, Object value)
+   在 EGT_OTA.Helper.CacheHelper.Insert(String CacheKey, Object objObject) 位置 f:\HBuider\Home\接口\EGT_OTA\Helper\CacheHelper.cs:行号 26
+   在 EGT_OTA.Redis.RedisHelper.GetRedisConfig() 位置 f:\HBuider\Home\接口\EGT_OTA\Redis\RedisHelper.cs:行号 47
+   在 EGT_OTA.Redis.RedisHelper..cctor() 位置 f:\HBuider\Home\接口\EGT_OTA\Redis\RedisHelper.cs:行号 18
+[用户信息]：
+UserAgent：Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+ClientIP：::1
+RawUrl：/app/init/build
+UrlReferrer：
+
+---------------------------
+[异常时间]：2017-05-04 13:59:33,132 [ThreadID:23] 
+[异常级别]：ERROR
+[日志类型]：ErrorLoger
+[异常信息]：
+索引数1：1000000,20000
+---------------------------
+[异常时间]：2017-05-04 13:59:33,222 [ThreadID:23] 
+[异常级别]：ERROR
+[日志类型]：ErrorLoger
+[异常信息]：
+索引数2：Cannot create directory: C:\inetpub\wwwroot\Index\Music
+---------------------------
+[异常时间]：2017-05-04 13:59:33,223 [ThreadID:23] 
+[异常级别]：ERROR
+[日志类型]：ErrorLoger
+[异常信息]：
+索引数3：1
+---------------------------
+[异常时间]：2017-05-04 14:01:25,988 [ThreadID:9] 
+[异常级别]：ERROR
+[日志类型]：ErrorLoger
+[异常信息]：
+索引数1：1000000,20000
+---------------------------
+[异常时间]：2017-05-04 14:01:25,990 [ThreadID:9] 
+[异常级别]：ERROR
+[日志类型]：ErrorLoger
+[异常信息]：
+索引数2：Cannot create directory: C:\inetpub\wwwroot\Index\Music
+---------------------------
+[异常时间]：2017-05-04 14:01:25,990 [ThreadID:9] 
+[异常级别]：ERROR
+[日志类型]：ErrorLoger
+[异常信息]：
+索引数3：1
+---------------------------

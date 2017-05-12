@@ -1,0 +1,13 @@
+F:\HBuider\Home\接口\AutoMusic\AutoMusic\bin\Debug\AutoMusic.exe.config
+F:\HBuider\Home\接口\AutoMusic\AutoMusic\bin\Debug\AutoMusic.exe
+F:\HBuider\Home\接口\AutoMusic\AutoMusic\bin\Debug\AutoMusic.pdb
+F:\HBuider\Home\接口\AutoMusic\AutoMusic\bin\Debug\Castle.Core.dll
+F:\HBuider\Home\接口\AutoMusic\AutoMusic\bin\Debug\Newtonsoft.Json.dll
+F:\HBuider\Home\接口\AutoMusic\AutoMusic\bin\Debug\SubSonic.Core.dll
+F:\HBuider\Home\接口\AutoMusic\AutoMusic\bin\Debug\Tools.dll
+F:\HBuider\Home\接口\AutoMusic\AutoMusic\obj\Debug\AutoMusic.exe
+F:\HBuider\Home\接口\AutoMusic\AutoMusic\obj\Debug\AutoMusic.pdb
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\bin\Debug\AutoMusic.exe.config
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\obj\Debug\AutoMusic.exe
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\obj\Debug\AutoMusic.pdb
+F:\HBuider\Home\接口\MusicFilter\AutoMusic\bin\Debug\MusicFilter.exe.config
