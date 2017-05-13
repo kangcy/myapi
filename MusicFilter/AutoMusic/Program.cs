@@ -21,115 +21,171 @@ namespace MusicFilter
 
         static void Main(string[] args)
         {
+            var loss = 0;
             EGT_OTA.Models.Repository.UpdateDB();
             SimpleRepository db = Repository.GetRepo();
             try
             {
+                var CurrDatabase = Tools.SafeString(System.Web.Configuration.WebConfigurationManager.AppSettings["CurrDatabase"]);
+
                 Console.WriteLine("正在运行");
+
+                var music01 = new List<Music01>();
+                var music02 = new List<Music02>();
+                var music03 = new List<Music03>();
+                var music04 = new List<Music04>();
+                var music05 = new List<Music05>();
+                var music06 = new List<Music06>();
+                var music07 = new List<Music07>();
+                var music08 = new List<Music08>();
+                var music09 = new List<Music09>();
+                var music10 = new List<Music10>();
+                var music11 = new List<Music11>();
+                var music12 = new List<Music12>();
+                var music13 = new List<Music13>();
 
                 Console.WriteLine("读取Music01");
 
-                var music01 = db.All<Music01>().ToList();
-                music01.ForEach(x =>
+                if (CurrDatabase.Contains(",1,"))
                 {
-                    x.DataBaseNumber = 1;
-                });
+                    music01 = db.All<Music01>().ToList();
+                    music01.ForEach(x =>
+                   {
+                       x.DataBaseNumber = 1;
+                   });
+                }
 
                 Console.WriteLine("读取Music02");
 
-                var music02 = db.All<Music02>().ToList();
-                music02.ForEach(x =>
+                if (CurrDatabase.Contains(",2,"))
                 {
-                    x.DataBaseNumber = 2;
-                });
+                    music02 = db.All<Music02>().ToList();
+                    music02.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 2;
+                    });
+                }
 
                 Console.WriteLine("读取Music03");
 
-                var music03 = db.All<Music03>().ToList();
-                music03.ForEach(x =>
+                if (CurrDatabase.Contains(",3,"))
                 {
-                    x.DataBaseNumber = 3;
-                });
+                    music03 = db.All<Music03>().ToList();
+                    music03.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 3;
+                    });
+                }
 
                 Console.WriteLine("读取Music04");
 
-                var music04 = db.All<Music04>().ToList();
-                music04.ForEach(x =>
+                if (CurrDatabase.Contains(",4,"))
                 {
-                    x.DataBaseNumber = 4;
-                });
+                    music04 = db.All<Music04>().ToList();
+                    music04.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 4;
+                    });
+                }
 
                 Console.WriteLine("读取Music05");
 
-                var music05 = db.All<Music05>().ToList();
-                music05.ForEach(x =>
+                if (CurrDatabase.Contains(",5,"))
                 {
-                    x.DataBaseNumber = 5;
-                });
+                    music05 = db.All<Music05>().ToList();
+                    music05.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 5;
+                    });
+                }
 
                 Console.WriteLine("读取Music06");
 
-                var music06 = db.All<Music06>().ToList();
-                music06.ForEach(x =>
+                if (CurrDatabase.Contains(",6,"))
                 {
-                    x.DataBaseNumber = 6;
-                });
+                    music06 = db.All<Music06>().ToList();
+                    music06.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 6;
+                    });
+                }
 
                 Console.WriteLine("读取Music07");
 
-                var music07 = db.All<Music07>().ToList();
-                music07.ForEach(x =>
+                if (CurrDatabase.Contains(",7,"))
                 {
-                    x.DataBaseNumber = 7;
-                });
+                    music07 = db.All<Music07>().ToList();
+                    music07.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 7;
+                    });
+                }
 
                 Console.WriteLine("读取Music08");
 
-                var music08 = db.All<Music08>().ToList();
-                music08.ForEach(x =>
+                if (CurrDatabase.Contains(",8,"))
                 {
-                    x.DataBaseNumber = 8;
-                });
+                    music08 = db.All<Music08>().ToList();
+                    music08.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 8;
+                    });
+                }
 
                 Console.WriteLine("读取Music09");
 
-                var music09 = db.All<Music09>().ToList();
-                music09.ForEach(x =>
+                if (CurrDatabase.Contains(",9,"))
                 {
-                    x.DataBaseNumber = 9;
-                });
+                    music09 = db.All<Music09>().ToList();
+                    music09.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 9;
+                    });
+                }
 
                 Console.WriteLine("读取Music10");
 
-                var music10 = db.All<Music10>().ToList();
-                music10.ForEach(x =>
+                if (CurrDatabase.Contains(",10,"))
                 {
-                    x.DataBaseNumber = 10;
-                });
+                    music10 = db.All<Music10>().ToList();
+                    music10.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 10;
+                    });
+                }
 
                 Console.WriteLine("读取Music11");
 
-                var music11 = db.All<Music11>().ToList();
-                music11.ForEach(x =>
+                if (CurrDatabase.Contains(",11,"))
                 {
-                    x.DataBaseNumber = 11;
-                });
+                    music11 = db.All<Music11>().ToList();
+                    music11.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 11;
+                    });
+                }
 
                 Console.WriteLine("读取Music12");
 
-                var music12 = db.All<Music12>().ToList();
-                music12.ForEach(x =>
+                if (CurrDatabase.Contains(",12,"))
                 {
-                    x.DataBaseNumber = 12;
-                });
+                    music12 = db.All<Music12>().ToList();
+                    music12.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 12;
+                    });
+                }
 
                 Console.WriteLine("读取Music13");
 
-                var music13 = db.All<Music13>().ToList();
-                music13.ForEach(x =>
+                if (CurrDatabase.Contains(",13,"))
                 {
-                    x.DataBaseNumber = 13;
-                });
+                    music13 = db.All<Music13>().ToList();
+                    music13.ForEach(x =>
+                    {
+                        x.DataBaseNumber = 13;
+                    });
+                }
 
                 var list = new List<Music>();
                 list.AddRange(music01);
@@ -147,7 +203,7 @@ namespace MusicFilter
                 list.AddRange(music13);
 
                 var LineCount = Tools.SafeInt(System.Web.Configuration.WebConfigurationManager.AppSettings["LineCount"]);
-                var loss = 0;
+
 
                 for (var i = 0; i < LineCount; i++)
                 {
