@@ -65,32 +65,23 @@ namespace EGT_OTA.Models
         /// <summary>
         /// 数据库编号
         /// </summary>
-        [SubSonicIgnore]
-        public int DataBaseNumber { get; set; }
-    }
-
-    public class MusicBase : Music
-    {
-        /// <summary>
-        /// 数据库编号
-        /// </summary>
         public int DataBaseNumber { get; set; }
     }
 
     /// <summary>
     /// 音乐分库
     /// </summary>
-    public class Music01 : MusicBase { }
-    public class Music02 : MusicBase { }
-    public class Music03 : MusicBase { }
-    public class Music04 : MusicBase { }
-    public class Music05 : MusicBase { }
-    public class Music06 : MusicBase { }
-    public class Music07 : MusicBase { }
-    public class Music08 : MusicBase { }
-    public class Music09 : MusicBase { }
-    public class Music10 : MusicBase { }
-    public class Music11 : MusicBase { }
-    public class Music12 : MusicBase { }
-    public class Music13 : MusicBase { }
+    public class Music01 : Music { }
+    public class Music02 : Music { }
+    public class Music03 : Music { }
+    public class Music04 : Music { }
+    public class Music05 : Music { }
+    public class Music06 : Music { }
+    public class Music07 : Music { }
+    public class Music08 : Music { }
+    public class Music09 : Music { }
+    public class Music10 : Music { }
+    public class Music11 : Music { }
+    public class Music12 : Music { }
+    public class Music13 : Music { }
 }
