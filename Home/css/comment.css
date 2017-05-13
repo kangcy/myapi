@@ -1,0 +1,252 @@
+.mui-table-view-cell {
+	background: #fff;
+	padding: 0px 0.8rem;
+}
+
+.main {
+	border-bottom: 1px solid #eee;
+}
+
+.oa-contact-cell.mui-table .mui-table-cell {
+	padding: 0px;
+	vertical-align: top;
+}
+
+.oa-contact-cell.comment .mui-table-cell {
+	padding: 10px 0px 0px;
+	vertical-align: top;
+}
+
+.oa-contact-cell {
+	position: relative;
+}
+
+.oa-contact-avatar {
+	width: 3.8rem;
+}
+
+.oa-contact-avatar img {
+	width: 3rem !important;
+	height: 3rem !important;
+	border-radius: 50%;
+}
+
+.oa-contact-content {
+	width: 100%;
+	vertical-align: middle;
+}
+
+.oa-contact-icon {
+	vertical-align: middle;
+	width: 1.875rem;
+	text-align: right;
+}
+
+.oa-contact-icon img {
+	width: 2.5rem;
+	float: right;
+}
+
+.oa-contact-date {
+	width: 4.6875rem;
+}
+
+.mui-table-view-cell:after {
+	left: 0px;
+	background-color: transparent;
+}
+
+#header .curr {
+	border-bottom: 2px solid #fff;
+	padding-bottom: 0.1875rem;
+}
+
+.footer {
+	background: none;
+	border-top: 1px solid #ccc;
+}
+
+.footer .txt {
+	width: 80%;
+	padding: 2px 10px;
+	height: 30px;
+	line-height: 30px;
+	margin-top: 7px;
+	float: left;
+	border: 0px;
+	border-radius: 5px;
+	border-bottom: 1px solid #2CADFA;
+}
+
+.footer . {
+	padding: 0.175rem 0.75rem;
+	background: #2CADFA;
+	border-color: #2CADFA;
+}
+
+.red {
+	color: #ed5565;
+}
+
+
+/**心跳**/
+
+@-ms-keyframes heartbeat {
+	0% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1)
+	}
+	50% {
+		-ms-transform: scale(1.5);
+		-moz-transform: scale(1.5);
+		-o-transform: scale(1.5);
+		-webkit-transform: scale(1.5);
+		transform: scale(1.5);
+	}
+	100% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		color: #ed5565;
+	}
+}
+
+@-moz-keyframes heartbeat {
+	0% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1)
+	}
+	50% {
+		-ms-transform: scale(1.5);
+		-moz-transform: scale(1.5);
+		-o-transform: scale(1.5);
+		-webkit-transform: scale(1.5);
+		transform: scale(1.5);
+	}
+	100% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		color: #ed5565;
+	}
+}
+
+@-o-keyframes heartbeat {
+	0% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1)
+	}
+	50% {
+		-ms-transform: scale(1.5);
+		-moz-transform: scale(1.5);
+		-o-transform: scale(1.5);
+		-webkit-transform: scale(1.5);
+		transform: scale(1.5);
+	}
+	100% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		color: #ed5565;
+	}
+}
+
+@-webkit-keyframes heartbeat {
+	0% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1)
+	}
+	50% {
+		-ms-transform: scale(1.5);
+		-moz-transform: scale(1.5);
+		-o-transform: scale(1.5);
+		-webkit-transform: scale(1.5);
+		transform: scale(1.5);
+	}
+	100% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		color: #ed5565;
+	}
+}
+
+@keyframes heartbeat {
+	0% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1)
+	}
+	50% {
+		-ms-transform: scale(1.5);
+		-moz-transform: scale(1.5);
+		-o-transform: scale(1.5);
+		-webkit-transform: scale(1.5);
+		transform: scale(1.5);
+	}
+	100% {
+		-ms-transform: scale(1);
+		-moz-transform: scale(1);
+		-o-transform: scale(1);
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		color: #ed5565;
+	}
+}
+
+.heartbeat {
+	-webkit-animation: heartbeat 500ms linear;
+	-moz-animation: heartbeat 500ms linear;
+	-ms-animation: heartbeat 500ms linear;
+	animation: heartbeat 500ms linear;
+	animation-fill-mode: forwards;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	-ms-animation-fill-mode: forwards;
+}
+
+.tip {
+	text-align: left;
+	background: #eee;
+	padding: 10px;
+	width: 100%;
+	position: relative;
+	border-radius: 3px;
+}
+
+.tip:before {
+	position: absolute;
+	content: '';
+	width: 0;
+	height: 0;
+	border: 6px solid transparent;
+	border-bottom-color: #eee;
+	left: 10px;
+	top: -12px;
+}
+
+.mui-slider .mui-slider-group .mui-slider-item img {
+	width: initial !important;
+}

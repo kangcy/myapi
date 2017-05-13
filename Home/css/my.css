@@ -1,0 +1,214 @@
+#pullrefresh {
+	background: #E8E8E8;
+}
+
+.menu {
+	width: 100%;
+	height: 3rem;
+	line-height: 3rem;
+	text-align: left;
+	text-indent: 0.625rem;
+	background: #fff;
+}
+
+.menu div {
+	width: 85%;
+	float: right;
+	height: 100%;
+	border-bottom: 1px solid #eee;
+	text-indent: 0px;
+}
+
+.menu div.noborder {
+	border-bottom: 0px;
+}
+
+.mui-btn {
+	padding: 0.375rem 2.125rem;
+}
+
+.mui-title {
+	white-space: normal;
+}
+
+#setting {
+	width: 1.2rem;
+	margin-top: 1.5rem;
+	margin-left: 0.5rem;
+}
+
+#tip {
+	width: 1.2rem;
+	margin-top: 1rem;
+	margin-right: 0.5rem;
+}
+
+.info-content {
+	width: 100%;
+	display: inline-block;
+	margin: 0px;
+	text-align: center;
+	position: relative;
+	padding-top: 5rem;
+}
+
+.info-content .side {
+	float: left;
+	width: 25%;
+	line-height: 0.625rem;
+	padding-top: 2.1875rem;
+}
+
+.signature {
+	margin: 0px;
+	line-height: 1.25rem;
+	color: #a3a3a3;
+}
+
+.secret {
+	margin: 0px;
+	line-height: 1.25rem;
+	color: #a3a3a3;
+}
+
+.secret span.c666 {
+	padding-left: 0.8rem;
+	padding-right: 0.8rem;
+}
+
+.content1 {
+	display: inline-block;
+	width: 100%;
+}
+
+.content1 .items {
+	width: 25%;
+	float: left;
+}
+
+.content1 .items img {
+	width: 1.25rem;
+	height: 1.25rem;
+	margin-right: 0.3125rem;
+}
+
+.content1 .items .item1 {
+	margin: 0px;
+	line-height: 1.25rem;
+	width: 100%;
+}
+
+.content1 .items .item2 {
+	margin: 0px;
+	width: 100%;
+	float: left;
+	line-height: 1.25rem;
+}
+
+.setting {
+	width: 100%;
+	height: 4.0625rem;
+	background: #fff;
+	text-align: center;
+	padding-top: 0.9375rem;
+}
+
+.setting img {
+	width: 6rem;
+}
+
+.setting-icon {
+	width: 0.9375rem;
+	height: 0.9375rem;
+	float: left;
+	margin-top: 0.625rem;
+	margin-left: 1.25rem;
+}
+
+.guanzhu {
+	border: 1px solid #49be38;
+	background: #49be38;
+	color: #fff;
+	text-align: center;
+	border-radius: 15px;
+	padding: 0.4rem 1.2rem;
+	display: inline-block;
+	width: 6rem;
+}
+
+.guanzhu2 {
+	border: 1px solid #aaa;
+	background: #aaa;
+	color: #fff;
+	text-align: center;
+	border-radius: 15px;
+	padding: 0.4rem 1.2rem;
+	display: inline-block;
+	width: 6rem;
+}
+
+.dashang {
+	background:#fff;
+	color: #49be38;
+	text-align: center;
+	border-radius: 15px;
+	padding: 0.4rem 1.2rem;
+	display: inline-block;
+	width: 6rem;
+}
+
+#my-mypay {
+	background-image: url(../images/my/menu01.png);
+	background-repeat: no-repeat;
+	background-position: 0.8rem center;
+	background-size: 1.5rem;
+}
+
+#my-comment {
+	background-image: url(../images/my/menu02.png);
+	background-repeat: no-repeat;
+	background-position: 0.8rem center;
+	background-size: 1.5rem;
+}
+
+#my-feedback {
+	background-image: url(../images/my/menu03.png);
+	background-repeat: no-repeat;
+	background-position: 0.8rem center;
+	background-size: 1.5rem;
+}
+
+#my-good {
+	background-image: url(../images/my/menu04.png);
+	background-repeat: no-repeat;
+	background-position: 0.8rem center;
+	background-size: 1.5rem;
+}
+
+#my-help {
+	background-image: url(../images/my/menu05.png);
+	background-repeat: no-repeat;
+	background-position: 0.8rem center;
+	background-size: 1.5rem;
+}
+
+
+/**操作**/
+
+.mui-popover.mui-popover-action .mui-table-view {
+	margin-left: 0 !important;
+	margin-right: 0px !important;
+	border-radius: 0px !important;
+}
+
+.mui-popover.mui-popover-action .mui-table-view {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+	margin-bottom: 0px !important;
+	margin-top: 0.5rem !important;
+	border-radius: 0px !important;
+}
+
+.mui-popover.mui-popover-action .mui-table-view .mui-table-view-cell:after {
+	background-color: #ddd !important;
+}

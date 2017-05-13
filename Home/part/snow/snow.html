@@ -1,0 +1,16 @@
+<style type="text/css">
+	.snow-canvas {
+		display: block;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		position: fixed;
+		pointer-events: none;
+		z-index: 99999;
+	}
+</style>
+<!--漂浮特效-->
+<canvas class="snow-canvas" speed="1" interaction="false" size="2" count="10" start-color="rgba(253,252,251,1)" end-color="rgba(251,252,253,0.3)" opacity="0.00001" wind-power="0" image="false"></canvas>
+<canvas class="snow-canvas" speed="3" interaction="true" size="6" count="10" start-color="rgba(253,252,251,1)" end-color="rgba(251,252,253,0.3)" opacity="0.00001" wind-power="2" image="false"></canvas>
+<canvas class="snow-canvas" speed="3" interaction="true" size="12" count="10" wind-power="-2" image="part/snow/img/snow.png"></canvas>

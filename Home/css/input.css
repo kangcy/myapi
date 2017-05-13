@@ -1,0 +1,55 @@
+#input-form {
+	display: inline-block;
+	width: 100%;
+}
+#input-form .user,
+#input-form .phone,
+#input-form .pwd,
+#input-form .input {
+	width: 85%;
+	margin: 0px 7.5%;
+	border-radius: 30px;
+	height: 2.5rem;
+	line-height: 2.5rem;
+}
+#input-form .user {
+	background: #EFEFEF;
+	background-image: url(../img/user.png);
+	background-repeat: no-repeat;
+	background-position: 0.8rem 0.6rem;
+	background-size: 1.3rem;
+}
+#input-form .phone {
+	background: #EFEFEF;
+	background-image: url(../img/phone.png);
+	background-repeat: no-repeat;
+	background-position: 0.8rem 0.6rem;
+	background-size: 1.3rem;
+}
+
+#input-form .pwd {
+	background: #EFEFEF;
+	background-image: url(../img/pwd.png);
+	background-repeat: no-repeat;
+	background-position: 0.8rem 0.6rem;
+	background-size: 1.3rem;
+}
+
+#input-form .input {
+	color: #fff;
+	background: #4087CB;
+}
+
+#input-form .text {
+	height: 1.2rem;
+	line-height: 1.2rem;
+	margin-top: 0.6rem;
+	width: 14.5rem;
+	border: 0px;
+	float: right;
+	background: transparent;
+	border-left: 1px solid #333;
+	text-indent: 0.5rem;
+	color: #999;
+	border-radius: 0px;
+}

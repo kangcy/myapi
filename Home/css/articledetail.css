@@ -1,0 +1,351 @@
+.detail {
+	width: 100%;
+	margin: 0%;
+	padding: 3%;
+	line-height: 1.5625rem;
+	display: inline-block;
+}
+
+.detail2 {
+	width: 100%;
+	margin: 0%;
+	padding: 0%;
+	line-height: 1.5625rem;
+	display: inline-block;
+}
+
+.footer div {
+	line-height: 2.75rem;
+}
+
+.footer img {
+	width: 1.4rem;
+	height: 1.4rem;
+	margin-top: 0.6rem;
+}
+
+#addcomment {
+	width: 60%;
+	float: left;
+	height: 50px;
+	line-height: 46px;
+	text-align: center;
+}
+
+#addcomment div {
+	width: 90%;
+	border-radius: 30px;
+	background: #eee;
+	display: inline-block;
+	height: 40px;
+	line-height: 40px;
+	background-image: url(../images/img/pen.png);
+	background-repeat: no-repeat;
+	background-position: 25% center;
+	background-size: 20px;
+	text-indent: 10%;
+}
+
+#footer {
+	width: 40%;
+	float: left;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+}
+
+#footer div {
+	width: 33.3%;
+	float: left;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+}
+
+
+/**操作**/
+
+.myaction {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	z-index: 1000;
+	background: #fff;
+}
+
+.myaction .myaction_body {
+	padding: 5%;
+	padding-top: 2%;
+	display: inline-block;
+}
+
+.myaction .myaction_items {
+	width: 33.3%;
+	float: left;
+	position: relative;
+	padding-bottom: 1.2rem;
+}
+
+.myaction .myaction_items img {
+	width: 40%;
+}
+
+.myaction .myaction_items p {
+	position: absolute;
+	left: 0px;
+	bottom: 0.4rem;
+	width: 100%;
+	margin-bottom: 0px;
+}
+
+#useravatar1 {
+	width: 20%;
+	border-radius: 50%;
+	border: 2px solid #fff;
+}
+
+#title1 {
+	line-height: 1.5625rem;
+	padding: 0.8rem 0px 0px;
+}
+
+#desc {
+	padding: 0px 3% 3% 3%;
+}
+
+.cover {
+	background: RGBA(255, 255, 255, 1);
+	height: 100%;
+	z-index: -1;
+}
+
+.fa-music {
+	padding: 0.35rem;
+	background: #fff;
+	border-radius: 50px;
+	color: #333;
+	box-shadow: 0px 0px 1px #333;
+	width: 1.5rem;
+	height: 1.5rem;
+	box-shadow: 0px 0.05px 0.05px #333;
+}
+
+.fa-music[play=stop] {
+	animation: rotate 4s linear infinite;
+	-webkit-animation: rotate 4s linear infinite;
+	-ms-animation: rotate 4s linear infinite;
+	-moz-animation: rotate 4s linear infinite;
+	-o-animation: rotate 4s linear infinite;
+}
+
+
+/**通用样式**/
+
+.music {
+	width: 100%;
+	height: 42px;
+	border-radius: 5px;
+	margin: 10px 8px 0 0;
+	background: #f6f6f6;
+	padding: 0;
+	line-height: 42px;
+	cursor: pointer;
+}
+
+.music[play=on] i {
+	background-image: url("../img/on.png");
+}
+
+.music[play=stop] i {
+	background-image: url("../img/off.png");
+}
+
+.music i {
+	float: left;
+	width: 25px;
+	height: 25px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	margin: 8px 10px 0 15px;
+}
+
+.music span {
+	width: calc(100% - 70px);
+	width: -webkit-calc(100% - 70px);
+	margin: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	float: left;
+	text-align: left;
+}
+
+
+/*模板选择*/
+
+.mui-segmented-control .mui-control-item.mui-active {
+	background-color: inherit;
+}
+
+#agreeTemp {
+	position: fixed;
+	right: 10px;
+	bottom: 110px;
+	z-index: 999;
+}
+
+#temps {
+	background: #eee;
+	height: 100px;
+	position: fixed;
+	bottom: 0px;
+	top: auto;
+	z-index: 99999;
+	border: 0px;
+}
+
+.temp {
+	width: 60px !important;
+	height: 80px !important;
+	padding: 0px !important;
+	position: relative;
+	margin-left: 8px !important;
+}
+
+.temp:first-child {
+	margin-left: 10px !important;
+}
+
+.temp:last-child {
+	margin-right: 10px !important;
+}
+
+.temp img {
+	width: 100% !important;
+	height: 100% !important;
+	border: 2px solid #eee;
+	border-radius: 5px;
+}
+
+.temp div {
+	width: 100% !important;
+	height: 100% !important;
+	border: 2px solid #fff;
+	border-radius: 5px;
+}
+
+.temp.hover div,
+.temp.hover img {
+	border: 2px solid #ff6900;
+	color: #ff6900;
+}
+
+
+/**背景设置**/
+
+.mui-input-group .mui-input-row:after {
+	left: 0px;
+}
+
+.mui-card {
+	border: 0px;
+}
+
+
+/**打赏**/
+
+.mui-input-group .mui-input-row:after {
+	left: 0px;
+}
+
+#txtmoney {
+	height: 45px;
+	text-align: center;
+	width: 50%;
+	border: 0px;
+	border-bottom: 1px solid #007aff;
+	padding: 3px;
+}
+
+#btnPay {
+	position: fixed;
+	left: 10px;
+	bottom: 110px;
+	z-index: 999;
+}
+
+#mypay {
+	position: fixed;
+	bottom: 30%;
+	left: 5%;
+	width: 90%;
+	z-index: 99999;
+	background: #fff;
+}
+
+#mypay #mypaycontent {
+	padding: 5% 15%;
+	text-align: center;
+	position: relative;
+}
+
+#mypay #mypaycontent .fa-remove {
+	position: absolute;
+	left: 20px;
+	top: 20px;
+}
+
+#payuser {
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50px;
+}
+
+.payment {
+	height: 45px;
+	line-height: 45px;
+	border-radius: 30px;
+	background: #ed5565;
+	color: #fff;
+}
+
+
+/*视频容器*/
+
+video {
+	/*修复尺寸*/
+	width: 100%;
+	height: auto;
+	max-height: 100%;
+	/*修复白边*/
+	display: block;
+	font-size: 0;
+}
+
+.more {
+	margin-top: 13px;
+	margin-right: 0.4rem;
+	height: 20px;
+}
+
+#action {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	width: 40px;
+	height: 45px;
+	background: url(../images/article/more2.png) no-repeat center center;
+	background-size: auto 20px;
+}
+
+#btnTemp {
+	position: absolute;
+	right: 30px;
+	top: 0px;
+	width: 40px;
+	height: 45px;
+	background: url(../images/article/skin.png) no-repeat center center;
+	background-size: auto 20px;
+}
