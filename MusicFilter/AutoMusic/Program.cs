@@ -13,8 +13,6 @@ using System.Net;
 
 namespace MusicFilter
 {
-
-
     class Program
     {
         static Object locker = new Object();

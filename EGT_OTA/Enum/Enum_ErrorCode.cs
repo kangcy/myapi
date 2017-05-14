@@ -15,17 +15,5 @@ namespace EGT_OTA.Models
         /// </summary>
         [EnumAttribute("未登录")]
         public const int UnLogin = 1;
-
-        /// <summary>
-        /// 多个用户
-        /// </summary>
-        [EnumAttribute("多个用户")]
-        public const int Multiple = 1;
-
-        /// <summary>
-        /// 所有用户
-        /// </summary>
-        [EnumAttribute("所有用户")]
-        public const int All = 2;
     }
 }

@@ -224,8 +224,6 @@
     <Compile Include="Controllers\PushController.cs" />
     <Compile Include="Controllers\RedisController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Controllers\FanController.cs" />
-    <Compile Include="Controllers\KeepController.cs" />
     <Compile Include="Controllers\FeedBackController.cs" />
     <Compile Include="Controllers\ArticlePartController.cs" />
     <Compile Include="Controllers\BaseController.cs" />

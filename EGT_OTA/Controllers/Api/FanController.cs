@@ -71,6 +71,50 @@ namespace EGT_OTA.Controllers.Api
         }
 
         /// <summary>
+        /// 删除
+        /// </summary>
+        [HttpGet]
+        [Route("Api/Fan/Delete")]
+        public string Delete()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                User user = GetUserInfo();
+                if (user == null)
+                {
+                    result.message = EnumBase.GetDescription(typeof(Enum_ErrorCode), Enum_ErrorCode.UnLogin);
+                    result.code = Enum_ErrorCode.UnLogin;
+                    return JsonConvert.SerializeObject(result);
+                }
+                var ToUserNumber = ZNRequest.GetString("ToUserNumber");
+                var model = db.Single<Fan>(x => x.CreateUserNumber == user.Number && x.ToUserNumber == ToUserNumber);
+                if (model == null)
+                {
+                    result.message = "信息异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                if (model.CreateUserNumber != user.Number)
+                {
+                    result.message = "没有权限";
+                    return JsonConvert.SerializeObject(result);
+                }
+                var success = db.Delete<Fan>(model.ID) > 0;
+                if (success)
+                {
+                    result.result = true;
+                    result.message = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Fan_Delete:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
         /// 关注列表
         /// </summary>
         [DeflateCompression]

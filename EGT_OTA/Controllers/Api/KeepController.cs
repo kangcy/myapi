@@ -17,6 +17,110 @@ namespace EGT_OTA.Controllers.Api
     public class KeepController : BaseApiController
     {
         /// <summary>
+        /// 编辑
+        /// </summary>
+        [HttpGet]
+        [Route("Api/Keep/Edit")]
+        public string Edit()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                User user = GetUserInfo();
+                if (user == null)
+                {
+                    result.message = EnumBase.GetDescription(typeof(Enum_ErrorCode), Enum_ErrorCode.UnLogin);
+                    result.code = Enum_ErrorCode.UnLogin;
+                    return JsonConvert.SerializeObject(result);
+                }
+                var articleID = ZNRequest.GetInt("ArticleID");
+                if (articleID <= 0)
+                {
+                    result.message = "文章信息异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                Article article = new SubSonic.Query.Select(provider, "ID", "CreateUserNumber", "Number").From<Article>().Where<Article>(x => x.ID == articleID).ExecuteSingle<Article>();
+                if (article == null)
+                {
+                    result.message = "文章信息异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                Keep model = db.Single<Keep>(x => x.CreateUserNumber == user.Number && x.ArticleNumber == article.Number);
+                if (model == null)
+                {
+                    model = new Keep();
+                    model.CreateDate = DateTime.Now;
+                    model.CreateUserNumber = user.Number;
+                    model.CreateIP = Tools.GetClientIP;
+                }
+                else
+                {
+                    result.result = true;
+                    result.message = "";
+                    return JsonConvert.SerializeObject(result);
+                }
+                model.ArticleNumber = article.Number;
+                model.ArticleUserNumber = article.CreateUserNumber;
+                var success = Tools.SafeInt(db.Add<Keep>(model)) > 0;
+                if (success)
+                {
+                    result.result = true;
+                    result.message = user.Follows;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Keep_Edit:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        [HttpGet]
+        [Route("Api/Keep/Delete")]
+        public string Delete()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                User user = GetUserInfo();
+                if (user == null)
+                {
+                    result.message = EnumBase.GetDescription(typeof(Enum_ErrorCode), Enum_ErrorCode.UnLogin);
+                    result.code = Enum_ErrorCode.UnLogin;
+                    return JsonConvert.SerializeObject(result);
+                }
+                var ArticleNumber = ZNRequest.GetString("ArticleNumber");
+                if (string.IsNullOrWhiteSpace(ArticleNumber))
+                {
+                    result.message = "参数异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                var model = db.Single<Keep>(x => x.ArticleNumber == ArticleNumber && x.CreateUserNumber == user.Number);
+                if (model == null)
+                {
+                    result.message = "信息异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                var success = db.Delete<Keep>(model.ID) > 0;
+                if (success)
+                {
+                    result.result = true;
+                    result.message = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Keep_Delete:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
         /// 收藏列表
         /// </summary>
         [DeflateCompression]
