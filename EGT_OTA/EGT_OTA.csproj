@@ -225,7 +225,6 @@
     <Compile Include="Controllers\RedisController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\FeedBackController.cs" />
-    <Compile Include="Controllers\ArticlePartController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
@@ -309,8 +308,9 @@
     <Compile Include="Models\App\UserLog.cs" />
     <Compile Include="Models\App\Background.cs" />
     <Compile Include="Models\BaseModel.cs" />
-    <Compile Include="Models\Base\Repository.cs" />
+    <Compile Include="Models\Base\BasicRepository.cs" />
     <Compile Include="Models\Base\WebApplication.cs" />
+    <Compile Include="Models\Base\MusicRepository.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />

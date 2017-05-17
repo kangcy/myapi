@@ -32,29 +32,32 @@ namespace EGT_OTA
 
             new WebApplication().Start(System.Web.HttpContext.Current);
 
-            EGT_OTA.Models.Repository.UpdateDB();
+            BasicRepository.UpdateDB();
+            MusicRepository.UpdateDB();
         }
 
         protected void Application_End(object sender, EventArgs e)
         {
             //在应用程序关闭时运行的代码
-            new EGT_OTA.Models.WebApplication().End(System.Web.HttpContext.Current);
+            new WebApplication().End(System.Web.HttpContext.Current);
         }
 
         void Application_Error(object sender, EventArgs e)
         {
             //在出现未处理的错误时运行的代码
-            new EGT_OTA.Models.WebApplication().Error(System.Web.HttpContext.Current);
+            new WebApplication().Error(System.Web.HttpContext.Current);
         }
 
         protected void Application_BeginRequest()
         {
-            HttpContext.Current.Items["DefaultConnection"] = EGT_OTA.Models.Repository.GetRepo("DefaultConnection");
+            HttpContext.Current.Items["DefaultConnection"] = EGT_OTA.Models.BasicRepository.GetRepo("DefaultConnection");
+            HttpContext.Current.Items["MusicConnection"] = EGT_OTA.Models.MusicRepository.GetRepo("MusicConnection");
         }
 
         protected void Application_EndRequest()
         {
             HttpContext.Current.Items.Remove("DefaultConnection");
+            HttpContext.Current.Items.Remove("MusicConnection");
         }
     }
 }

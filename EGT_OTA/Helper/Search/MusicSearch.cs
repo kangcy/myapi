@@ -43,7 +43,7 @@ namespace EGT_OTA.Helper.Search
         /// </summary>
         public static void IndexReset()
         {
-            SimpleRepository db = Repository.GetRepo();
+            SimpleRepository db = MusicRepository.GetRepo();
 
             var music01 = db.All<Music01>().ToList();
             var list = new List<Music>();

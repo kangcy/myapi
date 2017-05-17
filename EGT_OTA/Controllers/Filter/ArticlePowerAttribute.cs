@@ -14,7 +14,7 @@ namespace EGT_OTA.Controllers.Filter
     /// </summary>
     public class ArticlePowerAttribute : ActionFilterAttribute
     {
-        protected readonly SimpleRepository db = Repository.GetRepo();
+        protected readonly SimpleRepository db = BasicRepository.GetRepo();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {

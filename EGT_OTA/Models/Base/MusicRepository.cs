@@ -13,15 +13,15 @@ namespace EGT_OTA.Models
     /// <summary>
     /// 在Global文件中注册时使用
     /// </summary>
-    public class Repository
+    public class MusicRepository
     {
         public static SimpleRepository GetRepo()
         {
-            var item = HttpContext.Current.Items["DefaultConnection"] as SimpleRepository;
+            var item = HttpContext.Current.Items["MusicConnection"] as SimpleRepository;
             if (item == null)
             {
-                var newItem = EGT_OTA.Models.Repository.GetRepo("DefaultConnection");
-                HttpContext.Current.Items["DefaultConnection"] = newItem;
+                var newItem = MusicRepository.GetRepo("MusicConnection");
+                HttpContext.Current.Items["MusicConnection"] = newItem;
                 return newItem;
             }
             return item;
@@ -40,35 +40,15 @@ namespace EGT_OTA.Models
             return new SimpleRepository(idp);
         }
 
-        public static IDataProvider GetProvider(string connection = "DefaultConnection")
+        public static IDataProvider GetProvider(string connection = "MusicConnection")
         {
             string database = System.Configuration.ConfigurationManager.ConnectionStrings[connection].ToString();
             return ProviderFactory.GetProvider(database, "MySql.Data.MySqlClient");
         }
 
-        public static void UpdateDB(string connection = "DefaultConnection")
+        public static void UpdateDB(string connection = "MusicConnection")
         {
             var repo = new SimpleRepository(GetProvider(connection), SimpleRepositoryOptions.RunMigrations);
-
-            repo.Single<User>(x => x.ID == 0);//用户
-            repo.Single<Article>(x => x.ID == 0);//文章
-            repo.Single<ArticlePart>(x => x.ID == 0);//文章内容
-            repo.Single<Comment>(x => x.ID == 0);//评论
-            repo.Single<Fan>(x => x.ID == 0);//关注
-            repo.Single<Keep>(x => x.ID == 0);//收藏
-            repo.Single<ArticleZan>(x => x.ID == 0);//文章点赞
-            repo.Single<CommentZan>(x => x.ID == 0);//评论点赞
-            repo.Single<FeedBack>(x => x.ID == 0);//意见反馈
-            repo.Single<ShareLog>(x => x.ID == 0);//分享记录
-            repo.Single<SendSMS>(x => x.ID == 0);//短信发送记录
-            repo.Single<ApplyMoney>(x => x.ID == 0);//提现申请记录
-            repo.Single<Report>(x => x.ID == 0);//举报记录
-            repo.Single<ArticleRecommend>(x => x.ID == 0);//举报记录
-            repo.Single<Black>(x => x.ID == 0);//黑名单
-            repo.Single<Tag>(x => x.ID == 0);//标签
-            repo.Single<Order>(x => x.ID == 0);//订单
-            repo.Single<UserLog>(x => x.ID == 0);//登录日志
-            repo.Single<Background>(x => x.ID == 0);//背景
 
             repo.Single<Music>(x => x.ID == 0);//音乐
             repo.Single<Music01>(x => x.ID == 0);//音乐库01

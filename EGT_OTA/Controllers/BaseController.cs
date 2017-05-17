@@ -21,8 +21,8 @@ namespace EGT_OTA.Controllers
 {
     public class BaseController : Controller
     {
-        protected readonly SimpleRepository db = Repository.GetRepo();
-        protected readonly IDataProvider provider = Repository.GetProvider();
+        protected readonly SimpleRepository db = BasicRepository.GetRepo();
+        protected readonly IDataProvider provider = BasicRepository.GetProvider();
         protected static readonly RedisBase redis = RedisHelper.Redis;
 
         //默认管理员账号
