@@ -88,7 +88,7 @@ function doFilter(query) {
  * 下载
  */
 function Download() {
-	alert("跳转AppStore");
+	window.location.href = "http://app.qq.com/#id=detail&appid=1106027124";
 }
 
 /**

@@ -380,6 +380,15 @@
 				});
 			});
 
+			//打开外链
+			mui('#desc').on('tap', 'a.link', function() {
+				var link = this.getAttribute("link");
+				if(base.IsNullOrEmpty(link)) {
+					return;
+				}
+				window.location.href = link;
+			});
+
 			isLoading = false;
 		});
 	}
