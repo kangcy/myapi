@@ -19,7 +19,7 @@ namespace EGT_OTA.Controllers.Api
 {
     public class MusicController : BaseApiController
     {
-        protected readonly SimpleRepository musicdb = BasicRepository.GetRepo();
+        protected readonly SimpleRepository musicdb = MusicRepository.GetRepo();
 
         /// <summary>
         /// 音乐列表
