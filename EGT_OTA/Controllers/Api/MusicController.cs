@@ -106,8 +106,6 @@ namespace EGT_OTA.Controllers.Api
 
                 var recordCount = list.Count;
 
-                LogHelper.ErrorLoger.Error(recordCount);
-
                 if (recordCount == 0)
                 {
                     result.message = new { records = recordCount, totalpage = 1 };

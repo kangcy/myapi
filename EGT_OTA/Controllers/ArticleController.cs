@@ -74,7 +74,7 @@ namespace EGT_OTA.Controllers
                     parts.ForEach(x =>
                     {
                         x.ArticleNumber = model.Number;
-                        x.Status = Enum_Status.Audit;
+                        x.Status = Enum_Status.DELETE;
                         x.CreateDate = DateTime.Now;
                         x.CreateUserNumber = userNumber;
                         x.CreateIP = ip;
