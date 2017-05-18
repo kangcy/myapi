@@ -65,23 +65,29 @@ namespace EGT_OTA.Controllers
 
                 string password = ZNRequest.GetString("ArticlePassword");
 
-                //私密
-                if (model.ArticlePower == Enum_ArticlePower.Myself)
+                //当前用户编号
+                string xwp = ZNRequest.GetString("xwp");
+
+                if (model.CreateUserNumber != xwp)
                 {
-                    var newmodel = new Article();
-                    newmodel.ID = model.ID;
-                    newmodel.Title = model.Title;
-                    newmodel.ArticlePower = Enum_ArticlePower.Myself;
-                    return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
-                }
-                //加密
-                if (model.ArticlePower == Enum_ArticlePower.Password && model.ArticlePowerPwd != password)
-                {
-                    var newmodel = new Article();
-                    newmodel.ID = model.ID;
-                    newmodel.Title = model.Title;
-                    newmodel.ArticlePower = Enum_ArticlePower.Password;
-                    return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
+                    //私密
+                    if (model.ArticlePower == Enum_ArticlePower.Myself)
+                    {
+                        var newmodel = new Article();
+                        newmodel.ID = model.ID;
+                        newmodel.Title = model.Title;
+                        newmodel.ArticlePower = Enum_ArticlePower.Myself;
+                        return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
+                    }
+                    //加密
+                    if (model.ArticlePower == Enum_ArticlePower.Password && model.ArticlePowerPwd != password)
+                    {
+                        var newmodel = new Article();
+                        newmodel.ID = model.ID;
+                        newmodel.Title = model.Title;
+                        newmodel.ArticlePower = Enum_ArticlePower.Password;
+                        return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
+                    }
                 }
 
                 //浏览数

@@ -225,8 +225,9 @@
 		if(base.IsNullOrEmpty(key)) {
 			return mui.toast("参数异常");
 		}
+		var xwp = GetParameter("xwp");
 
-		LoadArticle(key, "");
+		LoadArticle(key, xwp, "");
 		LoadComment(key);
 
 		mui("#wrapper").on('tap', '.user', function(event) {
@@ -250,7 +251,7 @@
 			}, function(data) {
 				if(data != null) {
 					if(data.result) {
-						LoadArticle(key, pwd);
+						LoadArticle(key, xwp, pwd);
 						return;
 					}
 				}
@@ -263,10 +264,11 @@
 	/**
 	 * 加载文章
 	 */
-	function LoadArticle(key, pwd) {
+	function LoadArticle(key, xwp, pwd) {
 		mui.getJSON(RootUrl + "Home/Info", {
 			key: key,
-			ArticlePassword: pwd
+			ArticlePassword: pwd,
+			xwp: xwp
 		}, function(data) {
 			if(!data) {
 				return mui.toast("信息异常");

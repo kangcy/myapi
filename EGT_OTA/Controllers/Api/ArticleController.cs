@@ -216,5 +216,68 @@ namespace EGT_OTA.Controllers.Api
             }
             return JsonConvert.SerializeObject(result);
         }
+
+        /// <summary>
+        /// 链接文章列表
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Article/LinkAll")]
+        public string LinkAll()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                User user = GetUserInfo();
+                if (user == null)
+                {
+                    result.message = EnumBase.GetDescription(typeof(Enum_ErrorCode), Enum_ErrorCode.UnLogin);
+                    result.code = Enum_ErrorCode.UnLogin;
+                    return JsonConvert.SerializeObject(result);
+                }
+
+                var pager = new Pager();
+                var query = new SubSonic.Query.Select(provider, "ID", "Number", "Title", "Cover", "CreateUserNumber", "CreateDate", "ArticlePower", "ArticlePowerPwd").From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved);
+                query = query.And("CreateUserNumber").IsEqualTo(user.Number);
+                var recordCount = query.GetRecordCount();
+                if (recordCount == 0)
+                {
+                    result.message = new { records = recordCount, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+
+                var sort = new string[] { "ID" };
+
+                var list = query.Paged(pager.Index, pager.Size).OrderDesc(sort).ExecuteTypedList<Article>();
+
+                var newlist = (from l in list
+                               select new
+                               {
+                                   ID = l.ID,
+                                   Number = l.Number,
+                                   Title = l.Title,
+                                   Cover = l.Cover,
+                                   CreateDate = l.CreateDate.ToString("yyyy-MM-dd hh:mm:ss"),
+                                   ArticlePower = l.ArticlePower,
+                                   ArticlePowerPwd = l.ArticlePowerPwd
+                               });
+
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = newlist
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Article_LinkAll:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
     }
 }
