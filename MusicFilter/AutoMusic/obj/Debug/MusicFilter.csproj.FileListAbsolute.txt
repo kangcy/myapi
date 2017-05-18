@@ -16,3 +16,12 @@ D:\康春阳\api\MusicFilter\AutoMusic\bin\Debug\SubSonic.Core.dll
 D:\康春阳\api\MusicFilter\AutoMusic\bin\Debug\Tools.dll
 D:\康春阳\api\MusicFilter\AutoMusic\obj\Debug\MusicFilter.exe
 D:\康春阳\api\MusicFilter\AutoMusic\obj\Debug\MusicFilter.pdb
+F:\HBuider\MyApi\MusicFilter\AutoMusic\bin\Debug\MusicFilter.exe.config
+F:\HBuider\MyApi\MusicFilter\AutoMusic\obj\Debug\MusicFilter.exe
+F:\HBuider\MyApi\MusicFilter\AutoMusic\obj\Debug\MusicFilter.pdb
+F:\HBuider\MyApi\MusicFilter\AutoMusic\bin\Debug\MusicFilter.exe
+F:\HBuider\MyApi\MusicFilter\AutoMusic\bin\Debug\MusicFilter.pdb
+F:\HBuider\MyApi\MusicFilter\AutoMusic\bin\Debug\Castle.Core.dll
+F:\HBuider\MyApi\MusicFilter\AutoMusic\bin\Debug\Newtonsoft.Json.dll
+F:\HBuider\MyApi\MusicFilter\AutoMusic\bin\Debug\SubSonic.Core.dll
+F:\HBuider\MyApi\MusicFilter\AutoMusic\bin\Debug\Tools.dll

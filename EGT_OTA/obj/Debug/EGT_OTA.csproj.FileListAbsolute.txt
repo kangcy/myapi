@@ -320,9 +320,6 @@ D:\项目\myapi\EGT_OTA\bin\System.Web.Http.WebHost.xml
 D:\项目\myapi\EGT_OTA\obj\Debug\EGT_OTA.csprojResolveAssemblyReference.cache
 D:\项目\myapi\EGT_OTA\obj\Debug\EGT_OTA.dll
 D:\项目\myapi\EGT_OTA\obj\Debug\EGT_OTA.pdb
-F:\HBuider\MyApi\EGT_OTA\obj\Debug\EGT_OTA.csprojResolveAssemblyReference.cache
-F:\HBuider\MyApi\EGT_OTA\obj\Debug\EGT_OTA.dll
-F:\HBuider\MyApi\EGT_OTA\obj\Debug\EGT_OTA.pdb
 F:\HBuider\MyApi\EGT_OTA\bin\EGT_OTA.dll
 F:\HBuider\MyApi\EGT_OTA\bin\EGT_OTA.pdb
 F:\HBuider\MyApi\EGT_OTA\bin\Castle.Core.dll
@@ -371,3 +368,6 @@ F:\HBuider\MyApi\EGT_OTA\bin\Newtonsoft.Json.xml
 F:\HBuider\MyApi\EGT_OTA\bin\StackExchange.Redis.xml
 F:\HBuider\MyApi\EGT_OTA\bin\System.Web.Http.Cors.xml
 F:\HBuider\MyApi\EGT_OTA\bin\System.Web.Http.WebHost.xml
+F:\HBuider\MyApi\EGT_OTA\obj\Debug\EGT_OTA.csprojResolveAssemblyReference.cache
+F:\HBuider\MyApi\EGT_OTA\obj\Debug\EGT_OTA.dll
+F:\HBuider\MyApi\EGT_OTA\obj\Debug\EGT_OTA.pdb
