@@ -304,6 +304,20 @@ namespace EGT_OTA.Controllers
                 var result = new SubSonic.Query.Update<Article>(provider).Set("Template").EqualTo(Template).Where<Article>(x => x.ID == ArticleID).Execute() > 0;
                 if (result)
                 {
+                    //取消自定义模板启用
+                    string ArticleNumber = ZNRequest.GetString("ArticleNumber");
+                    if (!string.IsNullOrWhiteSpace(ArticleNumber) && Template != 1)
+                    {
+                        var list = db.Find<Background>(x => x.ArticleNumber == ArticleNumber && x.IsUsed == Enum_Used.Approved).ToList();
+                        if (list.Count > 0)
+                        {
+                            list.ForEach(x =>
+                            {
+                                x.IsUsed = Enum_Used.Audit;
+                            });
+                            db.UpdateMany<Background>(list);
+                        }
+                    }
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
                 }
             }
