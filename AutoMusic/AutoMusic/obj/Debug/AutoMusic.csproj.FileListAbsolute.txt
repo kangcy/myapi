@@ -10,3 +10,12 @@ F:\HBuider\Home\接口\AutoMusic\AutoMusic\obj\Debug\AutoMusic.pdb
 D:\康春阳\api\AutoMusic\AutoMusic\bin\Debug\AutoMusic.exe.config
 D:\康春阳\api\AutoMusic\AutoMusic\obj\Debug\AutoMusic.exe
 D:\康春阳\api\AutoMusic\AutoMusic\obj\Debug\AutoMusic.pdb
+F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\AutoMusic.exe.config
+F:\HBuider\MyApi\AutoMusic\AutoMusic\obj\Debug\AutoMusic.exe
+F:\HBuider\MyApi\AutoMusic\AutoMusic\obj\Debug\AutoMusic.pdb
+F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\AutoMusic.exe
+F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\AutoMusic.pdb
+F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\Castle.Core.dll
+F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\Newtonsoft.Json.dll
+F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\SubSonic.Core.dll
+F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\Tools.dll

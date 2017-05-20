@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,14 +57,40 @@ namespace AutoMusic
                                             var albumName = album["name"].ToString();
                                             var musicPicUrl = album["picUrl"].ToString();
 
-                                            Music music = new Music();
-                                            music.Author = artistsName;
-                                            music.Cover = musicPicUrl;
-                                            music.FileUrl = musicUrl;
-                                            music.Name = musicName;
-                                            music.Number = musicId;
-                                            db.Add<Music>(music);
-                                            Console.WriteLine(MusicStartIndex + ":成功");
+                                            if (!string.IsNullOrWhiteSpace(musicUrl))
+                                            {
+                                                var result = true;
+                                                try
+                                                {
+                                                    HttpWebRequest wbRequest = (HttpWebRequest)WebRequest.Create(musicUrl);
+                                                    wbRequest.Method = "GET";
+                                                    wbRequest.Timeout = 2000;
+                                                    HttpWebResponse wbResponse = (HttpWebResponse)wbRequest.GetResponse();
+                                                    result = (wbResponse.StatusCode == System.Net.HttpStatusCode.OK);
+
+                                                    if (wbResponse != null)
+                                                    {
+                                                        wbResponse.Close();
+                                                    }
+                                                    if (wbRequest != null)
+                                                    {
+                                                        wbRequest.Abort();
+                                                    }
+                                                    Music music = new Music();
+                                                    music.Author = artistsName;
+                                                    music.Cover = musicPicUrl;
+                                                    music.FileUrl = musicUrl;
+                                                    music.Name = musicName;
+                                                    music.Number = musicId;
+                                                    db.Add<Music>(music);
+                                                    Console.WriteLine(MusicStartIndex + ":成功");
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    result = false;
+                                                    Console.WriteLine("失败:" + musicName + "," + ex.Message);
+                                                }
+                                            }
                                         }
                                         else
                                         {
