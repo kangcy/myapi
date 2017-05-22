@@ -134,7 +134,8 @@ namespace EGT_OTA.Controllers.Api
 
 
         /// <summary>
-        /// 音乐搜索
+        /// 音乐搜索  
+        /// http://s.music.163.com/search/get/?type=1&offset=0&limit=5&s=爱
         /// s: 搜索词
         /// offset: 偏移量
         /// limit: 返回数量
@@ -174,27 +175,49 @@ namespace EGT_OTA.Controllers.Api
                 dic.Add("s", name);
                 var json = HttpUtil.Post(url, dic);
 
-                LogHelper.ErrorLoger.Error(json);
-
                 var js = JObject.Parse(json);
                 if (Tools.SafeInt(js["code"]) == 200)
                 {
                     recordCount = Tools.SafeInt(js["result"]["songCount"]);
                     var songs = js["result"]["songs"].ToString();
                     JArray arr = JArray.Parse(songs);
-                    foreach (var ss in arr)
+                    foreach (JObject model in arr)
                     {
-                        //var model = ss;
-                        var model = (JObject)ss;
-                        var music = new Music();
-                        music.ID = Tools.SafeInt(model["id"]);
-                        music.Name = model["name"].ToString();
-                        var artists = JArray.Parse(model["artists"].ToString());
-                        music.Author = ((JObject)artists[0])["name"].ToString();
-                        var album = JObject.Parse(model["album"].ToString());
-                        music.Cover = album["picUrl"].ToString();
-                        music.FileUrl = model["mp3Url"].ToString();
-                        list.Add(music);
+                        var fileUrl = model["mp3Url"].ToString(); ;
+                        if (!string.IsNullOrWhiteSpace(fileUrl))
+                        {
+                            var success = true;
+                            try
+                            {
+                                HttpWebRequest wbRequest = (HttpWebRequest)WebRequest.Create(fileUrl);
+                                wbRequest.Method = "GET";
+                                wbRequest.Timeout = 2000;
+                                HttpWebResponse wbResponse = (HttpWebResponse)wbRequest.GetResponse();
+                                success = (wbResponse.StatusCode == System.Net.HttpStatusCode.OK);
+
+                                if (wbResponse != null)
+                                {
+                                    wbResponse.Close();
+                                }
+                                if (wbRequest != null)
+                                {
+                                    wbRequest.Abort();
+                                }
+                                var music = new Music();
+                                music.ID = Tools.SafeInt(model["id"]);
+                                music.Name = model["name"].ToString();
+                                var artists = JArray.Parse(model["artists"].ToString());
+                                music.Author = ((JObject)artists[0])["name"].ToString();
+                                var album = JObject.Parse(model["album"].ToString());
+                                music.Cover = album["picUrl"].ToString();
+                                music.FileUrl = fileUrl;
+                                list.Add(music);
+                            }
+                            catch (Exception ex)
+                            {
+                                success = false;
+                            }
+                        }
                     }
                 }
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
