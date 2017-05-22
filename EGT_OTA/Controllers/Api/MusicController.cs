@@ -14,6 +14,7 @@ using EGT_OTA.Models;
 using Newtonsoft.Json;
 using SubSonic.Repository;
 using SubSonic.DataProviders;
+using Newtonsoft.Json.Linq;
 
 namespace EGT_OTA.Controllers.Api
 {
@@ -61,8 +62,8 @@ namespace EGT_OTA.Controllers.Api
         /// </summary>
         [DeflateCompression]
         [HttpGet]
-        [Route("Api/Music/Search")]
-        public string Search()
+        [Route("Api/Music/SearchOld")]
+        public string SearchOld()
         {
             ApiResult result = new ApiResult();
             try
@@ -130,32 +131,71 @@ namespace EGT_OTA.Controllers.Api
             return JsonConvert.SerializeObject(result);
         }
 
+
+
         /// <summary>
         /// 音乐搜索
+        /// s: 搜索词
+        /// offset: 偏移量
+        /// limit: 返回数量
+        /// sub: 意义不明(非必须参数)；取值：false
+        /// type: 搜索类型；取值意义
+        /// 1 单曲
+        /// 10 专辑
+        /// 100 歌手
+        /// 1000 歌单
+        /// 1002 用户
+        /// 1004 MV
+        /// 1006 歌词 
+        /// 1009 主播电台 
         /// </summary>
         [DeflateCompression]
         [HttpGet]
-        [Route("Api/Music/Search2")]
-        public string Search2()
+        [Route("Api/Music/Search")]
+        public string Search()
         {
             ApiResult result = new ApiResult();
             try
             {
                 var name = SqlFilter(ZNRequest.GetString("name"));
-                //if (string.IsNullOrWhiteSpace(name))
-                //{
-                //    result.message = "参数异常";
-                //    return JsonConvert.SerializeObject(result);
-                //}
-                var pager = new Pager();
-
-                var recordCount = 0;
-                List<Music> list = MusicSearch.Search(name, null, pager.Index - 1, pager.Size, out recordCount);
-
-                if (recordCount == 0)
+                if (string.IsNullOrWhiteSpace(name))
                 {
-                    result.message = new { records = recordCount, totalpage = 1 };
+                    result.message = "参数异常";
                     return JsonConvert.SerializeObject(result);
+                }
+                var list = new List<Music>();
+                var recordCount = 0;
+                var pager = new Pager();
+                var url = "http://music.163.com/api/search/pc";
+                IDictionary<string, object> dic = new Dictionary<string, object>();
+                dic.Add("offset", (pager.Index - 1) * pager.Size);
+                dic.Add("limit", pager.Size);
+                dic.Add("type", 1);
+                dic.Add("s", name);
+                var json = HttpUtil.Post(url, dic);
+
+                LogHelper.ErrorLoger.Error(json);
+
+                var js = JObject.Parse(json);
+                if (Tools.SafeInt(js["code"]) == 200)
+                {
+                    recordCount = Tools.SafeInt(js["result"]["songCount"]);
+                    var songs = js["result"]["songs"].ToString();
+                    JArray arr = JArray.Parse(songs);
+                    foreach (var ss in arr)
+                    {
+                        //var model = ss;
+                        var model = (JObject)ss;
+                        var music = new Music();
+                        music.ID = Tools.SafeInt(model["id"]);
+                        music.Name = model["name"].ToString();
+                        var artists = JArray.Parse(model["artists"].ToString());
+                        music.Author = ((JObject)artists[0])["name"].ToString();
+                        var album = JObject.Parse(model["album"].ToString());
+                        music.Cover = album["picUrl"].ToString();
+                        music.FileUrl = model["mp3Url"].ToString();
+                        list.Add(music);
+                    }
                 }
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
                 result.result = true;
@@ -169,10 +209,11 @@ namespace EGT_OTA.Controllers.Api
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLoger.Error("Api_Music_Search2:" + ex.Message);
+                LogHelper.ErrorLoger.Error("Api_Music_Search:" + ex.Message);
                 result.message = ex.Message;
             }
             return JsonConvert.SerializeObject(result);
         }
+
     }
 }

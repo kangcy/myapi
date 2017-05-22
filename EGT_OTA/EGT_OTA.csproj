@@ -259,6 +259,7 @@
     <Compile Include="Helper\Config\CommonConfig.cs" />
     <Compile Include="Helper\DistanceHelper.cs" />
     <Compile Include="Helper\EmotionHelper.cs" />
+    <Compile Include="Helper\HttpUtil.cs" />
     <Compile Include="Helper\PushHelper.cs" />
     <Compile Include="Helper\Config\RewriteConfig.cs" />
     <Compile Include="Helper\Config\UploadConfig.cs" />
