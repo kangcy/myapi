@@ -19,3 +19,4 @@ F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\Castle.Core.dll
 F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\Newtonsoft.Json.dll
 F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\SubSonic.Core.dll
 F:\HBuider\MyApi\AutoMusic\AutoMusic\bin\Debug\Tools.dll
+F:\HBuider\MyApi\AutoMusic\AutoMusic\obj\Debug\AutoMusic.csprojResolveAssemblyReference.cache

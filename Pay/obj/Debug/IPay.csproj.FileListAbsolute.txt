@@ -17,3 +17,4 @@ F:\HBuider\MyApi\Pay\bin\Debug\IPay.dll
 F:\HBuider\MyApi\Pay\bin\Debug\IPay.pdb
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.dll
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.pdb
+F:\HBuider\MyApi\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
