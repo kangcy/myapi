@@ -663,7 +663,15 @@ namespace EGT_OTA.Controllers.Api
                 userids.Add(x.CreateUserNumber);
             });
 
+            List<string> articleids = new List<string>();
+            list.ForEach(x =>
+            {
+                articleids.Add(x.Number);
+            });
+
             var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Signature", "Number", "IsPay").From<User>().Where("Number").In(userids.ToArray()).ExecuteTypedList<User>();
+
+            var comments = new SubSonic.Query.Select(provider, "ID", "ArticleNumber").From<Comment>().Where("ArticleNumber").In(articleids.ToArray()).ExecuteTypedList<Comment>();
 
             //判断是否关注、判断是否点赞、判断是否收藏
             var fans = new List<Fan>();
@@ -712,6 +720,7 @@ namespace EGT_OTA.Controllers.Api
                             }
                         });
                     }
+                    model.Comments = comments.Count(y => y.ArticleNumber == x.Number);
                     model.IsFollow = fans.Count(y => y.ToUserNumber == x.CreateUserNumber);
                     model.IsZan = zans.Count(y => y.ArticleNumber == x.Number);
                     model.IsKeep = keeps.Count(y => y.ArticleNumber == x.Number);

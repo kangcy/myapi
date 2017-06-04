@@ -340,6 +340,7 @@ namespace EGT_OTA.Models
         public string Title { get; set; }
         public int Views { get; set; }
         public int Goods { get; set; }
+        public int Comments { get; set; }
         public string Cover { get; set; }
         public string CreateDate { get; set; }
         public string TypeName { get; set; }
