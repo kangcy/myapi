@@ -671,7 +671,7 @@ namespace EGT_OTA.Controllers.Api
 
             var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Signature", "Number", "IsPay").From<User>().Where("Number").In(userids.ToArray()).ExecuteTypedList<User>();
 
-            var comments = new SubSonic.Query.Select(provider, "ID", "ArticleNumber").From<Comment>().Where("ArticleNumber").In(articleids.ToArray()).ExecuteTypedList<Comment>();
+            var comments = new SubSonic.Query.Select(provider, "ID", "ArticleNumber", "ParentCommentNumber").From<Comment>().Where("ArticleNumber").In(articleids.ToArray()).And("ParentCommentNumber").IsEqualTo("").ExecuteTypedList<Comment>();
 
             //判断是否关注、判断是否点赞、判断是否收藏
             var fans = new List<Fan>();

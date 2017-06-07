@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EGT_OTA", "EGT_OTA.csproj", "{DBAAF756-A902-4849-9860-5451F03E865D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRedis", "..\Redis\IRedis.csproj", "{03AEADC5-1134-4316-9CF8-BBDE5AF5F7A5}"
