@@ -80,6 +80,7 @@ namespace EGT_OTA.Controllers.Api
                     model.NickName = createUser.NickName;
                     model.Avatar = createUser.Avatar;
                     model.AutoMusic = createUser.AutoMusic;
+                    model.UserCover = createUser.Cover;
                     model.ShareNick = createUser.ShareNick;
                     model.IsPay = createUser.IsPay;
                 }
@@ -167,12 +168,12 @@ namespace EGT_OTA.Controllers.Api
                     query = query.And("TypeIDList").Like("%-0-" + TypeID.ToString() + "-%");
                 }
 
-                //搜索默认显示推荐文章
-                var Source = ZNRequest.GetString("Source");
-                if (!string.IsNullOrWhiteSpace(Source))
-                {
-                    query = query.And("Recommend").IsEqualTo(Enum_ArticleRecommend.Recommend);
-                }
+                ////搜索默认显示推荐文章
+                //var Source = ZNRequest.GetString("Source");
+                //if (!string.IsNullOrWhiteSpace(Source))
+                //{
+                //    query = query.And("Recommend").IsEqualTo(Enum_ArticleRecommend.Recommend);
+                //}
 
                 //过滤黑名单
                 if (!string.IsNullOrWhiteSpace(CurrUserNumber))
@@ -196,6 +197,11 @@ namespace EGT_OTA.Controllers.Api
                 if (CreateUserNumber == CurrUserNumber)
                 {
                     sort = new string[] { "ID" };
+                }
+                var Source = ZNRequest.GetString("Source");
+                if (!string.IsNullOrWhiteSpace(Source))
+                {
+                    sort = new string[] { "Views" };
                 }
 
                 var list = query.Paged(pager.Index, pager.Size).OrderDesc(sort).ExecuteTypedList<Article>();

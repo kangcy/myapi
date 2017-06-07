@@ -242,6 +242,12 @@ namespace EGT_OTA.Models
         public string NickName { get; set; }
 
         /// <summary>
+        /// 封面
+        /// </summary>
+        [SubSonicIgnore]
+        public string UserCover { get; set; }
+
+        /// <summary>
         /// 创建人
         /// </summary>
         [SubSonicIgnore]
