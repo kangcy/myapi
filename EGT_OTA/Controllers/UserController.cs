@@ -866,6 +866,7 @@ namespace EGT_OTA.Controllers
                                    NickName = l.NickName,
                                    Signature = l.Signature,
                                    Avatar = l.Avatar,
+                                   Cover = l.Cover,
                                    Number = l.Number,
                                    IsFollow = follows.Exists(x => x.ToUserNumber == l.Number) ? 1 : 0
                                }).ToList();
@@ -1424,6 +1425,7 @@ namespace EGT_OTA.Controllers
                                    ID = l.ID,
                                    NickName = l.NickName,
                                    Signature = l.Signature,
+                                   Cover = l.Cover,
                                    Avatar = l.Avatar,
                                    Number = l.Number,
                                    Distance = l.Distance,

@@ -514,7 +514,16 @@ namespace EGT_OTA.Controllers
 
                 //#endregion
 
-                bitmap.Save(thumbnailPath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                EncoderParameter p;
+                EncoderParameters ps;
+                ps = new EncoderParameters(1);
+                p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+                ps.Param[0] = p;
+                ImageCodecInfo ii = GetCodecInfo("image/jpeg");
+
+                bitmap.Save(thumbnailPath, ii, ps);
+
+                //bitmap.Save(thumbnailPath, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
             catch (System.Exception e)
             {
@@ -538,6 +547,16 @@ namespace EGT_OTA.Controllers
             {
                 if (encoders[j].MimeType == mimeType)
                     return encoders[j];
+            }
+            return null;
+        }
+
+        public static ImageCodecInfo GetCodecInfo(string mimeType)
+        {
+            ImageCodecInfo[] CodecInfo = ImageCodecInfo.GetImageEncoders();
+            foreach (ImageCodecInfo ici in CodecInfo)
+            {
+                if (ici.MimeType == mimeType) return ici;
             }
             return null;
         }

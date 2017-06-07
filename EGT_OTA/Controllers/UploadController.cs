@@ -26,6 +26,7 @@ namespace EGT_OTA.Controllers
         public static string AudioExtensions = ",mp3,wav,";
         public static string VideoExtensions = ",mp4,avi,wmv,mkv,3gp,flv,rmvb,";
 
+        //上传文件
         public ActionResult UploadFile()
         {
             var result = false;
@@ -176,7 +177,17 @@ namespace EGT_OTA.Controllers
                 {
                     image2 = WaterMark(image2);
                 }
-                image2.Save(savePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+
+                EncoderParameter p;
+                EncoderParameters ps;
+                ps = new EncoderParameters(1);
+                p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+                ps.Param[0] = p;
+                ImageCodecInfo ii = GetCodecInfo("image/jpeg");
+
+                //image2.Save(savePath, System.Drawing.Imaging.ImageFormat.Jpeg, ps);
+                image2.Save(savePath, ii, ps);
                 image2.Dispose();
                 ms.Close();
 

@@ -334,6 +334,7 @@ namespace EGT_OTA.Models
         public string UserNumber { get; set; }
         public string NickName { get; set; }
         public string Avatar { get; set; }
+        public string UserCover { get; set; }
         public string Signature { get; set; }
         public int ArticleID { get; set; }
         public string ArticleNumber { get; set; }

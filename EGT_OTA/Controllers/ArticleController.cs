@@ -236,7 +236,7 @@ namespace EGT_OTA.Controllers
                         {
                             if (x.Status == 0)
                             {
-                                //编辑
+                                //排序
                                 var partid = Tools.SafeInt(x.ID);
                                 var part = db.Single<ArticlePart>(y => y.ID == partid);
                                 if (part != null)

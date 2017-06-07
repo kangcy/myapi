@@ -669,7 +669,7 @@ namespace EGT_OTA.Controllers.Api
                 articleids.Add(x.Number);
             });
 
-            var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Signature", "Number", "IsPay").From<User>().Where("Number").In(userids.ToArray()).ExecuteTypedList<User>();
+            var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Cover", "Signature", "Number", "IsPay").From<User>().Where("Number").In(userids.ToArray()).ExecuteTypedList<User>();
 
             var comments = new SubSonic.Query.Select(provider, "ID", "ArticleNumber", "ParentCommentNumber").From<Comment>().Where("ArticleNumber").In(articleids.ToArray()).And("ParentCommentNumber").IsEqualTo("").ExecuteTypedList<Comment>();
 
@@ -697,6 +697,7 @@ namespace EGT_OTA.Controllers.Api
                     model.UserID = user.ID;
                     model.NickName = user.NickName;
                     model.Avatar = user.Avatar;
+                    model.UserCover = user.Avatar;
                     model.Signature = user.Signature;
                     model.IsPay = user.IsPay;
                     model.ArticleID = x.ID;

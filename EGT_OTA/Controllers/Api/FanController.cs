@@ -142,7 +142,7 @@ namespace EGT_OTA.Controllers.Api
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
                 var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Fan>();
                 var array = list.Select(x => x.ToUserNumber).Distinct().ToList();
-                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Signature", "Number").From<User>().Where<User>(x => x.Status == Enum_Status.Approved).And("Number").In(array.ToArray()).ExecuteTypedList<User>();
+                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Cover", "Signature", "Number").From<User>().Where<User>(x => x.Status == Enum_Status.Approved).And("Number").In(array.ToArray()).ExecuteTypedList<User>();
 
                 var newlist = (from l in list
                                join u in users on l.ToUserNumber equals u.Number
@@ -151,6 +151,7 @@ namespace EGT_OTA.Controllers.Api
                                    ID = l.ID,
                                    CreateDate = l.CreateDate.ToString("yyyy-MM-dd"),
                                    UserID = u.ID,
+                                   Cover = u.Cover,
                                    NickName = u.NickName,
                                    Signature = u.Signature,
                                    Avatar = u.Avatar,
@@ -201,7 +202,7 @@ namespace EGT_OTA.Controllers.Api
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
                 var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Fan>();
                 var array = list.Select(x => x.CreateUserNumber).Distinct().ToList();
-                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Signature", "Number").From<User>().Where<User>(x => x.Status == Enum_Status.Approved).And("Number").In(array.ToArray()).ExecuteTypedList<User>();
+                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Cover", "Signature", "Number").From<User>().Where<User>(x => x.Status == Enum_Status.Approved).And("Number").In(array.ToArray()).ExecuteTypedList<User>();
                 var follows = db.Find<Fan>(x => x.CreateUserNumber == ToUserNumber).ToList();
 
                 var newlist = (from l in list
@@ -211,6 +212,7 @@ namespace EGT_OTA.Controllers.Api
                                    ID = l.ID,
                                    CreateDate = l.CreateDate.ToString("yyyy-MM-dd"),
                                    UserID = u.ID,
+                                   Cover = u.Cover,
                                    NickName = u.NickName,
                                    Signature = u.Signature,
                                    Avatar = u.Avatar,
