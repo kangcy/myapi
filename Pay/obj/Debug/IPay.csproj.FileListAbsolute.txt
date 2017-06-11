@@ -8,13 +8,12 @@ F:\HBuider\Home\接口\Pay\bin\Debug\IPay.pdb
 F:\HBuider\Home\接口\Pay\obj\Debug\IPay.dll
 F:\HBuider\Home\接口\Pay\obj\Debug\IPay.pdb
 F:\HBuider\Home\接口\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
-D:\康春阳\api\Pay\bin\Debug\IPay.dll
-D:\康春阳\api\Pay\bin\Debug\IPay.pdb
-D:\康春阳\api\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
-D:\康春阳\api\Pay\obj\Debug\IPay.dll
-D:\康春阳\api\Pay\obj\Debug\IPay.pdb
 F:\HBuider\MyApi\Pay\bin\Debug\IPay.dll
 F:\HBuider\MyApi\Pay\bin\Debug\IPay.pdb
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.dll
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.pdb
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
+D:\康春阳\api\Pay\bin\Debug\IPay.dll
+D:\康春阳\api\Pay\bin\Debug\IPay.pdb
+D:\康春阳\api\Pay\obj\Debug\IPay.dll
+D:\康春阳\api\Pay\obj\Debug\IPay.pdb

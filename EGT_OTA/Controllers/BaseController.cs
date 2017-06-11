@@ -487,7 +487,7 @@ namespace EGT_OTA.Controllers
                 default:
                     break;
             }
-
+            
             Image bitmap = new Bitmap(towidth, toheight);//新建一个bmp图片  
             Graphics g = Graphics.FromImage(bitmap);//新建一个画板  
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;//设置高质量插值法  
