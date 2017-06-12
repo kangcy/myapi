@@ -53,6 +53,9 @@ namespace EGT_OTA.Controllers.Api
                         user.Follows = db.Find<Fan>(x => x.CreateUserNumber == user.Number).Count;
                         result.result = true;
                         result.message = user.Follows;
+
+                        //推送
+                        new AppHelper().Push(number, 0, "", user.NickName, Enum_PushType.Fan);
                     }
                 }
                 else
@@ -149,7 +152,7 @@ namespace EGT_OTA.Controllers.Api
                                select new
                                {
                                    ID = l.ID,
-                                   CreateDate = l.CreateDate.ToString("yyyy-MM-dd"),
+                                   CreateDate = FormatTime(l.CreateDate),
                                    UserID = u.ID,
                                    Cover = u.Cover,
                                    NickName = u.NickName,
@@ -210,7 +213,7 @@ namespace EGT_OTA.Controllers.Api
                                select new
                                {
                                    ID = l.ID,
-                                   CreateDate = l.CreateDate.ToString("yyyy-MM-dd"),
+                                   CreateDate = FormatTime(l.CreateDate),
                                    UserID = u.ID,
                                    Cover = u.Cover,
                                    NickName = u.NickName,

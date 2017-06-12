@@ -33,7 +33,7 @@ namespace EGT_OTA
             new WebApplication().Start(System.Web.HttpContext.Current);
 
             BasicRepository.UpdateDB();
-            MusicRepository.UpdateDB();
+            LogRepository.UpdateDB();
         }
 
         protected void Application_End(object sender, EventArgs e)
@@ -51,13 +51,13 @@ namespace EGT_OTA
         protected void Application_BeginRequest()
         {
             HttpContext.Current.Items["DefaultConnection"] = EGT_OTA.Models.BasicRepository.GetRepo("DefaultConnection");
-            HttpContext.Current.Items["MusicConnection"] = EGT_OTA.Models.MusicRepository.GetRepo("MusicConnection");
+            HttpContext.Current.Items["LogConnection"] = EGT_OTA.Models.LogRepository.GetRepo("LogConnection");
         }
 
         protected void Application_EndRequest()
         {
             HttpContext.Current.Items.Remove("DefaultConnection");
-            HttpContext.Current.Items.Remove("MusicConnection");
+            HttpContext.Current.Items.Remove("LogConnection");
         }
     }
 }

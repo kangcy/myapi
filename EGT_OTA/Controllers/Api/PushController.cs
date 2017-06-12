@@ -103,9 +103,6 @@ namespace EGT_OTA.Controllers.Api
             ApiResult result = new ApiResult();
             try
             {
-                var title = ZNRequest.GetString("Title");
-                var text = ZNRequest.GetString("Text");
-
                 string clientId = "557e5625f84c82517457c43024b03b0c";
                 //string clientId = "54f3c1dc7795e813a8e0cdb039becb6f";
                 PushHelper message = new PushHelper(new List<string>() { clientId });

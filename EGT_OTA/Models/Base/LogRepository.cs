@@ -13,15 +13,15 @@ namespace EGT_OTA.Models
     /// <summary>
     /// 在Global文件中注册时使用
     /// </summary>
-    public class MusicRepository
+    public class LogRepository
     {
         public static SimpleRepository GetRepo()
         {
-            var item = HttpContext.Current.Items["MusicConnection"] as SimpleRepository;
+            var item = HttpContext.Current.Items["LogConnection"] as SimpleRepository;
             if (item == null)
             {
-                var newItem = MusicRepository.GetRepo("MusicConnection");
-                HttpContext.Current.Items["MusicConnection"] = newItem;
+                var newItem = LogRepository.GetRepo("LogConnection");
+                HttpContext.Current.Items["LogConnection"] = newItem;
                 return newItem;
             }
             return item;
@@ -40,30 +40,17 @@ namespace EGT_OTA.Models
             return new SimpleRepository(idp);
         }
 
-        public static IDataProvider GetProvider(string connection = "MusicConnection")
+        public static IDataProvider GetProvider(string connection = "LogConnection")
         {
             string database = System.Configuration.ConfigurationManager.ConnectionStrings[connection].ToString();
             return ProviderFactory.GetProvider(database, "MySql.Data.MySqlClient");
         }
 
-        public static void UpdateDB(string connection = "MusicConnection")
+        public static void UpdateDB(string connection = "LogConnection")
         {
             var repo = new SimpleRepository(GetProvider(connection), SimpleRepositoryOptions.RunMigrations);
 
-            repo.Single<Music>(x => x.ID == 0);//音乐
-            repo.Single<Music01>(x => x.ID == 0);//音乐库01
-            repo.Single<Music02>(x => x.ID == 0);//音乐库02
-            repo.Single<Music03>(x => x.ID == 0);//音乐库03
-            repo.Single<Music04>(x => x.ID == 0);//音乐库04
-            repo.Single<Music05>(x => x.ID == 0);//音乐库05
-            repo.Single<Music06>(x => x.ID == 0);//音乐库06
-            repo.Single<Music07>(x => x.ID == 0);//音乐库07
-            repo.Single<Music08>(x => x.ID == 0);//音乐库08
-            repo.Single<Music09>(x => x.ID == 0);//音乐库09
-            repo.Single<Music10>(x => x.ID == 0);//音乐库10
-            repo.Single<Music11>(x => x.ID == 0);//音乐库11
-            repo.Single<Music12>(x => x.ID == 0);//音乐库12
-            repo.Single<Music13>(x => x.ID == 0);//音乐库13
+            repo.Single<PushLog>(x => x.ID == 0);//推送日志
         }
     }
 }

@@ -57,7 +57,7 @@ namespace EGT_OTA.Controllers
                 var fromarray = list.Select(x => x.CreateUserNumber).Distinct().ToList();
                 var toarray = list.Select(x => x.ToUserNumber).Distinct().ToList();
                 fromarray.AddRange(toarray);
-                var allusers = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number").From<User>().And("Number").In(fromarray.ToArray()).ExecuteTypedList<User>();
+                var allusers = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number", "Cover").From<User>().And("Number").In(fromarray.ToArray()).ExecuteTypedList<User>();
 
                 List<OrderJson> newlist = new List<OrderJson>();
                 list.ForEach(x =>
@@ -74,6 +74,7 @@ namespace EGT_OTA.Controllers
                         model.FromUserNumber = fromUser.Number;
                         model.FromUserAvatar = fromUser.Avatar;
                         model.FromUserName = fromUser.NickName;
+                        model.FromUserCover = fromUser.Cover;
                     }
                     if (toUser != null)
                     {
@@ -81,6 +82,7 @@ namespace EGT_OTA.Controllers
                         model.ToUserNumber = toUser.Number;
                         model.ToUserAvatar = toUser.Avatar;
                         model.ToUserName = toUser.NickName;
+                        model.ToUserCover = toUser.Cover;
                     }
                     newlist.Add(model);
                 });

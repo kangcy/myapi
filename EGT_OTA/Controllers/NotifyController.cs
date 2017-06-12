@@ -48,7 +48,7 @@ namespace EGT_OTA.Controllers
             }
 
             //记录文本日志
-            LogHelper.InfoLoger.Info("NotifyController_AliPay:" + "支付通知参数：" + strResult);
+            //LogHelper.InfoLoger.Info("NotifyController_AliPay:" + "支付通知参数：" + strResult);
 
             if (verifyResult && !string.IsNullOrWhiteSpace(strResult))
             {
@@ -95,7 +95,7 @@ namespace EGT_OTA.Controllers
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
 
-            LogHelper.InfoLoger.Info("NotifyController_WxPay:" + "支付通知参数：" + xml);
+            //LogHelper.InfoLoger.Info("NotifyController_WxPay:" + "支付通知参数：" + xml);
 
             if (xml.IndexOf("SUCCESS") > 0)
             {
@@ -112,10 +112,16 @@ namespace EGT_OTA.Controllers
 
                     if (order != null)
                     {
-                        //更新充值状态
-                        order.Status = Enum_Status.Approved;
+                        if (order.Status != Enum_Status.Approved)
+                        {
+                            //更新充值状态
+                            order.Status = Enum_Status.Approved;
 
-                        db.Update<Order>(order);
+                            db.Update<Order>(order);
+
+                            //推送
+                            new AppHelper().Push(order.ToUserNumber, 0, "", "", Enum_PushType.Money);
+                        }
                     }
                 }
                 else

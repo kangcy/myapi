@@ -225,6 +225,7 @@
     <Compile Include="Controllers\Api\PushController.cs" />
     <Compile Include="Controllers\Api\UserController.cs" />
     <Compile Include="Controllers\Api\OrderController.cs" />
+    <Compile Include="Controllers\AppHelper.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\Filter\ArticlePowerAttribute.cs" />
     <Compile Include="Controllers\Filter\DeflateCompressionAttribute.cs" />
@@ -321,7 +322,8 @@
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Base\BasicRepository.cs" />
     <Compile Include="Models\Base\WebApplication.cs" />
-    <Compile Include="Models\Base\MusicRepository.cs" />
+    <Compile Include="Models\Base\LogRepository.cs" />
+    <Compile Include="Models\Log\PushLog.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
@@ -728,7 +730,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="AutoMusic\" />
     <Folder Include="bin\zh-Hans\" />
-    <Folder Include="Index\Music\" />
     <Folder Include="Upload\" />
   </ItemGroup>
   <ItemGroup>

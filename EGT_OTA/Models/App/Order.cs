@@ -62,10 +62,12 @@ namespace EGT_OTA.Models
         public string FromUserNumber { get; set; }
         public string FromUserAvatar { get; set; }
         public string FromUserName { get; set; }
+        public string FromUserCover { get; set; }
         public int ToUserID { get; set; }
         public string ToUserNumber { get; set; }
         public string ToUserAvatar { get; set; }
         public string ToUserName { get; set; }
+        public string ToUserCover { get; set; }
         public string CreateDate { get; set; }
         public int Price { get; set; }
     }

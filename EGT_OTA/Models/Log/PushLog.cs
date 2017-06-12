@@ -22,81 +22,55 @@ using SubSonic.SqlGeneration.Schema;
 namespace EGT_OTA.Models
 {
     /// <summary>
-    /// 音乐
+    /// 推送记录
     /// </summary>
     [Serializable]
-    public class Music
+    public class PushLog
     {
         /// <summary>
         /// ID
         /// </summary>
+        [SubSonicPrimaryKey]
         public int ID { get; set; }
 
         /// <summary>
-        /// 音乐编号
+        /// 目标用户编号
         /// </summary>
         [SubSonicNullString]
         public string Number { get; set; }
 
         /// <summary>
-        /// 名称
-        /// </summary>
-        [SubSonicNullString]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// 作者
-        /// </summary>
-        [SubSonicNullString]
-        public string Author { get; set; }
-
-        /// <summary>
-        /// 封面
-        /// </summary>
-        [SubSonicNullString]
-        public string Cover { get; set; }
-
-        /// <summary>
-        /// 文件地址
-        /// </summary>
-        [SubSonicNullString]
-        public string FileUrl { get; set; }
-
-        /// <summary>
-        /// 数据库编号
-        /// </summary>
-        [SubSonicIgnore]
-        public int DataBaseNumber { get; set; }
-    }
-
-    [Serializable]
-    public class MusicJson
-    {
-        /// <summary>
         /// ID
         /// </summary>
-        public int ID { get; set; }
+        [SubSonicNullString]
+        public int ObjectID { get; set; }
+
+        /// <summary>
+        /// 编号
+        /// </summary>
+        [SubSonicNullString]
+        public string ObjectNumber { get; set; }
 
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; }
+        [SubSonicNullString]
+        public string ObjectName { get; set; }
 
         /// <summary>
-        /// 当前索引值
+        /// 推送结果
         /// </summary>
-        public int CurrID { get; set; }
+        [SubSonicNullString]
+        public string PushResult { get; set; }
 
         /// <summary>
-        /// 状态
+        /// 推送类型
         /// </summary>
-        public int Status { get; set; }
+        public int PushType { get; set; }
 
         /// <summary>
-        /// 排序值
+        /// 推送时间
         /// </summary>
-        public int SortID { get; set; }
-
-        public List<Music> Music { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }
