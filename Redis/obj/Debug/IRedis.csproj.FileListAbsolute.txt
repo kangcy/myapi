@@ -41,3 +41,12 @@ F:\HBuider\MyApi\Redis\bin\Debug\StackExchange.Redis.xml
 F:\HBuider\MyApi\Redis\obj\Debug\IRedis.dll
 F:\HBuider\MyApi\Redis\obj\Debug\IRedis.pdb
 F:\HBuider\MyApi\Redis\obj\Debug\IRedis.csprojResolveAssemblyReference.cache
+D:\项目\My\Api\Redis\bin\Debug\IRedis.dll
+D:\项目\My\Api\Redis\bin\Debug\IRedis.pdb
+D:\项目\My\Api\Redis\bin\Debug\Newtonsoft.Json.dll
+D:\项目\My\Api\Redis\bin\Debug\StackExchange.Redis.dll
+D:\项目\My\Api\Redis\bin\Debug\Newtonsoft.Json.xml
+D:\项目\My\Api\Redis\bin\Debug\StackExchange.Redis.xml
+D:\项目\My\Api\Redis\obj\Debug\IRedis.csprojResolveAssemblyReference.cache
+D:\项目\My\Api\Redis\obj\Debug\IRedis.dll
+D:\项目\My\Api\Redis\obj\Debug\IRedis.pdb
