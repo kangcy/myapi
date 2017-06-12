@@ -8,18 +8,20 @@ F:\HBuider\Home\接口\Pay\bin\Debug\IPay.pdb
 F:\HBuider\Home\接口\Pay\obj\Debug\IPay.dll
 F:\HBuider\Home\接口\Pay\obj\Debug\IPay.pdb
 F:\HBuider\Home\接口\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
-D:\康春阳\api\Pay\bin\Debug\IPay.dll
-D:\康春阳\api\Pay\bin\Debug\IPay.pdb
-D:\康春阳\api\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
-D:\康春阳\api\Pay\obj\Debug\IPay.dll
-D:\康春阳\api\Pay\obj\Debug\IPay.pdb
 F:\HBuider\MyApi\Pay\bin\Debug\IPay.dll
 F:\HBuider\MyApi\Pay\bin\Debug\IPay.pdb
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.dll
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.pdb
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
+<<<<<<< HEAD
 D:\项目\My\Api\Pay\bin\Debug\IPay.dll
 D:\项目\My\Api\Pay\bin\Debug\IPay.pdb
 D:\项目\My\Api\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
 D:\项目\My\Api\Pay\obj\Debug\IPay.dll
 D:\项目\My\Api\Pay\obj\Debug\IPay.pdb
+=======
+D:\康春阳\api\Pay\bin\Debug\IPay.dll
+D:\康春阳\api\Pay\bin\Debug\IPay.pdb
+D:\康春阳\api\Pay\obj\Debug\IPay.dll
+D:\康春阳\api\Pay\obj\Debug\IPay.pdb
+>>>>>>> a3daef2595d53208b98ef3f24669adba0b2a6c5a
