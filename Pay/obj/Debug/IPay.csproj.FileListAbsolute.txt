@@ -18,3 +18,8 @@ F:\HBuider\MyApi\Pay\bin\Debug\IPay.pdb
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.dll
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.pdb
 F:\HBuider\MyApi\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
+D:\项目\My\Api\Pay\bin\Debug\IPay.dll
+D:\项目\My\Api\Pay\bin\Debug\IPay.pdb
+D:\项目\My\Api\Pay\obj\Debug\IPay.csprojResolveAssemblyReference.cache
+D:\项目\My\Api\Pay\obj\Debug\IPay.dll
+D:\项目\My\Api\Pay\obj\Debug\IPay.pdb
