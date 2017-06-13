@@ -141,12 +141,12 @@ namespace EGT_OTA.Controllers.Api
                 var recordCount = query.GetRecordCount();
                 if (recordCount == 0)
                 {
-                    result.message = string.Empty;
+                    result.message = new { records = recordCount, totalpage = 1 };
                     return JsonConvert.SerializeObject(result);
                 }
                 var list = query.OrderDesc("ID").ExecuteTypedList<Black>();
                 var array = list.Select(x => x.ToUserNumber).ToArray();
-                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Signature", "Number").From<User>().Where("Number").In(array).ExecuteTypedList<User>();
+                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Signature", "Number", "Cover").From<User>().Where("Number").In(array).ExecuteTypedList<User>();
 
                 var newlist = (from b in list
                                join u in users on b.ToUserNumber equals u.Number
@@ -159,6 +159,7 @@ namespace EGT_OTA.Controllers.Api
                                    NickName = u.NickName,
                                    Avatar = u.Avatar,
                                    Signature = u.Signature,
+                                   Cover = u.Cover
                                }).ToList();
                 result.result = true;
                 result.message = new
