@@ -11,12 +11,6 @@ namespace EGT_OTA.Models
     public class Enum_PushType : EnumBase
     {
         /// <summary>
-        /// 系统文章推荐
-        /// </summary>
-        [EnumAttribute("系统文章推荐")]
-        public const int Article = 0;
-
-        /// <summary>
         /// 用户评论
         /// </summary>
         [EnumAttribute("用户评论")]
@@ -39,6 +33,12 @@ namespace EGT_OTA.Models
         /// </summary>
         [EnumAttribute("关注用户发布文章")]
         public const int FanArticle = 4;
+
+        /// <summary>
+        /// 系统文章推荐
+        /// </summary>
+        [EnumAttribute("系统文章推荐")]
+        public const int Article = 5;
 
         /// <summary>
         /// APP升级

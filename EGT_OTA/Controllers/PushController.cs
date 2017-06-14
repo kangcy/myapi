@@ -6,11 +6,14 @@ using System.Web;
 using System.Web.Mvc;
 using EGT_OTA.Helper;
 using EGT_OTA.Models;
+using CommonTools;
+using SubSonic.Repository;
 
 namespace EGT_OTA.Controllers
 {
-    public class PushController : Controller
+    public class PushController : BaseController
     {
+        public static readonly SimpleRepository logdb = LogRepository.GetRepo();
 
         public ActionResult Index()
         {
@@ -49,6 +52,70 @@ namespace EGT_OTA.Controllers
         {
             var distance = DistanceHelper.GetDistance(31.97603, 118.761916, 31.97601, 118.761916);
             return Content(distance.ToString());
+        }
+
+        /// <summary>
+        /// 获取推送信息
+        /// </summary>
+        public ActionResult All()
+        {
+            var number = ZNRequest.GetString("number");
+            if (string.IsNullOrWhiteSpace(number))
+            {
+                return Json(new { result = false, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+            var list = logdb.Find<PushLog>(x => x.Number == number).GroupBy(x => x.PushType).ToList();
+            var newlist = (from l in list
+                           select new
+                           {
+                               PushType = l.Key,
+                               PushCount = l.Count()
+                           }).ToList();
+            return Json(new { result = true, message = newlist }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 清除推送信息
+        /// </summary>
+        public ActionResult Clear()
+        {
+            var number = ZNRequest.GetString("number");
+            var pushtype = ZNRequest.GetInt("pushtype");
+            if (string.IsNullOrWhiteSpace(number))
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            var list = new List<PushLog>();
+            switch (pushtype)
+            {
+                case Enum_PushType.Article:
+                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Article && x.Number == number).ToList();
+                    logdb.DeleteMany<PushLog>(list);
+                    break;
+                case Enum_PushType.Comment:
+                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Comment && x.Number == number).ToList();
+                    logdb.DeleteMany<PushLog>(list);
+                    break;
+                case Enum_PushType.Money:
+                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Money && x.Number == number).ToList();
+                    logdb.DeleteMany<PushLog>(list);
+                    break;
+                case Enum_PushType.Fan:
+                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Fan && x.Number == number).ToList();
+                    logdb.DeleteMany<PushLog>(list);
+                    break;
+                case Enum_PushType.FanArticle:
+                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.FanArticle && x.Number == number).ToList();
+                    logdb.DeleteMany<PushLog>(list);
+                    break;
+                case Enum_PushType.Update:
+                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Update && x.Number == number).ToList();
+                    logdb.DeleteMany<PushLog>(list);
+                    break;
+                default:
+                    break;
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

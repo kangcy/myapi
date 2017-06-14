@@ -52,19 +52,19 @@ namespace EGT_OTA.Controllers
                 switch (pushtype)
                 {
                     case Enum_PushType.Article:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇文章推荐啦", name, "", "", "0|" + id, beginTime, endTime);
+                        result = message.PushTemplate(Enum_Push.Single, "小微篇文章推荐啦", name, "", "", Enum_PushType.Article + "|" + id, beginTime, endTime);
                         break;
                     case Enum_PushType.Comment:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友评论啦，快去看看吧", "", "", "1|" + id + "|" + number, beginTime, endTime);
+                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友评论啦，快去看看吧", "", "", Enum_PushType.Comment + "|" + id + "|" + number, beginTime, endTime);
                         break;
                     case Enum_PushType.Money:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友打赏啦，快去看看吧", "", "", "2", beginTime, endTime);
+                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友打赏啦，快去看看吧", "", "", Enum_PushType.Money.ToString(), beginTime, endTime);
                         break;
                     case Enum_PushType.Fan:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有新的粉丝啦，快去看看吧", "", "", "3", beginTime, endTime);
+                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有新的粉丝啦，快去看看吧", "", "", Enum_PushType.Fan.ToString(), beginTime, endTime);
                         break;
                     case Enum_PushType.FanArticle:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友发文啦，快去看看吧", "", "", "4|" + id, beginTime, endTime);
+                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友发文啦，快去看看吧", "", "", Enum_PushType.FanArticle + "|" + id, beginTime, endTime);
                         break;
                     case Enum_PushType.Update:
                         result = message.PushTemplate(Enum_Push.Single, "小微篇更新啦", "更新内容", "", "", "10", beginTime, endTime);
