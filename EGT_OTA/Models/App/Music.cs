@@ -33,40 +33,29 @@ namespace EGT_OTA.Models
         public int ID { get; set; }
 
         /// <summary>
-        /// 音乐编号
-        /// </summary>
-        [SubSonicNullString]
-        public string Number { get; set; }
-
-        /// <summary>
         /// 名称
         /// </summary>
-        [SubSonicNullString]
         public string Name { get; set; }
 
         /// <summary>
         /// 作者
         /// </summary>
-        [SubSonicNullString]
         public string Author { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
 
         /// <summary>
         /// 封面
         /// </summary>
-        [SubSonicNullString]
         public string Cover { get; set; }
 
         /// <summary>
         /// 文件地址
         /// </summary>
-        [SubSonicNullString]
         public string FileUrl { get; set; }
-
-        /// <summary>
-        /// 数据库编号
-        /// </summary>
-        [SubSonicIgnore]
-        public int DataBaseNumber { get; set; }
     }
 
     [Serializable]

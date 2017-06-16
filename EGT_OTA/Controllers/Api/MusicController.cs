@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using SubSonic.Repository;
 using SubSonic.DataProviders;
 using Newtonsoft.Json.Linq;
+using HtmlAgilityPack;
 
 namespace EGT_OTA.Controllers.Api
 {
@@ -74,8 +75,8 @@ namespace EGT_OTA.Controllers.Api
         /// </summary>
         [DeflateCompression]
         [HttpGet]
-        [Route("Api/Music/Search")]
-        public string Search()
+        [Route("Api/Music/Search2")]
+        public string Search2()
         {
             ApiResult result = new ApiResult();
             try
@@ -154,11 +155,101 @@ namespace EGT_OTA.Controllers.Api
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLoger.Error("Api_Music_Search:" + ex.Message);
+                LogHelper.ErrorLoger.Error("Api_Music_Search2:" + ex.Message);
                 result.message = ex.Message;
             }
             return JsonConvert.SerializeObject(result);
         }
 
+        /// <summary>
+        /// 搜搜音乐
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Music/Search")]
+        public string Search()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var name = SqlFilter(ZNRequest.GetString("name"));
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    result.message = "参数异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                var list = new List<Music>();
+
+                var pager = new Pager();
+
+                var totalPage = 100;
+                var recordCount = pager.Size * totalPage;
+
+                var url = string.Format("http://mp3.sogou.com/music.so?st=1&query={0}&comp=1&page={1}&len={2}", name, pager.Index, pager.Size);
+
+                WebClient wc = new WebClient();
+                byte[] pageSourceBytes = wc.DownloadData(new Uri(url));
+                string source = Encoding.GetEncoding("GBK").GetString(pageSourceBytes);
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(source);
+                HtmlNodeCollection listNodes = doc.DocumentNode.SelectNodes("//li");
+
+                //最后一页
+                if (listNodes.Count < pager.Size)
+                {
+                    totalPage = pager.Index;
+                    if (totalPage > 1)
+                    {
+                        recordCount = (pager.Index - 1) * pager.Size + listNodes.Count;
+                    }
+                    else
+                    {
+                        recordCount = listNodes.Count;
+                    }
+                }
+
+                foreach (HtmlNode node in listNodes)
+                {
+                    //[#4801424#,#2#,#http://cc.stream.qqmusic.qq.com/C100002Zobl64HwPBi.m4a?fromtag=52#,#爱#,#5017#,#小虎队#,#426766#,#华纳国语情浓13首#,#100#,#56a453131fa27a35#]
+                    //4801424
+                    //2
+                    //http://cc.stream.qqmusic.qq.com/C100002Zobl64HwPBi.m4a?fromtag=52
+                    //爱
+                    //5017
+                    //小虎队
+                    //426766
+                    //华纳国语情浓13首
+                    //100
+                    //56a453131fa27a35
+
+                    var param = node.Attributes["param"].Value.Trim();
+                    var parts = param.Replace("[", "").Replace("]", "").Replace("#", "").Split(',');
+                    var music = new Music();
+                    music.ID = Tools.SafeInt(parts[6]);
+                    music.Name = parts[3];
+                    music.Author = parts[5];
+                    music.Remark = parts[7];
+                    music.Cover = "http://imgcache.qq.com/music/photo/album_300/" + parts[6].Substring(parts[6].Length - 2) + "/300_albumpic_" + music.ID + "_0.jpg";
+                    music.FileUrl = parts[2];
+                    list.Add(music);
+                }
+
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = list
+                };
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Music_Search:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
     }
 }

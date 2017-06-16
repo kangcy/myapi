@@ -93,7 +93,7 @@ namespace EGT_OTA.Controllers.Api
                     return JsonConvert.SerializeObject(result);
                 }
 
-                Article article = new SubSonic.Query.Select(provider, "Number", "CreateUserNumber").From<Article>().Where<Article>(x => x.Number == ArticleNumber).ExecuteSingle<Article>();
+                Article article = new SubSonic.Query.Select(provider, "ID", "Number", "CreateUserNumber").From<Article>().Where<Article>(x => x.Number == ArticleNumber).ExecuteSingle<Article>();
                 if (article == null)
                 {
                     result.message = "文章信息异常";
@@ -123,6 +123,9 @@ namespace EGT_OTA.Controllers.Api
                 {
                     result.result = true;
                     result.message = model.ID;
+
+                    //推送
+                    new AppHelper().Push(article.CreateUserNumber, article.ID, article.Number, user.NickName, Enum_PushType.Comment, false);
                 }
             }
             catch (Exception ex)
@@ -187,7 +190,7 @@ namespace EGT_OTA.Controllers.Api
                     model.Summary = x.Summary;
                     model.Goods = x.Goods;
                     model.Number = x.Number;
-                    model.CreateDateText = x.CreateDate.ToString("yyyy-MM-dd");
+                    model.CreateDateText = FormatTime(x.CreateDate);
                     model.UserID = user.ID;
                     model.UserNumber = user.Number;
                     model.NickName = user.NickName;
@@ -296,7 +299,7 @@ namespace EGT_OTA.Controllers.Api
                     model.Summary = x.Summary;
                     model.Goods = x.Goods;
                     model.Number = x.Number;
-                    model.CreateDateText = isNew > 0 ? FormatTime(x.CreateDate) : x.CreateDate.ToString("yyyy-MM-dd");
+                    model.CreateDateText = FormatTime(x.CreateDate);
                     model.UserID = user.ID;
                     model.UserNumber = user.Number;
                     model.NickName = user.NickName;

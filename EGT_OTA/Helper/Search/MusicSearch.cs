@@ -135,7 +135,6 @@ namespace EGT_OTA.Helper.Search
         public static int AddDocument(IndexWriter writer, Music p)
         {
             Document doc = new Document();
-            doc.Add(new Field("Number", p.Number, Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("Author", p.Author, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("Name", p.Name, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("FileUrl", p.FileUrl, Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -171,7 +170,7 @@ namespace EGT_OTA.Helper.Search
         /// </summary>
         public static void MusicDelete(Music model)
         {
-            MusicDelete(model.Number);
+            MusicDelete(model.ID.ToString());
         }
 
         /// <summary>
@@ -182,7 +181,7 @@ namespace EGT_OTA.Helper.Search
             string IDList = "";
             foreach (Music p in pList)
             {
-                IDList += "," + p.Number;
+                IDList += "," + p.ID;
             }
             if (IDList.Length > 0)
             {

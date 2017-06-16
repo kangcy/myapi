@@ -23,7 +23,8 @@ namespace EGT_OTA.Controllers
         /// <param name="number">对象Number</param>
         /// <param name="name">用户名称/文章标题</param>
         /// <param name="pushtype">推送类型</param>
-        public void Push(string usernumber, int id, string number, string name, int pushtype)
+        /// <param name="ispush">是否推送</param>
+        public void Push(string usernumber, int id, string number, string name, int pushtype, bool ispush = true)
         {
             try
             {
@@ -36,43 +37,47 @@ namespace EGT_OTA.Controllers
                 {
                     return;
                 }
-                if (user.ShowPush == 0)
-                {
-                    return;
-                }
-                if (string.IsNullOrWhiteSpace(user.ClientID))
-                {
-                    return;
-                }
-                PushHelper message = new PushHelper(new List<string>() { user.ClientID });
 
-                var beginTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                var endTime = DateTime.Now.AddHours(12).ToString("yyyy-MM-dd HH:mm:ss");
                 var result = "";
-                switch (pushtype)
+                if (ispush)
                 {
-                    case Enum_PushType.Article:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇文章推荐啦", name, "", "", Enum_PushType.Article + "|" + id, beginTime, endTime);
-                        break;
-                    case Enum_PushType.Comment:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友评论啦，快去看看吧", "", "", Enum_PushType.Comment + "|" + id + "|" + number, beginTime, endTime);
-                        break;
-                    case Enum_PushType.Money:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友打赏啦，快去看看吧", "", "", Enum_PushType.Money.ToString(), beginTime, endTime);
-                        break;
-                    case Enum_PushType.Fan:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有新的粉丝啦，快去看看吧", "", "", Enum_PushType.Fan.ToString(), beginTime, endTime);
-                        break;
-                    case Enum_PushType.FanArticle:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友发文啦，快去看看吧", "", "", Enum_PushType.FanArticle + "|" + id, beginTime, endTime);
-                        break;
-                    case Enum_PushType.Update:
-                        result = message.PushTemplate(Enum_Push.Single, "小微篇更新啦", "更新内容", "", "", "10", beginTime, endTime);
-                        break;
-                    default:
-                        break;
-                }
+                    if (user.ShowPush == 0)
+                    {
+                        return;
+                    }
+                    if (string.IsNullOrWhiteSpace(user.ClientID))
+                    {
+                        return;
+                    }
+                    PushHelper message = new PushHelper(new List<string>() { user.ClientID });
 
+                    var beginTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    var endTime = DateTime.Now.AddHours(12).ToString("yyyy-MM-dd HH:mm:ss");
+
+                    switch (pushtype)
+                    {
+                        case Enum_PushType.Article:
+                            result = message.PushTemplate(Enum_Push.Single, "小微篇文章推荐啦", name, "", "", Enum_PushType.Article + "|" + id, beginTime, endTime);
+                            break;
+                        case Enum_PushType.Comment:
+                            result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友评论啦，快去看看吧", "", "", Enum_PushType.Comment + "|" + id + "|" + number, beginTime, endTime);
+                            break;
+                        case Enum_PushType.Money:
+                            result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友打赏啦，快去看看吧", "", "", Enum_PushType.Money.ToString(), beginTime, endTime);
+                            break;
+                        case Enum_PushType.Fan:
+                            result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有新的粉丝啦，快去看看吧", "", "", Enum_PushType.Fan.ToString(), beginTime, endTime);
+                            break;
+                        case Enum_PushType.FanArticle:
+                            result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友发文啦，快去看看吧", "", "", Enum_PushType.FanArticle + "|" + id, beginTime, endTime);
+                            break;
+                        case Enum_PushType.Update:
+                            result = message.PushTemplate(Enum_Push.Single, "小微篇更新啦", "更新内容", "", "", "10", beginTime, endTime);
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 //推送记录
                 PushLog log = new PushLog();
                 log.Number = usernumber;
