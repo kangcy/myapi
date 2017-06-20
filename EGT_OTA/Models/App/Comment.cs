@@ -68,6 +68,61 @@ namespace EGT_OTA.Models
         /// </summary>
         public int Goods { get; set; }
 
+        #region  定位
+
+        /// <summary>
+        /// 省份名称
+        /// </summary>
+        [SubSonicStringLength(50), SubSonicNullString]
+        public string Province { get; set; }
+
+        /// <summary>
+        /// 城市名称
+        /// </summary>
+        [SubSonicStringLength(50), SubSonicNullString]
+        public string City { get; set; }
+
+        /// <summary>
+        /// 地区名称
+        /// </summary>
+        [SubSonicStringLength(50), SubSonicNullString]
+        public string District { get; set; }
+
+        /// <summary>
+        /// 街道名称
+        /// </summary>
+        [SubSonicStringLength(100), SubSonicNullString]
+        public string Street { get; set; }
+
+        /// <summary>
+        /// 具体定位
+        /// </summary>
+        [SubSonicStringLength(100), SubSonicNullString]
+        public string DetailName { get; set; }
+
+        /// <summary>
+        /// 城市编码
+        /// </summary>
+        [SubSonicStringLength(20), SubSonicNullString]
+        public string CityCode { get; set; }
+
+        /// <summary>
+        /// 纬度
+        /// </summary>
+        public double Latitude { get; set; }
+
+        /// <summary>
+        /// 经度
+        /// </summary>
+        public double Longitude { get; set; }
+
+        /// <summary>
+        /// 显示定位
+        /// </summary>
+        public int ShowPosition { get; set; }
+
+        #endregion
+
         #region 扩展
 
         /// <summary>

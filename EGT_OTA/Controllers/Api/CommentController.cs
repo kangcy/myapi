@@ -118,6 +118,16 @@ namespace EGT_OTA.Controllers.Api
                 model.CreateIP = Tools.GetClientIP;
                 model.ParentCommentNumber = ZNRequest.GetString("ParentCommentNumber");
                 model.ParentUserNumber = ZNRequest.GetString("ParentUserNumber");
+
+                model.Province = ZNRequest.GetString("Province");
+                model.City = ZNRequest.GetString("City");
+                model.District = ZNRequest.GetString("District");
+                model.Street = ZNRequest.GetString("Street");
+                model.DetailName = ZNRequest.GetString("DetailName");
+                model.CityCode = ZNRequest.GetString("CityCode");
+                model.Latitude = Tools.SafeDouble(ZNRequest.GetString("Latitude"));
+                model.Longitude = Tools.SafeDouble(ZNRequest.GetString("Longitude"));
+                model.ShowPosition = ZNRequest.GetInt("Longitude");
                 model.ID = Tools.SafeInt(db.Add<Comment>(model));
                 if (model.ID > 0)
                 {

@@ -122,6 +122,9 @@ function UnicodeText(str) {
  * js Unicode解码
  */
 function UnUnicodeText(str) {
+	if(base.IsNullOrEmpty(str)) {
+		return "";
+	}
 	return unescape(str.replace(/\\u/gi, '%u'));
 }
 
@@ -164,6 +167,12 @@ var base = new function() {
 
 	this.IsNullOrEmpty = function(str) {
 		if(!str) {
+			return true;
+		}
+		if(str == "") {
+			return true;
+		}
+		if(str.toString().toLowerCase() == "null") {
 			return true;
 		}
 		return false;

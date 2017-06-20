@@ -83,6 +83,11 @@
 				box-sizing: border-box;
 				padding: 10px 0 0;
 			}
+			
+			.summary img {
+				width: 1rem !important;
+				vertical-align: middle;
+			}
 		</style>
 	</head>
 
@@ -117,9 +122,9 @@
 		<div id="snowwrapper" class="hide"></div>
 		<i id="music1" class="fa fa-music f13 hide" onclick="switchsound()" style="position:fixed;right:10px;top:10px;z-index:999;"></i>
 		<div id="wrapper2"></div>
-		<div class="mui-scroll-wrapper" id="scroll-wrapper" style="top:0px;bottom:0px;">
+		<div class="mui-scroll-wrapper hide" id="scroll-wrapper" style="top:0px;bottom:0px;">
 			<div class="mui-scroll" id="scroll">
-				<div id="wrapper" class="hide">
+				<div id="wrapper">
 					<div class="mui-content" style="overflow-x:hidden;" id="wrapper1">
 						<!--通用样式-->
 						<div id="main0" class="f13 tl mt10 mb10 hide">
@@ -294,12 +299,13 @@
 			}
 			//密码可见
 			else if(data.ArticlePower == 1) {
-				if(pwd != data.ArticlePowerPwd)
+				if(pwd != data.ArticlePowerPwd) {
 					$("#password").removeClass("hide");
-				else
-					$("#wrapper,#snowwrapper").removeClass("hide");
+				} else {
+					$("#scroll-wrapper,#snowwrapper").removeClass("hide");
+				}
 			} else {
-				$("#wrapper,#snowwrapper").removeClass("hide");
+				$("#scroll-wrapper,#snowwrapper").removeClass("hide");
 			}
 
 			AutoMusic = data.AutoMusic;
@@ -506,9 +512,9 @@
 		model.push('<div class="mui-table-cell oa-contact-avatar"><img src="' + base.ShowThumb(item.Avatar, 1) + '" class="user" userid="' + item.UserNumber + '" /></div>');
 		model.push('<div class="mui-table-cell pb0 main">');
 		model.push('<p class="f12 user c333" userid="' + item.UserNumber + '">' + UnUnicodeText(item.NickName) + '<span class="fr c999 f11">' + item.CreateDateText + '</span></p>');
-		model.push('<p class="f11 c999 mt3 mb5" style="line-height:1.3rem;">' + UnUnicodeText(item.Summary) + '</p>');
+		model.push('<p class="f11 c999 mt5 mb5 summary" style="line-height:1.3rem;">' + UnUnicodeText(item.Summary) + '</p>');
 		if(!base.IsNullOrEmpty(item.ParentCommentNumber)) {
-			model.push('<p class="tip mb0 f11" style="line-height:1.3rem;"><span class="user blue" userid="' + item.ParentUserNumber + '">@' + UnUnicodeText(item.ParentNickName) + '：</span>' + UnUnicodeText(item.ParentSummary) + '</p>');
+			model.push('<p class="tip mb0 f11" style="line-height:1.3rem;"><span class="user blue summary" userid="' + item.ParentUserNumber + '">@' + UnUnicodeText(item.ParentNickName) + '：</span>' + UnUnicodeText(item.ParentSummary) + '</p>');
 		}
 		model.push('</div></div>');
 		div.innerHTML = model.join('');

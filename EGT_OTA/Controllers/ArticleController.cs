@@ -391,7 +391,8 @@ namespace EGT_OTA.Controllers
                 var ArticleID = ZNRequest.GetInt("ArticleID");
                 Article article = db.Single<Article>(x => x.ID == ArticleID);
                 var ArticlePower = ZNRequest.GetInt("ArticlePower", Enum_ArticlePower.Myself);
-                var result = new SubSonic.Query.Update<Article>(provider).Set("ArticlePower").EqualTo(ArticlePower).Where<Article>(x => x.ID == ArticleID).Execute() > 0;
+                var ArticlePowerPwd = ZNRequest.GetString("ArticlePowerPwd");
+                var result = new SubSonic.Query.Update<Article>(provider).Set("ArticlePower").EqualTo(ArticlePower).Set("ArticlePowerPwd").EqualTo(ArticlePowerPwd).Where<Article>(x => x.ID == ArticleID).Execute() > 0;
                 if (result)
                 {
                     //用户相册是否展示
