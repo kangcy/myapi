@@ -10,41 +10,202 @@
 		<link rel="stylesheet" href="css/mui.min.css">
 		<link rel="stylesheet" href="css/loading.css">
 		<link rel="stylesheet" href="css/animate.css">
-		<link rel="stylesheet" href="css/my.css">
 		<style type="text/css">
-			/*头部*/
+			.avatar {
+				margin-top: -2.5rem;
+				text-align: center;
+				display: inline-block;
+				width: 100%
+			}
 			
 			#avatar {
 				border-radius: 50%;
 				width: 5rem;
 				height: 5rem;
 				border: 3px solid #fff;
+				text-align: center
+			}
+			
+			.menu {
+				width: 100%;
+				height: 3rem;
+				line-height: 3rem;
+				text-align: left;
+				text-indent: .625rem;
+				background: #fff
+			}
+			
+			.menu div {
+				width: 85%;
+				float: right;
+				height: 100%;
+				border-bottom: 1px solid #eee;
+				text-indent: 0
+			}
+			
+			.menu div.noborder {
+				border-bottom: 0
+			}
+			
+			.mui-btn {
+				padding: .375rem 2.125rem
+			}
+			
+			.mui-title {
+				white-space: normal
+			}
+			
+			#setting {
+				width: 1.2rem;
+				margin-top: 1rem;
+				margin-left: .5rem
+			}
+			
+			#tip {
+				width: 1.2rem;
+				margin-top: 1rem;
+				margin-right: .5rem
+			}
+			
+			.bg {
+				width: 100%;
+				display: inline-block;
+				margin: 0;
+				z-index: -1
+			}
+			
+			.bg .side {
+				float: left;
+				width: 25%;
+				line-height: .625rem;
+				padding-top: 2.1875rem
+			}
+			
+			.signature {
+				margin: 0;
+				line-height: 1.25rem;
+				color: #a3a3a3
+			}
+			
+			.secret {
+				margin: 0 5%;
+				display: inline-block;
+				width: 90%
+			}
+			
+			.secret div {
+				width: 33.3%;
+				display: inline-block;
+				float: left
+			}
+			
+			.content1 {
+				display: inline-block;
+				width: 100%
+			}
+			
+			.content1 .items {
+				width: 25%;
+				float: left
+			}
+			
+			.content1 .items img {
+				width: 1.25rem;
+				height: 1.25rem;
+				margin-right: .3125rem
+			}
+			
+			.content1 .items .item1 {
+				margin: 0;
+				line-height: 1.25rem;
+				width: 100%
+			}
+			
+			.content1 .items .item2 {
+				margin: 0;
+				width: 100%;
+				float: left;
+				line-height: 1.25rem
+			}
+			
+			.setting {
+				width: 100%;
+				height: 4.0625rem;
+				background: #fff;
+				text-align: center;
+				padding-top: .9375rem
+			}
+			
+			.setting img {
+				width: 6rem
+			}
+			
+			.setting-icon {
+				width: .9375rem;
+				height: .9375rem;
+				float: left;
+				margin-top: .625rem;
+				margin-left: 1.25rem
+			}
+			
+			.guanzhu,
+			.guanzhu2 {
+				color: #fff;
+				text-align: center;
+				border-radius: 30px;
+				display: inline-block;
+				width: 35%;
+				height: 2.5rem;
+				line-height: 2.5rem
+			}
+			
+			.dashang {
+				color: #fff;
+				text-align: center;
+				border-radius: 30px;
+				display: inline-block;
+				width: 35%;
+				height: 2.5rem;
+				line-height: 2.5rem
 			}
 			
 			#article .head {
-				background: #EEEEEE;
+				background: #eee;
 				height: 2.5rem;
-				line-height: 2.5rem;
+				line-height: 2.5rem
 			}
 			
 			#article .title {
-				height: 3rem;
-				line-height: 3rem;
+				height: 2.5rem;
+				line-height: 2.5rem
 			}
 			
 			#article .list {
 				display: inline-block;
-				background: #EEEEEE;
+				background: #eee;
+				padding-bottom: 2.2%
 			}
 			
 			#article .list img {
-				width: 33.3%;
+				width: 30%;
+				margin-left: 2.2%;
+				margin-top: 2.2%;
 				float: left;
-				border: 1px solid #fff;
+				border-radius: 5px
 			}
 			
-			.bt {
-				border-top: 1px solid #eee;
+			.more {
+				margin-top: .35rem;
+				margin-right: .4rem
+			}
+			
+			.submit {
+				width: 30%;
+				margin: 0 auto;
+				border-radius: 30px;
+				height: 2rem;
+				line-height: 2rem;
+				background: #4087cb
 			}
 			
 			.download {
@@ -71,19 +232,34 @@
 				</div>
 			</div>
 			<div class="mui-scroll">
-				<div class="info-content" id="bg">
-					<img id="avatar" class="hide" />
-					<p class="f16 tc mt5 cfff textshadow" id="nickname"></p>
-					<p class="signature tc mt5 f12 cfff textshadow" id="signature"></p>
-					<p class="secret tc mt5 mb20 f13">
-						<span class="cfff textshadow mr15 hide" id="showFollow">关注&nbsp;<span class="cfff textshadow" id="showFollowNum">0</span></span>
-						<span class="cfff textshadow ml15 mr15 hide" id="showFan">粉丝&nbsp;<span class="cfff textshadow" id="showFanNum">0</span></span>
-						<span class="cfff textshadow ml15 hide" id="showArticle">喜欢&nbsp;<span class="cfff textshadow" id="showArticleNum">0</span></span>
-					</p>
+				<div class="bg" id="bg"></div>
+				<div class="avatar">
+					<img id="avatar" src="bg/avatar.png" />
 				</div>
-				<div id="article" class="hide f13 caaa full">
+				<div class="f15 tc mt10 c000 bold" id="nickname"></div>
+				<div class="signature mt5 tc f12 c999" id="signature"></div>
+				<div style="padding:0.3125rem 5%;" class="mt10 f13 c000">
+					<div class="flex-box flex-row f13 tc">
+						<div style="flex:0 0 33.3%;" class="flex-item hide" id="showFollow">
+							<p class="f25 mb0 blue bold" id="showFollowNum">0</p>
+							<p>关注</p>
+						</div>
+						<div style="flex:0 0 33.3%;" class="flex-item hide" id="showFan">
+							<p class="f25 mb0 blue bold" id="showFanNum">0</p>
+							<p>粉丝</p>
+						</div>
+						<div style="flex:0 0 33.3%;" class="flex-item hide" id="showArticle">
+							<p class="f25 mb0 blue bold" id="showArticleNum">0</p>
+							<p>收藏</p>
+						</div>
+					</div>
+				</div>
+				<div id="article" class="hide f13 c999 full">
 					<div class="head tl"><span class="ml15" id="a_title">0篇文章</span></div>
 					<div id="a_list">
+					</div>
+					<div id="none" class="mb20 hide">
+						<p class="full tc f13 c333 mt50">暂未发表过动态</p>
 					</div>
 				</div>
 				<!--下载-->
@@ -96,6 +272,7 @@
 <script src="js/mui.min.js"></script>
 <script src="js/base.js"></script>
 <script type="text/javascript">
+	var $bg = base.Get("bg");
 	mui.init({
 		gestureConfig: {
 			doubletap: true
@@ -104,6 +281,22 @@
 	});
 
 	mui.ready(function() {
+
+		$bg.style.minHeight = window.innerWidth * 3 / 4 + "px";
+		$bg.style.background = "#eee";
+		$bg.style.backgroundSize = "cover";
+
+		var key = GetParameter("key");
+		if(base.IsNullOrEmpty("key")) {
+			mui.alert("参数异常");
+			return false;
+		}
+
+		base.InitScroll();
+
+		LoadUserInfo(key);
+		LoadArticle(key);
+
 		mui("#a_list").on('tap', '.article', function(event) {
 			var articleId = this.getAttribute("articleid");
 			var articleNumber = this.getAttribute("articleNumber");
@@ -127,20 +320,6 @@
 		});
 	});
 
-	mui.ready(function() {
-
-		var key = GetParameter("key");
-		if(base.IsNullOrEmpty("key")) {
-			mui.alert("参数异常");
-			return false;
-		}
-
-		base.InitScroll();
-
-		LoadUserInfo(key);
-		LoadArticle(key);
-	});
-
 	//文章
 	function LoadArticle(key) {
 		var data = {
@@ -151,13 +330,13 @@
 			if(data != null) {
 				var length = data.records;
 				if(length > 0) {
-					base.Get("a_title").innerHTML = data.records + "篇文章";
+					base.Get("a_title").innerHTML = length + "篇文章";
 
 					for(var i = 0; i < data.list.length; i++) {
 						var html = [];
 						var div = document.createElement('div');
-						div.className = 'title tl';
-						div.innerHTML = '<span class="ml15">' + data.list[i].CreateDate + '</span><span class="ml15" id="a_num">' + data.list[i].Count + '篇</span>';
+						div.className = 'title tc mt15 mb15 f14';
+						div.innerHTML = '<div style="border:1px solid #0080ff;color:#0080ff;border-radius:30px;display:inline-block;width:60%;"><span>' + data.list[i].CreateDate + '</span><span class="ml15" id="a_num">' + data.list[i].Count + '篇文章</span></div>';
 						table.appendChild(div);
 
 						var div2 = document.createElement('div');
@@ -165,11 +344,13 @@
 						var html = [];
 						for(var y = 0; y < data.list[i].List.length; y++) {
 							var item = data.list[i].List[y];
-							html.push('<img src="' + base.ShowThumb(item.Cover, 2) + '" class="article" articleid="' + item.ID + '" articleNumber="' + item.Number + '" userid="' + item.CreateUserNumber + '" power="' + item.ArticlePower + '" />');
+							html.push('<img src="' + base.ShowThumb(item.Cover, 2) + '" class="article" articleid="' + item.ID + '" articleNumber="' + item.Number + '" power="' + item.ArticlePower + '" />');
 						}
 						div2.innerHTML = html.join('');
 						table.appendChild(div2);
 					}
+				} else {
+					base.Get("none").classList.remove("hide");
 				}
 			}
 		});
@@ -187,8 +368,9 @@
 				data = data.message;
 
 				document.title = data.NickName + "的专栏";
-				base.Get("bg").style.background = "url(" + base.ShowThumb(data.Cover, 1) + ") center center no-repeat";
-				base.Get("bg").style.backgroundSize = "cover";
+				$bg.style.background = "url(" + base.ShowThumb(data.Cover, 1) + ") center center no-repeat";
+				$bg.style.backgroundSize = "cover";
+
 				base.Get("avatar").setAttribute("src", base.ShowThumb(data.Avatar, 2));
 				base.Get("avatar").classList.remove("hide");
 				base.Get("nickname").innerHTML = UnUnicodeText(data.NickName);
