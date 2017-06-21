@@ -310,6 +310,12 @@ namespace EGT_OTA.Models
         [SubSonicIgnore]
         public int Money { get; set; }
 
+        /// <summary>
+        /// 微信分享
+        /// </summary>
+        [SubSonicIgnore]
+        public Share Share { get; set; }
+
         #endregion
     }
 }

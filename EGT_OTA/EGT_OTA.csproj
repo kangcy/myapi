@@ -225,6 +225,7 @@
     <Compile Include="Controllers\Api\PushController.cs" />
     <Compile Include="Controllers\Api\UserController.cs" />
     <Compile Include="Controllers\Api\OrderController.cs" />
+    <Compile Include="Controllers\Api\WeixinController.cs" />
     <Compile Include="Controllers\AppHelper.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\Filter\ArticlePowerAttribute.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ShareLogController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\WeixinController.cs" />
     <Compile Include="Enum\EnumAttribute.cs" />
     <Compile Include="Enum\EnumBase.cs" />
     <Compile Include="Enum\Enum_Price.cs" />
@@ -293,11 +295,13 @@
     <Compile Include="Helper\UnicodeHelper.cs" />
     <Compile Include="Helper\UnixTimeHelper.cs" />
     <Compile Include="Helper\ValidateCodeHelper.cs" />
+    <Compile Include="Helper\WeixinHelper.cs" />
     <Compile Include="Helper\XmlHelper.cs" />
     <Compile Include="Helper\SmsHelper.cs" />
     <Compile Include="Models\App\Article.cs" />
     <Compile Include="Models\App\Order.cs" />
     <Compile Include="Models\App\SendSMS.cs" />
+    <Compile Include="Models\App\Share.cs" />
     <Compile Include="Models\App\User.cs" />
     <Compile Include="Models\App\ArticleType.cs" />
     <Compile Include="Models\App\Comment.cs" />
@@ -358,6 +362,7 @@
     <Content Include="DLL\Tools.dll" />
     <Content Include="Global.asax" />
     <Content Include="Config\log4net.config" />
+    <Content Include="Images\avatar.png" />
     <Content Include="Images\Banner\banner.png" />
     <Content Include="Images\base\title.png" />
     <Content Include="Images\Help\01.png" />
@@ -733,6 +738,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="AutoMusic\" />
     <Folder Include="bin\zh-Hans\" />
+    <Folder Include="Home\" />
     <Folder Include="Images\Icons\" />
     <Folder Include="Upload\" />
   </ItemGroup>

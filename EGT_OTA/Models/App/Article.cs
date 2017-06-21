@@ -331,6 +331,12 @@ namespace EGT_OTA.Models
         [SubSonicIgnore]
         public Background BackgroundJson { get; set; }
 
+        /// <summary>
+        /// 分享
+        /// </summary>
+        [SubSonicIgnore]
+        public Share Share { get; set; }
+
         #endregion
     }
 

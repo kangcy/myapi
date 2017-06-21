@@ -802,6 +802,18 @@ namespace EGT_OTA.Controllers
                     return Json(new { result = false, message = "用戶信息异常" }, JsonRequestBehavior.AllowGet);
                 }
                 var newuser = UserInfo(user);
+
+                //微信分享设置
+                string url = ZNRequest.GetString("url");
+                url = System.Text.RegularExpressions.Regex.Replace(url, @":\d{2,5}/", "/");//去端口号
+                Share share = new Share();
+                share.AppID = WeixinHelper.AppID;
+                share.NonceStr = WeixinHelper.NonceStr;
+                share.TimeStr = UnixTimeHelper.FromDateTime(DateTime.Now).ToString();
+                share.Signature = WeixinHelper.GetSignature(url, share.TimeStr);
+
+                newuser.Share = share;
+
                 return Json(new { result = true, message = newuser }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

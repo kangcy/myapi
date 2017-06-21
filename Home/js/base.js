@@ -50,7 +50,7 @@
 
 })(document, window);
 
-var RootUrl = "http://www.ishaoxia.com/";
+var RootUrl = "http://www.xiaoweipian.com/";
 
 /*获取html的参数**********************************************/
 function GetParameter(param) {

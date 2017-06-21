@@ -234,7 +234,7 @@
 			<div class="mui-scroll">
 				<div class="bg" id="bg"></div>
 				<div class="avatar">
-					<img id="avatar" src="bg/avatar.png" />
+					<img id="avatar" src="img/avatar.png" />
 				</div>
 				<div class="f15 tc mt10 c000 bold" id="nickname"></div>
 				<div class="signature mt5 tc f12 c999" id="signature"></div>
@@ -271,6 +271,8 @@
 </html>
 <script src="js/mui.min.js"></script>
 <script src="js/base.js"></script>
+<script src="js/jweixin-1.0.0.js"></script>
+<script src="js/WeixinApi.js"></script>
 <script type="text/javascript">
 	var $bg = base.Get("bg");
 	mui.init({
@@ -359,7 +361,8 @@
 	//获取用户信息
 	function LoadUserInfo(key) {
 		mui.getJSON(RootUrl + "User/Info", {
-			Number: key
+			Number: key,
+			url: window.location.href
 		}, function(data) {
 
 			base.Get("loader").classList.add("hide");
@@ -388,6 +391,53 @@
 					base.Get("showFanNum").innerHTML = data.Fans;
 					base.Get("showFan").classList.remove("hide");
 				}
+
+				var wx_url = window.location.href;
+				var wx_title = UnUnicodeText(data.NickName) + "的专栏";
+				var wx_desc = "分享自「小微篇」";
+				var wx_icon = base.ShowThumb(data.Avatar, 2);
+
+				var wx_appId = data.Share.AppID; // 必填，公众号的唯一标识
+				var wx_timestamp = data.Share.TimeStr; // 必填，生成签名的时间戳
+				var wx_nonceStr = data.Share.NonceStr; // 必填，生成签名的随机串
+				var wx_signature = data.Share.Signature; // 必填，签名，见附录1
+				if(!base.IsNullOrEmpty(wx_signature)) {
+					wx.config({
+						debug: false, //开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+						appId: wx_appId, //必填，公众号的唯一标识
+						timestamp: wx_timestamp, //必填，生成签名的时间戳
+						nonceStr: wx_nonceStr, //必填，生成签名的随机串
+						signature: wx_signature, //必填，签名，见附录1
+						jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+					});
+					wx.ready(function() {
+						wx.onMenuShareTimeline({
+							title: wx_title, //分享标题
+							link: wx_url, //分享链
+							imgUrl: wx_icon, //分享图标
+							success: function() {},
+							cancel: function() {
+								//用户取消分享后执行的回调函数
+							}
+						});
+						wx.onMenuShareAppMessage({
+							title: wx_title, // 分享标题
+							desc: wx_desc, // 分享描述
+							link: wx_url, // 分享链接
+							imgUrl: wx_icon, // 分享图标
+							type: '', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function() {},
+							cancel: function() {
+								//用户取消分享后执行的回调函数
+							}
+						});
+					});
+					wx.error(function(res) {
+						// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+					});
+				}
+
 			} else {
 				mui.toast(data.message);
 			}

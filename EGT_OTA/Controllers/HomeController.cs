@@ -68,6 +68,17 @@ namespace EGT_OTA.Controllers
                 //当前用户编号
                 string xwp = ZNRequest.GetString("xwp");
 
+                //微信分享设置
+                string url = ZNRequest.GetString("url");
+                url = System.Text.RegularExpressions.Regex.Replace(url, @":\d{2,5}/", "/");//去端口号
+                Share share = new Share();
+                share.AppID = WeixinHelper.AppID;
+                share.NonceStr = WeixinHelper.NonceStr;
+                share.TimeStr = UnixTimeHelper.FromDateTime(DateTime.Now).ToString();
+                share.Signature = WeixinHelper.GetSignature(url, share.TimeStr);
+
+                model.Share = share;
+
                 if (model.CreateUserNumber != xwp)
                 {
                     //私密
@@ -77,6 +88,7 @@ namespace EGT_OTA.Controllers
                         newmodel.ID = model.ID;
                         newmodel.Title = model.Title;
                         newmodel.ArticlePower = Enum_ArticlePower.Myself;
+                        newmodel.Share = share;
                         return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
                     }
                     //加密
@@ -86,6 +98,7 @@ namespace EGT_OTA.Controllers
                         newmodel.ID = model.ID;
                         newmodel.Title = model.Title;
                         newmodel.ArticlePower = Enum_ArticlePower.Password;
+                        newmodel.Share = share;
                         return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
                     }
                 }
