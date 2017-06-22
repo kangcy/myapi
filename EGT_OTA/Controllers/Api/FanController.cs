@@ -36,7 +36,7 @@ namespace EGT_OTA.Controllers.Api
                 var number = ZNRequest.GetString("ToUserNumber");
                 if (string.IsNullOrWhiteSpace(number))
                 {
-                    result.message = "信息异常,请刷新重试";
+                    result.message = "参数异常,请刷新重试";
                     return JsonConvert.SerializeObject(result);
                 }
                 Fan model = db.Single<Fan>(x => x.CreateUserNumber == user.Number && x.ToUserNumber == number);
@@ -53,6 +53,28 @@ namespace EGT_OTA.Controllers.Api
                         user.Follows = db.Find<Fan>(x => x.CreateUserNumber == user.Number).Count;
                         result.result = true;
                         result.message = user.Follows;
+
+                        //操作记录
+                        var now = DateTime.Now.ToString("yyyy-MM-dd");
+                        var action = db.Single<UserAction>(x => x.CreateUserNumber == user.Number && x.CreateTimeText == now && x.ActionType == Enum_ActionType.Follow);
+                        if (action == null)
+                        {
+                            action = new UserAction();
+                            action.CreateUserNumber = user.Number;
+                            action.ActionType = Enum_ActionType.Follow;
+                            action.CreateTime = DateTime.Now;
+                            action.CreateTimeText = now;
+                            action.ActionInfo = number;
+                            db.Add<UserAction>(action);
+                        }
+                        else
+                        {
+                            if (!action.ActionInfo.Contains(number))
+                            {
+                                action.ActionInfo += "," + number;
+                                db.Update<UserAction>(action);
+                            }
+                        }
 
                         //推送
                         new AppHelper().Push(number, 0, "", user.NickName, Enum_PushType.Fan);

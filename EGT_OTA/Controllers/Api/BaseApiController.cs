@@ -177,6 +177,10 @@ namespace EGT_OTA.Controllers.Api
             {
                 return Convert.ToInt32(hour / year) + "年前";
             }
+            else if (hour > 24 * 10)
+            {
+                return date.ToString("MM-dd");
+            }
             else if (hour > 24)
             {
                 return Convert.ToInt32(hour / 24) + "天前";

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using CommonTools;
 using EGT_OTA.Helper;
 using EGT_OTA.Models;
+using System.Web.Http.Cors;
 
 namespace EGT_OTA.Controllers
 {

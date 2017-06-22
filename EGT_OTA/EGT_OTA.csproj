@@ -226,6 +226,7 @@
     <Compile Include="Controllers\Api\UserController.cs" />
     <Compile Include="Controllers\Api\OrderController.cs" />
     <Compile Include="Controllers\Api\WeixinController.cs" />
+    <Compile Include="Controllers\Api\UserActionController.cs" />
     <Compile Include="Controllers\AppHelper.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\Filter\ArticlePowerAttribute.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Enum\Enum_Push.cs" />
     <Compile Include="Enum\Enum_PushType.cs" />
     <Compile Include="Enum\Enum_ErrorCode.cs" />
+    <Compile Include="Enum\Enum_ActionType.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -323,6 +325,7 @@
     <Compile Include="Models\App\Banner.cs" />
     <Compile Include="Models\App\UserLog.cs" />
     <Compile Include="Models\App\Background.cs" />
+    <Compile Include="Models\App\UserAction.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Base\BasicRepository.cs" />
     <Compile Include="Models\Base\WebApplication.cs" />

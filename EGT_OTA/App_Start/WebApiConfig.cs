@@ -19,6 +19,7 @@ namespace EGT_OTA
             //支持跨域
             //这是重点，从配置文件的appsettings节点中读取跨域的地址
             var cors = new EnableCorsAttribute(ConfigurationManager.AppSettings["origins"], "*", "*");
+            cors.SupportsCredentials = true;
             config.EnableCors(cors);
 
             config.Routes.MapHttpRoute(

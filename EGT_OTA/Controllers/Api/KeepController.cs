@@ -36,7 +36,7 @@ namespace EGT_OTA.Controllers.Api
                 var articleID = ZNRequest.GetInt("ArticleID");
                 if (articleID <= 0)
                 {
-                    result.message = "文章信息异常";
+                    result.message = "参数异常";
                     return JsonConvert.SerializeObject(result);
                 }
                 Article article = new SubSonic.Query.Select(provider, "ID", "CreateUserNumber", "Number").From<Article>().Where<Article>(x => x.ID == articleID).ExecuteSingle<Article>();
@@ -66,6 +66,29 @@ namespace EGT_OTA.Controllers.Api
                 {
                     result.result = true;
                     result.message = user.Follows;
+
+
+                    //操作记录
+                    var now = DateTime.Now.ToString("yyyy-MM-dd");
+                    var action = db.Single<UserAction>(x => x.CreateUserNumber == user.Number && x.CreateTimeText == now && x.ActionType == Enum_ActionType.Keep);
+                    if (action == null)
+                    {
+                        action = new UserAction();
+                        action.CreateUserNumber = user.Number;
+                        action.ActionType = Enum_ActionType.Keep;
+                        action.CreateTime = DateTime.Now;
+                        action.CreateTimeText = now;
+                        action.ActionInfo = article.Number;
+                        db.Add<UserAction>(action);
+                    }
+                    else
+                    {
+                        if (!action.ActionInfo.Contains(article.Number))
+                        {
+                            action.ActionInfo += "," + article.Number;
+                            db.Update<UserAction>(action);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
