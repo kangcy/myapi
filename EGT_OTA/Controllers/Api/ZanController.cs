@@ -223,8 +223,8 @@ namespace EGT_OTA.Controllers.Api
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
                 var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<ArticleZan>();
 
-                var articles = new SubSonic.Query.Select(provider, "ID", "Number", "Cover", "ArticlePower", "CreateUserNumber", "Status", "Title").From<Article>().Where("Number").In(list.Select(x => x.ArticleNumber).ToArray()).And("CreateUserNumber").IsEqualTo(UserNumber).ExecuteTypedList<Article>();
-                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number").From<User>().Where("Number").In(list.Select(x => x.CreateUserNumber).ToArray()).ExecuteTypedList<User>();
+                var articles = new SubSonic.Query.Select(provider, "ID", "Number", "Cover", "ArticlePower", "CreateUserNumber", "Status", "Title").From<Article>().Where("Number").In(list.Select(x => x.ArticleNumber).ToArray()).ExecuteTypedList<Article>();
+                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number", "Cover").From<User>().Where("Number").In(list.Select(x => x.CreateUserNumber).ToArray()).ExecuteTypedList<User>();
 
                 List<ZanJson> newlist = new List<ZanJson>();
                 list.ForEach(x =>
@@ -245,6 +245,7 @@ namespace EGT_OTA.Controllers.Api
                         model.NickName = user.NickName;
                         model.Avatar = user.Avatar;
                         model.UserNumber = user.Number;
+                        model.UserCover = user.Cover;
                         newlist.Add(model);
                     }
                 });
@@ -260,6 +261,78 @@ namespace EGT_OTA.Controllers.Api
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("Api_Zan_ToMe:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
+        /// 我点赞
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Zan/ToUser")]
+        public string ToUser()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var UserNumber = ZNRequest.GetString("UserNumber");
+                if (string.IsNullOrWhiteSpace(UserNumber))
+                {
+                    result.message = "参数异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                var pager = new Pager();
+                var query = new SubSonic.Query.Select(provider).From<ArticleZan>().Where<ArticleZan>(x => x.CreateUserNumber == UserNumber);
+                var recordCount = query.GetRecordCount();
+                if (recordCount == 0)
+                {
+                    result.message = new { records = recordCount, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<ArticleZan>();
+
+                var articles = new SubSonic.Query.Select(provider, "ID", "Number", "Cover", "ArticlePower", "CreateUserNumber", "Status", "Title").From<Article>().Where("Number").In(list.Select(x => x.ArticleNumber).ToArray()).ExecuteTypedList<Article>();
+                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number", "Cover").From<User>().Where("Number").In(list.Select(x => x.ArticleUserNumber).ToArray()).ExecuteTypedList<User>();
+
+                List<ZanJson> newlist = new List<ZanJson>();
+                list.ForEach(x =>
+                {
+                    var article = articles.FirstOrDefault(y => y.Number == x.ArticleNumber);
+                    var user = users.FirstOrDefault(y => y.Number == x.ArticleUserNumber);
+                    if (article != null && user != null)
+                    {
+                        ZanJson model = new ZanJson();
+                        model.ID = x.ID;
+                        model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd");
+                        model.ArticleID = article.ID;
+                        model.Title = article.Title;
+                        model.Number = article.Number;
+                        model.Cover = article.Cover;
+                        model.ArticlePower = article.ArticlePower;
+                        model.CreateUserNumber = article.CreateUserNumber;
+                        model.NickName = user.NickName;
+                        model.Avatar = user.Avatar;
+                        model.UserNumber = user.Number;
+                        model.UserCover = user.Cover;
+                        newlist.Add(model);
+                    }
+                });
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = newlist
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Zan_ToUser:" + ex.Message);
                 result.message = ex.Message;
             }
             return JsonConvert.SerializeObject(result);
