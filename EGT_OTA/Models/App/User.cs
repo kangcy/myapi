@@ -198,9 +198,14 @@ namespace EGT_OTA.Models
         #region  隐私管理
 
         /// <summary>
-        /// 显示我喜欢的文章
+        /// 显示点赞
         /// </summary>
-        public int ShowArticle { get; set; }
+        public int ShowZan { get; set; }
+
+        /// <summary>
+        /// 显示收藏
+        /// </summary>
+        public int ShowKeep { get; set; }
 
         /// <summary>
         /// 显示我的关注

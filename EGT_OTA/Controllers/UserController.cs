@@ -109,7 +109,8 @@ namespace EGT_OTA.Controllers
                     user.Articles = 0;
                     user.Comments = 0;
                     user.Zans = 0;
-                    user.ShowArticle = 1;
+                    user.ShowZan = 1;
+                    user.ShowKeep = 1;
                     user.ShowFollow = 1;
                     user.ShowFan = 1;
                     user.ShowPush = 1;
@@ -267,7 +268,8 @@ namespace EGT_OTA.Controllers
                 user.Keeps = 0;
                 user.Follows = 0;
                 user.Fans = 0;
-                user.ShowArticle = 1;
+                user.ShowZan = 1;
+                user.ShowKeep = 1;
                 user.ShowFollow = 1;
                 user.ShowFan = 1;
                 user.ShowPush = 1;
@@ -1225,8 +1227,12 @@ namespace EGT_OTA.Controllers
                 switch (target)
                 {
                     //显示我喜欢的文章
-                    case "ShowArticle":
-                        result = new SubSonic.Query.Update<User>(provider).Set("ShowArticle").EqualTo(show).Where<User>(x => x.ID == user.ID).Execute() > 0;
+                    case "ShowZan":
+                        result = new SubSonic.Query.Update<User>(provider).Set("ShowZan").EqualTo(show).Where<User>(x => x.ID == user.ID).Execute() > 0;
+                        break;
+                    //显示我收藏的文章
+                    case "ShowKeep":
+                        result = new SubSonic.Query.Update<User>(provider).Set("ShowKeep").EqualTo(show).Where<User>(x => x.ID == user.ID).Execute() > 0;
                         break;
                     //显示我的关注
                     case "ShowFollow":
