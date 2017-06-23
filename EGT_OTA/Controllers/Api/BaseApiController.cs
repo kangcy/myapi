@@ -701,7 +701,7 @@ namespace EGT_OTA.Controllers.Api
                     model.UserID = user.ID;
                     model.NickName = user.NickName;
                     model.Avatar = user.Avatar;
-                    model.UserCover = user.Avatar;
+                    model.UserCover = user.Cover;
                     model.Signature = user.Signature;
                     model.IsPay = user.IsPay;
                     model.ArticleID = x.ID;

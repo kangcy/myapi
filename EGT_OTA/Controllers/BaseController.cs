@@ -487,7 +487,7 @@ namespace EGT_OTA.Controllers
                 default:
                     break;
             }
-            
+
             Image bitmap = new Bitmap(towidth, toheight);//新建一个bmp图片  
             Graphics g = Graphics.FromImage(bitmap);//新建一个画板  
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;//设置高质量插值法  
@@ -643,7 +643,7 @@ namespace EGT_OTA.Controllers
                 userids.Add(x.CreateUserNumber);
             });
 
-            var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Signature", "Number", "IsPay").From<User>().Where("Number").In(userids.ToArray()).ExecuteTypedList<User>();
+            var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Cover", "Signature", "Number", "IsPay").From<User>().Where("Number").In(userids.ToArray()).ExecuteTypedList<User>();
 
             //判断是否关注、判断是否点赞、判断是否收藏
             var fans = new List<Fan>();
@@ -670,6 +670,7 @@ namespace EGT_OTA.Controllers
                     model.NickName = user.NickName;
                     model.Avatar = user.Avatar;
                     model.Signature = user.Signature;
+                    model.UserCover = user.Cover;
                     model.IsPay = user.IsPay;
                     model.ArticleID = x.ID;
                     model.ArticleNumber = x.Number;
