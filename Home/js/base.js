@@ -162,7 +162,11 @@ var base = new function() {
 		if(url.indexOf('_0') < 0) {
 			return url;
 		}
-		return url.replace("_0", "_" + thumb);
+		url = url.replace("_0", "_" + thumb);
+		if(url.toString().toLowerCase().indexOf("http://") < 0) {
+			url = base.RootUrl + url;
+		}
+		return url;
 	}
 
 	this.IsNullOrEmpty = function(str) {

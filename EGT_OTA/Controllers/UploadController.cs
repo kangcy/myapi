@@ -208,5 +208,98 @@ namespace EGT_OTA.Controllers
                 message = ""
             }, JsonRequestBehavior.AllowGet);
         }
+
+
+        /// <summary>
+        /// 带缩略图上传
+        /// </summary>
+        public ActionResult UploadImage()
+        {
+            var standards = ZNRequest.GetString("standard");//缩略图规格名称
+            var number = ZNRequest.GetString("number");//用户编号
+
+            int isDraw = 0;//是否生成水印
+            int isThumb = 1;//是否生成缩略图
+            var user = db.Single<User>(x => x.Number == number);
+            if (user != null)
+            {
+                isDraw = user.UseDraw;
+            }
+
+            if (standards != "Article")
+            {
+                isDraw = 0;
+            }
+
+            UploadConfig.ConfigItem config = null;
+            if (isThumb == 1 && !String.IsNullOrEmpty(standards))
+            {
+                config = UploadConfig.Instance.GetConfig(standards);
+            }
+            var folder = ZNRequest.GetString("folder");
+            var basePath = "Upload/Images/" + standards + "/" + DateTime.Now.ToString("yyyyMMdd") + "/" + number + "/";
+            string savePath = Server.MapPath("~/" + basePath);
+
+            if (!Directory.Exists(savePath))
+            {
+                Directory.CreateDirectory(savePath);
+            }
+            var url = new List<string> { };
+            int count = Request.Files.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                try
+                {
+                    var file = Request.Files[i];
+                    string filename = Path.GetFileName(file.FileName);
+                    filename = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(10000) + Path.GetExtension(filename);
+
+                    int l = file.ContentLength;
+                    byte[] buffer = new byte[l];
+                    Stream ms = file.InputStream;
+                    System.Drawing.Bitmap image = new System.Drawing.Bitmap(ms);
+
+                    image.Save(savePath + "\\" + filename.Replace(".", "_0."));
+
+                    #region  生成缩略图
+
+                    if (config != null)
+                    {
+                        //生成缩略图（多种规格的）
+                        int index = 0;
+                        foreach (UploadConfig.ThumbMode mode in config.ModeList)
+                        {
+                            ///保存缩略图地址
+                            index++;
+                            using (Bitmap Origninal = new Bitmap(ms))
+                            {
+                                Bitmap returnBmp = new Bitmap(Origninal.Width, Origninal.Height);
+                                Graphics g = Graphics.FromImage(returnBmp);
+                                g.DrawImage(Origninal, 0, 0, Origninal.Width, Origninal.Height);
+                                g.Dispose();
+                                MakeThumbnail((Image)returnBmp, mode.Mode, mode.Width, mode.Height, isDraw, savePath + "\\" + filename.Replace(".", "_" + index + "."));
+                            }
+                        }
+                    }
+
+                    ms.Dispose();
+                    image.Dispose();
+
+                    url.Add(basePath + filename.Replace(".", "_0."));
+
+                    #endregion
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.ErrorLoger.Error("UploadController_UploadImage" + ex.Message, ex);
+                }
+            }
+            return Json(new
+            {
+                result = true,
+                message = url.Count == 0 ? "" : string.Join(",", url)
+            }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

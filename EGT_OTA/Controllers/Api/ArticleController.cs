@@ -224,6 +224,63 @@ namespace EGT_OTA.Controllers.Api
         }
 
         /// <summary>
+        /// 搜索文章
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Article/Search")]
+        public string Search()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var pager = new Pager();
+                var query = new SubSonic.Query.Select(provider).From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved && x.ArticlePower == Enum_ArticlePower.Public);
+
+                var title = SqlFilter(ZNRequest.GetString("Title"));
+                if (!string.IsNullOrWhiteSpace(title))
+                {
+                    query.And("Title").IsNotNull().And("Title").Like("%" + title + "%");
+                }
+
+                var UserNumber = ZNRequest.GetString("UserNumber");
+                if (!string.IsNullOrWhiteSpace(UserNumber))
+                {
+                    var black = db.Find<Black>(x => x.CreateUserNumber == UserNumber);
+                    if (black.Count > 0)
+                    {
+                        var userids = black.Select(x => x.ToUserNumber).ToArray();
+                        query = query.And("CreateUserNumber").NotIn(userids);
+                    }
+                }
+                var recordCount = query.GetRecordCount();
+                if (recordCount == 0)
+                {
+                    result.result = true;
+                    result.message = new { records = recordCount, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                var list = query.Paged(pager.Index, pager.Size).OrderDesc(new string[] { "Recommend", "Views" }).ExecuteTypedList<Article>();
+                List<ArticleJson> newlist = ArticleListInfo(list, UserNumber);
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = newlist
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Article_Search:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
         /// 链接文章列表
         /// </summary>
         [DeflateCompression]

@@ -219,6 +219,14 @@ namespace EGT_OTA.Models
         public string ArticleUserNumber { get; set; }
         public int ArticlePower { get; set; }
         /// <summary>
+        /// 显示定位
+        /// </summary>
+        public int ShowPosition { get; set; }
+        /// <summary>
+        /// 城市名称
+        /// </summary>
+        public string City { get; set; }
+        /// <summary>
         /// 子评论数量
         /// </summary>
         public int SubCommentCount { get; set; }

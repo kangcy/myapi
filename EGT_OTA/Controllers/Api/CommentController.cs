@@ -44,7 +44,7 @@ namespace EGT_OTA.Controllers.Api
                 model.NickName = user == null ? "" : user.NickName;
                 model.Avatar = user == null ? "" : user.Avatar;
                 model.ArticleID = model.ArticleID;
-                model.CreateDateText = model.CreateDate.ToString("yyyy-MM-dd");
+                model.CreateDateText = FormatTime(model.CreateDate);
                 result.result = true;
                 result.message = model;
             }
@@ -127,7 +127,7 @@ namespace EGT_OTA.Controllers.Api
                 model.CityCode = ZNRequest.GetString("CityCode");
                 model.Latitude = Tools.SafeDouble(ZNRequest.GetString("Latitude"));
                 model.Longitude = Tools.SafeDouble(ZNRequest.GetString("Longitude"));
-                model.ShowPosition = ZNRequest.GetInt("Longitude");
+                model.ShowPosition = ZNRequest.GetInt("ShowPosition");
                 model.ID = Tools.SafeInt(db.Add<Comment>(model));
                 if (model.ID > 0)
                 {
@@ -201,6 +201,12 @@ namespace EGT_OTA.Controllers.Api
                     model.Goods = x.Goods;
                     model.Number = x.Number;
                     model.CreateDateText = FormatTime(x.CreateDate);
+                    model.ShowPosition = x.ShowPosition;
+                    model.City = x.City;
+                    if (string.IsNullOrWhiteSpace(model.City))
+                    {
+                        model.ShowPosition = 0;
+                    }
                     model.UserID = user.ID;
                     model.UserNumber = user.Number;
                     model.NickName = user.NickName;
@@ -310,6 +316,12 @@ namespace EGT_OTA.Controllers.Api
                     model.Goods = x.Goods;
                     model.Number = x.Number;
                     model.CreateDateText = FormatTime(x.CreateDate);
+                    model.ShowPosition = x.ShowPosition;
+                    model.City = x.City;
+                    if (string.IsNullOrWhiteSpace(model.City))
+                    {
+                        model.ShowPosition = 0;
+                    }
                     model.UserID = user.ID;
                     model.UserNumber = user.Number;
                     model.NickName = user.NickName;
@@ -402,6 +414,12 @@ namespace EGT_OTA.Controllers.Api
                     model.Goods = x.Goods;
                     model.Number = x.Number;
                     model.CreateDateText = x.CreateDate.ToString("yyyy-MM-dd");
+                    model.ShowPosition = x.ShowPosition;
+                    model.City = x.City;
+                    if (string.IsNullOrWhiteSpace(model.City))
+                    {
+                        model.ShowPosition = 0;
+                    }
                     model.UserID = user.ID;
                     model.UserNumber = user.Number;
                     model.NickName = user.NickName;
