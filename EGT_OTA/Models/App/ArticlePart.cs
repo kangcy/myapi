@@ -86,12 +86,29 @@ namespace EGT_OTA.Models
     {
         public string ID { get; set; }
 
+        /// <summary>
+        /// 内容
+        /// </summary>
         public string Introduction { get; set; }
 
+        /// <summary>
+        /// 类型
+        /// </summary>
         public int PartType { get; set; }
 
+        /// <summary>
+        /// 状态（0-未操作，1-新增，2-编辑，3-删除）
+        /// </summary>
         public int Status { get; set; }
 
+        /// <summary>
+        /// 排序值
+        /// </summary>
         public int SortID { get; set; }
+
+        /// <summary>
+        /// 是否临时
+        /// </summary>
+        public int Temporary { get; set; }
     }
 }

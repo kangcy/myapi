@@ -136,6 +136,7 @@ namespace EGT_OTA.Controllers
         [HttpPost]
         public ActionResult Edit()
         {
+            var parts = "";
             try
             {
                 User user = GetUserInfo();
@@ -175,6 +176,7 @@ namespace EGT_OTA.Controllers
                 model.UpdateIP = Tools.GetClientIP;
                 model.Status = Enum_Status.Approved;
                 var result = false;
+
                 if (model.ID == 0)
                 {
                     var cover = ZNRequest.GetString("Cover");
@@ -205,7 +207,7 @@ namespace EGT_OTA.Controllers
                             part.ArticleNumber = model.Number;
                             part.Types = Enum_ArticlePart.Pic;
                             part.Introduction = covers[i];
-                            part.SortID = i;
+                            part.SortID = Tools.SafeInt(i);
                             part.Status = Enum_Status.Audit;
                             part.CreateDate = DateTime.Now;
                             part.CreateUserNumber = user.Number;
@@ -227,7 +229,7 @@ namespace EGT_OTA.Controllers
                     }
                     result = db.Update<Article>(model) > 0;
 
-                    var parts = SqlFilter(ZNRequest.GetString("Part").Trim(), false, false);
+                    parts = SqlFilter(ZNRequest.GetString("Part").Trim(), false, false);
 
                     if (!string.IsNullOrWhiteSpace(parts))
                     {
@@ -241,7 +243,7 @@ namespace EGT_OTA.Controllers
                                 var part = db.Single<ArticlePart>(y => y.ID == partid);
                                 if (part != null)
                                 {
-                                    part.SortID = x.SortID;
+                                    part.SortID = Tools.SafeInt(x.SortID);
                                     db.Update<ArticlePart>(part);
                                 }
                             }
@@ -252,7 +254,7 @@ namespace EGT_OTA.Controllers
                                 part.ArticleNumber = model.Number;
                                 part.Types = x.PartType;
                                 part.Introduction = x.Introduction;
-                                part.SortID = x.SortID;
+                                part.SortID = Tools.SafeInt(x.SortID);
                                 part.Status = Enum_Status.Audit;
                                 part.CreateDate = DateTime.Now;
                                 part.CreateUserNumber = user.Number;
@@ -267,14 +269,17 @@ namespace EGT_OTA.Controllers
                                 if (part != null)
                                 {
                                     part.Introduction = x.Introduction;
-                                    part.SortID = x.SortID;
+                                    part.SortID = Tools.SafeInt(x.SortID);
                                     db.Update<ArticlePart>(part);
                                 }
                             }
                             else if (x.Status == 3)
                             {
-                                //删除
-                                db.Delete<ArticlePart>(x.ID);
+                                //是否临时删除删除
+                                if (x.Temporary == 0)
+                                {
+                                    db.Delete<ArticlePart>(x.ID);
+                                }
                             }
                         });
                     }
@@ -286,7 +291,7 @@ namespace EGT_OTA.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLoger.Error("ArticleController_Edit:" + ex.Message);
+                LogHelper.ErrorLoger.Error("ArticleController_Edit:" + ex.Message + "," + parts);
             }
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
         }
