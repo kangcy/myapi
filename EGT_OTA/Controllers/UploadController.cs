@@ -110,10 +110,20 @@ namespace EGT_OTA.Controllers
                 System.IO.MemoryStream ms = new System.IO.MemoryStream(Convert.FromBase64String(stream));
                 string random = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(10000);
 
-                #region  保存缩略图
-
                 string standards = ZNRequest.GetString("standard");///缩略图规格名称
                 string number = ZNRequest.GetString("Number");
+
+                var filename = random + ".jpg";
+
+                //保存原图
+                var basePath = "Upload/Images/" + standards + "/" + DateTime.Now.ToString("yyyyMMdd") + "/" + number + "/";
+                string savePath = Server.MapPath("~/" + basePath);
+                if (!Directory.Exists(savePath))
+                {
+                    Directory.CreateDirectory(savePath);
+                }
+
+                #region  保存缩略图
 
                 int isDraw = 0;//是否生成水印
                 int isThumb = 1;//是否生成缩略图
@@ -133,68 +143,45 @@ namespace EGT_OTA.Controllers
                     UploadConfig.ConfigItem config = UploadConfig.Instance.GetConfig(standards);
                     if (config != null)
                     {
-                        //缩略图存放根目录
-                        string strFile = System.Web.HttpContext.Current.Server.MapPath(config.SavePath) + "/" + DateTime.Now.ToString("yyyyMMdd");
-                        if (!Directory.Exists(strFile))
-                        {
-                            Directory.CreateDirectory(strFile);
-                        }
-                        //Image image = Image.FromStream(ms, true);
-                        ///生成缩略图（多种规格的）
                         int i = 0;
                         foreach (UploadConfig.ThumbMode mode in config.ModeList)
                         {
-                            ///保存缩略图地址
                             i++;
-                            //MakeThumbnail(image, mode.Mode, mode.Width, mode.Height, isDraw, strFile + "\\" + random + "_" + i.ToString() + ".jpg");
-
                             using (Bitmap Origninal = new Bitmap(ms))
                             {
                                 Bitmap returnBmp = new Bitmap(Origninal.Width, Origninal.Height);
                                 Graphics g = Graphics.FromImage(returnBmp);
                                 g.DrawImage(Origninal, 0, 0, Origninal.Width, Origninal.Height);
                                 g.Dispose();
-                                MakeThumbnail((Image)returnBmp, mode.Mode, mode.Width, mode.Height, isDraw, strFile + "\\" + random + "_" + i.ToString() + ".jpg");
+                                MakeThumbnail((Image)returnBmp, mode.Mode, mode.Width, mode.Height, isDraw, savePath + "\\" + filename.Replace(".", "_" + i + "."));
                             }
 
                         }
-                        //image.Dispose();
                     }
                 }
 
                 #endregion
 
-                //保存原图
-                string savePath = System.Web.HttpContext.Current.Server.MapPath("~/Upload/Images/" + standards + "/" + DateTime.Now.ToString("yyyyMMdd") + "/");
-                if (!Directory.Exists(savePath))
-                {
-                    Directory.CreateDirectory(savePath);
-                }
-                savePath = savePath + "\\" + random + "_0" + ".jpg";
                 Image image2 = Image.FromStream(ms, true);
                 //添加水印
                 if (isDraw == 1)
                 {
                     image2 = WaterMark(image2);
                 }
-
-
                 EncoderParameter p;
                 EncoderParameters ps;
                 ps = new EncoderParameters(1);
                 p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
                 ps.Param[0] = p;
                 ImageCodecInfo ii = GetCodecInfo("image/jpeg");
-
-                //image2.Save(savePath, System.Drawing.Imaging.ImageFormat.Jpeg, ps);
-                image2.Save(savePath, ii, ps);
+                image2.Save(savePath + "\\" + filename.Replace(".", "_0."), ii, ps);
                 image2.Dispose();
                 ms.Close();
 
                 return Json(new
                 {
                     result = true,
-                    message = ("Upload/Images/" + standards + "/" + DateTime.Now.ToString("yyyyMMdd") + "/" + random + "_0" + ".jpg")
+                    message = basePath + filename.Replace(".", "_0.")
                 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -258,7 +245,13 @@ namespace EGT_OTA.Controllers
                     int l = file.ContentLength;
                     byte[] buffer = new byte[l];
                     Stream ms = file.InputStream;
-                    System.Drawing.Bitmap image = new System.Drawing.Bitmap(ms);
+                    //System.Drawing.Bitmap image = new System.Drawing.Bitmap(ms);
+
+                    Image image = Image.FromStream(ms, true);
+                    if (isDraw == 1)
+                    {
+                        image = WaterMark(image);
+                    }
 
                     image.Save(savePath + "\\" + filename.Replace(".", "_0."));
 
