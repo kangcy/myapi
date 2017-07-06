@@ -19,7 +19,7 @@ namespace EGT_OTA.Controllers.Api
         /// <summary>
         /// 编辑
         /// </summary>
-        [HttpPost]
+        [HttpGet]
         [Route("Api/Background/Edit")]
         public string Edit()
         {
