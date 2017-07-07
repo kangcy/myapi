@@ -164,7 +164,7 @@ var base = new function() {
 		}
 		url = url.replace("_0", "_" + thumb);
 		if(url.toString().toLowerCase().indexOf("http://") < 0) {
-			url = base.RootUrl + url;
+			url = RootUrl + url;
 		}
 		return url;
 	}

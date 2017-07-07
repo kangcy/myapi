@@ -313,7 +313,7 @@
 			var wx_url = window.location.href;
 			var wx_title = data.Title;
 			var wx_desc = "分享自「小微篇」";
-			var wx_icon = data.Cover;
+			var wx_icon = base.ShowThumb(data.Cover, 2);
 
 			var wx_appId = data.Share.AppID; // 必填，公众号的唯一标识
 			var wx_timestamp = data.Share.TimeStr; // 必填，生成签名的时间戳
