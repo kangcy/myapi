@@ -111,4 +111,11 @@ namespace EGT_OTA.Models
         /// </summary>
         public int Temporary { get; set; }
     }
+
+    public class PicJson
+    {
+        public string CreateDate { get; set; }
+
+        public List<ArticlePart> List { get; set; }
+    }
 }

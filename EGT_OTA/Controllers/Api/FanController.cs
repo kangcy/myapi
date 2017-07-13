@@ -216,6 +216,13 @@ namespace EGT_OTA.Controllers.Api
                     result.message = "参数异常";
                     return JsonConvert.SerializeObject(result);
                 }
+
+                var CurrUserNumber = ZNRequest.GetString("CurrUserNumber");
+                if (string.IsNullOrWhiteSpace(CurrUserNumber))
+                {
+                    CurrUserNumber = ToUserNumber;
+                }
+
                 var pager = new Pager();
                 var query = new SubSonic.Query.Select(provider).From<Fan>().Where<Fan>(x => x.ToUserNumber == ToUserNumber);
                 var recordCount = query.GetRecordCount();
@@ -228,7 +235,7 @@ namespace EGT_OTA.Controllers.Api
                 var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Fan>();
                 var array = list.Select(x => x.CreateUserNumber).Distinct().ToList();
                 var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Cover", "Signature", "Number").From<User>().Where<User>(x => x.Status == Enum_Status.Approved).And("Number").In(array.ToArray()).ExecuteTypedList<User>();
-                var follows = db.Find<Fan>(x => x.CreateUserNumber == ToUserNumber).ToList();
+                var follows = db.Find<Fan>(x => x.CreateUserNumber == CurrUserNumber).ToList();
 
                 var newlist = (from l in list
                                join u in users on l.CreateUserNumber equals u.Number
