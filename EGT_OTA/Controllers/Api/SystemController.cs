@@ -38,7 +38,7 @@ namespace EGT_OTA.Controllers.Api
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLoger.Error("Api_Article_Detail:" + ex.Message);
+                LogHelper.ErrorLoger.Error("Api_System_CheckDirtyword:" + ex.Message);
                 result.message = ex.Message;
             }
             return JsonConvert.SerializeObject(GetDirtyWord());
