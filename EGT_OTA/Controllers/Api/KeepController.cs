@@ -160,6 +160,12 @@ namespace EGT_OTA.Controllers.Api
                     result.message = "参数异常";
                     return JsonConvert.SerializeObject(result);
                 }
+                var CurrUserNumber = ZNRequest.GetString("CurrUserNumber");
+                if (string.IsNullOrWhiteSpace(CurrUserNumber))
+                {
+                    CurrUserNumber = CreateUserNumber;
+                }
+
                 var pager = new Pager();
                 var query = new SubSonic.Query.Select(provider).From<Keep>().Where<Keep>(x => x.CreateUserNumber == CreateUserNumber);
                 var recordCount = query.GetRecordCount();
@@ -172,7 +178,7 @@ namespace EGT_OTA.Controllers.Api
                 var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Keep>();
                 var articles = new SubSonic.Query.Select(provider, "ID", "Number", "Title", "TypeID", "Cover", "Views", "Goods", "CreateUserNumber", "CreateDate", "ArticlePower", "ArticlePowerPwd", "Recommend", "City", "Province").From<Article>().Where("Number").In(list.Select(x => x.ArticleNumber).ToArray()).And("Status").IsNotEqualTo(Enum_Status.Audit).OrderDesc(new string[] { "Recommend", "ID" }).ExecuteTypedList<Article>();
 
-                List<ArticleJson> newlist = ArticleListInfo(articles, CreateUserNumber);
+                List<ArticleJson> newlist = ArticleListInfo(articles, CurrUserNumber);
                 result.result = true;
                 result.message = new
                 {

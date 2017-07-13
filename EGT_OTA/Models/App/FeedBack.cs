@@ -30,13 +30,13 @@ namespace EGT_OTA.Models
         /// <summary>
         /// 内容
         /// </summary>
-        [SubSonicStringLength(500), SubSonicNullString]
+        [SubSonicStringLength(2000), SubSonicNullString]
         public string Summary { get; set; }
 
         /// <summary>
         /// 联系方式
         /// </summary>
-        [SubSonicStringLength(20), SubSonicNullString]
+        [SubSonicStringLength(500), SubSonicNullString]
         public string QQ { get; set; }
     }
 }
