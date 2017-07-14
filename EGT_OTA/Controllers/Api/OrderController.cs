@@ -131,12 +131,12 @@ namespace EGT_OTA.Controllers.Api
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
                 var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Order>();
 
-                var userarray = list.Select(x => x.ToUserNumber).Distinct().ToList();
+                var userarray = list.Select(x => x.CreateUserNumber).Distinct().ToList();
                 var allusers = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number", "Cover").From<User>().And("Number").In(userarray.ToArray()).ExecuteTypedList<User>();
                 List<OrdersJson> newlist = new List<OrdersJson>();
                 list.ForEach(x =>
                 {
-                    var user = allusers.FirstOrDefault(y => y.Number == x.ToUserNumber);
+                    var user = allusers.FirstOrDefault(y => y.Number == x.CreateUserNumber);
                     if (user != null)
                     {
                         OrdersJson model = new OrdersJson();
@@ -197,12 +197,12 @@ namespace EGT_OTA.Controllers.Api
                 var pager = new Pager();
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
                 var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Order>();
-                var userarray = list.Select(x => x.CreateUserNumber).Distinct().ToList();
+                var userarray = list.Select(x => x.ToUserNumber).Distinct().ToList();
                 var allusers = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number", "Cover").From<User>().And("Number").In(userarray.ToArray()).ExecuteTypedList<User>();
                 List<OrdersJson> newlist = new List<OrdersJson>();
                 list.ForEach(x =>
                 {
-                    var user = allusers.FirstOrDefault(y => y.Number == x.CreateUserNumber);
+                    var user = allusers.FirstOrDefault(y => y.Number == x.ToUserNumber);
                     if (user != null)
                     {
                         OrdersJson model = new OrdersJson();

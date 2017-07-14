@@ -251,6 +251,110 @@ namespace EGT_OTA.Controllers.Api
         }
 
         /// <summary>
+        /// 评论列表
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Comment/All_1_3")]
+        public string All_1_3()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var pager = new Pager();
+                var id = ZNRequest.GetInt("NewId");
+                var ArticleUserNumber = ZNRequest.GetString("ArticleUserNumber");
+                if (string.IsNullOrWhiteSpace(ArticleUserNumber))
+                {
+                    result.message = "参数异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                var query = new SubSonic.Query.Select(provider).From<Comment>().Where<Comment>(x => (x.ArticleUserNumber == ArticleUserNumber && x.ArticleUserNumber == "") || x.ParentUserNumber == ArticleUserNumber);
+                var recordCount = query.GetRecordCount();
+                if (recordCount == 0)
+                {
+                    result.result = true;
+                    result.message = new { records = recordCount, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+
+                if (recordCount == 1 && id > 0)
+                {
+                    result.result = true;
+                    result.message = new { records = recordCount, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                query = query.And("ID").IsNotEqualTo(id);
+
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Comment>();
+                var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number").From<User>().Where("Number").In(list.Select(x => x.CreateUserNumber).ToArray()).ExecuteTypedList<User>();
+                var parentComments = new SubSonic.Query.Select(provider, "ID", "ParentCommentNumber", "Number", "CreateUserNumber").From<Comment>().Where("ParentCommentNumber").In(list.Select(x => x.Number).ToArray()).ExecuteTypedList<Comment>();
+                var zans = db.Find<CommentZan>(x => x.CreateUserNumber == ArticleUserNumber).ToList();
+                List<CommentJson> newlist = new List<CommentJson>();
+                list.ForEach(x =>
+                {
+                    CommentJson model = new CommentJson();
+                    var user = users.FirstOrDefault(y => y.Number == x.CreateUserNumber);
+                    if (user == null)
+                    {
+                        return;
+                    }
+                    model.ID = x.ID;
+                    model.Summary = x.Summary;
+                    model.Goods = x.Goods;
+                    model.Number = x.Number;
+                    model.CreateDateText = FormatTime(x.CreateDate);
+                    model.ShowPosition = x.ShowPosition;
+                    model.City = x.City;
+                    if (string.IsNullOrWhiteSpace(model.City))
+                    {
+                        model.ShowPosition = 0;
+                    }
+                    model.UserID = user.ID;
+                    model.UserNumber = user.Number;
+                    model.NickName = user.NickName;
+                    model.Avatar = user.Avatar;
+                    model.SubCommentCount = parentComments.Count(y => y.ParentCommentNumber == x.Number);
+                    if (model.SubCommentCount == 1)
+                    {
+                        var subuser = db.Single<User>(y => y.Number == parentComments[0].CreateUserNumber);
+                        var comment = db.Single<Comment>(y => y.Number == parentComments[0].Number);
+                        if (subuser == null && comment == null)
+                        {
+                            model.SubCommentCount = 0;
+                        }
+                        if (subuser != null)
+                        {
+                            model.SubUserName = subuser.NickName;
+                        }
+                        if (comment != null)
+                        {
+                            model.SubSummary = comment.Summary;
+                        }
+                    }
+                    model.ArticleNumber = x.ArticleNumber;
+                    model.IsZan = zans.Count(y => y.CommentNumber == x.Number);
+                    newlist.Add(model);
+                });
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = newlist
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Comment_All_1_3:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
         /// 文章评论
         /// </summary>
         [DeflateCompression]
