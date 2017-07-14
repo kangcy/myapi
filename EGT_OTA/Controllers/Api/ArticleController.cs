@@ -342,5 +342,27 @@ namespace EGT_OTA.Controllers.Api
             }
             return JsonConvert.SerializeObject(result);
         }
+
+        /// <summary>
+        /// 链接文章列表
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Article/Public")]
+        public string Public()
+        {
+            var query = new SubSonic.Query.Select(provider, "Number", "Title", "CreateDate", "ArticlePowerPwd").From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved && x.ArticlePower != Enum_ArticlePower.Myself);
+            var list = query.ExecuteTypedList<Article>();
+
+            var newlist = (from l in list
+                           select new
+                           {
+                               Number = l.Number,
+                               Title = l.Title,
+                               ArticlePowerPwd = l.ArticlePowerPwd,
+                               CreateDate = l.CreateDate.ToString("yyyy-MM-dd hh:mm:ss")
+                           }).ToList();
+            return Newtonsoft.Json.JsonConvert.SerializeObject(newlist);
+        }
     }
 }
