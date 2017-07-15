@@ -175,6 +175,7 @@ namespace EGT_OTA.Controllers
                 model.UpdateDate = DateTime.Now;
                 model.UpdateIP = Tools.GetClientIP;
                 model.Status = Enum_Status.Approved;
+
                 var result = false;
 
                 if (model.ID == 0)
@@ -218,7 +219,22 @@ namespace EGT_OTA.Controllers
                     }
                     if (result)
                     {
-                        return Json(new { result = true, message = new { ID = model.ID, Number = model.Number } }, JsonRequestBehavior.AllowGet);
+                        ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
+                        model.TypeName = articleType == null ? string.Empty : articleType.Name;
+
+                        return Json(new
+                        {
+                            result = true,
+                            message = new
+                            {
+                                ID = model.ID,
+                                Number = model.Number,
+                                ArticlePower = model.ArticlePower,
+                                ArticlePowerPwd = model.ArticlePowerPwd,
+                                ArticleType = model.TypeID,
+                                ArticleTypeName = model.TypeName
+                            }
+                        }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 else
@@ -227,7 +243,16 @@ namespace EGT_OTA.Controllers
                     {
                         return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
                     }
+
+                    if (model.ArticlePower == Enum_ArticlePower.Public)
+                    {
+                        model.ArticlePower = Enum_ArticlePower.Myself;
+                    }
+
                     result = db.Update<Article>(model) > 0;
+
+                    ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
+                    model.TypeName = articleType == null ? string.Empty : articleType.Name;
 
                     parts = SqlFilter(ZNRequest.GetString("Part").Trim(), false, false);
 
@@ -286,7 +311,19 @@ namespace EGT_OTA.Controllers
                 }
                 if (result)
                 {
-                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                    return Json(new
+                    {
+                        result = true,
+                        message = new
+                        {
+                            ID = model.ID,
+                            Number = model.Number,
+                            ArticlePower = model.ArticlePower,
+                            ArticlePowerPwd = model.ArticlePowerPwd,
+                            TypeID = model.TypeID,
+                            TypeName = model.TypeName
+                        }
+                    }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)

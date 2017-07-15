@@ -28,10 +28,16 @@ namespace EGT_OTA.Models
     public class ShareLog : BaseModelShort
     {
         /// <summary>
-        /// 文章
+        /// 分享文章
         /// </summary>
         [SubSonicStringLength(30), SubSonicNullString]
         public string ArticleNumber { get; set; }
+
+        /// <summary>
+        /// 分享用户
+        /// </summary>
+        [SubSonicStringLength(30), SubSonicNullString]
+        public string UserNumber { get; set; }
 
         /// <summary>
         /// 分享方式

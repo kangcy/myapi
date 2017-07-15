@@ -26,37 +26,36 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                User user = GetUserInfo();
-                if (user == null)
+                var UserNumber = ZNRequest.GetString("UserNumber");
+                var Number = ZNRequest.GetString("Number");
+                if (string.IsNullOrWhiteSpace(Number))
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
                 }
-                var articleID = ZNRequest.GetInt("ArticleID");
-                Article article = new SubSonic.Query.Select(provider, "ID", "Shares", "Number").From<Article>().Where<Article>(x => x.ID == articleID).ExecuteSingle<Article>();
-
-                if (article == null)
-                {
-                    return Json(new { result = false, message = "文章信息异常" }, JsonRequestBehavior.AllowGet);
-                }
+                var ShareType = ZNRequest.GetInt("ShareType");
 
                 ShareLog model = new ShareLog();
                 model.CreateDate = DateTime.Now;
-                model.CreateUserNumber = user.Number;
+                model.CreateUserNumber = UserNumber;
                 model.CreateIP = Tools.GetClientIP;
-                model.ArticleNumber = article.Number;
+                model.ArticleNumber = ShareType == 0 ? Number : "";
+                model.UserNumber = ShareType == 0 ? "" : Number;
                 model.Source = ZNRequest.GetString("Source");
                 var result = false;
 
                 result = Tools.SafeInt(db.Add<ShareLog>(model)) > 0;
-                //修改分享数
                 if (result)
                 {
-                    result = new SubSonic.Query.Update<Article>(provider).Set("Shares").EqualTo(article.Shares + 1).Where<Article>(x => x.ID == articleID).Execute() > 0;
+                    if (ShareType == 0)
+                    {
+                        Article article = new SubSonic.Query.Select(provider, "ID", "Shares", "Number").From<Article>().Where<Article>(x => x.Number == Number).ExecuteSingle<Article>();
+                        if (article != null)
+                        {
+                            result = new SubSonic.Query.Update<Article>(provider).Set("Shares").EqualTo(article.Shares + 1).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                        }
+                    }
                 }
-                if (result)
-                {
-                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
-                }
+                return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
