@@ -240,16 +240,20 @@
 				<div class="signature mt5 tc f12 c999" id="signature"></div>
 				<div style="padding:0.3125rem 5%;" class="mt10 f13 c000">
 					<div class="flex-box flex-row f13 tc">
-						<div style="flex:0 0 33.3%;" class="flex-item hide" id="showFollow">
+						<div style="flex:0 0 25%;" class="flex-item hide" id="showZan">
+							<p class="f25 mb0 blue bold" id="showZanNum">0</p>
+							<p>喜欢</p>
+						</div>
+						<div style="flex:0 0 25%;" class="flex-item hide" id="showFollow">
 							<p class="f25 mb0 blue bold" id="showFollowNum">0</p>
 							<p>关注</p>
 						</div>
-						<div style="flex:0 0 33.3%;" class="flex-item hide" id="showFan">
+						<div style="flex:0 0 25%;" class="flex-item hide" id="showFan">
 							<p class="f25 mb0 blue bold" id="showFanNum">0</p>
 							<p>粉丝</p>
 						</div>
-						<div style="flex:0 0 33.3%;" class="flex-item hide" id="showArticle">
-							<p class="f25 mb0 blue bold" id="showArticleNum">0</p>
+						<div style="flex:0 0 25%;" class="flex-item hide" id="showKeep">
+							<p class="f25 mb0 blue bold" id="showKeepNum">0</p>
 							<p>收藏</p>
 						</div>
 					</div>
@@ -283,7 +287,6 @@
 	});
 
 	mui.ready(function() {
-
 		$bg.style.minHeight = window.innerWidth * 3 / 4 + "px";
 		$bg.style.background = "#eee";
 		$bg.style.backgroundSize = "cover";
@@ -379,17 +382,53 @@
 				base.Get("nickname").innerHTML = UnUnicodeText(data.NickName);
 				base.Get("signature").innerHTML = UnUnicodeText(data.Signature);
 
-				if(data.ShowArticle == 1) {
-					base.Get("showArticleNum").innerHTML = data.Keeps;
-					base.Get("showArticle").classList.remove("hide");
+				var showcount = 0;
+				if(data.ShowZan == 1) {
+					base.Get("showZanNum").innerHTML = data.Zans;
+					base.Get("showZan").classList.remove("hide");
+					showcount++;
+				}
+
+				if(data.ShowKeep == 1) {
+					base.Get("showKeepNum").innerHTML = data.Keeps;
+					base.Get("showKeep").classList.remove("hide");
+					showcount++;
 				}
 				if(data.ShowFollow == 1) {
 					base.Get("showFollowNum").innerHTML = data.Follows;
 					base.Get("showFollow").classList.remove("hide");
+					showcount++;
 				}
 				if(data.ShowFan == 1) {
 					base.Get("showFanNum").innerHTML = data.Fans;
 					base.Get("showFan").classList.remove("hide");
+					showcount++;
+				}
+				switch(showcount) {
+					case 1:
+						base.Get("showZan").style.flex = "0 0 100%";
+						base.Get("showKeep").style.flex = "0 0 100%";
+						base.Get("showFollow").style.flex = "0 0 100%";
+						base.Get("showFan").style.flex = "0 0 100%";
+						break;
+					case 2:
+						base.Get("showZan").style.flex = "0 0 50%";
+						base.Get("showKeep").style.flex = "0 0 50%";
+						base.Get("showFollow").style.flex = "0 0 50%";
+						base.Get("showFan").style.flex = "0 0 50%";
+						break;
+					case 3:
+						base.Get("showZan").style.flex = "0 0 33.3%";
+						base.Get("showKeep").style.flex = "0 0 33.3%";
+						base.Get("showFollow").style.flex = "0 0 33.3%";
+						base.Get("showFan").style.flex = "0 0 33.3%";
+						break;
+					case 4:
+						base.Get("showZan").style.flex = "0 0 25%";
+						base.Get("showKeep").style.flex = "0 0 25%";
+						base.Get("showFollow").style.flex = "0 0 25%";
+						base.Get("showFan").style.flex = "0 0 25%";
+						break;
 				}
 
 				var wx_url = window.location.href;

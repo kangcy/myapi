@@ -229,6 +229,7 @@
     <Compile Include="Controllers\Api\UserActionController.cs" />
     <Compile Include="Controllers\AppHelper.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
+    <Compile Include="Controllers\BackController.cs" />
     <Compile Include="Controllers\Filter\ArticlePowerAttribute.cs" />
     <Compile Include="Controllers\Filter\DeflateCompressionAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
