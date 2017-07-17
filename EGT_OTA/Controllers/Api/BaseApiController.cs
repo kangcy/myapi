@@ -124,6 +124,39 @@ namespace EGT_OTA.Controllers.Api
         }
 
         /// <summary>
+        /// 判断是否SQL注入
+        /// </summary>
+        /// <param name="inputString"></param>
+        /// <returns></returns>
+        protected bool ProcessSqlStr(string inputString)
+        {
+            if (string.IsNullOrWhiteSpace(inputString))
+            {
+                return false;
+            }
+            var list = new List<string> { "script", "and", "or", "exec", "execute", "insert", "select", "delete", "update", "alter", "create", "drop", "count", "chr", "char", "asc", "mid", "substring", "master", "truncate", "declare", "xp_cmdshell", "restore", "backup", "net", "user", "localgroup", "administrators" };
+            try
+            {
+                inputString = Tools.NoHTML(UrlDecode(inputString)).ToLower();
+
+                LogHelper.ErrorLoger.Error(inputString);
+                for (var i = 0; i < list.Count; i++)
+                {
+                    if (inputString.Contains(list[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error(ex.Message);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// 生成随机编号
         /// </summary>
         /// <param name="length"></param>

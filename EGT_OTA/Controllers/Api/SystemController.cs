@@ -26,7 +26,12 @@ namespace EGT_OTA.Controllers.Api
             ApiResult result = new ApiResult();
             try
             {
-                var title = ZNRequest.GetString("Title");
+                var title = UrlDecode(ZNRequest.GetString("Title"));
+                if (ProcessSqlStr(title))
+                {
+                    result.message = "禁止SQL注入";
+                    return JsonConvert.SerializeObject(result);
+                }
                 if (HasDirtyWord(title))
                 {
                     result.message = "您输入的内容含有敏感内容，请检查后重试哦";
