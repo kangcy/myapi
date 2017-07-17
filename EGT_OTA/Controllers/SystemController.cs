@@ -335,7 +335,7 @@ namespace EGT_OTA.Controllers
             bmp.Save(ms, ImageFormat.Png);
             return File(ms.GetBuffer(), "application/x-png");
         }
-        
+
         /// <summary>
         /// 判断远程文件是否存在
         /// </summary>
@@ -359,6 +359,32 @@ namespace EGT_OTA.Controllers
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 判断敏感词
+        /// </summary>
+        [HttpPost]
+        public ActionResult CheckDirty()
+        {
+            try
+            {
+                var title = UrlDecode(ZNRequest.GetString("Title"));
+                if (ProcessSqlStr(title))
+                {
+                    return Json(new { result = false, message = "禁止SQL注入" }, JsonRequestBehavior.AllowGet);
+                }
+                if (HasDirtyWord(title))
+                {
+                    return Json(new { result = false, message = "您输入的内容含有敏感内容，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { result = true, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_System_CheckDirty:" + ex.Message);
+            }
+            return Json(new { result = true, message = "" }, JsonRequestBehavior.AllowGet);
         }
     }
 }
