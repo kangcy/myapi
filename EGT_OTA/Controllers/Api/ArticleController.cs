@@ -45,20 +45,18 @@ namespace EGT_OTA.Controllers.Api
                     result.message = "文章信息异常";
                     return JsonConvert.SerializeObject(result);
                 }
-                if (model.Submission != Enum_Status.Approved && model.Submission != Enum_Submission.TemporaryApproved)
+                if (model.Status == Enum_Status.Audit)
                 {
                     result.message = "当前文章未通过审核";
                     return JsonConvert.SerializeObject(result);
                 }
+
                 if (model.Status == Enum_Status.DELETE)
                 {
                     result.message = "当前文章已删除";
                     return JsonConvert.SerializeObject(result);
                 }
-                if (model.CreateUserNumber != UserNumber)
-                {
-                    model.ArticlePower = Enum_ArticlePower.Myself;
-                }
+
                 //判断黑名单
                 if (db.Exists<Black>(x => x.ToUserNumber == UserNumber && x.CreateUserNumber == model.CreateUserNumber))
                 {
@@ -141,7 +139,7 @@ namespace EGT_OTA.Controllers.Api
             try
             {
                 var pager = new Pager();
-                var query = new SubSonic.Query.Select(provider).From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved && x.Submission >= Enum_Submission.Approved);
+                var query = new SubSonic.Query.Select(provider).From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved);
 
                 //昵称
                 var title = SqlFilter(ZNRequest.GetString("Title"));
@@ -160,6 +158,7 @@ namespace EGT_OTA.Controllers.Api
                 if (CreateUserNumber != CurrUserNumber || string.IsNullOrWhiteSpace(CreateUserNumber))
                 {
                     query = query.And("ArticlePower").IsEqualTo(Enum_ArticlePower.Public);
+                    query = query.And("Submission").IsGreaterThan(Enum_Submission.Audit);
                 }
 
                 //文章类型
@@ -345,7 +344,7 @@ namespace EGT_OTA.Controllers.Api
         [Route("Api/Article/Public")]
         public string Public()
         {
-            var query = new SubSonic.Query.Select(provider, "Number", "Title", "CreateDate", "ArticlePowerPwd").From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved && x.ArticlePower != Enum_ArticlePower.Myself);
+            var query = new SubSonic.Query.Select(provider, "Number", "Title", "CreateDate", "ArticlePowerPwd").From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved && x.ArticlePower != Enum_ArticlePower.Myself && x.Submission != Enum_Submission.Approved);
             var list = query.ExecuteTypedList<Article>();
 
             var newlist = (from l in list

@@ -92,7 +92,7 @@ namespace EGT_OTA.Controllers.Api
                             //喜欢、收藏
                             if (x.ActionType == like || x.ActionType == keep)
                             {
-                                var articles = new SubSonic.Query.Select(provider, "ID", "Number", "Cover", "ArticlePower", "CreateUserNumber", "Status", "Title").From<Article>().Where("Number").In(x.ActionInfo.Split(',')).And("Status").IsEqualTo(Enum_Status.Approved).And("ArticlePower").IsEqualTo(Enum_ArticlePower.Public).ExecuteTypedList<Article>();
+                                var articles = new SubSonic.Query.Select(provider, "ID", "Number", "Cover", "ArticlePower", "CreateUserNumber", "Status", "Title").From<Article>().Where("Number").In(x.ActionInfo.Split(',')).And("Status").IsEqualTo(Enum_Status.Approved).And("ArticlePower").IsEqualTo(Enum_ArticlePower.Public).And("Submission").IsGreaterThan(Enum_Submission.Audit).ExecuteTypedList<Article>();
                                 if (articles.Count > 0)
                                 {
                                     articles.ForEach(y =>

@@ -118,7 +118,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
                 }
-                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DELETE).Set("Submission").EqualTo(Enum_Submission.None).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DELETE).Set("Submission").EqualTo(Enum_Submission.TemporaryApproved).Where<Article>(x => x.ID == article.ID).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);

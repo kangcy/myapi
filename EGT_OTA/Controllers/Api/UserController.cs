@@ -240,6 +240,7 @@ namespace EGT_OTA.Controllers.Api
                 if (UserNumber != CurrUserNumber)
                 {
                     datequery = datequery.And("ArticlePower").IsEqualTo(Enum_ArticlePower.Public);
+                    datequery = datequery.And("Submission").IsGreaterThan(Enum_Submission.Audit);
                 }
                 var datelist = datequery.ExecuteTypedList<Article>();
                 var newdatelist = new List<DateTime>();
@@ -262,6 +263,7 @@ namespace EGT_OTA.Controllers.Api
                 if (UserNumber != CurrUserNumber)
                 {
                     query = query.And("ArticlePower").IsEqualTo(Enum_ArticlePower.Public);
+                    query = query.And("Submission").IsGreaterThan(Enum_Submission.Audit);
                 }
 
                 query.And("CreateDate").IsGreaterThanOrEqualTo(newdatelist[newdatelist.Count - 1].ToString("yyyy-MM-01 00:00:00"));
