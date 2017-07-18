@@ -32,5 +32,10 @@ namespace EGT_OTA.Models
         /// </summary>
         [SubSonicStringLength(30), SubSonicNullString]
         public string ArticleNumber { get; set; }
+
+        /// <summary>
+        /// 审核状态
+        /// </summary>
+        public int Status { get; set; }
     }
 }

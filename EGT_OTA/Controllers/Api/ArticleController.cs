@@ -45,18 +45,20 @@ namespace EGT_OTA.Controllers.Api
                     result.message = "文章信息异常";
                     return JsonConvert.SerializeObject(result);
                 }
-
-                if (model.Status == Enum_Status.Audit && model.CreateUserNumber != UserNumber)
+                if (model.Submission != Enum_Status.Approved && model.Submission != Enum_Submission.TemporaryApproved)
                 {
-                    model.ArticlePower = Enum_ArticlePower.Myself;
+                    result.message = "当前文章未通过审核";
+                    return JsonConvert.SerializeObject(result);
                 }
-
                 if (model.Status == Enum_Status.DELETE)
                 {
                     result.message = "当前文章已删除";
                     return JsonConvert.SerializeObject(result);
                 }
-
+                if (model.CreateUserNumber != UserNumber)
+                {
+                    model.ArticlePower = Enum_ArticlePower.Myself;
+                }
                 //判断黑名单
                 if (db.Exists<Black>(x => x.ToUserNumber == UserNumber && x.CreateUserNumber == model.CreateUserNumber))
                 {
@@ -139,7 +141,7 @@ namespace EGT_OTA.Controllers.Api
             try
             {
                 var pager = new Pager();
-                var query = new SubSonic.Query.Select(provider).From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved);
+                var query = new SubSonic.Query.Select(provider).From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved && x.Submission >= Enum_Submission.Approved);
 
                 //昵称
                 var title = SqlFilter(ZNRequest.GetString("Title"));
@@ -158,7 +160,6 @@ namespace EGT_OTA.Controllers.Api
                 if (CreateUserNumber != CurrUserNumber || string.IsNullOrWhiteSpace(CreateUserNumber))
                 {
                     query = query.And("ArticlePower").IsEqualTo(Enum_ArticlePower.Public);
-                    //query = query.And("TypeID").IsGreaterThan(0);
                 }
 
                 //文章类型
@@ -167,13 +168,6 @@ namespace EGT_OTA.Controllers.Api
                 {
                     query = query.And("TypeIDList").Like("%-0-" + TypeID.ToString() + "-%");
                 }
-
-                ////搜索默认显示推荐文章
-                //var Source = ZNRequest.GetString("Source");
-                //if (!string.IsNullOrWhiteSpace(Source))
-                //{
-                //    query = query.And("Recommend").IsEqualTo(Enum_ArticleRecommend.Recommend);
-                //}
 
                 //过滤黑名单
                 if (!string.IsNullOrWhiteSpace(CurrUserNumber))
@@ -235,7 +229,7 @@ namespace EGT_OTA.Controllers.Api
             try
             {
                 var pager = new Pager();
-                var query = new SubSonic.Query.Select(provider).From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved && x.ArticlePower == Enum_ArticlePower.Public);
+                var query = new SubSonic.Query.Select(provider).From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved && x.ArticlePower == Enum_ArticlePower.Public && x.Submission >= Enum_Submission.Approved);
 
                 var title = SqlFilter(ZNRequest.GetString("Title"));
                 if (!string.IsNullOrWhiteSpace(title))
@@ -300,7 +294,7 @@ namespace EGT_OTA.Controllers.Api
                 }
 
                 var pager = new Pager();
-                var query = new SubSonic.Query.Select(provider, "ID", "Number", "Title", "Cover", "CreateUserNumber", "CreateDate", "ArticlePower", "ArticlePowerPwd").From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved);
+                var query = new SubSonic.Query.Select(provider, "ID", "Number", "Title", "Cover", "CreateUserNumber", "CreateDate", "ArticlePower", "ArticlePowerPwd").From<Article>().Where<Article>(x => x.Status == Enum_Status.Approved && x.Submission >= Enum_Submission.Approved);
                 query = query.And("CreateUserNumber").IsEqualTo(user.Number);
                 var recordCount = query.GetRecordCount();
                 if (recordCount == 0)

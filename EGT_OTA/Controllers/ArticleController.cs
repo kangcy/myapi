@@ -56,6 +56,7 @@ namespace EGT_OTA.Controllers
                 model.UpdateDate = DateTime.Now;
                 model.UpdateIP = ip;
                 model.Status = Enum_Status.Approved;
+                model.Submission = Enum_Submission.TemporaryApproved;
                 model.Views = 0;
                 model.Goods = 0;
                 model.Keeps = 0;
@@ -117,7 +118,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
                 }
-                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DELETE).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DELETE).Set("Submission").EqualTo(Enum_Submission.None).Where<Article>(x => x.ID == article.ID).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -175,6 +176,7 @@ namespace EGT_OTA.Controllers
                 model.UpdateDate = DateTime.Now;
                 model.UpdateIP = Tools.GetClientIP;
                 model.Status = Enum_Status.Approved;
+                model.Submission = Enum_Submission.TemporaryApproved;//默认临时投稿审核
 
                 var result = false;
 
@@ -566,22 +568,46 @@ namespace EGT_OTA.Controllers
             {
                 var UserNumber = ZNRequest.GetString("UserNumber");
                 var ArticleNumber = ZNRequest.GetString("ArticleNumber");
+                var ArticlePower = ZNRequest.GetInt("ArticlePower");
                 if (string.IsNullOrWhiteSpace(UserNumber) || string.IsNullOrWhiteSpace(ArticleNumber))
                 {
                     return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
                 }
-                var time = DateTime.Now.AddDays(-7);
-                var log = db.Single<ArticleRecommend>(x => x.CreateUserNumber == UserNumber && x.CreateDate > time);
+
+                //判断文章权限,公开的才可以投稿
+                var article = db.Single<Article>(x => x.Number == ArticleNumber);
+                if (article == null)
+                {
+                    return Json(new { result = false, message = "文章信息异常" }, JsonRequestBehavior.AllowGet);
+                }
+                if (article.TypeID == 0)
+                {
+                    return Json(new { result = false, message = "请选择文章分类" }, JsonRequestBehavior.AllowGet);
+                }
+                if (article.ArticlePower != Enum_ArticlePower.Public)
+                {
+                    if (ArticlePower != Enum_ArticlePower.Public)
+                    {
+                        return Json(new { result = false, message = "公开文章才可以投稿哦" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                var time = DateTime.Now.AddDays(-1);
+                var log = db.Single<ArticleRecommend>(x => x.CreateUserNumber == UserNumber && x.ArticleNumber == ArticleNumber && x.CreateDate > time);
                 if (log != null)
                 {
-                    return Json(new { result = false, message = "每7日只有一次投稿机会，上次投稿时间为：" + log.CreateDate.ToString("yyyy-MM-dd") }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "每天只有1次投稿机会，上次投稿时间为：" + log.CreateDate.ToString("yyyy-MM-dd hh:mm:ss") }, JsonRequestBehavior.AllowGet);
                 }
+
+                //修改文章投稿记录
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Submission").EqualTo(Enum_Submission.Audit).Set("ArticlePower").EqualTo(Enum_ArticlePower.Public).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+
                 ArticleRecommend model = new ArticleRecommend();
                 model.ArticleNumber = ArticleNumber;
                 model.CreateUserNumber = UserNumber;
                 model.CreateDate = DateTime.Now;
                 model.CreateIP = Tools.GetClientIP;
-                var result = Tools.SafeInt(db.Add<ArticleRecommend>(model)) > 0;
+                model.Status = Enum_Status.Audit;
+                result = Tools.SafeInt(db.Add<ArticleRecommend>(model)) > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);

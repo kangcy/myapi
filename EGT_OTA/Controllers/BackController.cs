@@ -14,6 +14,11 @@ namespace EGT_OTA.Controllers
     /// </summary>
     public class BackController : BaseController
     {
+        public ActionResult Login()
+        {
+            return View();
+        }
+
         /// <summary>
         /// 登录审核
         /// </summary>
@@ -128,5 +133,29 @@ namespace EGT_OTA.Controllers
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 投稿审核
+        /// </summary>
+        public ActionResult RecommendArticleAudit()
+        {
+            try
+            {
+                var pager = new Pager();
+                var query = new SubSonic.Query.Select(provider).From<ArticleRecommend>().Where<ArticleRecommend>(x => x.Status == Enum_Status.Audit);
+                var recordCount = query.GetRecordCount();
+                if (recordCount == 0)
+                {
+                    return Json(new { result = true, records = 0, totalpage = 1 }, JsonRequestBehavior.AllowGet);
+                }
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<ArticleRecommend>();
+                return Json(new { result = true, currpage = pager.Index, records = recordCount, totalpage = totalPage, list = list }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_ArticleAudit:" + ex.Message);
+            }
+            return Json(new { result = true, records = 0, totalpage = 1 }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -262,6 +262,7 @@
     <Compile Include="Enum\Enum_PushType.cs" />
     <Compile Include="Enum\Enum_ErrorCode.cs" />
     <Compile Include="Enum\Enum_ActionType.cs" />
+    <Compile Include="Enum\Enum_Submission.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -339,7 +340,10 @@
     <Compile Include="Redis\RedisHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Back\bootstrap.min.js" />
     <Content Include="bin\EntityFramework.dll" />
+    <Content Include="Back\bootstrap.css" />
+    <Content Include="Back\login.css" />
     <Content Include="DLL\Castle.Core.dll" />
     <Content Include="DLL\GetuiServerApiSDK.dll" />
     <Content Include="DLL\Google.ProtocolBuffers.dll" />
@@ -738,6 +742,7 @@
     </Content>
     <None Include="Properties\PublishProfiles\interface.pubxml" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
+    <Content Include="Views\Back\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

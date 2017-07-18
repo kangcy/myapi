@@ -54,6 +54,19 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "信息异常" }, JsonRequestBehavior.AllowGet);
                 }
+
+                //待审核
+                if (model.Status == Enum_Status.Audit)
+                {
+                    var newmodel = new Article();
+                    newmodel.ID = model.ID;
+                    newmodel.Title = model.Title;
+                    newmodel.ArticlePower = model.ArticlePower;
+                    newmodel.Status = model.Status;
+                    return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
+                }
+
+                //已删除
                 if (model.Status == Enum_Status.DELETE)
                 {
                     var newmodel = new Article();
