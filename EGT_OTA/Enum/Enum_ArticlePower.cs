@@ -11,27 +11,27 @@ namespace EGT_OTA.Models
     public class Enum_ArticlePower : EnumBase
     {
         /// <summary>
-        /// 公开
+        /// 所有人都可以看到
         /// </summary>
-        [EnumAttribute("所有人都可以看到")]
+        [EnumAttribute("公开")]
         public const int Public = 3;
 
         /// <summary>
-        /// 限制可见
+        /// 仅通过自己分享后才可见
         /// </summary>
-        [EnumAttribute("仅通过自己分享后才可见")]
+        [EnumAttribute("限制可见")]
         public const int Share = 2;
 
         /// <summary>
-        /// 密码可见
+        /// 设置密码,输入密码才可见
         /// </summary>
-        [EnumAttribute("设置密码,输入密码才可见")]
+        [EnumAttribute("密码可见")]
         public const int Password = 1;
 
         /// <summary>
-        /// 私密
+        /// 仅自己可见
         /// </summary>
-        [EnumAttribute("仅自己可见")]
+        [EnumAttribute("私密")]
         public const int Myself = 0;
     }
 }

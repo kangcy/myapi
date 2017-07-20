@@ -1,0 +1,196 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="format-detection" content="telephone = no" />
+
+    <title>小微篇后台</title>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/login.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/Page.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/msgbox.css")"  />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
+    @RenderSection("Styles", false)
+</head>
+<body>
+    <div id="wrapper">
+        <div class="overlay" id="overlay"></div>
+        <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+            <ul class="nav sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">小微篇后台</a>
+                </li>
+                <li>
+                    <a href="@Url.Content("~/Back/User")">用户</a>
+                </li>
+                <li>
+                    <a href="@Url.Content("~/Back/Article")">文章</a>
+                </li>
+                <li>
+                    <a href="@Url.Content("~/Back/RecommendArticle")">投稿</a>
+                </li>
+                <li>
+                    <a href="#">评论</a>
+                </li>
+                <li>
+                    <a href="#">打赏</a>
+                </li>
+                <li>
+                    <a href="#">留言反馈</a>
+                </li>
+                @*<li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i>文章管理 <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>*@
+
+            </ul>
+        </nav>
+        <div id="page-content-wrapper">
+            <button type="button" class="hamburger is-closed animated fadeInLeft" data-toggle="offcanvas">
+                <span class="hamb-top"></span>
+                <span class="hamb-middle"></span>
+                <span class="hamb-bottom"></span>
+            </button>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <div class="el-card box-card">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
+<script src="@Url.Content("~/Back/bootstrap.min.js")"></script>
+<script src="@Url.Content("~/Back/msgbox/msgbox.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Back/jquery.myPagination5.0.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
+<script type="text/ecmascript">
+    var trigger = $('.hamburger'), overlay = $('.overlay'), isClosed = false;
+
+    trigger.click(function () {
+        hamburger_cross();
+    });
+
+    function hamburger_cross() {
+
+        if (isClosed == true) {
+            overlay.hide();
+            trigger.removeClass('is-open');
+            trigger.addClass('is-closed');
+            isClosed = false;
+        } else {
+            overlay.show();
+            trigger.removeClass('is-closed');
+            trigger.addClass('is-open');
+            isClosed = true;
+        }
+    }
+
+    $('[data-toggle="offcanvas"]').click(function () {
+        $('#wrapper').toggleClass('toggled');
+    });
+
+    function change(val, id, name) {
+        $("#" + id).html(name).attr("index", val);
+    }
+
+    var base = new function () {
+        //校验字符串是否为空
+        this.IsNullOrEmpty = function (str) {
+            if (!str) {
+                return true;
+            }
+            if (str == "") {
+                return true;
+            }
+            if (str.toString().toLowerCase() == "null") {
+                return true;
+            }
+            if (str.toString().toLowerCase() == "undefined") {
+                return true;
+            }
+            return false;
+        }
+
+        //js Unicode解码
+        this.UnUnicodeText = function (str) {
+            if (base.IsNullOrEmpty(str)) {
+                return "";
+            }
+            return unescape(str.replace(/\\u/gi, '%u'));
+        }
+
+        //打开等待提示框
+        this.ShowWaiting = function (title) {
+            waiting.show(title);
+        }
+
+        //关闭等待提示框
+        this.CloseWaiting = function () {
+            waiting.close();
+        }
+
+        this.ShowMask = function (enable, callback) {
+            $("#overlay").show();
+            $("#overlay").click(function () {
+                if (enable) {
+                    $("#overlay").hide();
+                    if (callback) {
+                        callback();
+                    }
+                }
+            })
+        }
+    }
+
+
+    //等待框
+    var waiting = new function () {
+        //创建
+        this.create = function (title) {
+            var item = document.getElementById("waiting");
+            if (item) {
+                document.getElementById("waiting_title").innerHTML = title;
+                return item;
+            }
+            var div = document.createElement('div');
+            div.className = 'waiting c333 f13 tc';
+            div.setAttribute("id", "waiting");
+            div.style.zIndex = "2147483647";
+            div.innerHTML = '<div class="waiting1"><div class="waiting2"><img src="@(ViewBag.RootUrl)/Images/loading.gif" class="fl" /><span id="waiting_title">' + title + '</span></div></div>';
+            document.getElementsByTagName("body")[0].appendChild(div);
+            return div;
+        }
+        this.setTitle = function (title) {
+            var item = this.create(title);
+            base.Get("waiting_title").innerHTML = title;
+        }
+        this.show = function (title) {
+            var item = this.create(title);
+            item.classList.remove("hide");
+        }
+        this.close = function () {
+            var item = this.create("");
+            item.classList.add("hide");
+        }
+    }
+
+</script>
+@RenderSection("scripts", required: false)

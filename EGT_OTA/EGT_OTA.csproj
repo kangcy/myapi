@@ -230,8 +230,10 @@
     <Compile Include="Controllers\AppHelper.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\BackController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\Filter\ArticlePowerAttribute.cs" />
     <Compile Include="Controllers\Filter\DeflateCompressionAttribute.cs" />
+    <Compile Include="Controllers\Filter\BackPowerAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InitController.cs" />
     <Compile Include="Controllers\NotifyController.cs" />
@@ -341,6 +343,25 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Back\bootstrap.min.js" />
+    <Content Include="Back\jquery.myPagination5.0.js" />
+    <Content Include="Back\layer\extend\layer.ext.js" />
+    <Content Include="Back\layer\layer.js" />
+    <Content Include="Back\layer\skin\default\icon-ext.png" />
+    <Content Include="Back\layer\skin\default\icon.png" />
+    <Content Include="Back\layer\skin\default\loading-0.gif" />
+    <Content Include="Back\layer\skin\default\loading-1.gif" />
+    <Content Include="Back\layer\skin\default\loading-2.gif" />
+    <Content Include="Back\layer\skin\layer.css" />
+    <Content Include="Back\layer\skin\layer.ext.css" />
+    <Content Include="Back\msgbox\gb_tip_layer.png" />
+    <Content Include="Back\msgbox\gb_tip_layer_ie6.png" />
+    <Content Include="Back\msgbox\loading.gif" />
+    <Content Include="Back\msgbox\min.js" />
+    <Content Include="Back\msgbox\msgbox.css" />
+    <Content Include="Back\msgbox\msgbox.html" />
+    <Content Include="Back\msgbox\msgbox.js" />
+    <Content Include="Back\msgbox\Page.css" />
+    <Content Include="Back\table.css" />
     <Content Include="bin\EntityFramework.dll" />
     <Content Include="Back\bootstrap.css" />
     <Content Include="Back\login.css" />
@@ -389,6 +410,7 @@
     <Content Include="Images\Help\6.png" />
     <Content Include="Images\Help\7.png" />
     <Content Include="Images\Help\8.png" />
+    <Content Include="Images\loading.gif" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\logo_50_52.png" />
     <Content Include="Images\push.png" />
@@ -743,6 +765,11 @@
     <None Include="Properties\PublishProfiles\interface.pubxml" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <Content Include="Views\Back\Login.cshtml" />
+    <Content Include="Views\Back\Article.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Back\User.cshtml" />
+    <Content Include="Views\Back\RecommendArticle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

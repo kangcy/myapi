@@ -1,0 +1,248 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using EGT_OTA.Models
+<div>
+    <div class="el-card__header">
+        <div class="clearfix">
+            <p>文章列表(@(ViewBag.RecordCount))</p>
+            <div class="el-form-item inline fl">
+                <div class="el-form-item__content">
+                    <div class="el-input el-input--small">
+                        <input id="title" placeholder="文章标题" size="small" type="text" class="el-input__inner" value="@(ViewBag.title)">
+                    </div>
+                </div>
+            </div>
+            <div class="el-form-item inline fl ml15">
+                <div class="el-form-item__content">
+                    <div class="el-input el-input--small">
+                        <input id="usernumber" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="el-form-item inline fl ml15">
+                <label class="el-form-item__label">文章状态</label>
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button id="status" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            不限
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'status','不限')" class="ddl_status" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(0,'status','待审核')" class="ddl_status" index="0">待审核</a></li>
+                            <li><a href="#" onclick="change(1,'status','已审核')" class="ddl_status" index="1">已审核</a></li>
+                            <li><a href="#" onclick="change(2,'status','已删除')" class="ddl_status" index="2">已删除</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="el-form-item inline fl ml15">
+                <label class="el-form-item__label">投稿状态</label>
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button type="button" id="submission" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            不限
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'submission','不限')" class="ddl_submission" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(0,'submission','未提交')" class="ddl_submission" index="0">未提交</a></li>
+                            <li><a href="#" onclick="change(1,'submission','待审核')" class="ddl_submission" index="1">待审核</a></li>
+                            <li><a href="#" onclick="change(2,'submission','已审核')" class="ddl_submission" index="2">已审核</a></li>
+                            <li><a href="#" onclick="change(100,'submission','临时审核')" class="ddl_submission" index="100">临时审核</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="el-form-item inline fl ml15">
+                <label class="el-form-item__label">权限</label>
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button id="articlepower" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            不限
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'articlepower','不限')" class="ddl_articlepower" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(3,'articlepower','公开')" class="ddl_articlepower" index="3">公开</a></li>
+                            <li><a href="#" onclick="change(2,'articlepower','限制可见')" class="ddl_articlepower" index="2">限制可见</a></li>
+                            <li><a href="#" onclick="change(1,'articlepower','密码可见')" class="ddl_articlepower" index="1">密码可见</a></li>
+                            <li><a href="#" onclick="change(0,'articlepower','私密')" class="ddl_articlepower" index="1">私密</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fr">
+                <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
+                <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="el-card__body">
+        <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition full f12 tc">
+            <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body full">
+                <thead>
+                    <tr>
+                        <th class="cell" style="width: 100px;">用户头像</th>
+                        <th class="cell" style="width: 150px;">用户昵称(编号)</th>
+                        <th class="cell">标题</th>
+                        <th class="cell" style="width: 80px;">权限</th>
+                        <th class="cell" style="width: 80px;">状态</th>
+                        <th class="cell" style="width: 100px;">投稿</th>
+                        <th class="cell">定位</th>
+                        <th class="cell" style="width: 160px;">创建日期</th>
+                        <th class="cell" style="width: 100px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var list = ViewBag.List;
+                        for (var i = 0; i < list.Count; i++)
+                        {
+                            var url = list[i].Avatar;
+                            if (string.IsNullOrWhiteSpace(url))
+                            {
+                                url = "http://www.xiaoweipian.com/Images/avatar.png";
+                            }
+                            else
+                            {
+                                if (url.IndexOf("_0") >= 0)
+                                {
+                                    url = url.Replace("_0", "_2");
+                                    if (url.ToLower().IndexOf("http://") < 0)
+                                    {
+                                        url = "http://www.xiaoweipian.com/" + url;
+                                    }
+                                }
+                            }
+                        <tr>
+                            <td class="cell">
+                                <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
+                            </td>
+                            <td>
+                                <div class="cell">
+                                    <span class="nickname" nickname="@list[i].NickName"></span>
+                                    <p class="mb0">(@list[i].CreateUserNumber)</p>
+                                </div>
+                            </td>
+                            <td class="cell el-button--text">
+                                <a href="#" class="underline">@list[i].Title</a>
+                            </td>
+                            <td class="cell">
+                                @EnumBase.GetDescription(typeof(Enum_ArticlePower), @list[i].ArticlePower)
+                            </td>
+                            <td class="cell">
+                                @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
+                            </td>
+                            <td class="cell">
+                                @EnumBase.GetDescription(typeof(Enum_Submission), @list[i].Submission)
+                            </td>
+                            <td class="cell">
+                                @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
+                            </td>
+                            <td class="cell">
+                                @list[i].CreateDateText
+                            </td>
+                            <td>
+                                <button type="button" class="el-button el-button--primary el-button--small btnAudit" index="@list[i].ID"><span>取消审核</span></button>
+                            </td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="divPager" align="center" style="margin-top: 30px;"></div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+
+        var isloading = false;
+        $(document).ready(function () {
+            $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
+            $(".ddl_submission[index=" + parseInt(@(ViewBag.submission)) + "]").eq(0).trigger("click");
+            $(".ddl_articlepower[index=" + parseInt(@(ViewBag.articlepower)) + "]").eq(0).trigger("click");
+
+            var currentIndex = parseInt(@(ViewBag.CurrPage));
+            var recordCount = parseInt(@(ViewBag.RecordCount));
+            var pageSize = parseInt(@(ViewBag.PageSize));
+
+            $(".nickname").each(function () {
+                this.innerText = base.UnUnicodeText(this.getAttribute("nickname"));
+            })
+
+            $("#divPager").myPagination({
+                currPage: currentIndex,
+                pageCount: Math.ceil(recordCount / pageSize),
+                pageSize: pageSize,
+                links: 'javascript:void(0);',
+                cssStyle: 'jogger',
+                ajax: {
+                    on: false,
+                    onClick: function (page) {
+                        ZENG.msgbox.show(" 正在加载" + page + "页，请稍后...", 6, 1000);
+                        var param = {
+                            page: page,
+                            rows: pageSize,
+                            title: $("#title").val().trim(),
+                            usernumber: $("#usernumber").val().trim(),
+                            status: $("#status").attr("index"),
+                            submission: $("#submission").attr("index"),
+                            articlepower: $("#articlepower").attr("index")
+                        }
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?" + $.param(param)
+                    }
+                }
+            });
+
+            $("#search").click(function () {
+                var param = {
+                    page: 1,
+                    rows: pageSize,
+                    title: $("#title").val().trim(),
+                    usernumber: $("#usernumber").val().trim(),
+                    status: $("#status").attr("index"),
+                    submission: $("#submission").attr("index"),
+                    articlepower: $("#articlepower").attr("index")
+                }
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?" + $.param(param)
+            })
+
+            $("#reset").click(function () {
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article"
+            })
+
+            $(".btnAudit").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                var id = this.getAttribute("index");
+
+                layer.confirm('确认执行当前操作吗？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: "@(ViewBag.RootUrl)Back/ArticleAudit",
+                        data: { key: "149516652684099", id: id },
+                        dataType: "json",
+                        success: function (data) {
+                            isloading = false;
+                            layer.alert(data.message);
+                            if (data.result) {
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }, function () {
+
+                });
+                isloading = false;
+            })
+        });
+    </script>
+}

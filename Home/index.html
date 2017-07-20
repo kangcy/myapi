@@ -91,6 +91,10 @@
 	</head>
 
 	<body>
+		<div id="audit" class="full tc hide">
+			<img src="img/stop.png" class="none" />
+			<p class="mt20 f12 c999">当前文章未通过审核</p>
+		</div>
 		<div id="delete" class="full tc hide">
 			<img src="img/stop.png" class="none" />
 			<p class="mt20 f12 c999">当前文章已删除</p>
@@ -287,7 +291,14 @@
 			ArticleID = data.ID;
 			document.title = UnUnicodeText(data.Title);
 
-			//是否删除
+			//未审核
+			if(data.Status == 0) {
+				document.getElementById("loader").classList.add("hide");
+				$("#audit").removeClass("hide");
+				return;
+			}
+
+			//已删除
 			if(data.Status == 2) {
 				document.getElementById("loader").classList.add("hide");
 				$("#delete").removeClass("hide");

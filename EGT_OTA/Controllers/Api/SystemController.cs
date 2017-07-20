@@ -54,7 +54,7 @@ namespace EGT_OTA.Controllers.Api
         /// </summary>
         [HttpPost]
         [Route("Api/System/CheckDirty")]
-        public string CheckDirty()
+        public IHttpActionResult CheckDirty()
         {
             ApiResult result = new ApiResult();
             try
@@ -63,23 +63,23 @@ namespace EGT_OTA.Controllers.Api
                 if (ProcessSqlStr(title))
                 {
                     result.message = "禁止SQL注入";
-                    return JsonConvert.SerializeObject(result);
+                    return Json<ApiResult>(result);
                 }
                 if (HasDirtyWord(title))
                 {
                     result.message = "您输入的内容含有敏感内容，请检查后重试哦";
-                    return JsonConvert.SerializeObject(result);
+                    return Json<ApiResult>(result);
                 }
                 result.result = true;
                 result.message = "";
-                return JsonConvert.SerializeObject(result);
+                return Json<ApiResult>(result);
             }
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("Api_System_CheckDirty:" + ex.Message);
                 result.message = ex.Message;
             }
-            return JsonConvert.SerializeObject(result);
+            return Json<ApiResult>(result);
         }
     }
 }

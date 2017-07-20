@@ -49,6 +49,25 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
+        /// Api返回结果
+        /// </summary>
+        public class ApiResult
+        {
+            public ApiResult()
+            {
+                this.result = false;
+                this.code = 0;
+                this.message = string.Empty;
+            }
+
+            public bool result { get; set; }
+
+            public int code { get; set; }
+
+            public object message { get; set; }
+        }
+
+        /// <summary>
         /// 解码
         /// </summary>
         protected string UrlDecode(string msg)
@@ -736,6 +755,7 @@ namespace EGT_OTA.Controllers
                     model.Recommend = x.Recommend;
                     model.Province = x.Province;
                     model.City = x.City;
+                    model.Submission = x.Submission;
                     newlist.Add(model);
                 }
             });

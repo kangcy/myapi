@@ -1,0 +1,252 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using EGT_OTA.Models
+<div>
+    <div class="el-card__header">
+        <div class="clearfix">
+            <p>用户列表(@(ViewBag.RecordCount))</p>
+            <div class="el-form-item inline fl">
+                <div class="el-form-item__content">
+                    <div class="el-input el-input--small">
+                        <input id="nickname" placeholder="用户昵称" size="small" type="text" class="el-input__inner" value="@(ViewBag.nickname)">
+                    </div>
+                </div>
+            </div>
+            <div class="el-form-item inline fl ml15">
+                <div class="el-form-item__content">
+                    <div class="el-input el-input--small">
+                        <input id="usernumber" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="el-form-item inline fl ml15">
+                <label class="el-form-item__label">状态</label>
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button id="status" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            不限
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'status','不限')" class="ddl_status" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(0,'status','待审核')" class="ddl_status" index="0">待审核</a></li>
+                            <li><a href="#" onclick="change(1,'status','已审核')" class="ddl_status" index="1">已审核</a></li>
+                            <li><a href="#" onclick="change(2,'status','已删除')" class="ddl_status" index="2">已删除</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="el-form-item inline fl ml15">
+                <label class="el-form-item__label">启用推荐</label>
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button type="button" id="isrecommend" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            不限
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'isrecommend','不限')" class="ddl_isrecommend" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(1,'isrecommend','启用')" class="ddl_isrecommend" index="1">启用</a></li>
+                            <li><a href="#" onclick="change(0,'isrecommend','不启用')" class="ddl_isrecommend" index="0">不启用</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="el-form-item inline fl ml15">
+                <label class="el-form-item__label">启用打赏</label>
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button type="button" id="ispay" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            不限
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'ispay','不限')" class="ddl_ispay" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(1,'ispay','启用')" class="ddl_ispay" index="1">启用</a></li>
+                            <li><a href="#" onclick="change(0,'ispay','不启用')" class="ddl_ispay" index="0">不启用</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="el-form-item inline fl ml15">
+                <label class="el-form-item__label">性别</label>
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button type="button" id="sex" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            不限
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'sex','不限')" class="ddl_sex" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(0,'sex','男')" class="ddl_sex" index="0">男</a></li>
+                            <li><a href="#" onclick="change(1,'sex','女')" class="ddl_sex" index="1">女</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fr">
+                <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
+                <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="el-card__body">
+        <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition full f12 tc">
+            <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body full">
+                <thead>
+                    <tr>
+                        <th class="cell" style="width: 100px;">用户头像</th>
+                        <th class="cell" style="width: 150px;">用户昵称(编号)</th>
+                        <th class="cell">个性签名</th>
+                        <th class="cell" style="width: 80px;">性别</th>
+                        <th class="cell" style="width: 80px;">状态</th>
+                        <th class="cell">定位</th>
+                        <th class="cell" style="width: 100px;">登录次数</th>
+                        <th class="cell" style="width: 160px;">创建日期</th>
+                        <th class="cell" style="width: 160px;">上次登录</th>
+                        <th class="cell" style="width: 200px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var list = ViewBag.List;
+                        for (var i = 0; i < list.Count; i++)
+                        {
+                            var url = list[i].Avatar;
+                            if (string.IsNullOrWhiteSpace(url))
+                            {
+                                url = "http://www.xiaoweipian.com/Images/avatar.png";
+                            }
+                            else
+                            {
+                                if (url.IndexOf("_0") >= 0)
+                                {
+                                    url = url.Replace("_0", "_2");
+                                    if (url.ToLower().IndexOf("http://") < 0)
+                                    {
+                                        url = "http://www.xiaoweipian.com/" + url;
+                                    }
+                                }
+                            }
+                        <tr>
+                            <td class="cell">
+                                <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
+                            </td>
+                            <td>
+                                <div class="cell">
+                                    <span class="nickname" nickname="@list[i].NickName"></span>
+                                    <p class="mb0">(@list[i].Number)</p>
+                                </div>
+                            </td>
+                            <td class="cell">
+                                @list[i].Signature
+                            </td>
+                            <td class="cell">
+                                @EnumBase.GetDescription(typeof(Enum_Sex), @list[i].Sex)
+                            </td>
+                            <td class="cell">
+                                @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
+                            </td>
+                            <td class="cell">
+                                @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
+                            </td>
+                            <td class="cell">
+                                @list[i].LoginTimes
+                            </td>
+                            <td class="cell">
+                                @list[i].CreateDate.ToString("yyyy-MM-dd hh:mm:ss")
+                            </td>
+                            <td class="cell">
+                                @list[i].LastLoginDate.ToString("yyyy-MM-dd hh:mm:ss")
+                            </td>
+                            <td>
+                                <button type="button" class="el-button el-button--success el-button--small btnRecommend"><span>推荐</span></button>
+                                <button type="button" class="el-button el-button--warning el-button--small btnNoRecommend"><span>取消推荐</span></button>
+                                <button type="button" class="el-button el-button--danger el-button--small btnDelete"><span>删除</span></button>
+                            </td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="divPager" align="center" style="margin-top: 30px;"></div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
+            $(".ddl_isrecommend[index=" + parseInt(@(ViewBag.isrecommend)) + "]").eq(0).trigger("click");
+            $(".ddl_ispay[index=" + parseInt(@(ViewBag.ispay)) + "]").eq(0).trigger("click");
+            $(".ddl_sex[index=" + parseInt(@(ViewBag.sex)) + "]").eq(0).trigger("click");
+
+            var currentIndex = parseInt(@(ViewBag.CurrPage));
+            var recordCount = parseInt(@(ViewBag.RecordCount));
+            var pageSize = parseInt(@(ViewBag.PageSize));
+
+            $(".nickname").each(function () {
+                this.innerText = base.UnUnicodeText(this.getAttribute("nickname"));
+            })
+
+            $("#divPager").myPagination({
+                currPage: currentIndex,
+                pageCount: Math.ceil(recordCount / pageSize),
+                pageSize: pageSize,
+                links: 'javascript:void(0);',
+                cssStyle: 'jogger',
+                ajax: {
+                    on: false,
+                    onClick: function (page) {
+                        ZENG.msgbox.show(" 正在加载" + page + "页，请稍后...", 6, 1000);
+                        var param = {
+                            page: page,
+                            rows: pageSize,
+                            nickname: $("#nickname").val().trim(),
+                            usernumber: $("#usernumber").val().trim(),
+                            status: $("#status").attr("index"),
+                            isrecommend: $("#isrecommend").attr("index"),
+                            ispay: $("#ispay").attr("index"),
+                            sex: $("#sex").attr("index")
+                        }
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/User?" + $.param(param)
+                    }
+                }
+            });
+
+            $("#search").click(function () {
+                var param = {
+                    page: 1,
+                    rows: pageSize,
+                    nickname: $("#nickname").val().trim(),
+                    usernumber: $("#usernumber").val().trim(),
+                    status: $("#status").attr("index"),
+                    isrecommend: $("#isrecommend").attr("index"),
+                    ispay: $("#ispay").attr("index"),
+                    sex: $("#sex").attr("index")
+                }
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/User?" + $.param(param)
+            })
+
+            $("#reset").click(function () {
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/User"
+            })
+
+            $(".btnRecommend").click(function () {
+                
+            })
+
+            $(".btnNoRecommend").click(function () {
+                
+            })
+
+            $(".btnDelete").click(function () {
+                
+            })
+        });
+    </script>
+}

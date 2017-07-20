@@ -367,6 +367,7 @@ namespace EGT_OTA.Models
         public int IsKeep { get; set; }
         public List<Tag> TagList { get; set; }
         public int IsPay { get; set; }
+        public int Submission { get; set; }
     }
 
     public class UserArticleJson

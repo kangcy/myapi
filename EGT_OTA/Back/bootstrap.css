@@ -1993,7 +1993,7 @@ pre {
     margin-left: auto;
 }
 
-@media (min-width: 768px) {
+/*@media (min-width: 768px) {
     .container {
         width: 750px;
     }
@@ -2009,7 +2009,7 @@ pre {
     .container {
         width: 1170px;
     }
-}
+}*/
 
 .container-fluid {
     padding-right: 15px;

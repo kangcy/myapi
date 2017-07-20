@@ -9,6 +9,9 @@
     <title>小微篇管理后台</title>
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/login.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/Page.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/msgbox.css")"  />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
 </head>
 <body>
     <div id="wrapper">
@@ -19,18 +22,24 @@
                     <a href="#">小微篇后台</a>
                 </li>
                 <li>
-                    <a href="#"></a>
+                    <a href="#">用户</a>
                 </li>
                 <li>
-                    <a href="#">Page one</a>
+                    <a href="#">文章</a>
                 </li>
                 <li>
-                    <a href="#">Second page</a>
+                    <a href="#">投稿</a>
                 </li>
                 <li>
-                    <a href="#">Third page</a>
+                    <a href="#">评论</a>
                 </li>
-                <li class="dropdown">
+                <li>
+                    <a href="#">打赏</a>
+                </li>
+                <li>
+                    <a href="#">留言反馈</a>
+                </li>
+                @*<li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i>文章管理 <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#">Action</a></li>
@@ -39,7 +48,8 @@
                         <li><a href="#">Separated link</a></li>
                         <li><a href="#">One more separated link</a></li>
                     </ul>
-                </li>
+                </li>*@
+
             </ul>
         </nav>
         <div id="page-content-wrapper">
@@ -51,18 +61,98 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2">
-                        <h1 class="page-header">Awesome Bootstrap 3 Sidebar Navigation</h1>
-                        <p class="lead">Originally authored by <a href="http://bootsnipp.com/maridlcrmn" target="_blank">maridlcrmn</a> on Bootsnipp and then converted to Less and customized further by j_holtslander who is building a collection of great Bootstrap 3 navbars.</p>
-                        <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Sed posuere consectetur est at lobortis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Etiam porta sem malesuada magna mollis euismod. Aenean lacinia bibendum nulla sed consectetur. Nulla vitae elit libero, a pharetra augue.</p>
+                        <div class="el-card box-card">
+                            <div class="el-card__header">
+                                <div class="clearfix">
+                                    <span>用户列表</span>
+                                    <div style="float: right;">
+                                        <button type="button" class="el-button el-button--primary">
+                                            <i class="el-icon-search"></i><span>选择条件</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-card__body">
+                                <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition" style="width: 100%; font-size: 12px; text-align: center;">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th class="cell">头像</th>
+                                                <th class="cell">姓名</th>
+                                                <th class="cell">电话</th>
+                                                <th class="cell">身份证号</th>
+                                                <th class="cell">来源</th>
+                                                <th class="cell">状态</th>
+                                                <th class="cell">创建时间</th>
+                                                <th class="cell">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="cell">
+                                                    <img src="http://res.pinzhi.xin//pzstore/20170718/BodyPart_2b79d2a8-f04c-44e3-a42e-948a2efc8fee.png" style="width: 40px; height: 40px; display: inline-block;">
+                                                </td>
+                                                <td>
+                                                    <div class="cell">潘锋</div>
+                                                </td>
+                                                <td>
+                                                    <div class="cell">@(ViewBag.RecordCount)</div>
+                                                </td>
+                                                <td>
+                                                    <div class="cell">429006198105191212</div>
+                                                </td>
+                                                <td>
+                                                    <div class="cell">广东营业厅订单</div>
+                                                </td>
+                                                <td>
+                                                    <div class="name-wrapper cell">
+                                                        <span class="el-tag el-tag--success">有效</span>
+                                                        <span class="el-tag el-tag--primary">获信中</span>
+                                                        <span class="el-tag el-tag--danger">获信失败</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="cell">2017-07-18 16:00:35</div>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="el-button el-button--text el-button--small"><span>查看</span></button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="divPager" align="center" style="margin-top: 30px;"></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
-    <script src="@Url.Content("~/Back/bootstrap.min.js")"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+
+            var currentIndex = 1;
+            var recordCount = 1;
+            var pageSize = 15;
+
+            $("#divPager").myPagination({
+                currPage: currentIndex,
+                pageCount: Math.ceil(recordCount / pageSize),
+                pageSize: pageSize,
+                links: 'javascript:void(0);',
+                cssStyle: 'jogger',
+                ajax: {
+                    on: false,
+                    onClick: function (page) {
+                        //ZENG.msgbox.show(" 正在加载" + page + "页，请稍后...", 6, 1000);
+                        //if ("<%=keyword %>" == "")
+                        //    window.location.href = "/article-<%=tid %>-" + tag + "-" + page + ".html";
+                        //else
+                        //    window.location.href = "/article-<%=tid %>-" + tag + "-" + page + ".html?key=" + escape("<%=keyword %>");
+                    }
+                }
+            });
+
             var trigger = $('.hamburger'),
                 overlay = $('.overlay'),
                isClosed = false;

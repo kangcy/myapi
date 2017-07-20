@@ -138,8 +138,6 @@ namespace EGT_OTA.Controllers.Api
             try
             {
                 inputString = Tools.NoHTML(UrlDecode(inputString)).ToLower();
-
-                LogHelper.ErrorLoger.Error(inputString);
                 for (var i = 0; i < list.Count; i++)
                 {
                     if (inputString.Contains(list[i]))
@@ -771,6 +769,7 @@ namespace EGT_OTA.Controllers.Api
                     model.Recommend = x.Recommend;
                     model.Province = x.Province;
                     model.City = x.City;
+                    model.Submission = x.Submission;
                     newlist.Add(model);
                 }
             });

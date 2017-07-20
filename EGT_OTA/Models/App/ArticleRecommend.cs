@@ -38,4 +38,24 @@ namespace EGT_OTA.Models
         /// </summary>
         public int Status { get; set; }
     }
+
+    public class ArticleRecommendJson
+    {
+        public ArticleRecommendJson() { }
+
+        public string Title { get; set; }
+        public string TypeName { get; set; }
+        public int Status { get; set; }
+        public string Province { get; set; }
+        public string City { get; set; }
+        public string District { get; set; }
+        public string Street { get; set; }
+        public string DetailName { get; set; }
+        public string ArticleNumber { get; set; }
+        public string NickName { get; set; }
+        public string Avatar { get; set; }
+        public int Sex { get; set; }
+        public string CreateDate { get; set; }
+        public string UserNumber { get; set; }
+    }
 }
