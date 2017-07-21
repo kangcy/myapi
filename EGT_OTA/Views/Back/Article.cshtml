@@ -148,7 +148,7 @@
                                 @list[i].CreateDateText
                             </td>
                             <td>
-                                @if (list[i].Status != Enum_Deal.Approved)
+                                @if (list[i].Status == Enum_Deal.Approved)
                                 {
                                     <button type="button" class="el-button el-button--primary el-button--small btnAudit" index="@list[i].ID"><span>取消审核</span></button>
                                 }
@@ -198,7 +198,7 @@
                             submission: $("#submission").attr("index"),
                             articlepower: $("#articlepower").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&" + $.param(param)
                     }
                 }
             });
@@ -213,11 +213,11 @@
                     submission: $("#submission").attr("index"),
                     articlepower: $("#articlepower").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)"
             })
 
             $(".btnAudit").click(function () {

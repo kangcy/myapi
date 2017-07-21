@@ -213,7 +213,7 @@
                             ispay: $("#ispay").attr("index"),
                             sex: $("#sex").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/User?" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)&" + $.param(param)
                     }
                 }
             });
@@ -229,23 +229,23 @@
                     ispay: $("#ispay").attr("index"),
                     sex: $("#sex").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/User?" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/User"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)"
             })
 
             $(".btnRecommend").click(function () {
-                
+
             })
 
             $(".btnNoRecommend").click(function () {
-                
+
             })
 
             $(".btnDelete").click(function () {
-                
+
             })
         });
     </script>

@@ -91,6 +91,7 @@
                             </td>
                             <td class="cell el-button--text">
                                 <a href="#" class="underline">@list[i].Title</a>
+                                <p class="mb0">(@list[i].ArticleNumber)</p>
                             </td>
                             <td class="cell">
                                 @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
@@ -105,8 +106,14 @@
                                 @list[i].CreateDate
                             </td>
                             <td>
-                                <button type="button" class="el-button el-button--success el-button--small btnAudit" index="@list[i].ID"><span>通过审核</span></button>
-                                <button type="button" class="el-button el-button--warning el-button--small btnNoAudit" index="@list[i].ID"><span>打回</span></button>
+                                @if (list[i].Status == Enum_Status.Audit)
+                                {
+                                    <button type="button" class="el-button el-button--success el-button--small btnAudit" index="@list[i].ID"><span>通过审核</span></button>
+                                }
+                                @if (list[i].Status != Enum_Status.DELETE)
+                                {
+                                    <button type="button" class="el-button el-button--warning el-button--small btnNoAudit" index="@list[i].ID"><span>打回</span></button>
+                                }
                             </td>
                         </tr>
                         }
@@ -149,7 +156,7 @@
                             usernumber: $("#usernumber").val().trim(),
                             status: $("#status").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?key=@(ViewBag.key)&" + $.param(param)
                     }
                 }
             });
@@ -162,11 +169,11 @@
                     usernumber: $("#usernumber").val().trim(),
                     status: $("#status").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?key=@(ViewBag.key)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?key=@(ViewBag.key)"
             })
 
             //通过审核

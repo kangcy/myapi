@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using CommonTools;
 using EGT_OTA.Models;
 using SubSonic.Repository;
+using EGT_OTA.Helper;
 
 namespace EGT_OTA.Controllers.Filter
 {
@@ -18,24 +19,39 @@ namespace EGT_OTA.Controllers.Filter
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            //var key = ZNRequest.GetString("key");
+            //if (string.IsNullOrWhiteSpace(key))
+            //{
+            //    filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            //    filterContext.Result = new JsonResult() { Data = new { result = false, message = "参数异常" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            //    return;
+            //}
+            //User user = db.Single<User>(x => x.Number == key);
+            //if (user == null)
+            //{
+            //    filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            //    filterContext.Result = new JsonResult() { Data = new { result = false, message = "用户不存在" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            //    return;
+            //}
+            //if (user.UserRole != Enum_UserRole.Administrator && user.UserRole != Enum_UserRole.SuperAdministrator)
+            //{
+            //    filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            //    filterContext.Result = new JsonResult() { Data = new { result = false, message = "没有权限" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            //    return;
+            //}
+
             var key = ZNRequest.GetString("key");
-            if (string.IsNullOrWhiteSpace(key))
+            var cookie = CookieHelper.GetCookieValue("Back");
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(cookie))
             {
                 filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                filterContext.Result = new JsonResult() { Data = new { result = false, message = "参数异常" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                filterContext.Result = new RedirectResult("Login");
                 return;
             }
-            User user = db.Single<User>(x => x.Number == key);
-            if (user == null)
+            if (key != cookie)
             {
                 filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                filterContext.Result = new JsonResult() { Data = new { result = false, message = "用户不存在" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                return;
-            }
-            if (user.UserRole != Enum_UserRole.Administrator && user.UserRole != Enum_UserRole.SuperAdministrator)
-            {
-                filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                filterContext.Result = new JsonResult() { Data = new { result = false, message = "没有权限" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                filterContext.Result = new RedirectResult("Login");
                 return;
             }
             base.OnActionExecuting(filterContext);

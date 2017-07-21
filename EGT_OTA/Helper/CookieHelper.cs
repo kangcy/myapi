@@ -21,6 +21,7 @@ namespace EGT_OTA.Helper
                 HttpContext.Current.Response.Cookies.Add(cookie);
             }
         }
+
         /// <summary>
         /// 获取指定Cookie值
         /// </summary>
@@ -36,6 +37,7 @@ namespace EGT_OTA.Helper
             }
             return str;
         }
+
         /// <summary>
         /// 添加一个Cookie（24小时过期）
         /// </summary>
@@ -45,6 +47,7 @@ namespace EGT_OTA.Helper
         {
             SetCookie(cookiename, cookievalue, DateTime.Now.AddDays(1.0));
         }
+
         /// <summary>
         /// 添加一个Cookie
         /// </summary>

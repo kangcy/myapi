@@ -136,7 +136,7 @@
                             usernumber: $("#usernumber").val().trim(),
                             status: $("#status").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)&" + $.param(param)
                     }
                 }
             });
@@ -148,11 +148,11 @@
                     usernumber: $("#usernumber").val().trim(),
                     status: $("#status").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)"
             })
 
             //处理

@@ -27,22 +27,22 @@
                     <a href="#">小微篇后台</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/User")">用户</a>
+                    <a href="@Url.Content("~/Back/User?key=")@(ViewBag.key)">用户</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/Article")">文章</a>
+                    <a href="@Url.Content("~/Back/Article?key=")@(ViewBag.key)">文章</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/RecommendArticle")">投稿</a>
+                    <a href="@Url.Content("~/Back/RecommendArticle?key=")@(ViewBag.key)">投稿</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/Comment")">评论</a>
+                    <a href="@Url.Content("~/Back/Comment?key=")@(ViewBag.key)">评论</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/Order")">打赏</a>
+                    <a href="@Url.Content("~/Back/Order?key=")@(ViewBag.key)">打赏</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/FeedBack")">留言反馈</a>
+                    <a href="@Url.Content("~/Back/FeedBack?key=")@(ViewBag.key)">留言反馈</a>
                 </li>
                 @*<li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i>文章管理 <span class="caret"></span></a>

@@ -17,18 +17,33 @@ namespace EGT_OTA.Controllers
     {
         public ActionResult Login()
         {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             return View();
         }
 
         /// <summary>
-        /// 登录审核
+        /// 登录
         /// </summary>
-        [BackPower]
-        public ActionResult CheckLogin()
+        public ActionResult UserLogin()
         {
             try
             {
-                return Json(new { result = true, message = "" }, JsonRequestBehavior.AllowGet);
+                var phone = ZNRequest.GetString("phone");
+                if (string.IsNullOrWhiteSpace(phone))
+                {
+                    return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
+                }
+                User user = db.Single<User>(x => x.Phone == phone);
+                if (user == null)
+                {
+                    return Json(new { result = false, message = "用户不存在" }, JsonRequestBehavior.AllowGet);
+                }
+                if (user.UserRole != Enum_UserRole.Administrator && user.UserRole != Enum_UserRole.SuperAdministrator)
+                {
+                    return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
+                }
+                CookieHelper.SetCookie("Back", user.WeiXin + user.QQ);
+                return Json(new { result = true, message = user.WeiXin + user.QQ }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -37,11 +52,21 @@ namespace EGT_OTA.Controllers
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 注销登录
+        /// </summary>
+        public ActionResult LoginOut()
+        {
+            CookieHelper.ClearCookie("Back");
+            return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+        }
+
         #region  文章
 
         /// <summary>
         /// 文章
         /// </summary>
+        [BackPower]
         public ActionResult Article()
         {
             var pager = new Pager();
@@ -109,13 +134,13 @@ namespace EGT_OTA.Controllers
             ViewBag.PageSize = pager.Size;
             ViewBag.List = list;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
             return View();
         }
 
         /// <summary>
         /// 文章取消审核
         /// </summary>
-        [BackPower]
         public ActionResult ArticleAudit()
         {
             var message = "";
@@ -144,7 +169,6 @@ namespace EGT_OTA.Controllers
         /// <summary>
         /// 文章删除
         /// </summary>
-        [BackPower]
         public ActionResult ArticleDelete()
         {
             try
@@ -175,6 +199,7 @@ namespace EGT_OTA.Controllers
         /// <summary>
         /// 投稿文章
         /// </summary>
+        [BackPower]
         public ActionResult RecommendArticle()
         {
             var pager = new Pager();
@@ -248,13 +273,13 @@ namespace EGT_OTA.Controllers
             ViewBag.PageSize = pager.Size;
             ViewBag.List = newlist;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
             return View();
         }
 
         /// <summary>
         /// 投稿审核通过
         /// </summary>
-        [BackPower]
         public ActionResult RecommendArticleAudit()
         {
             var message = "";
@@ -287,7 +312,6 @@ namespace EGT_OTA.Controllers
         /// <summary>
         /// 投稿审核打回
         /// </summary>
-        [BackPower]
         public ActionResult RecommendArticleNoAudit()
         {
             var message = "";
@@ -324,6 +348,7 @@ namespace EGT_OTA.Controllers
         /// <summary>
         /// 评论
         /// </summary>
+        [BackPower]
         public ActionResult Comment()
         {
             var pager = new Pager();
@@ -371,13 +396,13 @@ namespace EGT_OTA.Controllers
             ViewBag.PageSize = pager.Size;
             ViewBag.List = newlist;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
             return View();
         }
 
         /// <summary>
         /// 评论删除
         /// </summary>
-        [BackPower]
         public ActionResult CommentDelete()
         {
             var message = "";
@@ -410,6 +435,7 @@ namespace EGT_OTA.Controllers
         /// <summary>
         /// 用户
         /// </summary>
+        [BackPower]
         public ActionResult User()
         {
             var pager = new Pager();
@@ -467,6 +493,7 @@ namespace EGT_OTA.Controllers
             ViewBag.PageSize = pager.Size;
             ViewBag.List = list;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
             return View();
         }
 
@@ -555,6 +582,7 @@ namespace EGT_OTA.Controllers
             ViewBag.PageSize = pager.Size;
             ViewBag.List = newlist;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
             return View();
         }
 
@@ -565,6 +593,7 @@ namespace EGT_OTA.Controllers
         /// <summary>
         /// 反馈
         /// </summary>
+        [BackPower]
         public ActionResult FeedBack()
         {
             var pager = new Pager();
@@ -611,13 +640,13 @@ namespace EGT_OTA.Controllers
             ViewBag.PageSize = pager.Size;
             ViewBag.List = newlist;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
             return View();
         }
 
         /// <summary>
         /// 反馈处理
         /// </summary>
-        [BackPower]
         public ActionResult FeedBackDeal()
         {
             var message = "";
@@ -638,36 +667,6 @@ namespace EGT_OTA.Controllers
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("Back_FeedBackDeal:" + ex.Message);
-                message = ex.Message;
-            }
-            return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// 反馈删除
-        /// </summary>
-        [BackPower]
-        public ActionResult FeedBackDelete()
-        {
-            var message = "";
-            try
-            {
-                //审核记录
-                var id = ZNRequest.GetInt("id");
-                var recommend = db.Single<FeedBack>(x => x.ID == id);
-                if (recommend == null)
-                {
-                    return Json(new { result = false, message = "投稿信息异常" }, JsonRequestBehavior.AllowGet);
-                }
-                var result = new SubSonic.Query.Update<FeedBack>(provider).Set("Status").EqualTo(Enum_Deal.DELETE).Where<FeedBack>(x => x.ID == id).Execute() > 0;
-                if (result)
-                {
-                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.ErrorLoger.Error("Back_FeedBackDelete:" + ex.Message);
                 message = ex.Message;
             }
             return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);

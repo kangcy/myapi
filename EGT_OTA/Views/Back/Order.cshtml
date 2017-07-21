@@ -188,7 +188,7 @@
                             tousernumber: $("#tousernumber").val().trim(),
                             status: $("#status").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?key=@(ViewBag.key)&" + $.param(param)
                     }
                 }
             });
@@ -202,11 +202,11 @@
                     tousernumber: $("#tousernumber").val().trim(),
                     status: $("#status").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?key=@(ViewBag.key)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?key=@(ViewBag.key)"
             })
         });
     </script>
