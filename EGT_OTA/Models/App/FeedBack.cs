@@ -38,5 +38,19 @@ namespace EGT_OTA.Models
         /// </summary>
         [SubSonicStringLength(500), SubSonicNullString]
         public string QQ { get; set; }
+
+        /// <summary>
+        /// 处理状态
+        /// </summary>
+        public int Status { get; set; }
+
+        [SubSonicIgnore]
+        public string NickName { get; set; }
+
+        [SubSonicIgnore]
+        public string Avatar { get; set; }
+
+        [SubSonicIgnore]
+        public string CreateDateText { get; set; }
     }
 }

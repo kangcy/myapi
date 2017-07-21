@@ -57,5 +57,7 @@ namespace EGT_OTA.Models
         public int Sex { get; set; }
         public string CreateDate { get; set; }
         public string UserNumber { get; set; }
+        public int Submission { get; set; }
+        public int ID { get; set; }
     }
 }

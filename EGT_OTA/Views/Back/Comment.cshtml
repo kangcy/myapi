@@ -1,9 +1,17 @@
 ﻿@inherits System.Web.Mvc.WebViewPage
 @using EGT_OTA.Models
+@section Styles{
+    <style type="text/css">
+        .summary img {
+            width: 20px !important;
+            display: inline-block;
+        }
+    </style>
+}
 <div>
     <div class="el-card__header">
         <div class="clearfix">
-            <p>投稿列表(@(ViewBag.RecordCount))</p>
+            <p>评论列表(@(ViewBag.RecordCount))</p>
             <div class="el-form-item inline fl">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
@@ -15,24 +23,6 @@
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
                         <input id="usernumber" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
-                    </div>
-                </div>
-            </div>
-
-            <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">审核状态</label>
-                <div class="el-form-item__content inline fl">
-                    <div class="btn-group">
-                        <button id="status" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
-                                                  <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'status','不限')" class="ddl_status" index="-1">不限</a></li>
-                            <li><a href="#" onclick="change(0,'status','待审核')" class="ddl_status" index="0">待审核</a></li>
-                            <li><a href="#" onclick="change(1,'status','已审核')" class="ddl_status" index="1">已审核</a></li>
-                            <li><a href="#" onclick="change(2,'status','已删除')" class="ddl_status" index="2">已删除</a></li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -50,12 +40,11 @@
                     <tr>
                         <th class="cell" style="width: 100px;">用户头像</th>
                         <th class="cell" style="width: 150px;">用户昵称(编号)</th>
-                        <th class="cell">标题</th>
-                        <th class="cell" style="width: 100px;">审核状态</th>
-                        <th class="cell" style="width: 100px;">投稿状态</th>
+                        <th class="cell">文章标题(编号)</th>
+                        <th class="cell">评论</th>
                         <th class="cell">定位</th>
                         <th class="cell" style="width: 160px;">创建日期</th>
-                        <th class="cell" style="width: 200px;">操作</th>
+                        <th class="cell" style="width: 100px;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,27 +75,24 @@
                             <td>
                                 <div class="cell">
                                     <span class="nickname" nickname="@list[i].NickName"></span>
-                                    <p class="mb0">(@list[i].UserNumber)</p>
+                                    <p class="mb0">(@list[i].CreateUserNumber)</p>
                                 </div>
                             </td>
-                            <td class="cell el-button--text">
-                                <a href="#" class="underline">@list[i].Title</a>
+                            <td class="cell">
+                                @list[i].Title
+                                <p class="mb0">(@list[i].ArticleNumber)</p>
                             </td>
                             <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
-                            </td>
-                            <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Submission), @list[i].Submission)
+                                <div class="summary" summary="@list[i].Summary"></div>
                             </td>
                             <td class="cell">
                                 @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
                             </td>
                             <td class="cell">
-                                @list[i].CreateDate
+                                @list[i].CreateDateText
                             </td>
                             <td>
-                                <button type="button" class="el-button el-button--success el-button--small btnAudit" index="@list[i].ID"><span>通过审核</span></button>
-                                <button type="button" class="el-button el-button--warning el-button--small btnNoAudit" index="@list[i].ID"><span>打回</span></button>
+                                <button type="button" class="el-button el-button--primary el-button--small btnDelete" index="@list[i].ID"><span>删除</span></button>
                             </td>
                         </tr>
                         }
@@ -122,14 +108,16 @@
 
         var isloading = false;
         $(document).ready(function () {
-            $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
-
             var currentIndex = parseInt(@(ViewBag.CurrPage));
             var recordCount = parseInt(@(ViewBag.RecordCount));
             var pageSize = parseInt(@(ViewBag.PageSize));
 
             $(".nickname").each(function () {
                 this.innerText = base.UnUnicodeText(this.getAttribute("nickname"));
+            })
+
+            $(".summary").each(function () {
+                $(this).html(base.UnUnicodeText(this.getAttribute("summary")));
             })
 
             $("#divPager").myPagination({
@@ -146,10 +134,9 @@
                             page: page,
                             rows: pageSize,
                             articlenumber: $("#articlenumber").val().trim(),
-                            usernumber: $("#usernumber").val().trim(),
-                            status: $("#status").attr("index")
+                            usernumber: $("#usernumber").val().trim()
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Comment?" + $.param(param)
                     }
                 }
             });
@@ -159,56 +146,28 @@
                     page: 1,
                     rows: pageSize,
                     articlenumber: $("#articlenumber").val().trim(),
-                    usernumber: $("#usernumber").val().trim(),
-                    status: $("#status").attr("index")
+                    usernumber: $("#usernumber").val().trim()
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Comment?" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Comment"
             })
 
-            //通过审核
-            $(".btnAudit").click(function () {
+            //删除
+            $(".btnDelete").click(function () {
                 if (isloading) {
                     return;
                 }
                 isloading = true;
                 var id = this.getAttribute("index");
+
                 layer.confirm('确认执行当前操作吗？', {
                     btn: ['确定', '取消']
                 }, function () {
                     $.ajax({
-                        url: "@(ViewBag.RootUrl)Back/RecommendArticleAudit",
-                        data: { key: "149516652684099", id: id },
-                        dataType: "json",
-                        success: function (data) {
-                            isloading = false;
-                            layer.alert(data.message);
-                            if (data.result) {
-                                window.location.reload();
-                            }
-                        }
-                    });
-                }, function () {
-
-                });
-                isloading = false;
-            })
-
-            //打回
-            $(".btnNoAudit").click(function () {
-                if (isloading) {
-                    return;
-                }
-                isloading = true;
-                var id = this.getAttribute("index");
-                layer.confirm('确认执行当前操作吗？', {
-                    btn: ['确定', '取消']
-                }, function () {
-                    $.ajax({
-                        url: "@(ViewBag.RootUrl)Back/RecommendArticleNoAudit",
+                        url: "@(ViewBag.RootUrl)Back/CommentDelete",
                         data: { key: "149516652684099", id: id },
                         dataType: "json",
                         success: function (data) {

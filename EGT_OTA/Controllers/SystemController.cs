@@ -372,7 +372,7 @@ namespace EGT_OTA.Controllers
                 var title = UrlDecode(ZNRequest.GetString("Title"));
                 if (ProcessSqlStr(title))
                 {
-                    return Json(new { result = false, message = "禁止SQL注入" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "存在违禁词" }, JsonRequestBehavior.AllowGet);
                 }
                 if (HasDirtyWord(title))
                 {

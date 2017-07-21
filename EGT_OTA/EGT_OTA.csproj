@@ -265,6 +265,9 @@
     <Compile Include="Enum\Enum_ErrorCode.cs" />
     <Compile Include="Enum\Enum_ActionType.cs" />
     <Compile Include="Enum\Enum_Submission.cs" />
+    <Compile Include="Enum\Enum_Deal.cs" />
+    <Compile Include="Enum\Enum_Order.cs" />
+    <Compile Include="Enum\Enum_PayType.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -770,6 +773,9 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Back\User.cshtml" />
     <Content Include="Views\Back\RecommendArticle.cshtml" />
+    <Content Include="Views\Back\Comment.cshtml" />
+    <Content Include="Views\Back\Order.cshtml" />
+    <Content Include="Views\Back\FeedBack.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

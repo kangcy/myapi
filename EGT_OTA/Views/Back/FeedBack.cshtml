@@ -3,40 +3,30 @@
 <div>
     <div class="el-card__header">
         <div class="clearfix">
-            <p>投稿列表(@(ViewBag.RecordCount))</p>
+            <p>反馈列表(@(ViewBag.RecordCount))</p>
             <div class="el-form-item inline fl">
-                <div class="el-form-item__content">
-                    <div class="el-input el-input--small">
-                        <input id="articlenumber" placeholder="文章编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.articlenumber)">
-                    </div>
-                </div>
-            </div>
-            <div class="el-form-item inline fl ml15">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
                         <input id="usernumber" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
                     </div>
                 </div>
             </div>
-
             <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">审核状态</label>
+                <label class="el-form-item__label">状态</label>
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
-                        <button id="status" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                        <button type="button" id="status" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
                             不限
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
                             <li><a href="#" onclick="change(-1,'status','不限')" class="ddl_status" index="-1">不限</a></li>
-                            <li><a href="#" onclick="change(0,'status','待审核')" class="ddl_status" index="0">待审核</a></li>
-                            <li><a href="#" onclick="change(1,'status','已审核')" class="ddl_status" index="1">已审核</a></li>
-                            <li><a href="#" onclick="change(2,'status','已删除')" class="ddl_status" index="2">已删除</a></li>
+                            <li><a href="#" onclick="change(0,'status','待处理')" class="ddl_status" index="0">待处理</a></li>
+                            <li><a href="#" onclick="change(1,'status','已处理')" class="ddl_status" index="1">已处理</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-
             <div class="fr">
                 <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
                 <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
@@ -50,12 +40,11 @@
                     <tr>
                         <th class="cell" style="width: 100px;">用户头像</th>
                         <th class="cell" style="width: 150px;">用户昵称(编号)</th>
-                        <th class="cell">标题</th>
-                        <th class="cell" style="width: 100px;">审核状态</th>
-                        <th class="cell" style="width: 100px;">投稿状态</th>
-                        <th class="cell">定位</th>
+                        <th class="cell">反馈</th>
+                        <th class="cell">联系方式</th>
+                        <th class="cell" style="width: 100px;">状态</th>
                         <th class="cell" style="width: 160px;">创建日期</th>
-                        <th class="cell" style="width: 200px;">操作</th>
+                        <th class="cell" style="width: 150px;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,27 +75,26 @@
                             <td>
                                 <div class="cell">
                                     <span class="nickname" nickname="@list[i].NickName"></span>
-                                    <p class="mb0">(@list[i].UserNumber)</p>
+                                    <p class="mb0">(@list[i].CreateUserNumber)</p>
                                 </div>
                             </td>
-                            <td class="cell el-button--text">
-                                <a href="#" class="underline">@list[i].Title</a>
+                            <td class="cell">
+                                @list[i].Summary
                             </td>
                             <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
+                                @list[i].QQ
                             </td>
                             <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Submission), @list[i].Submission)
+                                @EnumBase.GetDescription(typeof(Enum_Deal), @list[i].Status)
                             </td>
                             <td class="cell">
-                                @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
-                            </td>
-                            <td class="cell">
-                                @list[i].CreateDate
+                                @list[i].CreateDateText
                             </td>
                             <td>
-                                <button type="button" class="el-button el-button--success el-button--small btnAudit" index="@list[i].ID"><span>通过审核</span></button>
-                                <button type="button" class="el-button el-button--warning el-button--small btnNoAudit" index="@list[i].ID"><span>打回</span></button>
+                                @if (list[i].Status != Enum_Deal.Approved)
+                                {
+                                    <button type="button" class="el-button el-button--success el-button--small btnDeal" index="@list[i].ID"><span>处理</span></button>
+                                }
                             </td>
                         </tr>
                         }
@@ -145,11 +133,10 @@
                         var param = {
                             page: page,
                             rows: pageSize,
-                            articlenumber: $("#articlenumber").val().trim(),
                             usernumber: $("#usernumber").val().trim(),
                             status: $("#status").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?" + $.param(param)
                     }
                 }
             });
@@ -158,57 +145,29 @@
                 var param = {
                     page: 1,
                     rows: pageSize,
-                    articlenumber: $("#articlenumber").val().trim(),
                     usernumber: $("#usernumber").val().trim(),
                     status: $("#status").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack"
             })
 
-            //通过审核
-            $(".btnAudit").click(function () {
+            //处理
+            $(".btnDeal").click(function () {
                 if (isloading) {
                     return;
                 }
                 isloading = true;
                 var id = this.getAttribute("index");
+
                 layer.confirm('确认执行当前操作吗？', {
                     btn: ['确定', '取消']
                 }, function () {
                     $.ajax({
-                        url: "@(ViewBag.RootUrl)Back/RecommendArticleAudit",
-                        data: { key: "149516652684099", id: id },
-                        dataType: "json",
-                        success: function (data) {
-                            isloading = false;
-                            layer.alert(data.message);
-                            if (data.result) {
-                                window.location.reload();
-                            }
-                        }
-                    });
-                }, function () {
-
-                });
-                isloading = false;
-            })
-
-            //打回
-            $(".btnNoAudit").click(function () {
-                if (isloading) {
-                    return;
-                }
-                isloading = true;
-                var id = this.getAttribute("index");
-                layer.confirm('确认执行当前操作吗？', {
-                    btn: ['确定', '取消']
-                }, function () {
-                    $.ajax({
-                        url: "@(ViewBag.RootUrl)Back/RecommendArticleNoAudit",
+                        url: "@(ViewBag.RootUrl)Back/FeedBackDeal",
                         data: { key: "149516652684099", id: id },
                         dataType: "json",
                         success: function (data) {

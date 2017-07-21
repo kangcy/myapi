@@ -29,7 +29,7 @@ namespace EGT_OTA.Controllers.Api
                 var title = UrlDecode(ZNRequest.GetString("Title"));
                 if (ProcessSqlStr(title))
                 {
-                    result.message = "禁止SQL注入";
+                    result.message = "存在违禁词";
                     return JsonConvert.SerializeObject(result);
                 }
                 if (HasDirtyWord(title))
@@ -62,7 +62,7 @@ namespace EGT_OTA.Controllers.Api
                 var title = UrlDecode(ZNRequest.GetString("Title"));
                 if (ProcessSqlStr(title))
                 {
-                    result.message = "禁止SQL注入";
+                    result.message = "存在违禁词";
                     return Json<ApiResult>(result);
                 }
                 if (HasDirtyWord(title))

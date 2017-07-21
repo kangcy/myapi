@@ -3,7 +3,7 @@
 <div>
     <div class="el-card__header">
         <div class="clearfix">
-            <p>投稿列表(@(ViewBag.RecordCount))</p>
+            <p>打赏列表(@(ViewBag.RecordCount))</p>
             <div class="el-form-item inline fl">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
@@ -14,13 +14,20 @@
             <div class="el-form-item inline fl ml15">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
-                        <input id="usernumber" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
+                        <input id="usernumber" placeholder="打赏用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
+                    </div>
+                </div>
+            </div>
+            <div class="el-form-item inline fl ml15">
+                <div class="el-form-item__content">
+                    <div class="el-input el-input--small">
+                        <input id="tousernumber" placeholder="被打赏用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.tousernumber)">
                     </div>
                 </div>
             </div>
 
             <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">审核状态</label>
+                <label class="el-form-item__label">状态</label>
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button id="status" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
@@ -29,9 +36,8 @@
                         </button>
                         <ul class="dropdown-menu tc">
                             <li><a href="#" onclick="change(-1,'status','不限')" class="ddl_status" index="-1">不限</a></li>
-                            <li><a href="#" onclick="change(0,'status','待审核')" class="ddl_status" index="0">待审核</a></li>
-                            <li><a href="#" onclick="change(1,'status','已审核')" class="ddl_status" index="1">已审核</a></li>
-                            <li><a href="#" onclick="change(2,'status','已删除')" class="ddl_status" index="2">已删除</a></li>
+                            <li><a href="#" onclick="change(0,'status','待支付')" class="ddl_status" index="0">待支付</a></li>
+                            <li><a href="#" onclick="change(1,'status','已支付')" class="ddl_status" index="1">已支付</a></li>
                         </ul>
                     </div>
                 </div>
@@ -48,14 +54,16 @@
             <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body full">
                 <thead>
                     <tr>
-                        <th class="cell" style="width: 100px;">用户头像</th>
-                        <th class="cell" style="width: 150px;">用户昵称(编号)</th>
-                        <th class="cell">标题</th>
-                        <th class="cell" style="width: 100px;">审核状态</th>
-                        <th class="cell" style="width: 100px;">投稿状态</th>
-                        <th class="cell">定位</th>
+                        <th class="cell" style="width: 150px;">打赏用户头像</th>
+                        <th class="cell" style="width: 200px;">打赏用户昵称(编号)</th>
+                        <th class="cell" style="width: 150px;">被打赏用户头像</th>
+                        <th class="cell" style="width: 200px;">被打赏用户昵称(编号)</th>
+                        <th class="cell">文章(编号)</th>
+                        <th class="cell">打赏金额(元)</th>
+                        <th class="cell" style="width: 100px;">支付方式</th>
+                        <th class="cell" style="width: 100px;">是否匿名</th>
+                        <th class="cell" style="width: 80px;">状态</th>
                         <th class="cell" style="width: 160px;">创建日期</th>
-                        <th class="cell" style="width: 200px;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,7 +71,7 @@
                         var list = ViewBag.List;
                         for (var i = 0; i < list.Count; i++)
                         {
-                            var url = list[i].Avatar;
+                            var url = list[i].FromUserAvatar;
                             if (string.IsNullOrWhiteSpace(url))
                             {
                                 url = "http://www.xiaoweipian.com/Images/avatar.png";
@@ -79,34 +87,62 @@
                                     }
                                 }
                             }
+                            var url2 = list[i].ToUserAvatar;
+                            if (string.IsNullOrWhiteSpace(url2))
+                            {
+                                url2 = "http://www.xiaoweipian.com/Images/avatar.png";
+                            }
+                            else
+                            {
+                                if (url2.IndexOf("_0") >= 0)
+                                {
+                                    url2 = url.Replace("_0", "_2");
+                                    if (url2.ToLower().IndexOf("http://") < 0)
+                                    {
+                                        url2 = "http://www.xiaoweipian.com/" + url2;
+                                    }
+                                }
+                            }
                         <tr>
                             <td class="cell">
                                 <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
                             </td>
                             <td>
                                 <div class="cell">
-                                    <span class="nickname" nickname="@list[i].NickName"></span>
-                                    <p class="mb0">(@list[i].UserNumber)</p>
+                                    <span class="nickname" nickname="@list[i].FromUserName"></span>
+                                    <p class="mb0">(@list[i].FromUserNumber)</p>
                                 </div>
                             </td>
-                            <td class="cell el-button--text">
-                                <a href="#" class="underline">@list[i].Title</a>
+                            <td class="cell">
+                                <img src="@url2" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
+                            </td>
+                            <td>
+                                <div class="cell">
+                                    <span class="nickname" nickname="@list[i].ToUserName"></span>
+                                    <p class="mb0">(@list[i].ToUserNumber)</p>
+                                </div>
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(list[i].Title))
+                                {
+                                    <div class="cell">
+                                        @list[i].Title
+                                        <p class="mb0">(@list[i].ArticleNumber)</p>
+                                    </div>
+                                }
+                            </td>
+                            <td class="cell money" money="@list[i].Price"></td>
+                            <td class="cell">
+                                @EnumBase.GetDescription(typeof(Enum_PayType), @list[i].PayType)
                             </td>
                             <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
+                                @(list[i].Anony == 1 ? "是" : "否")
                             </td>
                             <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Submission), @list[i].Submission)
-                            </td>
-                            <td class="cell">
-                                @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
+                                @EnumBase.GetDescription(typeof(Enum_Order), @list[i].Status)
                             </td>
                             <td class="cell">
                                 @list[i].CreateDate
-                            </td>
-                            <td>
-                                <button type="button" class="el-button el-button--success el-button--small btnAudit" index="@list[i].ID"><span>通过审核</span></button>
-                                <button type="button" class="el-button el-button--warning el-button--small btnNoAudit" index="@list[i].ID"><span>打回</span></button>
                             </td>
                         </tr>
                         }
@@ -119,17 +155,19 @@
 </div>
 @section Scripts{
     <script type="text/javascript">
-
         var isloading = false;
         $(document).ready(function () {
             $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
-
             var currentIndex = parseInt(@(ViewBag.CurrPage));
             var recordCount = parseInt(@(ViewBag.RecordCount));
             var pageSize = parseInt(@(ViewBag.PageSize));
 
             $(".nickname").each(function () {
                 this.innerText = base.UnUnicodeText(this.getAttribute("nickname"));
+            })
+
+            $(".money").each(function () {
+                this.innerText = parseFloat(parseInt(this.getAttribute("money")) / 100).toFixed(2);
             })
 
             $("#divPager").myPagination({
@@ -147,9 +185,10 @@
                             rows: pageSize,
                             articlenumber: $("#articlenumber").val().trim(),
                             usernumber: $("#usernumber").val().trim(),
+                            tousernumber: $("#tousernumber").val().trim(),
                             status: $("#status").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?" + $.param(param)
                     }
                 }
             });
@@ -160,69 +199,14 @@
                     rows: pageSize,
                     articlenumber: $("#articlenumber").val().trim(),
                     usernumber: $("#usernumber").val().trim(),
+                    tousernumber: $("#tousernumber").val().trim(),
                     status: $("#status").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle"
-            })
-
-            //通过审核
-            $(".btnAudit").click(function () {
-                if (isloading) {
-                    return;
-                }
-                isloading = true;
-                var id = this.getAttribute("index");
-                layer.confirm('确认执行当前操作吗？', {
-                    btn: ['确定', '取消']
-                }, function () {
-                    $.ajax({
-                        url: "@(ViewBag.RootUrl)Back/RecommendArticleAudit",
-                        data: { key: "149516652684099", id: id },
-                        dataType: "json",
-                        success: function (data) {
-                            isloading = false;
-                            layer.alert(data.message);
-                            if (data.result) {
-                                window.location.reload();
-                            }
-                        }
-                    });
-                }, function () {
-
-                });
-                isloading = false;
-            })
-
-            //打回
-            $(".btnNoAudit").click(function () {
-                if (isloading) {
-                    return;
-                }
-                isloading = true;
-                var id = this.getAttribute("index");
-                layer.confirm('确认执行当前操作吗？', {
-                    btn: ['确定', '取消']
-                }, function () {
-                    $.ajax({
-                        url: "@(ViewBag.RootUrl)Back/RecommendArticleNoAudit",
-                        data: { key: "149516652684099", id: id },
-                        dataType: "json",
-                        success: function (data) {
-                            isloading = false;
-                            layer.alert(data.message);
-                            if (data.result) {
-                                window.location.reload();
-                            }
-                        }
-                    });
-                }, function () {
-
-                });
-                isloading = false;
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order"
             })
         });
     </script>
