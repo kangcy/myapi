@@ -776,6 +776,7 @@
     <Content Include="Views\Back\Comment.cshtml" />
     <Content Include="Views\Back\Order.cshtml" />
     <Content Include="Views\Back\FeedBack.cshtml" />
+    <Content Include="Views\Back\Password.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

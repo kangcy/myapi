@@ -213,7 +213,7 @@
                             ispay: $("#ispay").attr("index"),
                             sex: $("#sex").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)&" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
                     }
                 }
             });
@@ -229,11 +229,11 @@
                     ispay: $("#ispay").attr("index"),
                     sex: $("#sex").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)&" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
             })
 
             $(".btnRecommend").click(function () {

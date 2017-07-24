@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8" />
+    <title>预览</title>
+    <link href="css/mui.min.css" rel="stylesheet" />
+    <link href="css/animate.css" rel="stylesheet" />
+    <link href="css/loading.css" rel="stylesheet" />
+    <link href="css/articledetail.css" rel="stylesheet" />
+    <link href="css/comment.css" rel="stylesheet" />
+    <link href="css/input.css" rel="stylesheet" />
+    <style type="text/css">
+        html,
+        #body {
+            max-width: 750px;
+        }
+
+        html,
+        body,
+        #body {
+            width: 100%;
+            min-height: 100%;
+            margin: 0 auto;
+            font-family: Helvetica Neue, Helvetica, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        #bottom {
+            background: #fff;
+            margin: 0px;
+        }
+
+        .download {
+            text-align: center;
+            width: 90%;
+            height: 3rem;
+            line-height: 3rem;
+            color: #fff;
+            display: block;
+            border-radius: 8px;
+            background: #3395ed;
+            margin: 1rem 5%;
+            text-shadow: none;
+            float: left;
+        }
+
+        .comment {
+            width: auto;
+            margin: 0px;
+            padding: 15px;
+            padding-bottom: 0px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            border-radius: 0;
+            background-color: transparent;
+        }
+
+            .comment .title {
+                height: 1.5rem;
+            }
+
+                .comment .title .color-lump {
+                    background: #2887F0;
+                    width: 5px;
+                    height: 100%;
+                }
+
+                .comment .title h2 {
+                    text-indent: 1rem;
+                    font-weight: normal;
+                    color: #8C8C8C;
+                }
+
+            .comment .list {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 10px 0 0;
+            }
+
+        .summary img {
+            width: 1rem !important;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="error" class="full tc hide">
+        <img src="img/stop.png" class="none" />
+        <p class="mt20 f12 c999" id="errormsg">无权限访问</p>
+    </div>
+    <div class="loading" id="loader">
+        <div class="card">
+            <span class="circles-loader"></span>
+        </div>
+    </div>
+    <!--漂浮特效-->
+    <div id="snowwrapper" class="hide"></div>
+    <img id="music1" class="hide" src="img/btn_music.png" onclick="switchsound()" />
+    <div id="wrapper2"></div>
+    <div class="hide" id="scroll-wrapper">
+        <div class="mui-content" style="overflow-x: hidden;" id="wrapper1">
+            <!--通用样式-->
+            <div id="main0" class="f13 tl mt10 mb10 hide">
+                <div class="detail">
+                    <div class="full tl">
+                        <p class="f16 c000" id="title0"></p>
+                        <span class="mt0 mb0 csubtitle f13" id="createdate0"></span>
+                        <span class="mb0 ml10 user mt5 blue" userid="0" id="nickname0"></span>
+                        <span class="mt0 mb0 ml10 csubtitle f13" id="views0"></span>
+                        <p id="music0" play="on" class="music" onclick="switchsound()">
+                            <i></i>
+                            <span id="musicname0"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!--排版1-->
+            <div id="main1" class="f13 tc hide" style="position: relative;">
+                <div class="detail full fl" id="detail1">
+                    <div class="fl" style="width: 23%; display: inline-block;">
+                        <img id="useravatar1" class="full fl" />
+                    </div>
+                    <div class="fr tl" style="width: 77%; display: inline-block;">
+                        <p class="user ml10 mt10 mb0 textshadow f15 cfff fl full bold" userid="0" id="nickname1"></p>
+                        <p class="ml10 mb0 mt10 cfff textshadow f13 full">
+                            <span id="createdate1" class="mr10"></span>
+                            <span class="ml15" id="views1"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="detail2 cover fl tl">
+                <p class="f16 c333 tc hide" id="title1"></p>
+                <div class="c333 full" id="desc">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/music.js"></script>
+<script src="js/base.js"></script>
+<script type="text/javascript" src="http://player.youku.com/jsapi"></script>
+<script type="text/javascript">
+    var MusicID = 0;
+    var MusicUrl = "";
+    var ArticleID = 0;
+    var CurrTemplate = 0;
+    var CurrCover = "";
+    var AutoMusic = 0;
+    var isLoading = false;
+
+    mui.init({
+        gestureConfig: {
+            doubletap: true
+        },
+        swipeBack: false
+    });
+
+    mui.ready(function () {
+
+        //屏蔽IOS微信端页面回弹
+        //$('body').on('touchmove', function (event) {
+        //    event.preventDefault();
+        //});
+
+        $("#wrapper2").css({
+            "width": (document.getElementsByTagName("html")[0].clientWidth - document.getElementsByTagName("html")[0].offsetLeft * 2) + "px",
+            "height": window.innerHeight + "px",
+            "position": "fixed",
+            "z-index": -1
+        });
+        $("#detail1").css("margin-top", (window.innerHeight - 50) * 0.3 + "px");
+        $(".cover:eq(0)").css("min-height", window.innerHeight * 0.526 + "px");
+
+        var key = GetParameter("key");
+        var xwp = GetParameter("xwp");
+        if (base.IsNullOrEmpty(key) || base.IsNullOrEmpty(xwp)) {
+            document.getElementById("errormsg").innerText = "参数异常";
+            document.getElementById("error").classList.remove("hide");
+            document.getElementById("loader").classList.add("hide");
+            return;
+        }
+
+        LoadArticle(key, xwp);
+    });
+
+    /**
+	 * 加载文章
+	 */
+    function LoadArticle(key, xwp) {
+        mui.getJSON(RootUrl + "Back/ArticleInfo", {
+            key: key,
+            xwp: xwp
+        }, function (data) {
+            if (!data) {
+                return mui.toast("信息异常");
+            }
+            if (!data.result) {
+                document.getElementById("errormsg").innerText = data.message;
+                document.getElementById("error").classList.remove("hide");
+                document.getElementById("loader").classList.add("hide");
+                return;
+            }
+            data = data.message;
+            ArticleID = data.ID;
+            document.title = UnUnicodeText(data.Title);
+
+            $("#scroll-wrapper,#snowwrapper").removeClass("hide");
+
+            AutoMusic = data.AutoMusic;
+            MusicUrl = data.MusicUrl;
+
+            //段落
+            var html = [];
+            var parts = data.ArticlePart;
+            if (parts != null) {
+                for (var i = 0; i < parts.length; i++) {
+                    var part = parts[i];
+                    if (part.Types == 1) {
+                        //图片
+                        html.push('<div class="full f13 mt5"><img src="' + base.ShowThumb(part.Introduction, 1) + '" class="full" /></div>');
+                    } else if (part.Types == 2) {
+                        //文本
+                        html.push('<div class="full f13 mt5">' + UnUnicodeText(part.Introduction) + '</div>');
+                    } else if (part.Types == 3) {
+                        //视频
+                        html.push('<div class="full f13 mt5 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
+                    }
+                }
+            }
+
+            //排版
+            CurrCover = data.Cover;
+            var mainIndex = 0;
+            CurrTemplate = data.Template;
+            if (CurrTemplate == 1) {
+                mainIndex = 1;
+            }
+            if (data.TemplateJson != null) {
+                if (data.TemplateJson.ID > 0) {
+                    mainIndex = data.TemplateJson.TemplateType;
+                    CurrCover = data.TemplateJson.Cover;
+                    $("#scroll-wrapper").css("background-color", data.TemplateJson.Background);
+                }
+            }
+            CurrBackground = data.BackgroundJson;
+
+            ChangeBg();
+
+            $("#musicname0,#musicname1").html(data.MusicName);
+            $("#useravatar0,#useravatar1").attr({
+                "src": base.ShowThumb(data.Avatar, 1),
+                "userid": data.CreateUserNumber
+            });
+            $("#title0,#title1").html(UnUnicodeText(data.Title));
+            $("#nickname0,#nickname1").html(UnUnicodeText(data.NickName)).attr("userid", data.CreateUserNumber);
+            $("#createdate0,#createdate1").html(data.CreateDateText);
+            $("#views0,#views1").html("阅读  " + data.Views);
+            $("#desc").html(UnUnicodeText(html.join("")));
+
+            ChangeMusic(mainIndex);
+
+            document.getElementById("loader").classList.add("hide");
+
+            //实例化播放器
+            $(".youku_player").each(function () {
+                var $this = $(this);
+                ShowVideo($this.attr("id"), $this.attr("sid"));
+            });
+            mui.each(document.querySelectorAll(".video"), function () {
+                var $this = this;
+                $this.addEventListener('canplay', function () {
+                    $this.parentNode.classList.remove("hide");
+                });
+            });
+
+            $("#main0,#main1").addClass("hide");
+            $("#main" + mainIndex).removeClass("hide");
+
+            /*mui('#snowwrapper').load("part/snow/snow.html", function(response) {
+				LoadScript("part/snow/snow.js", function() {
+					$(".snow-canvas").snow();
+				});
+			});*/
+
+            //打开外链
+            mui('#desc').on('tap', 'a.link', function () {
+                var link = this.getAttribute("link");
+                if (base.IsNullOrEmpty(link)) {
+                    return;
+                }
+                window.location.href = link;
+            });
+
+            isLoading = false;
+        });
+    }
+
+    //背景状态切换
+    function ChangeBg() {
+        if (CurrTemplate > 0) {
+            $("#title1").removeClass("hide");
+        } else {
+            $("#title1").addClass("hide");
+        }
+
+        //纯白背景
+        if (CurrTemplate == 0) {
+            $("#scroll-wrapper").css("background-color", "transparent");
+            $("#wrapper1").css("background", "none");
+            $("#wrapper2").css("background", "#fff");
+            $(".cover").css("background", "RGBA(255, 255, 255, 1");
+        } else if (CurrTemplate > 1) {
+            $("#wrapper2").css("background", "none");
+            $("#wrapper1").css({
+                "background": "url(" + CurrCover + ") top center no-repeat",
+                "background-size": "100% auto"
+            });
+            $(".cover").css("background", "RGBA(255, 255, 255, 0.5");
+        } else {
+            $("#scroll-wrapper").css("background-color", "transparent");
+            $("#wrapper1").css("background", "none");
+            if (CurrBackground == null) {
+                //全屏
+                $("#wrapper2").css("background", "#fff");
+            } else {
+                //背景透明度
+                $(".cover").css("background", "RGBA(255, 255, 255, " + (100 - CurrBackground.Transparency) / 100 + ")");
+
+                var url = CurrBackground.Url;
+                if (CurrBackground.High == 0) {
+                    url = base.ShowThumb(url, 1);
+                } else {
+                    url = base.ShowThumb(url, 0);
+                }
+                switch (CurrBackground.Full) {
+                    case 0:
+                        //居顶 
+                        $("#wrapper2").css({
+                            "background": "url(" + url + ") no-repeat top center",
+                            "background-size": "100% auto"
+                        });
+                        break;
+                    case 1:
+                        //全屏
+                        $("#wrapper2").css({
+                            "background": "url(" + url + ") center center no-repeat",
+                            "background-size": "100% 100%",
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    //切换音乐
+    function ChangeMusic(index) {
+        MusicID = "music" + index;
+        if (!base.IsNullOrEmpty(MusicUrl)) {
+            if (AutoMusic == 1) {
+                document.addEventListener('touchstart', startsound);
+            }
+            $("#music" + index).removeClass("hide");
+        } else {
+            $("#music0,#music1").addClass("hide");
+        }
+    }
+
+    /**
+	 * 显示播放器
+	 */
+    function ShowVideo(domid, vid) {
+        player = new YKU.Player(domid, {
+            client_id: "59bec9b0be1fc34b",
+            styleid: '0',
+            vid: vid,
+            autoplay: false,
+            show_related: false
+        });
+    }
+
+    function AppendVideo(sourceurl) {
+        var html = [];
+        var height = window.innerHeight * 0.5;
+        //优酷
+        if (sourceurl.indexOf(".") < 0) {
+            return '<div class="media-cont audio-cont" style="width:100%;"><div id="youku_player_' + sourceurl + '" sid="' + sourceurl + '" class="youku_player" style="width:100%;height:' + height + ';"></div></div>';
+        }
+        //SWF
+        if (sourceurl.toLowerCase().indexOf(".swf") > 0) {
+            return '<div class="media-cont audio-cont" style="width:100%;"><embed src="' + sourceurl + '" allowfullscreen="true" quality="high" width="100%"  height="' + height + '" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash"></embed></div>';
+        }
+        //本地视频 
+        if (sourceurl.toLowerCase().indexOf(".") > 0) {
+            return '<video class="video" style="width:100%;height:' + height + 'px;" autoplay="autoplay" controls="controls"><source src="' + sourceurl + '" type="video/mp4" /></video>';
+        }
+        return "";
+    }
+</script>

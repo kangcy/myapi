@@ -125,8 +125,10 @@
                             <td>
                                 @if (!string.IsNullOrWhiteSpace(list[i].Title))
                                 {
+
+                                    var link = ViewBag.RootUrl + "Home/preview.html?key=" + list[i].ArticleNumber + "&xwp=" + ViewBag.xwp;
                                     <div class="cell">
-                                        @list[i].Title
+                                        <a href="@link" class="underline" target="_blank">@list[i].Title</a>
                                         <p class="mb0">(@list[i].ArticleNumber)</p>
                                     </div>
                                 }
@@ -188,7 +190,7 @@
                             tousernumber: $("#tousernumber").val().trim(),
                             status: $("#status").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?key=@(ViewBag.key)&" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
                     }
                 }
             });
@@ -202,11 +204,11 @@
                     tousernumber: $("#tousernumber").val().trim(),
                     status: $("#status").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?key=@(ViewBag.key)&" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?key=@(ViewBag.key)"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Order?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
             })
         });
     </script>

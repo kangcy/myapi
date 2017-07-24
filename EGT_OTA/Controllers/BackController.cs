@@ -23,27 +23,34 @@ namespace EGT_OTA.Controllers
 
         /// <summary>
         /// 登录
+        /// 初始密码：s84VDKwjLE8=  （123456）
         /// </summary>
         public ActionResult UserLogin()
         {
             try
             {
                 var phone = ZNRequest.GetString("phone");
-                if (string.IsNullOrWhiteSpace(phone))
+                var password = ZNRequest.GetString("password");
+                if (string.IsNullOrWhiteSpace(phone) || string.IsNullOrWhiteSpace(password))
                 {
-                    return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "请填写用户账号和密码" }, JsonRequestBehavior.AllowGet);
                 }
                 User user = db.Single<User>(x => x.Phone == phone);
                 if (user == null)
                 {
                     return Json(new { result = false, message = "用户不存在" }, JsonRequestBehavior.AllowGet);
                 }
+
+                if (user.Password != DesEncryptHelper.Encrypt(password))
+                {
+                    return Json(new { result = false, message = "密码错误" }, JsonRequestBehavior.AllowGet);
+                }
                 if (user.UserRole != Enum_UserRole.Administrator && user.UserRole != Enum_UserRole.SuperAdministrator)
                 {
                     return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
                 }
                 CookieHelper.SetCookie("Back", user.WeiXin + user.QQ);
-                return Json(new { result = true, message = user.WeiXin + user.QQ }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = true, message = user.WeiXin + user.QQ, xwp = user.Number }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -59,6 +66,64 @@ namespace EGT_OTA.Controllers
         {
             CookieHelper.ClearCookie("Back");
             return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 重置密码
+        /// </summary>
+        [BackPower]
+        public ActionResult Password()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
+            return View();
+        }
+
+        /// <summary>
+        /// 重置密码
+        /// </summary>
+        public ActionResult ResetPassword()
+        {
+            try
+            {
+                var password = ZNRequest.GetString("password");
+                var passwordagain = ZNRequest.GetString("passwordagain");
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    return Json(new { result = false, message = "请填写新密码" }, JsonRequestBehavior.AllowGet);
+                }
+                if (string.IsNullOrWhiteSpace(passwordagain))
+                {
+                    return Json(new { result = false, message = "请确认新密码" }, JsonRequestBehavior.AllowGet);
+                }
+                if (password != passwordagain)
+                {
+                    return Json(new { result = false, message = "两次密码不一致" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var usernumber = ZNRequest.GetString("xwp");
+
+                User user = db.Single<User>(x => x.Number == usernumber);
+                if (user == null)
+                {
+                    return Json(new { result = false, message = "用户不存在" }, JsonRequestBehavior.AllowGet);
+                }
+                if (user.UserRole != Enum_UserRole.Administrator && user.UserRole != Enum_UserRole.SuperAdministrator)
+                {
+                    return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("Password").EqualTo(DesEncryptHelper.Encrypt(password)).Where<User>(x => x.ID == user.ID).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_ResetPassword:" + ex.Message);
+            }
+            return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
         }
 
         #region  文章
@@ -135,6 +200,7 @@ namespace EGT_OTA.Controllers
             ViewBag.List = list;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
             return View();
         }
 
@@ -188,6 +254,77 @@ namespace EGT_OTA.Controllers
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("Back_ArticleDelete:" + ex.Message);
+            }
+            return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 详情
+        /// </summary>
+        public ActionResult ArticleInfo()
+        {
+            try
+            {
+                var number = ZNRequest.GetString("key");
+                if (string.IsNullOrWhiteSpace(number))
+                {
+                    return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
+                }
+                Article model = db.Single<Article>(x => x.Number == number);
+                if (model == null)
+                {
+                    return Json(new { result = false, message = "信息异常" }, JsonRequestBehavior.AllowGet);
+                }
+                var usernumber = ZNRequest.GetString("xwp");
+                if (string.IsNullOrWhiteSpace(usernumber))
+                {
+                    return Json(new { result = false, message = "无访问权限" }, JsonRequestBehavior.AllowGet);
+                }
+                User user = db.Single<User>(x => x.Number == usernumber);
+                if (user == null)
+                {
+                    return Json(new { result = false, message = "无访问权限" }, JsonRequestBehavior.AllowGet);
+                }
+                if (user.UserRole != Enum_UserRole.Administrator && user.UserRole != Enum_UserRole.SuperAdministrator)
+                {
+                    return Json(new { result = false, message = "无访问权限" }, JsonRequestBehavior.AllowGet);
+                }
+
+                //创建人
+                User createUser = db.Single<User>(x => x.Number == model.CreateUserNumber);
+                if (createUser != null)
+                {
+                    model.NickName = createUser == null ? "" : createUser.NickName;
+                    model.Avatar = createUser == null ? "" : createUser.Avatar;
+                    model.AutoMusic = createUser.AutoMusic;
+                    model.ShareNick = createUser.ShareNick;
+                }
+
+                //文章部分
+                model.ArticlePart = new SubSonic.Query.Select(provider).From<ArticlePart>().Where<ArticlePart>(x => x.ArticleNumber == model.Number).OrderAsc("SortID").ExecuteTypedList<ArticlePart>();
+
+                model.CreateDateText = DateTime.Now.ToString("yyyy-MM-dd");
+
+                //模板配置
+                model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);
+                if (model.Template > 0)
+                {
+                    model.TemplateJson = GetArticleTemp().FirstOrDefault(x => x.ID == model.Template);
+                    if (model.TemplateJson == null)
+                    {
+                        model.TemplateJson = new Template();
+                    }
+                }
+                else
+                {
+                    model.TemplateJson = new Template();
+                }
+
+                return Json(new { result = true, message = model }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("HomeController_BackInfo:" + ex.Message);
             }
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
         }
@@ -274,6 +411,7 @@ namespace EGT_OTA.Controllers
             ViewBag.List = newlist;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
             return View();
         }
 
@@ -397,6 +535,7 @@ namespace EGT_OTA.Controllers
             ViewBag.List = newlist;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
             return View();
         }
 
@@ -494,6 +633,7 @@ namespace EGT_OTA.Controllers
             ViewBag.List = list;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
             return View();
         }
 
@@ -583,6 +723,7 @@ namespace EGT_OTA.Controllers
             ViewBag.List = newlist;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
             return View();
         }
 
@@ -641,6 +782,7 @@ namespace EGT_OTA.Controllers
             ViewBag.List = newlist;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
             return View();
         }
 

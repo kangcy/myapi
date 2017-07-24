@@ -41,8 +41,9 @@ namespace EGT_OTA.Controllers.Filter
             //}
 
             var key = ZNRequest.GetString("key");
+            var xwp = ZNRequest.GetString("xwp");
             var cookie = CookieHelper.GetCookieValue("Back");
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(cookie))
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(xwp) || string.IsNullOrWhiteSpace(cookie))
             {
                 filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
                 filterContext.Result = new RedirectResult("Login");

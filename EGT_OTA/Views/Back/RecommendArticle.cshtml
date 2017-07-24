@@ -90,7 +90,10 @@
                                 </div>
                             </td>
                             <td class="cell el-button--text">
-                                <a href="#" class="underline">@list[i].Title</a>
+                                @{
+                            var link = ViewBag.RootUrl + "Home/preview.html?key=" + list[i].ArticleNumber + "&xwp=" + ViewBag.xwp;
+                                }
+                                <a href="@link" class="underline" target="_blank">@list[i].Title</a>
                                 <p class="mb0">(@list[i].ArticleNumber)</p>
                             </td>
                             <td class="cell">
@@ -156,7 +159,7 @@
                             usernumber: $("#usernumber").val().trim(),
                             status: $("#status").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?key=@(ViewBag.key)&" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
                     }
                 }
             });
@@ -169,11 +172,11 @@
                     usernumber: $("#usernumber").val().trim(),
                     status: $("#status").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?key=@(ViewBag.key)&" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?key=@(ViewBag.key)"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/RecommendArticle?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
             })
 
             //通过审核
@@ -188,7 +191,7 @@
                 }, function () {
                     $.ajax({
                         url: "@(ViewBag.RootUrl)Back/RecommendArticleAudit",
-                        data: { key: "149516652684099", id: id },
+                        data: { id: id },
                         dataType: "json",
                         success: function (data) {
                             isloading = false;
@@ -216,7 +219,7 @@
                 }, function () {
                     $.ajax({
                         url: "@(ViewBag.RootUrl)Back/RecommendArticleNoAudit",
-                        data: { key: "149516652684099", id: id },
+                        data: { id: id },
                         dataType: "json",
                         success: function (data) {
                             isloading = false;

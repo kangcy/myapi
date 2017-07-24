@@ -11,6 +11,7 @@
 		<link href="css/articledetail.css" rel="stylesheet" />
 		<link href="css/comment.css" rel="stylesheet" />
 		<link href="css/input.css" rel="stylesheet" />
+		<link rel="stylesheet" href="font-awesome-4.6.3/css/font-awesome.min.css">
 		<style type="text/css">
 			html,
 			#body {
@@ -82,19 +83,10 @@
 				box-sizing: border-box;
 				padding: 10px 0 0;
 			}
-			
-			.summary img {
-				width: 1rem !important;
-				vertical-align: middle;
-			}
 		</style>
 	</head>
 
 	<body>
-		<div id="audit" class="full tc hide">
-			<img src="img/stop.png" class="none" />
-			<p class="mt20 f12 c999">当前文章未通过审核</p>
-		</div>
 		<div id="delete" class="full tc hide">
 			<img src="img/stop.png" class="none" />
 			<p class="mt20 f12 c999">当前文章已删除</p>
@@ -121,13 +113,11 @@
 				<span class="circles-loader"></span>
 			</div>
 		</div>
-		<!--漂浮特效-->
-		<div id="snowwrapper" class="hide"></div>
-		<img id="music1" class="hide" src="img/btn_music.png" onclick="switchsound()" />
+		<i id="music1" class="fa fa-music f13 hide" onclick="switchsound()" style="position:fixed;right:10px;top:10px;z-index:999;"></i>
 		<div id="wrapper2"></div>
-		<div class="mui-scroll-wrapper hide" id="scroll-wrapper" style="top:0px;bottom:0px;">
+		<div class="mui-scroll-wrapper" id="scroll-wrapper" style="top:0px;bottom:0px;">
 			<div class="mui-scroll" id="scroll">
-				<div id="wrapper">
+				<div id="wrapper" class="hide">
 					<div class="mui-content" style="overflow-x:hidden;" id="wrapper1">
 						<!--通用样式-->
 						<div id="main0" class="f13 tl mt10 mb10 hide">
@@ -193,8 +183,6 @@
 <script src="js/mui.min.js"></script>
 <script src="js/music.js"></script>
 <script src="js/base.js"></script>
-<script src="js/jweixin-1.0.0.js"></script>
-<script src="js/WeixinApi.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
 <script type="text/javascript">
 	var MusicID = 0;
@@ -214,19 +202,14 @@
 
 	mui.ready(function() {
 
-		//屏蔽IOS微信端页面回弹
-		$('body').on('touchmove', function(event) {
-			event.preventDefault();
-		});
-
 		$("#wrapper2").css({
 			"width": window.innerWidth + "px",
 			"height": window.innerHeight + "px",
 			"position": "fixed",
 			"z-index": -1
 		});
-		//$("#wrapper1").css("min-height", window.innerHeight + "px")
-		$("#detail1").css("margin-top", (window.innerHeight - 50) * 0.3 + "px");
+		$("#wrapper1").css("min-height", window.innerHeight + "px")
+		$("#detail1").css("margin-top", window.innerHeight * 0.3 + "px");
 		$(".cover:eq(0)").css("min-height", window.innerHeight * 0.526 + "px");
 
 		base.InitScroll();
@@ -235,9 +218,8 @@
 		if(base.IsNullOrEmpty(key)) {
 			return mui.toast("参数异常");
 		}
-		var xwp = GetParameter("xwp");
 
-		LoadArticle(key, xwp, "");
+		LoadArticle(key, "");
 		LoadComment(key);
 
 		mui("#wrapper").on('tap', '.user', function(event) {
@@ -261,7 +243,7 @@
 			}, function(data) {
 				if(data != null) {
 					if(data.result) {
-						LoadArticle(key, xwp, pwd);
+						LoadArticle(key, pwd);
 						return;
 					}
 				}
@@ -274,12 +256,10 @@
 	/**
 	 * 加载文章
 	 */
-	function LoadArticle(key, xwp, pwd) {
+	function LoadArticle(key, pwd) {
 		mui.getJSON(RootUrl + "Home/Info", {
 			key: key,
-			ArticlePassword: pwd,
-			xwp: xwp,
-			url: window.location.href
+			ArticlePassword: pwd
 		}, function(data) {
 			if(!data) {
 				return mui.toast("信息异常");
@@ -291,14 +271,7 @@
 			ArticleID = data.ID;
 			document.title = UnUnicodeText(data.Title);
 
-			//未审核
-			if(data.Status == 0) {
-				document.getElementById("loader").classList.add("hide");
-				$("#audit").removeClass("hide");
-				return;
-			}
-
-			//已删除
+			//是否删除
 			if(data.Status == 2) {
 				document.getElementById("loader").classList.add("hide");
 				$("#delete").removeClass("hide");
@@ -312,59 +285,12 @@
 			}
 			//密码可见
 			else if(data.ArticlePower == 1) {
-				if(pwd != data.ArticlePowerPwd) {
+				if(pwd != data.ArticlePowerPwd)
 					$("#password").removeClass("hide");
-				} else {
-					$("#scroll-wrapper,#snowwrapper").removeClass("hide");
-				}
+				else
+					$("#wrapper").removeClass("hide");
 			} else {
-				$("#scroll-wrapper,#snowwrapper").removeClass("hide");
-			}
-
-			var wx_url = window.location.href;
-			var wx_title = data.Title;
-			var wx_desc = "分享自「小微篇」";
-			var wx_icon = base.ShowThumb(data.Cover, 2);
-
-			var wx_appId = data.Share.AppID; // 必填，公众号的唯一标识
-			var wx_timestamp = data.Share.TimeStr; // 必填，生成签名的时间戳
-			var wx_nonceStr = data.Share.NonceStr; // 必填，生成签名的随机串
-			var wx_signature = data.Share.Signature; // 必填，签名，见附录1
-			if(!base.IsNullOrEmpty(wx_signature)) {
-				wx.config({
-					debug: false, //开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-					appId: wx_appId, //必填，公众号的唯一标识
-					timestamp: wx_timestamp, //必填，生成签名的时间戳
-					nonceStr: wx_nonceStr, //必填，生成签名的随机串
-					signature: wx_signature, //必填，签名，见附录1
-					jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-				});
-				wx.ready(function() {
-					wx.onMenuShareTimeline({
-						title: wx_title, //分享标题
-						link: wx_url, //分享链
-						imgUrl: wx_icon, //分享图标
-						success: function() {},
-						cancel: function() {
-							//用户取消分享后执行的回调函数
-						}
-					});
-					wx.onMenuShareAppMessage({
-						title: wx_title, // 分享标题
-						desc: wx_desc, // 分享描述
-						link: wx_url, // 分享链接
-						imgUrl: wx_icon, // 分享图标
-						type: '', // 分享类型,music、video或link，不填默认为link
-						dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-						success: function() {},
-						cancel: function() {
-							//用户取消分享后执行的回调函数
-						}
-					});
-				});
-				wx.error(function(res) {
-					// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-				});
+				$("#wrapper").removeClass("hide");
 			}
 
 			AutoMusic = data.AutoMusic;
@@ -378,13 +304,13 @@
 					var part = parts[i];
 					if(part.Types == 1) {
 						//图片
-						html.push('<div class="full f13 mt5"><img src="' + base.ShowThumb(part.Introduction, 1) + '" class="full" /></div>');
+						html.push('<div class="full f13 mt10"><img src="' + base.ShowThumb(part.Introduction, 1) + '" class="full" /></div>');
 					} else if(part.Types == 2) {
 						//文本
-						html.push('<div class="full f13 mt5">' + UnUnicodeText(part.Introduction) + '</div>');
+						html.push('<div class="full f13 mt10">' + UnUnicodeText(part.Introduction) + '</div>');
 					} else if(part.Types == 3) {
 						//视频
-						html.push('<div class="full f13 mt5 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
+						html.push('<div class="full f13 mt10">' + AppendVideo(part.Introduction) + '</div>');
 					}
 				}
 			}
@@ -427,32 +353,11 @@
 				var $this = $(this);
 				ShowVideo($this.attr("id"), $this.attr("sid"));
 			});
-			mui.each(document.querySelectorAll(".video"), function() {
-				var $this = this;
-				$this.addEventListener('canplay', function() {
-					$this.parentNode.classList.remove("hide");
-				});
-			});
 
 			$("#main0,#main1").addClass("hide");
 			$("#main" + mainIndex).removeClass("hide");
 
 			$("#bottom").removeClass("hide");
-
-			/*mui('#snowwrapper').load("part/snow/snow.html", function(response) {
-				LoadScript("part/snow/snow.js", function() {
-					$(".snow-canvas").snow();
-				});
-			});*/
-
-			//打开外链
-			mui('#desc').on('tap', 'a.link', function() {
-				var link = this.getAttribute("link");
-				if(base.IsNullOrEmpty(link)) {
-					return;
-				}
-				window.location.href = link;
-			});
 
 			isLoading = false;
 		});
@@ -571,9 +476,9 @@
 		model.push('<div class="mui-table-cell oa-contact-avatar"><img src="' + base.ShowThumb(item.Avatar, 1) + '" class="user" userid="' + item.UserNumber + '" /></div>');
 		model.push('<div class="mui-table-cell pb0 main">');
 		model.push('<p class="f12 user c333" userid="' + item.UserNumber + '">' + UnUnicodeText(item.NickName) + '<span class="fr c999 f11">' + item.CreateDateText + '</span></p>');
-		model.push('<p class="f11 c999 mt5 mb5 summary" style="line-height:1.3rem;">' + UnUnicodeText(item.Summary) + '</p>');
+		model.push('<p class="f11 c999 mt3 mb5" style="line-height:1.3rem;">' + UnUnicodeText(item.Summary) + '</p>');
 		if(!base.IsNullOrEmpty(item.ParentCommentNumber)) {
-			model.push('<p class="tip mb0 f11" style="line-height:1.3rem;"><span class="user blue summary" userid="' + item.ParentUserNumber + '">@' + UnUnicodeText(item.ParentNickName) + '：</span>' + UnUnicodeText(item.ParentSummary) + '</p>');
+			model.push('<p class="tip mb0 f11" style="line-height:1.3rem;"><span class="user blue" userid="' + item.ParentUserNumber + '">@' + UnUnicodeText(item.ParentNickName) + '：</span>' + UnUnicodeText(item.ParentSummary) + '</p>');
 		}
 		model.push('</div></div>');
 		div.innerHTML = model.join('');
@@ -595,18 +500,13 @@
 
 	function AppendVideo(sourceurl) {
 		var html = [];
-		var height = window.innerHeight * 0.5;
 		//优酷
 		if(sourceurl.indexOf(".") < 0) {
-			return '<div class="media-cont audio-cont" style="width:100%;"><div id="youku_player_' + sourceurl + '" sid="' + sourceurl + '" class="youku_player" style="width:100%;height:' + height + ';"></div></div>';
+			return '<div class="media-cont audio-cont" style="margin-top: 10px; width: 100%;"><div id="youku_player_' + sourceurl + '" sid="' + sourceurl + '" class="youku_player" style="width:100%;height:400px;"></div></div>';
 		}
 		//SWF
 		if(sourceurl.toLowerCase().indexOf(".swf") > 0) {
-			return '<div class="media-cont audio-cont" style="width:100%;"><embed src="' + sourceurl + '" allowfullscreen="true" quality="high" width="100%"  height="' + height + '" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash"></embed></div>';
-		}
-		//本地视频 
-		if(sourceurl.toLowerCase().indexOf(".") > 0) {
-			return '<video class="video" style="width:100%;height:' + height + 'px;" autoplay="autoplay" controls="controls"><source src="' + sourceurl + '" type="video/mp4" /></video>';
+			return '<div class="media-cont audio-cont" style="margin-top:10px;width: 100%;"><embed src="' + sourceurl + '" allowfullscreen="true" quality="high" width="100%"  height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash"></embed></div>';
 		}
 		return "";
 	}

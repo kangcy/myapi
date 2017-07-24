@@ -136,7 +136,7 @@
                             usernumber: $("#usernumber").val().trim(),
                             status: $("#status").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)&" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
                     }
                 }
             });
@@ -148,11 +148,11 @@
                     usernumber: $("#usernumber").val().trim(),
                     status: $("#status").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)&" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
             })
 
             //处理
@@ -168,7 +168,7 @@
                 }, function () {
                     $.ajax({
                         url: "@(ViewBag.RootUrl)Back/FeedBackDeal",
-                        data: { key: "149516652684099", id: id },
+                        data: { id: id },
                         dataType: "json",
                         success: function (data) {
                             isloading = false;

@@ -23,26 +23,32 @@
         <div class="overlay" id="overlay"></div>
         <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
             <ul class="nav sidebar-nav">
+                @{
+                    var baseurl = "?key=" + ViewBag.key + "&xwp=" + ViewBag.xwp;
+                }
                 <li class="sidebar-brand">
                     <a href="#">小微篇后台</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/User?key=")@(ViewBag.key)">用户</a>
+                    <a href="@Url.Content("~/Back/User")@(baseurl)">用户</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/Article?key=")@(ViewBag.key)">文章</a>
+                    <a href="@Url.Content("~/Back/Article")@(baseurl)">文章</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/RecommendArticle?key=")@(ViewBag.key)">投稿</a>
+                    <a href="@Url.Content("~/Back/RecommendArticle")@(baseurl)">投稿</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/Comment?key=")@(ViewBag.key)">评论</a>
+                    <a href="@Url.Content("~/Back/Comment")@(baseurl)">评论</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/Order?key=")@(ViewBag.key)">打赏</a>
+                    <a href="@Url.Content("~/Back/Order")@(baseurl)">打赏</a>
                 </li>
                 <li>
-                    <a href="@Url.Content("~/Back/FeedBack?key=")@(ViewBag.key)">留言反馈</a>
+                    <a href="@Url.Content("~/Back/FeedBack")@(baseurl)">留言反馈</a>
+                </li>
+                <li>
+                    <a href="@Url.Content("~/Back/Password")@(baseurl)">重置密码</a>
                 </li>
                 @*<li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i>文章管理 <span class="caret"></span></a>

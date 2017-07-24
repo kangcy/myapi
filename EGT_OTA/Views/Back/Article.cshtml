@@ -89,6 +89,7 @@
                         <th class="cell" style="width: 100px;">用户头像</th>
                         <th class="cell" style="width: 150px;">用户昵称(编号)</th>
                         <th class="cell">标题(编号)</th>
+                        <th class="cell" style="width: 80px;">浏览</th>
                         <th class="cell" style="width: 80px;">权限</th>
                         <th class="cell" style="width: 80px;">状态</th>
                         <th class="cell" style="width: 100px;">投稿</th>
@@ -129,8 +130,14 @@
                                 </div>
                             </td>
                             <td class="cell el-button--text">
-                                <a href="#" class="underline">@list[i].Title</a>
+                                @{
+                            var link = ViewBag.RootUrl + "/Home/preview.html?key=" + list[i].Number + "&xwp=" + ViewBag.xwp;
+                                }
+                                <a href="@link" class="underline" target="_blank">@list[i].Title</a>
                                 <p class="mb0">(@list[i].Number)</p>
+                            </td>
+                            <td class="cell">
+                                @list[i].Views
                             </td>
                             <td class="cell">
                                 @EnumBase.GetDescription(typeof(Enum_ArticlePower), @list[i].ArticlePower)
@@ -198,7 +205,7 @@
                             submission: $("#submission").attr("index"),
                             articlepower: $("#articlepower").attr("index")
                         }
-                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&" + $.param(param)
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
                     }
                 }
             });
@@ -213,11 +220,11 @@
                     submission: $("#submission").attr("index"),
                     articlepower: $("#articlepower").attr("index")
                 }
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&" + $.param(param)
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
             })
 
             $("#reset").click(function () {
-                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)"
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
             })
 
             $(".btnAudit").click(function () {
@@ -232,7 +239,7 @@
                 }, function () {
                     $.ajax({
                         url: "@(ViewBag.RootUrl)Back/ArticleAudit",
-                        data: { key: "149516652684099", id: id },
+                        data: { id: id },
                         dataType: "json",
                         success: function (data) {
                             isloading = false;
