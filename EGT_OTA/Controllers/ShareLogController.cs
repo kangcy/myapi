@@ -21,6 +21,7 @@ namespace EGT_OTA.Controllers
     {
         /// <summary>
         /// 编辑
+        /// ShareType（0：文章,1：用户,2：新手红包）
         /// </summary>
         public ActionResult Edit()
         {
@@ -28,25 +29,20 @@ namespace EGT_OTA.Controllers
             {
                 var UserNumber = ZNRequest.GetString("UserNumber");
                 var Number = ZNRequest.GetString("Number");
-                if (string.IsNullOrWhiteSpace(Number))
-                {
-                    return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
-                }
                 var ShareType = ZNRequest.GetInt("ShareType");
-
                 ShareLog model = new ShareLog();
                 model.CreateDate = DateTime.Now;
                 model.CreateUserNumber = UserNumber;
                 model.CreateIP = Tools.GetClientIP;
                 model.ArticleNumber = ShareType == 0 ? Number : "";
-                model.UserNumber = ShareType == 0 ? "" : Number;
+                model.UserNumber = ShareType == 1 ? Number : "";
                 model.Source = ZNRequest.GetString("Source");
                 var result = false;
 
                 result = Tools.SafeInt(db.Add<ShareLog>(model)) > 0;
                 if (result)
                 {
-                    if (ShareType == 0)
+                    if (ShareType == 0 && !string.IsNullOrWhiteSpace(Number))
                     {
                         Article article = new SubSonic.Query.Select(provider, "ID", "Shares", "Number").From<Article>().Where<Article>(x => x.Number == Number).ExecuteSingle<Article>();
                         if (article != null)
@@ -62,6 +58,18 @@ namespace EGT_OTA.Controllers
                 LogHelper.ErrorLoger.Error("ShareLogController_Edit:" + ex.Message);
             }
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 红包信息
+        /// </summary>
+        public ActionResult RedInfo()
+        {
+            string during = System.Web.Configuration.WebConfigurationManager.AppSettings["during"];
+            string shareurl = System.Web.Configuration.WebConfigurationManager.AppSettings["shareurl"];
+            string shareicon = System.Web.Configuration.WebConfigurationManager.AppSettings["shareicon"];
+            var model = new { During = during, ShareUrl = shareurl, ShareIcon = shareicon };
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
     }
 }
