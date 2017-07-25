@@ -6,6 +6,8 @@
 <!DOCTYPE html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8" />
     <title>小微篇新户豪礼</title>
     <style type="text/css">
         .fl {
@@ -312,12 +314,12 @@
     </style>
 </head>
 <body class="tc" style="background:url(@Url.Content("~/Images/Red/bg.png")) top center no-repeat;background-size:100% auto;background-color:#f72a2b">
-    <div id="wrapper2">
+    <div style="width: 100%;">
         @{
             var avatar = ViewBag.Avatar;
             if (string.IsNullOrWhiteSpace(avatar))
             {
-            <img src="@Url.Content("~/Images/Red/logo.png")" class="icon" />
+            <img src="@Url.Content("~/Images/Red/logo.png")" class="icon user" />
             }
             else
             {
@@ -329,12 +331,12 @@
                         avatar = "http://www.xiaoweipian.com/" + avatar;
                     }
                 }
-            <img src="@avatar" class="icon" style="border-radius:100%;border: 0.15rem solid #fff;" />
+            <img src="@avatar" class="icon user" style="border-radius:100%;border: 0.15rem solid #fff;" />
             }
         }
-        <p class="cfff f13 mt15" style="width: 70%; display: inline-block; line-height: 1.5rem;"><span id="nickname" nickname="@ViewBag.NickName" class="text"></span>邀您下载小微篇，领取新用户大礼包，与TA一起记录精彩生活！</p>
-        <img src="@Url.Content("~/Images/Red/download.png")" style="width:90%;position:fixed;bottom:0px;left:5%;" onclick="Download()" />
     </div>
+    <p class="cfff f13 mt15" style="width: 80%; display: inline-block; line-height: 1.5rem;"><span id="nickname" nickname="@ViewBag.NickName" class="text user"></span>邀您下载小微篇，领取新用户大礼包，与TA一起记录精彩生活！</p>
+    <img src="@Url.Content("~/Images/Red/download.png")" style="width:90%;position:fixed;bottom:0px;left:5%;" onclick="Download()" />
 </body>
 <script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
 <script type="text/javascript">
@@ -391,8 +393,48 @@
     })(document, window);
 
     $(document).ready(function () {
-        $("#nickname").text(UnUnicodeText($("#nickname").attr("nickname")))
+        $("#nickname").text(UnUnicodeText($("#nickname").attr("nickname")));
+
+        var key = "@(ViewBag.Number)";
+
+        if (!IsNullOrEmpty(key)) {
+            $(".user").click(function () {
+                window.location.href = "http://www.xiaoweipian.com/u/" + key;
+            })
+        }
     });
+
+    /*获取html的参数**********************************************/
+    function GetParameter(param) {
+        var query = window.location.search;
+        query = doFilter(query);
+        var iLen = param.length;
+        var iStart = query.indexOf(param);
+        if (iStart == -1) {
+            return "";
+        }
+        iStart += iLen + 1;
+        var iEnd = query.indexOf("&", iStart);
+        if (iEnd == -1) {
+            return query.substring(iStart);
+        }
+        return query.substring(iStart, iEnd);
+    };
+
+    //过滤多余问号的情况
+    function doFilter(query) {
+        //出现多个？的情况，保留第一个，其他都改为&
+        var queryParam = query.split('?');
+        if (queryParam.length > 1) {
+            var _index = query.indexOf("?") + 1;
+            var queryBefore = query.substr(0, _index);
+            var queryAfter = query.substr(_index);
+            queryAfter = queryAfter.replace("?", "&");
+            //替换除第一？外的情况
+            query = queryBefore + queryAfter;
+        }
+        return query;
+    };
 
     function IsNullOrEmpty(str) {
         if (!str) {

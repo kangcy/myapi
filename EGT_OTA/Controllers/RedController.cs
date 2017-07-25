@@ -29,9 +29,14 @@ namespace EGT_OTA.Controllers
                     nickname = user.NickName;
                     avatar = user.Avatar;
                 }
+                else
+                {
+                    key = "";
+                }
             }
             ViewBag.NickName = string.IsNullOrWhiteSpace(nickname) ? "您的好友" : nickname;
             ViewBag.Avatar = avatar;
+            ViewBag.Number = key;
             return View();
         }
 
