@@ -10,6 +10,18 @@
     <meta charset="utf-8" />
     <title>小微篇新户豪礼</title>
     <style type="text/css">
+        html, body {
+            width: 100%;
+            min-height: 100%;
+            margin: 0 auto;
+            font-family: Helvetica Neue, Helvetica, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+        }
+
+        html,
+        body {
+            max-width: 750px;
+        }
+
         .fl {
             float: left !important;
         }
@@ -313,8 +325,8 @@
         }
     </style>
 </head>
-<body class="tc" style="background:url(@Url.Content("~/Images/Red/bg.png")) top center no-repeat;background-size:100% auto;background-color:#f72a2b">
-    <div style="width: 100%;">
+<body class="tc">
+    <div id="wrapper" style="width:100%;background:url(@Url.Content("~/Images/Red/bg.png")) top center no-repeat;background-size:100% auto;background-color:#f72a2b;position: relative; display: inline-block;">
         @{
             var avatar = ViewBag.Avatar;
             if (string.IsNullOrWhiteSpace(avatar))
@@ -334,9 +346,10 @@
             <img src="@avatar" class="icon user" style="border-radius:100%;border: 0.15rem solid #fff;" />
             }
         }
+
+        <p class="cfff f13 mt15" style="width: 80%; display: inline-block; line-height: 1.5rem;"><span id="nickname" nickname="@ViewBag.NickName" class="text user"></span>邀您下载小微篇，领取新用户大礼包，与TA一起记录精彩生活！</p>
+        <img src="@Url.Content("~/Images/Red/download.png")" style="width:90%;" onclick="Download()" id="download" />
     </div>
-    <p class="cfff f13 mt15" style="width: 80%; display: inline-block; line-height: 1.5rem;"><span id="nickname" nickname="@ViewBag.NickName" class="text user"></span>邀您下载小微篇，领取新用户大礼包，与TA一起记录精彩生活！</p>
-    <img src="@Url.Content("~/Images/Red/download.png")" style="width:90%;position:fixed;bottom:0px;left:5%;" onclick="Download()" />
 </body>
 <script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
 <script type="text/javascript">
@@ -393,6 +406,12 @@
     })(document, window);
 
     $(document).ready(function () {
+        $("#wrapper").css("min-height", window.innerHeight);
+
+        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+            $("#download").css({ "position": "fixed", "left": "5%", "bottom": "2%" })
+        }
+
         $("#nickname").text(UnUnicodeText($("#nickname").attr("nickname")));
 
         var key = "@(ViewBag.Number)";
