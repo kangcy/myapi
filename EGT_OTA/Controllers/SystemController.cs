@@ -83,11 +83,14 @@ namespace EGT_OTA.Controllers
                 //打赏金额
                 var orderMoney = db.Find<Order>(x => x.ToUserNumber == user.Number && x.Status == Enum_Status.Approved).Sum(x => x.Price);
 
+                //红包金额
+                var redMoney = db.Find<Red>(x => x.ToUserNumber == user.Number && x.Status == Enum_Status.Approved).Sum(x => x.Price);
+
                 //提现次数
                 var applyCount = db.Find<ApplyMoney>(x => x.CreateUserNumber == user.Number && x.Status == Enum_Status.Approved).Count;
 
                 //剩余赏金
-                user.Money = orderMoney - applyCount * Apply_Money * 100;
+                user.Money = orderMoney + redMoney - applyCount * Apply_Money * 100;
                 if (user.Money < 0)
                 {
                     user.Money = 0;
@@ -129,11 +132,14 @@ namespace EGT_OTA.Controllers
                 //打赏金额
                 var orderMoney = db.Find<Order>(x => x.ToUserNumber == user.Number && x.Status == Enum_Status.Approved).Sum(x => x.Price);
 
+                //红包金额
+                var redMoney = db.Find<Red>(x => x.ToUserNumber == user.Number && x.Status == Enum_Status.Approved).Sum(x => x.Price);
+
                 //提现次数
                 var applyCount = db.Find<ApplyMoney>(x => x.CreateUserNumber == user.Number && x.Status == Enum_Status.Approved).Count;
 
                 //剩余赏金
-                user.Money = orderMoney - applyCount * Apply_Money * 100;
+                user.Money = orderMoney + redMoney - applyCount * Apply_Money * 100;
                 if (user.Money < 0)
                 {
                     user.Money = 0;

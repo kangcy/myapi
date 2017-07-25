@@ -70,6 +70,7 @@ namespace EGT_OTA.Models
             repo.Single<UserLog>(x => x.ID == 0);//登录日志
             repo.Single<Background>(x => x.ID == 0);//背景
             repo.Single<UserAction>(x => x.ID == 0);//用户操作
+            repo.Single<Red>(x => x.ID == 0);//红包
         }
     }
 }

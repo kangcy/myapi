@@ -238,6 +238,7 @@
     <Compile Include="Controllers\InitController.cs" />
     <Compile Include="Controllers\NotifyController.cs" />
     <Compile Include="Controllers\PushController.cs" />
+    <Compile Include="Controllers\RedController.cs" />
     <Compile Include="Controllers\RedisController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\FeedBackController.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Enum\Enum_Deal.cs" />
     <Compile Include="Enum\Enum_Order.cs" />
     <Compile Include="Enum\Enum_PayType.cs" />
+    <Compile Include="Enum\Enum_RedType.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -333,6 +335,7 @@
     <Compile Include="Models\App\UserLog.cs" />
     <Compile Include="Models\App\Background.cs" />
     <Compile Include="Models\App\UserAction.cs" />
+    <Compile Include="Models\App\Red.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Base\BasicRepository.cs" />
     <Compile Include="Models\Base\WebApplication.cs" />
@@ -442,6 +445,9 @@
     <Content Include="Images\Help\6.png" />
     <Content Include="Images\Help\7.png" />
     <Content Include="Images\Help\8.png" />
+    <Content Include="Images\Red\bg.png" />
+    <Content Include="Images\Red\download.png" />
+    <Content Include="Images\Red\logo.png" />
     <Content Include="Images\Red\share.png" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\logo.png" />
@@ -809,6 +815,8 @@
     <Content Include="Views\Back\Order.cshtml" />
     <Content Include="Views\Back\FeedBack.cshtml" />
     <Content Include="Views\Back\Password.cshtml" />
+    <Content Include="Views\Back\Red.cshtml" />
+    <Content Include="Views\Red\LoginIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -49,7 +49,6 @@ namespace EGT_OTA.Controllers
                         default:
                             break;
                     }
-
                 }
                 if (user == null)
                 {
@@ -124,11 +123,22 @@ namespace EGT_OTA.Controllers
                         user.Address = user.Province + " " + user.City;
                         user.BirthdayText = user.Birthday.ToString("yyyy-MM-dd");
 
-                        return Json(new { result = true, message = user }, JsonRequestBehavior.AllowGet);
+                        return Json(new { result = true, message = user, first = 1 }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 else
                 {
+                    //判断账号是否删除
+                    if (user.Status == Enum_Status.Audit)
+                    {
+                        return Json(new { result = false, message = "当前账号已锁定", first = 0 }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    if (user.Status == Enum_Status.DELETE)
+                    {
+                        return Json(new { result = false, message = "当前账号已注销", first = 0 }, JsonRequestBehavior.AllowGet);
+                    }
+
                     user.ClientID = ZNRequest.GetString("ClientID");
                     user.Province = ZNRequest.GetString("Province");
                     user.City = ZNRequest.GetString("City");
@@ -144,7 +154,7 @@ namespace EGT_OTA.Controllers
                     var result = db.Update<User>(user) > 0;
                     if (result)
                     {
-                        return Json(new { result = true, message = UserInfo(user) }, JsonRequestBehavior.AllowGet);
+                        return Json(new { result = true, message = UserInfo(user), first = 0 }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }
@@ -152,7 +162,7 @@ namespace EGT_OTA.Controllers
             {
                 LogHelper.ErrorLoger.Error("UserController_LoginThird" + ex.Message, ex);
             }
-            return Json(new { result = false, message = "登录失败" }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = false, message = "登录失败", first = 0 }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -166,13 +176,13 @@ namespace EGT_OTA.Controllers
                 var password = ZNRequest.GetString("Password").Trim();
                 if (String.IsNullOrWhiteSpace(phone) || String.IsNullOrWhiteSpace(password))
                 {
-                    return Json(new { result = false, message = "手机号码和密码不能为空" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "手机号码和密码不能为空", first = 0 }, JsonRequestBehavior.AllowGet);
                 }
                 password = DesEncryptHelper.Encrypt(password);
                 User user = db.Single<User>(x => x.Phone == phone && x.Password == password);
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户名或密码错误" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户名或密码错误", first = 0 }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -186,7 +196,7 @@ namespace EGT_OTA.Controllers
                     var result = db.Update<User>(user) > 0;
                     if (result)
                     {
-                        return Json(new { result = true, message = UserInfo(user) }, JsonRequestBehavior.AllowGet);
+                        return Json(new { result = true, message = UserInfo(user), first = 1 }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }
@@ -194,7 +204,7 @@ namespace EGT_OTA.Controllers
             {
                 LogHelper.ErrorLoger.Error("UserController_Login" + ex.Message, ex);
             }
-            return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = false, message = "失败", first = 0 }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -1481,11 +1491,14 @@ namespace EGT_OTA.Controllers
             //打赏金额
             var orderMoney = order.Sum(x => x.Price);
 
+            //红包金额
+            var redMoney = db.Find<Red>(x => x.ToUserNumber == user.Number && x.Status == Enum_Status.Approved).Sum(x => x.Price);
+
             //提现次数
             var applyCount = db.Find<ApplyMoney>(x => x.CreateUserNumber == user.Number && x.Status == Enum_Status.Approved).Count;
 
             //剩余赏金
-            user.Money = orderMoney - applyCount * Apply_Money * 100;
+            user.Money = orderMoney + redMoney - applyCount * Apply_Money * 100;
             if (user.Money < 0)
             {
                 user.Money = 0;

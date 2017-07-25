@@ -59,17 +59,5 @@ namespace EGT_OTA.Controllers
             }
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
         }
-
-        /// <summary>
-        /// 红包信息
-        /// </summary>
-        public ActionResult RedInfo()
-        {
-            string during = System.Web.Configuration.WebConfigurationManager.AppSettings["during"];
-            string shareurl = System.Web.Configuration.WebConfigurationManager.AppSettings["shareurl"];
-            string shareicon = System.Web.Configuration.WebConfigurationManager.AppSettings["shareicon"];
-            var model = new { During = during, ShareUrl = shareurl, ShareIcon = shareicon };
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
     }
 }

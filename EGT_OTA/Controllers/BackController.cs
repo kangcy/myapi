@@ -816,7 +816,74 @@ namespace EGT_OTA.Controllers
 
         #endregion
 
-        #region  日志
+        #region  红包
+
+        /// <summary>
+        /// 红包
+        /// </summary>
+        public ActionResult Red()
+        {
+            var pager = new Pager();
+            var query = new SubSonic.Query.Select(provider).From<Red>().Where<Red>(x => x.ID > 0);
+            var tousernumber = ZNRequest.GetString("tousernumber");
+            if (!string.IsNullOrWhiteSpace(tousernumber))
+            {
+                query = query.And("ToUserNumber").IsEqualTo(tousernumber);
+            }
+            var redtype = ZNRequest.GetInt("redtype", -1);
+            if (redtype > -1)
+            {
+                query = query.And("RedType").IsEqualTo(redtype);
+            }
+            var status = ZNRequest.GetInt("status", -1);
+            if (status > -1)
+            {
+                query = query.And("Status").IsEqualTo(status);
+            }
+            var recordCount = query.GetRecordCount();
+            var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+            var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Red>();
+
+            List<RedJson> newlist = new List<RedJson>();
+
+            if (list.Count > 0)
+            {
+                //被打赏人
+                var tousers = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number").From<User>().Where("Number").In(list.Select(x => x.ToUserNumber).ToArray()).ExecuteTypedList<User>();
+
+                list.ForEach(x =>
+                {
+                    var touser = tousers.FirstOrDefault(y => y.Number == x.ToUserNumber);
+                    if (touser == null)
+                    {
+                        return;
+                    }
+                    var model = new RedJson();
+                    model.Price = x.Price;
+                    model.RedType = x.RedType;
+                    model.Status = x.Status;
+                    model.CreateDateText = x.CreateDate.ToString("yyyy-MM-dd hh:mm:ss");
+                    model.UserID = touser.ID;
+                    model.UserName = touser.NickName;
+                    model.UserAvatar = touser.Avatar;
+                    model.ToUserNumber = x.ToUserNumber;
+                    model.ID = x.ID;
+                    model.Number = x.Number;
+                    newlist.Add(model);
+                });
+            }
+            ViewBag.tousernumber = tousernumber;
+            ViewBag.redtype = redtype;
+            ViewBag.status = status;
+            ViewBag.RecordCount = recordCount;
+            ViewBag.CurrPage = pager.Index;
+            ViewBag.PageSize = pager.Size;
+            ViewBag.List = newlist;
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
+            return View();
+        }
 
         #endregion
     }

@@ -1,0 +1,423 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<head>
+    <title>小微篇新户豪礼</title>
+    <style type="text/css">
+        .fl {
+            float: left !important;
+        }
+
+        .fr {
+            float: right !important;
+        }
+
+        .c000 {
+            color: #000 !important;
+        }
+
+        .c333 {
+            color: #333 !important;
+        }
+
+        .c666 {
+            color: #666 !important;
+        }
+
+        .c999 {
+            color: #999 !important;
+        }
+
+        .cfff {
+            color: #fff !important;
+        }
+
+        .blue {
+            color: #007aff !important;
+        }
+
+        .ceee {
+            color: #eee !important;
+        }
+
+        .caaa {
+            color: #aaa !important;
+        }
+
+        .csubtitle {
+            color: #707070 !important;
+        }
+
+        .red {
+            color: #FF3B30 !important;
+        }
+
+        .f10 {
+            font-size: 0.625rem !important;
+        }
+
+        .f11 {
+            font-size: 0.6875rem !important;
+        }
+
+        .f12 {
+            font-size: 0.75rem !important;
+        }
+
+        .f13 {
+            font-size: 0.8125rem !important;
+        }
+
+        .f14 {
+            font-size: 0.875rem !important;
+        }
+
+        .f15 {
+            font-size: 0.9375rem !important;
+        }
+
+        .f16 {
+            font-size: 1rem !important;
+        }
+
+        .f17 {
+            font-size: 1.0625rem !important;
+        }
+
+        .f18 {
+            font-size: 1.125rem !important;
+        }
+
+        .f19 {
+            font-size: 1.1875rem !important;
+        }
+
+        .f20 {
+            font-size: 1.25rem !important;
+        }
+
+        .f25 {
+            font-size: 1.5625rem !important;
+        }
+
+        .f30 {
+            font-size: 1.875rem !important;
+        }
+
+        .f40 {
+            font-size: 2.5rem;
+        }
+
+        .f50 {
+            font-size: 3.125rem;
+        }
+
+        .p5 {
+            padding: 0.3125rem !important;
+        }
+
+        .ml5 {
+            margin-left: 0.3125rem !important;
+        }
+
+        .ml10 {
+            margin-left: 0.625rem !important;
+        }
+
+        .ml15 {
+            margin-left: 0.9375rem !important;
+        }
+
+        .mr5 {
+            margin-right: 0.3125rem !important;
+        }
+
+        .mr10 {
+            margin-right: 0.625rem !important;
+        }
+
+        .mr15 {
+            margin-right: 0.9375rem !important;
+        }
+
+        .mr20 {
+            margin-right: 1.25rem !important;
+        }
+
+        .mr30 {
+            margin-right: 1.875rem !important;
+        }
+
+        .mt0 {
+            margin-top: 0px !important;
+        }
+
+        .mt1 {
+            margin-top: 0.0625rem !important;
+        }
+
+        .mt2 {
+            margin-top: 0.125rem !important;
+        }
+
+        .mt3 {
+            margin-top: 0.1875rem !important;
+        }
+
+        .mt4 {
+            margin-top: 0.25rem !important;
+        }
+
+        .mt5 {
+            margin-top: 0.3125rem !important;
+        }
+
+        .mt6 {
+            margin-top: 0.375rem !important;
+        }
+
+        .mt7 {
+            margin-top: 0.4375rem !important;
+        }
+
+        .mt8 {
+            margin-top: 0.5rem !important;
+        }
+
+        .mt10 {
+            margin-top: 0.625rem !important;
+        }
+
+        .mt15 {
+            margin-top: 0.9375rem !important;
+        }
+
+        .mt20 {
+            margin-top: 1.25rem !important;
+        }
+
+        .mt25 {
+            margin-top: 1.5625rem !important;
+        }
+
+        .mt30 {
+            margin-top: 1.875rem !important;
+        }
+
+        .mb0 {
+            margin-bottom: 0px !important;
+        }
+
+        .mb5 {
+            margin-bottom: 0.3125rem !important;
+        }
+
+        .mb8 {
+            margin-bottom: 0.5rem !important;
+        }
+
+        .mb10 {
+            margin-bottom: 0.625rem !important;
+        }
+
+        .mb15 {
+            margin-bottom: 0.9375rem !important;
+        }
+
+        .mb20 {
+            margin-bottom: 1.25rem !important;
+        }
+
+        .m10 {
+            margin: 0.625rem !important;
+        }
+
+        .pl10 {
+            padding-left: 0.625rem !important;
+        }
+
+        .pr30 {
+            padding-right: 1.875rem !important;
+        }
+
+        .pt20 {
+            padding-top: 1.25rem !important;
+        }
+
+        .pb0 {
+            padding-bottom: 0px !important;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .full {
+            width: 100% !important;
+        }
+
+        .show {
+            display: inline-block;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .tablecell {
+            display: table-cell !important;
+        }
+
+        .tl {
+            text-align: left !important;
+        }
+
+        .tr {
+            text-align: right !important;
+        }
+
+        .tc {
+            text-align: center !important;
+        }
+
+        .fullheight {
+            height: 100%;
+        }
+
+        .initial {
+            position: initial !important;
+        }
+
+        .td {
+            text-decoration: underline;
+        }
+
+        .icon {
+            width: 27%;
+            margin-top: 77%;
+        }
+
+        .text {
+            color: #fff687;
+        }
+
+        .more {
+            margin-top: 0.35rem;
+            margin-right: 0.4rem;
+        }
+    </style>
+</head>
+<body class="tc" style="background:url(@Url.Content("~/Images/Red/bg.png")) top center no-repeat;background-size:100% auto;background-color:#f72a2b">
+    <div id="wrapper2">
+        @{
+            var avatar = ViewBag.Avatar;
+            if (string.IsNullOrWhiteSpace(avatar))
+            {
+            <img src="@Url.Content("~/Images/Red/logo.png")" class="icon" />
+            }
+            else
+            {
+                if (avatar.IndexOf("_0") >= 0)
+                {
+                    avatar = avatar.Replace("_0", "_2");
+                    if (avatar.ToLower().IndexOf("http://") < 0)
+                    {
+                        avatar = "http://www.xiaoweipian.com/" + avatar;
+                    }
+                }
+            <img src="@avatar" class="icon" style="border-radius:100%;border: 0.15rem solid #fff;" />
+            }
+        }
+        <p class="cfff f13 mt15" style="width: 70%; display: inline-block; line-height: 1.5rem;"><span id="nickname" nickname="@ViewBag.NickName" class="text"></span>邀您下载小微篇，领取新用户大礼包，与TA一起记录精彩生活！</p>
+        <img src="@Url.Content("~/Images/Red/download.png")" style="width:90%;position:fixed;bottom:0px;left:5%;" onclick="Download()" />
+    </div>
+</body>
+<script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
+<script type="text/javascript">
+
+    (function (doc, win) {
+        // 分辨率Resolution适配
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = document.getElementsByTagName("html")[0].clientWidth - document.getElementsByTagName("html")[0].offsetLeft * 2;
+                if (!clientWidth) return;
+                docEl.style.fontSize = 16 * (clientWidth / 320) + 'px';
+                docEl.style.width = '100%';
+                docEl.style.height = '100%';
+            };
+
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+
+        // 一物理像素在不同屏幕的显示效果不一样。要根据devicePixelRatio来修改meta标签的scale,要注释上面的meta标签
+        (function () {
+            return;
+            var dpr = scale = 1;
+            var isIPhone = win.navigator.appVersion.match(/iphone/gi);
+            var devicePixelRatio = win.devicePixelRatio;
+            if (isIPhone) {
+                // iOS下，对于2和3的屏，用2倍的方案，其余的用1倍方案
+                if (devicePixelRatio >= 3 && (!dpr || dpr >= 3)) {
+                    dpr = 3;
+                } else if (devicePixelRatio >= 2 && (!dpr || dpr >= 2)) {
+                    dpr = 2;
+                } else {
+                    dpr = 1;
+                }
+            } else {
+                // 其他设备下，仍旧使用1倍的方案
+                dpr = 1;
+            }
+            scale = 1 / dpr;
+            var metaEl = "";
+            metaEl = doc.createElement('meta');
+            metaEl.setAttribute('name', 'viewport');
+            metaEl.setAttribute('content', 'initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
+            if (docEl.firstElementChild) {
+                docEl.firstElementChild.appendChild(metaEl);
+            } else {
+                var wrap = doc.createElement('div');
+                wrap.appendChild(metaEl);
+                doc.write(wrap.innerHTML);
+            }
+        })();
+
+    })(document, window);
+
+    $(document).ready(function () {
+        $("#nickname").text(UnUnicodeText($("#nickname").attr("nickname")))
+    });
+
+    function IsNullOrEmpty(str) {
+        if (!str) {
+            return true;
+        }
+        if (str == "") {
+            return true;
+        }
+        if (str.toString().toLowerCase() == "null") {
+            return true;
+        }
+        if (str.toString().toLowerCase() == "undefined") {
+            return true;
+        }
+        return false;
+    }
+
+    function UnUnicodeText(str) {
+        if (IsNullOrEmpty(str)) {
+            return "";
+        }
+        return unescape(str.replace(/\\u/gi, '%u'));
+    }
+
+    function Download() {
+        window.location.href = "http://app.qq.com/#id=detail&appid=1106027124";
+    }
+</script>
