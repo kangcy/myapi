@@ -53,6 +53,7 @@ namespace EGT_OTA.Controllers
                 if (user == null)
                 {
                     user = new User();
+                    user.PhoneModel = ZNRequest.GetString("PhoneModel");
                     user.ClientID = ZNRequest.GetString("ClientID");
                     user.Province = ZNRequest.GetString("Province");
                     user.City = ZNRequest.GetString("City");
@@ -138,7 +139,7 @@ namespace EGT_OTA.Controllers
                     {
                         return Json(new { result = false, message = "当前账号已注销", first = 0 }, JsonRequestBehavior.AllowGet);
                     }
-
+                    user.PhoneModel = ZNRequest.GetString("PhoneModel");
                     user.ClientID = ZNRequest.GetString("ClientID");
                     user.Province = ZNRequest.GetString("Province");
                     user.City = ZNRequest.GetString("City");
@@ -189,6 +190,7 @@ namespace EGT_OTA.Controllers
                     string info = "\r\n" + user.Phone + "于" + DateTime.Now.ToString() + "登录APP\r\n" + "登录IP为:" + Tools.GetClientIP;
                     LogHelper.UserLoger.Info(info);
 
+                    user.PhoneModel = ZNRequest.GetString("PhoneModel");
                     user.ClientID = ZNRequest.GetString("ClientID");
                     user.LoginTimes += 1;
                     user.LastLoginDate = DateTime.Now;
@@ -288,6 +290,7 @@ namespace EGT_OTA.Controllers
                 user.Number = BuildNumber();
                 user.IsPay = 1;
                 user.ClientID = ZNRequest.GetString("ClientID");
+                user.PhoneModel = ZNRequest.GetString("PhoneModel");
                 user.ID = Tools.SafeInt(db.Add<User>(user), 0);
                 if (user.ID > 0)
                 {
@@ -1431,7 +1434,7 @@ namespace EGT_OTA.Controllers
                     return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
                 }
                 var pager = new Pager();
-                var query = new SubSonic.Query.Select(provider).From<User>().Where<User>(x => x.Status == Enum_Status.Approved && x.IsRecommend == 1 && x.ID != user.ID);
+                var query = new SubSonic.Query.Select(provider).From<User>().Where<User>(x => x.Status == Enum_Status.Approved && x.IsRecommend == Enum_Recommend.Approved && x.ID != user.ID);
 
                 //过滤黑名单
                 var black = db.Find<Black>(x => x.CreateUserNumber == user.Number);

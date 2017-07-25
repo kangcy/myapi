@@ -637,6 +637,118 @@ namespace EGT_OTA.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 用户推荐
+        /// </summary>
+        public ActionResult UserRecommend()
+        {
+            var message = "";
+            try
+            {
+                var id = ZNRequest.GetInt("id");
+                User model = db.Single<User>(x => x.ID == id);
+                if (model == null)
+                {
+                    return Json(new { result = false, message = "用户不存在" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("IsRecommend").EqualTo(Enum_Recommend.Approved).Where<User>(x => x.ID == id).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_UserRecommend:" + ex.Message);
+                message = ex.Message;
+            }
+            return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 用户取消推荐
+        /// </summary>
+        public ActionResult UserNoRecommend()
+        {
+            var message = "";
+            try
+            {
+                var id = ZNRequest.GetInt("id");
+                User model = db.Single<User>(x => x.ID == id);
+                if (model == null)
+                {
+                    return Json(new { result = false, message = "用户不存在" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("IsRecommend").EqualTo(Enum_Recommend.Audit).Where<User>(x => x.ID == id).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_UserNoRecommend:" + ex.Message);
+                message = ex.Message;
+            }
+            return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 用户删除
+        /// </summary>
+        public ActionResult UserDelete()
+        {
+            var message = "";
+            try
+            {
+                var id = ZNRequest.GetInt("id");
+                User model = db.Single<User>(x => x.ID == id);
+                if (model == null)
+                {
+                    return Json(new { result = false, message = "用户不存在" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("Status").EqualTo(Enum_Status.Audit).Where<User>(x => x.ID == id).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_UserDelete:" + ex.Message);
+                message = ex.Message;
+            }
+            return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 用户激活
+        /// </summary>
+        public ActionResult UserApproved()
+        {
+            var message = "";
+            try
+            {
+                var id = ZNRequest.GetInt("id");
+                User model = db.Single<User>(x => x.ID == id);
+                if (model == null)
+                {
+                    return Json(new { result = false, message = "用户不存在" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("Status").EqualTo(Enum_Status.Approved).Where<User>(x => x.ID == id).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_UserApproved:" + ex.Message);
+                message = ex.Message;
+            }
+            return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region  订单

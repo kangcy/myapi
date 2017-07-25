@@ -164,9 +164,10 @@
                                 @list[i].LastLoginDate.ToString("yyyy-MM-dd hh:mm:ss")
                             </td>
                             <td>
-                                <button type="button" class="el-button el-button--success el-button--small btnRecommend"><span>推荐</span></button>
-                                <button type="button" class="el-button el-button--warning el-button--small btnNoRecommend"><span>取消推荐</span></button>
-                                <button type="button" class="el-button el-button--danger el-button--small btnDelete"><span>删除</span></button>
+                                <button type="button" class="el-button el-button--success el-button--small btnRecommend" index="@list[i].ID"><span>推荐</span></button>
+                                <button type="button" class="el-button el-button--warning el-button--small btnNoRecommend" index="@list[i].ID"><span>取消推荐</span></button>
+                                <button type="button" class="el-button el-button--danger el-button--small btnDelete" index="@list[i].ID"><span>删除</span></button>
+                                <button type="button" class="el-button el-button--danger el-button--small btnApproved" index="@list[i].ID"><span>激活</span></button>
                             </td>
                         </tr>
                         }
@@ -236,16 +237,120 @@
                 window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
             })
 
+            //推荐
             $(".btnRecommend").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                var id = this.getAttribute("index");
 
+                layer.confirm('确认执行当前操作吗？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: "@(ViewBag.RootUrl)Back/UserRecommend",
+                        data: { id: id },
+                        dataType: "json",
+                        success: function (data) {
+                            isloading = false;
+                            layer.alert(data.message);
+                            if (data.result) {
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }, function () {
+
+                });
+                isloading = false;
             })
 
+            //取消推荐
             $(".btnNoRecommend").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                var id = this.getAttribute("index");
 
+                layer.confirm('确认执行当前操作吗？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: "@(ViewBag.RootUrl)Back/UserNoRecommend",
+                        data: { id: id },
+                        dataType: "json",
+                        success: function (data) {
+                            isloading = false;
+                            layer.alert(data.message);
+                            if (data.result) {
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }, function () {
+
+                });
+                isloading = false;
             })
 
+            //删除
             $(".btnDelete").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                var id = this.getAttribute("index");
 
+                layer.confirm('确认执行当前操作吗？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: "@(ViewBag.RootUrl)Back/UserDelete",
+                        data: { id: id },
+                        dataType: "json",
+                        success: function (data) {
+                            isloading = false;
+                            layer.alert(data.message);
+                            if (data.result) {
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }, function () {
+
+                });
+                isloading = false;
+            })
+
+            //激活
+            $(".btnApproved").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                var id = this.getAttribute("index");
+
+                layer.confirm('确认执行当前操作吗？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: "@(ViewBag.RootUrl)Back/UserApproved",
+                        data: { id: id },
+                        dataType: "json",
+                        success: function (data) {
+                            isloading = false;
+                            layer.alert(data.message);
+                            if (data.result) {
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }, function () {
+
+                });
+                isloading = false;
             })
         });
     </script>

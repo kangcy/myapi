@@ -195,6 +195,12 @@ namespace EGT_OTA.Models
         [SubSonicNullString]
         public string ClientID { get; set; }
 
+        /// <summary>
+        /// 手机型号
+        /// </summary>
+        [SubSonicNullString]
+        public string PhoneModel { get; set; }
+
         #region  隐私管理
 
         /// <summary>

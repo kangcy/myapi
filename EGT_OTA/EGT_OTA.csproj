@@ -270,6 +270,7 @@
     <Compile Include="Enum\Enum_Order.cs" />
     <Compile Include="Enum\Enum_PayType.cs" />
     <Compile Include="Enum\Enum_RedType.cs" />
+    <Compile Include="Enum\Enum_Recommend.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -400,7 +401,6 @@
     <Content Include="Home\css\animate.css" />
     <Content Include="Home\css\articledetail.css" />
     <Content Include="Home\css\comment.css" />
-    <Content Include="Home\css\index.html" />
     <Content Include="Home\css\input.css" />
     <Content Include="Home\css\loading.css" />
     <Content Include="Home\css\loading.min.css" />
