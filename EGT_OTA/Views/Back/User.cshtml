@@ -38,7 +38,7 @@
             </div>
 
             <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">启用推荐</label>
+                <label class="el-form-item__label">是否推荐</label>
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button type="button" id="isrecommend" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
@@ -47,8 +47,8 @@
                         </button>
                         <ul class="dropdown-menu tc">
                             <li><a href="#" onclick="change(-1,'isrecommend','不限')" class="ddl_isrecommend" index="-1">不限</a></li>
-                            <li><a href="#" onclick="change(1,'isrecommend','启用')" class="ddl_isrecommend" index="1">启用</a></li>
-                            <li><a href="#" onclick="change(0,'isrecommend','不启用')" class="ddl_isrecommend" index="0">不启用</a></li>
+                            <li><a href="#" onclick="change(1,'isrecommend','推荐')" class="ddl_isrecommend" index="1">推荐</a></li>
+                            <li><a href="#" onclick="change(0,'isrecommend','不推荐')" class="ddl_isrecommend" index="0">不推荐</a></li>
                         </ul>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
         </div>
     </div>
     <div class="el-card__body">
-        <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition full f12 tc">
+        <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition full f12 tc" style="overflow: auto;">
             <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body full">
                 <thead>
                     <tr>
@@ -104,11 +104,13 @@
                         <th class="cell" style="width: 250px;">个性签名</th>
                         <th class="cell" style="width: 80px;">性别</th>
                         <th class="cell" style="width: 80px;">状态</th>
+                        <th class="cell" style="width: 100px;">是否推荐</th>
+                        <th class="cell" style="width: 200px;">机型</th>
                         <th class="cell" style="width: 250px;">定位</th>
                         <th class="cell" style="width: 100px;">登录次数</th>
-                        <th class="cell" style="width: 150px;">创建日期</th>
-                        <th class="cell" style="width: 150px;">上次登录</th>
-                        <th class="cell" style="width: 200px;">操作</th>
+                        <th class="cell" style="width: 160px;">创建日期</th>
+                        <th class="cell" style="width: 160px;">上次登录</th>
+                        <th class="cell" style="width: 150px;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -152,6 +154,12 @@
                                 @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
                             </td>
                             <td class="cell">
+                                @EnumBase.GetDescription(typeof(Enum_Recommend), @list[i].IsRecommend)
+                            </td>
+                            <td class="cell">
+                                @list[i].PhoneModel
+                            </td>
+                            <td class="cell">
                                 @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
                             </td>
                             <td class="cell">
@@ -164,10 +172,22 @@
                                 @list[i].LastLoginDate.ToString("yyyy-MM-dd hh:mm:ss")
                             </td>
                             <td>
-                                <button type="button" class="el-button el-button--success el-button--small btnRecommend" index="@list[i].ID"><span>推荐</span></button>
-                                <button type="button" class="el-button el-button--warning el-button--small btnNoRecommend" index="@list[i].ID"><span>取消推荐</span></button>
-                                <button type="button" class="el-button el-button--danger el-button--small btnDelete" index="@list[i].ID"><span>删除</span></button>
-                                <button type="button" class="el-button el-button--danger el-button--small btnApproved" index="@list[i].ID"><span>激活</span></button>
+                                @if (list[i].IsRecommend != Enum_Recommend.Approved)
+                                {
+                                    <button type="button" class="el-button el-button--success el-button--small btnRecommend" index="@list[i].ID"><span>推荐</span></button>
+                                }
+                                @if (list[i].IsRecommend == Enum_Recommend.Approved)
+                                {
+                                    <button type="button" class="el-button el-button--warning el-button--small btnNoRecommend" index="@list[i].ID"><span>取消推荐</span></button>
+                                }
+                                @if (list[i].Status == Enum_Deal.Approved)
+                                {
+                                    <button type="button" class="el-button el-button--danger el-button--small btnDelete" index="@list[i].ID"><span>冻结</span></button>
+                                }
+                                @if (list[i].Status != Enum_Status.Approved)
+                                {
+                                    <button type="button" class="el-button el-button--success el-button--small btnApproved" index="@list[i].ID"><span>激活</span></button>
+                                }
                             </td>
                         </tr>
                         }
@@ -181,6 +201,7 @@
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function () {
+            var isloading = false;
             $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
             $(".ddl_isrecommend[index=" + parseInt(@(ViewBag.isrecommend)) + "]").eq(0).trigger("click");
             $(".ddl_ispay[index=" + parseInt(@(ViewBag.ispay)) + "]").eq(0).trigger("click");
@@ -246,6 +267,7 @@
                 var id = this.getAttribute("index");
 
                 layer.confirm('确认执行当前操作吗？', {
+                    title: "推荐",
                     btn: ['确定', '取消']
                 }, function () {
                     $.ajax({
@@ -275,6 +297,7 @@
                 var id = this.getAttribute("index");
 
                 layer.confirm('确认执行当前操作吗？', {
+                    title: "取消推荐",
                     btn: ['确定', '取消']
                 }, function () {
                     $.ajax({
@@ -295,7 +318,7 @@
                 isloading = false;
             })
 
-            //删除
+            //冻结
             $(".btnDelete").click(function () {
                 if (isloading) {
                     return;
@@ -304,6 +327,7 @@
                 var id = this.getAttribute("index");
 
                 layer.confirm('确认执行当前操作吗？', {
+                    title: "冻结",
                     btn: ['确定', '取消']
                 }, function () {
                     $.ajax({
@@ -333,6 +357,7 @@
                 var id = this.getAttribute("index");
 
                 layer.confirm('确认执行当前操作吗？', {
+                    title: "激活",
                     btn: ['确定', '取消']
                 }, function () {
                     $.ajax({

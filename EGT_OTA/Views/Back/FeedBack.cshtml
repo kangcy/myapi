@@ -164,6 +164,7 @@
                 var id = this.getAttribute("index");
 
                 layer.confirm('确认执行当前操作吗？', {
+                    title: "处理",
                     btn: ['确定', '取消']
                 }, function () {
                     $.ajax({

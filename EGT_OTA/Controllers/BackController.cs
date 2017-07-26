@@ -161,6 +161,11 @@ namespace EGT_OTA.Controllers
             {
                 query = query.And("ArticlePower").IsEqualTo(articlepower);
             }
+            var articletype = ZNRequest.GetInt("articletype", -1);
+            if (articletype > -1)
+            {
+                query = query.And("TypeID").IsEqualTo(articletype);
+            }
             var recordCount = query.GetRecordCount();
             var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Article>();
 
@@ -179,8 +184,8 @@ namespace EGT_OTA.Controllers
                     var user = users.FirstOrDefault(y => y.Number == x.CreateUserNumber);
                     if (user != null)
                     {
-                        var articletype = articletypes.FirstOrDefault(y => y.ID == x.TypeID);
-                        x.TypeName = articletype == null ? "" : articletype.Name;
+                        var type = articletypes.FirstOrDefault(y => y.ID == x.TypeID);
+                        x.TypeName = type == null ? "" : type.Name;
                         x.UserID = user.ID;
                         x.NickName = user.NickName;
                         x.Avatar = user.Avatar;
@@ -327,6 +332,43 @@ namespace EGT_OTA.Controllers
                 LogHelper.ErrorLoger.Error("HomeController_BackInfo:" + ex.Message);
             }
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 文章编辑
+        /// </summary>
+        public ActionResult ArticleEdit()
+        {
+            var message = "";
+            try
+            {
+                var id = ZNRequest.GetInt("id");
+                var articletype = ZNRequest.GetInt("articletype");
+                Article article = db.Single<Article>(x => x.ID == id);
+                if (article == null)
+                {
+                    return Json(new { result = false, message = "文章不存在" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var articletypes = GetArticleType();
+                var type = articletypes.FirstOrDefault(y => y.ID == articletype);
+                if (type == null)
+                {
+                    return Json(new { result = false, message = "分类不存在" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var result = new SubSonic.Query.Update<Article>(provider).Set("TypeID").EqualTo(articletype).Where<Article>(x => x.ID == id).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_ArticleEdit:" + ex.Message);
+                message = ex.Message;
+            }
+            return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

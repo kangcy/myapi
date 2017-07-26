@@ -75,6 +75,32 @@
                 </div>
             </div>
 
+            <div class="el-form-item fl ml15">
+                <label class="el-form-item__label">分类</label>
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button id="filter_articletype" index="0" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            其他
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'filter_articletype','不限')" class="ddl_filter_articletype" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(1,'filter_articletype','旅游')" class="ddl_filter_articletype" index="1">旅游</a></li>
+                            <li><a href="#" onclick="change(2,'filter_articletype','美食')" class="ddl_filter_articletype" index="2">美食</a></li>
+                            <li><a href="#" onclick="change(3,'filter_articletype','亲子')" class="ddl_filter_articletype" index="3">亲子</a></li>
+                            <li><a href="#" onclick="change(4,'filter_articletype','美妆')" class="ddl_filter_articletype" index="4">美妆</a></li>
+                            <li><a href="#" onclick="change(5,'filter_articletype','女神')" class="ddl_filter_articletype" index="5">女神</a></li>
+                            <li><a href="#" onclick="change(6,'filter_articletype','摄影')" class="ddl_filter_articletype" index="6">摄影</a></li>
+                            <li><a href="#" onclick="change(7,'filter_articletype','生活')" class="ddl_filter_articletype" index="7">生活</a></li>
+                            <li><a href="#" onclick="change(8,'filter_articletype','萌宠')" class="ddl_filter_articletype" index="8">萌宠</a></li>
+                            <li><a href="#" onclick="change(9,'filter_articletype','游戏')" class="ddl_filter_articletype" index="9">游戏</a></li>
+                            <li><a href="#" onclick="change(10,'filter_articletype','二次元')" class="ddl_filter_articletype" index="10">二次元</a></li>
+                            <li><a href="#" onclick="change(0,'filter_articletype','其他')" class="ddl_filter_articletype" index="0">其他</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div class="full fl">
                 <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
                 <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
@@ -89,13 +115,14 @@
                         <th class="cell" style="width: 100px;">用户头像</th>
                         <th class="cell" style="width: 150px;">用户昵称(编号)</th>
                         <th class="cell" style="width: 250px;">标题(编号)</th>
+                        <th class="cell" style="width: 80px;">分类</th>
                         <th class="cell" style="width: 80px;">浏览</th>
                         <th class="cell" style="width: 80px;">权限</th>
                         <th class="cell" style="width: 80px;">状态</th>
                         <th class="cell" style="width: 100px;">投稿</th>
                         <th class="cell" style="width: 250px;">定位</th>
                         <th class="cell" style="width: 160px;">创建日期</th>
-                        <th class="cell" style="width: 100px;">操作</th>
+                        <th class="cell" style="width: 150px;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,6 +164,9 @@
                                 <p class="mb0">(@list[i].Number)</p>
                             </td>
                             <td class="cell">
+                                @list[i].TypeName
+                            </td>
+                            <td class="cell">
                                 @list[i].Views
                             </td>
                             <td class="cell">
@@ -159,6 +189,10 @@
                                 {
                                     <button type="button" class="el-button el-button--primary el-button--small btnAudit" index="@list[i].ID"><span>取消审核</span></button>
                                 }
+                                @if ((list[i].Submission == Enum_Submission.Approved || list[i].Submission == Enum_Submission.TemporaryApproved) && list[i].ArticlePower == Enum_ArticlePower.Public && list[i].Status == Enum_Status.Approved)
+                                {
+                                    <button type="button" class="el-button el-button--success el-button--small btnEdit" index="@list[i].ID" typeid="@list[i].TypeID"><span>编辑</span></button>
+                                }
                             </td>
                         </tr>
                         }
@@ -167,6 +201,30 @@
             </table>
         </div>
         <div id="divPager" align="center" style="margin-top: 30px;"></div>
+    </div>
+    <div class="el-form-item fl" id="type" style="display: none; padding: 20px; width: 100%; height: 100%; position: relative;">
+        <label class="el-form-item__label">分类</label>
+        <div class="el-form-item__content inline fl">
+            <div class="btn-group">
+                <button id="articletype" articleid="0" index="0" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                    其他
+                                                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu tc">
+                    <li><a href="#" onclick="change(1,'articletype','旅游')" class="ddl_articletype" index="1">旅游</a></li>
+                    <li><a href="#" onclick="change(2,'articletype','美食')" class="ddl_articletype" index="2">美食</a></li>
+                    <li><a href="#" onclick="change(3,'articletype','亲子')" class="ddl_articletype" index="3">亲子</a></li>
+                    <li><a href="#" onclick="change(4,'articletype','美妆')" class="ddl_articletype" index="4">美妆</a></li>
+                    <li><a href="#" onclick="change(5,'articletype','女神')" class="ddl_articletype" index="5">女神</a></li>
+                    <li><a href="#" onclick="change(6,'articletype','摄影')" class="ddl_articletype" index="6">摄影</a></li>
+                    <li><a href="#" onclick="change(7,'articletype','生活')" class="ddl_articletype" index="7">生活</a></li>
+                    <li><a href="#" onclick="change(8,'articletype','萌宠')" class="ddl_articletype" index="8">萌宠</a></li>
+                    <li><a href="#" onclick="change(9,'articletype','游戏')" class="ddl_articletype" index="9">游戏</a></li>
+                    <li><a href="#" onclick="change(10,'articletype','二次元')" class="ddl_articletype" index="10">二次元</a></li>
+                </ul>
+            </div>
+        </div>
+        <button type="button" class="el-button el-button--primary" id="edit" style="position: absolute; right: 20px; bottom: 20px;"><span>编辑</span></button>
     </div>
 </div>
 @section Scripts{
@@ -177,6 +235,7 @@
             $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
             $(".ddl_submission[index=" + parseInt(@(ViewBag.submission)) + "]").eq(0).trigger("click");
             $(".ddl_articlepower[index=" + parseInt(@(ViewBag.articlepower)) + "]").eq(0).trigger("click");
+            $(".ddl_filter_articletype[index=" + parseInt(@(ViewBag.articletype)) + "]").eq(0).trigger("click");
 
             var currentIndex = parseInt(@(ViewBag.CurrPage));
             var recordCount = parseInt(@(ViewBag.RecordCount));
@@ -203,7 +262,8 @@
                             usernumber: $("#usernumber").val().trim(),
                             status: $("#status").attr("index"),
                             submission: $("#submission").attr("index"),
-                            articlepower: $("#articlepower").attr("index")
+                            articlepower: $("#articlepower").attr("index"),
+                            articletype: $("#filter_articletype").attr("index")
                         }
                         window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
                     }
@@ -218,7 +278,8 @@
                     usernumber: $("#usernumber").val().trim(),
                     status: $("#status").attr("index"),
                     submission: $("#submission").attr("index"),
-                    articlepower: $("#articlepower").attr("index")
+                    articlepower: $("#articlepower").attr("index"),
+                    articletype: $("#filter_articletype").attr("index")
                 }
                 window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
             })
@@ -227,6 +288,7 @@
                 window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
             })
 
+            //取消审核
             $(".btnAudit").click(function () {
                 if (isloading) {
                     return;
@@ -235,6 +297,7 @@
                 var id = this.getAttribute("index");
 
                 layer.confirm('确认执行当前操作吗？', {
+                    title: "取消审核",
                     btn: ['确定', '取消']
                 }, function () {
                     $.ajax({
@@ -254,6 +317,50 @@
                 });
                 isloading = false;
             })
+
+            //编辑
+            $(".btnEdit").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                var id = this.getAttribute("index");
+                var typeid = this.getAttribute("typeid");
+
+                $("#articletype").attr("articleid", id);
+                $(".ddl_articletype[index=" + typeid + "]").eq(0).trigger("click");
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    area: ['300px', '500px'],
+                    title: "编辑",
+                    content: $('#type')
+                });
+                isloading = false;
+            });
+
+            $("#edit").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                layer.closeAll();
+                var id = $("#articletype").attr("articleid")
+                var articletype = $("#articletype").attr("index")
+                $.ajax({
+                    url: "@(ViewBag.RootUrl)Back/ArticleEdit",
+                    data: { id: id, articletype: articletype },
+                    dataType: "json",
+                    success: function (data) {
+                        isloading = false;
+                        layer.alert(data.message);
+                        if (data.result) {
+                            window.location.reload();
+                        }
+                    }
+                });
+                isloading = false;
+            });
         });
     </script>
 }
