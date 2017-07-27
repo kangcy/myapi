@@ -105,6 +105,9 @@ namespace EGT_OTA.Controllers.Api
                                         article.ArticlePower = y.ArticlePower;
                                         action.ArticleInfoJson.Add(article);
                                     });
+
+                                    action.ArticleInfoJson.Reverse();
+
                                     newlist.Add(action);
                                 }
                             }
@@ -124,6 +127,9 @@ namespace EGT_OTA.Controllers.Api
                                         user.Cover = y.Cover;
                                         action.UserInfoJson.Add(user);
                                     });
+
+                                    action.ArticleInfoJson.Reverse();
+
                                     newlist.Add(action);
                                 }
                             }

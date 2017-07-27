@@ -160,7 +160,7 @@
                                 @{
                             var link = ViewBag.RootUrl + "Home/preview.html?key=" + list[i].Number + "&xwp=" + ViewBag.xwp;
                                 }
-                                <a href="@link" class="underline" target="_blank">@list[i].Title</a>
+                                <a href="@link" class="underline" target="_blank">@(string.IsNullOrWhiteSpace(list[i].Title) ? "我的小微篇" : list[i].Title)</a>
                                 <p class="mb0">(@list[i].Number)</p>
                             </td>
                             <td class="cell">

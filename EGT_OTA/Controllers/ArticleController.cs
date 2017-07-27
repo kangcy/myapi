@@ -161,6 +161,10 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "您输入的标题含有敏感内容，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
                 }
+                if (string.IsNullOrWhiteSpace(model.Title))
+                {
+                    model.Title = "我的小微篇";
+                }
                 model.MusicID = ZNRequest.GetInt("MusicID");
                 model.MusicName = ZNRequest.GetString("MusicName");
                 model.MusicUrl = ZNRequest.GetString("MusicUrl");
