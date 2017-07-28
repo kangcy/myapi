@@ -141,7 +141,7 @@ namespace EGT_OTA.Controllers.Api
                     {
                         OrdersJson model = new OrdersJson();
                         model.ID = x.ID;
-                        model.CreateDate = FormatTime(x.CreateDate);
+                        model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd");
                         model.Price = x.Price;
                         model.UserID = user.ID;
                         model.UserNumber = user.Number;
@@ -207,7 +207,7 @@ namespace EGT_OTA.Controllers.Api
                     {
                         OrdersJson model = new OrdersJson();
                         model.ID = x.ID;
-                        model.CreateDate = FormatTime(x.CreateDate);
+                        model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd");
                         model.Price = x.Price;
                         model.UserID = user.ID;
                         model.UserNumber = user.Number;
@@ -230,6 +230,61 @@ namespace EGT_OTA.Controllers.Api
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("Api_Order_ToUser_1_3:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
+        /// 提现记录
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Order/Apply_1_3")]
+        public string Apply_1_3()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var UserNumber = ZNRequest.GetString("UserNumber");
+                if (string.IsNullOrWhiteSpace(UserNumber))
+                {
+                    result.message = new { records = 0, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var query = new SubSonic.Query.Select(provider).From<ApplyMoney>().Where<ApplyMoney>(x => x.Status == Enum_Status.Approved);
+                query = query.And("CreateUserNumber").IsEqualTo(UserNumber);
+                var recordCount = query.GetRecordCount();
+                if (recordCount == 0)
+                {
+                    result.message = new { records = 0, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var pager = new Pager();
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<ApplyMoney>();
+                List<OrdersJson> newlist = new List<OrdersJson>();
+                list.ForEach(x =>
+                {
+                    OrdersJson model = new OrdersJson();
+                    model.ID = x.ID;
+                    model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd");
+                    model.Price = Tools.SafeInt(System.Configuration.ConfigurationManager.AppSettings["applymoney"]) * 100;
+                    newlist.Add(model);
+                });
+
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = newlist
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Order_Apply_1_3:" + ex.Message);
                 result.message = ex.Message;
             }
             return JsonConvert.SerializeObject(result);
