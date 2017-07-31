@@ -118,6 +118,7 @@ namespace EGT_OTA.Controllers
                     user.Birthday = DateTime.Now;
                     user.Number = BuildNumber();
                     user.IsPay = 1;
+                    user.AutoMusic = 1;
                     user.ID = Tools.SafeInt(db.Add<User>(user), 0);
                     if (user.ID > 0)
                     {
@@ -289,6 +290,7 @@ namespace EGT_OTA.Controllers
                 user.Status = Enum_Status.Approved;
                 user.Number = BuildNumber();
                 user.IsPay = 1;
+                user.AutoMusic = 1;
                 user.ClientID = ZNRequest.GetString("ClientID");
                 user.PhoneModel = ZNRequest.GetString("PhoneModel");
                 user.ID = Tools.SafeInt(db.Add<User>(user), 0);

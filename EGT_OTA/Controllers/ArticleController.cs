@@ -255,6 +255,11 @@ namespace EGT_OTA.Controllers
                         model.ArticlePower = Enum_ArticlePower.Myself;
                     }
 
+                    if (string.IsNullOrWhiteSpace(model.Title))
+                    {
+                        model.Title = "我的小微篇";
+                    }
+
                     result = db.Update<Article>(model) > 0;
 
                     ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);

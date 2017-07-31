@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CommonTools;
+using EGT_OTA.Helper;
 
 namespace EGT_OTA.Controllers
 {
@@ -57,38 +58,78 @@ namespace EGT_OTA.Controllers
         /// </summary>
         public ActionResult LoginRed()
         {
-            var number = ZNRequest.GetString("number");
-            if (string.IsNullOrWhiteSpace(number))
+            try
             {
-                return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
-            }
+                var number = ZNRequest.GetString("number");
+                if (string.IsNullOrWhiteSpace(number))
+                {
+                    return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
+                }
 
-            var red = db.Exists<Red>(x => x.ToUserNumber == number);
-            if (red)
-            {
-                return Json(new { result = false, message = "已领取红包" }, JsonRequestBehavior.AllowGet);
+                var model = db.Single<Red>(x => x.ToUserNumber == number && x.RedType == Enum_RedType.Login);
+                if (model != null)
+                {
+                    if (model.Status == Enum_Status.Approved)
+                    {
+                        return Json(new { result = false, message = "已领取红包" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                if (model == null)
+                {
+                    model = new Red();
+                    model.ToUserNumber = number;
+                    model.Price = new Random().Next(10, 500);
+                    if (model.Price <= 0)
+                    {
+                        model.Price = 10;
+                    }
+                    if (model.Price > 500)
+                    {
+                        model.Price = 500;
+                    }
+                    model.Status = Enum_Status.Audit;
+                    model.Number = Guid.NewGuid().ToString("N");
+                    model.RedType = Enum_RedType.Login;
+                    model.CreateDate = DateTime.Now;
+                    db.Add<Red>(model);
+                }
+                //用户新增红包
+                return Json(new { result = true, message = model.Price }, JsonRequestBehavior.AllowGet);
             }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Red_LoginRed:" + ex.Message);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
-            //添加红包记录
-            Red model = new Red();
-            model.ToUserNumber = number;
-            model.Price = new Random().Next(10, 500);
-            if (model.Price <= 0)
+        /// <summary>
+        /// 打开登陆红包
+        /// </summary>
+        public ActionResult OpenLoginRed()
+        {
+            try
             {
-                model.Price = 10;
-            }
-            if (model.Price > 500)
-            {
-                model.Price = 500;
-            }
-            model.Status = Enum_Status.Approved;
-            model.Number = Guid.NewGuid().ToString("N");
-            model.RedType = Enum_RedType.Login;
-            model.CreateDate = DateTime.Now;
-            db.Add<Red>(model);
+                var number = ZNRequest.GetString("number");
+                if (string.IsNullOrWhiteSpace(number))
+                {
+                    return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
+                }
 
-            //用户新增红包
-            return Json(new { result = true, message = model.Price }, JsonRequestBehavior.AllowGet);
+                var model = db.Single<Red>(x => x.ToUserNumber == number && x.RedType == Enum_RedType.Login && x.Status == Enum_Status.Audit);
+                if (model == null)
+                {
+                    return Json(new { result = false, message = "已领取红包" }, JsonRequestBehavior.AllowGet);
+                }
+                model.Status = Enum_Status.Approved;
+                db.Update<Red>(model);
+                return Json(new { result = true, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Red_OpenLoginRed:" + ex.Message);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
