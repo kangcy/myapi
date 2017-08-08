@@ -247,9 +247,10 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "昵称不能为空" }, JsonRequestBehavior.AllowGet);
                 }
-                if (HasDirtyWord(user.NickName))
+                var dirtyword = HasDirtyWord(user.NickName);
+                if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
-                    return Json(new { result = false, message = "您输入的内容含有敏感内容，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "您输入的内容含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
                 }
                 user.Password = DesEncryptHelper.Encrypt(password);
                 user.Sex = ZNRequest.GetInt("Sex", Enum_Sex.Boy);
@@ -516,9 +517,10 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "请填写昵称信息" }, JsonRequestBehavior.AllowGet);
                 }
-                if (HasDirtyWord(NickName))
+                var dirtyword = HasDirtyWord(NickName);
+                if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
-                    return Json(new { result = false, message = "您输入的昵称含有敏感内容，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "您输入的昵称含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("NickName").EqualTo(NickName).Where<User>(x => x.ID == user.ID).Execute() > 0;
                 if (result)
@@ -549,9 +551,10 @@ namespace EGT_OTA.Controllers
                 if (!string.IsNullOrWhiteSpace(Signature))
                 {
                     Signature = CutString(Signature, 200);
-                    if (HasDirtyWord(Signature))
+                    var dirtyword = HasDirtyWord(Signature);
+                    if (!string.IsNullOrWhiteSpace(dirtyword))
                     {
-                        return Json(new { result = false, message = "您输入的签名含有敏感内容，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { result = false, message = "您输入的签名含有敏感内容[" + Signature + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 else

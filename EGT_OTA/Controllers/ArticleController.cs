@@ -156,10 +156,11 @@ namespace EGT_OTA.Controllers
                     }
                 }
                 model.Title = SqlFilter(ZNRequest.GetString("Title"));
-                model.Title = CutString(model.Title, 60);
-                if (HasDirtyWord(model.Title))
+                model.Title = CutString(model.Title, 100);
+                var dirtyword = HasDirtyWord(model.Title);
+                if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
-                    return Json(new { result = false, message = "您输入的标题含有敏感内容，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "您输入的标题含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
                 }
                 if (string.IsNullOrWhiteSpace(model.Title))
                 {

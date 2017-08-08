@@ -266,13 +266,13 @@ namespace EGT_OTA.Controllers.Api
                     query = query.And("Submission").IsGreaterThan(Enum_Submission.Audit);
                 }
 
+                recordCount = query.GetRecordCount();
+
                 query.And("CreateDate").IsGreaterThanOrEqualTo(newdatelist[newdatelist.Count - 1].ToString("yyyy-MM-01 00:00:00"));
                 var day = DateTime.DaysInMonth(newdatelist[0].Year, newdatelist[0].Month); ;
 
                 query.And("CreateDate").IsLessThanOrEqualTo(newdatelist[0].ToString("yyyy-MM-" + day + " 23:59:59"));
                 var list = query.ExecuteTypedList<Article>();
-
-                LogHelper.ErrorLoger.Error(Newtonsoft.Json.JsonConvert.SerializeObject(list));
 
                 var newlist = new List<UserArticleJson>();
 

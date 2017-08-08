@@ -63,7 +63,7 @@ namespace EGT_OTA.Models
         /// <summary>
         /// 标题
         /// </summary>
-        [SubSonicStringLength(100), SubSonicNullString]
+        [SubSonicNullString]
         public string Title { get; set; }
 
         /// <summary>

@@ -418,11 +418,11 @@ namespace EGT_OTA.Controllers.Api
         /// <summary>
         /// 判断是否包含敏感词
         /// </summary>
-        protected bool HasDirtyWord(string content)
+        protected string HasDirtyWord(string content)
         {
             if (string.IsNullOrWhiteSpace(content))
             {
-                return false;
+                return "";
             }
             content = content.Trim();
             var list = GetDirtyWord();
@@ -430,10 +430,10 @@ namespace EGT_OTA.Controllers.Api
             {
                 if (content.Contains(list[i]))
                 {
-                    return true;
+                    return list[i];
                 }
             }
-            return false;
+            return "";
         }
 
         /// <summary>

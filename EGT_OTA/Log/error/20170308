@@ -1,7 +1,0 @@
-[异常时间]：2017-03-08 20:23:11,602 [ThreadID:6] 
-[异常级别]：ERROR
-[日志类型]：ErrorLoger
-[异常信息]：
-ArticleTypeController_All:值不能为 null。
-参数名: value
----------------------------

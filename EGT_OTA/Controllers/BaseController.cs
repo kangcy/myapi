@@ -235,6 +235,32 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
+        /// Showy
+        /// </summary>
+        protected List<Showy> GetShowy()
+        {
+            List<Showy> list = new List<Showy>();
+            if (CacheHelper.Exists("Showy"))
+            {
+                list = (List<Showy>)CacheHelper.GetCache("Showy");
+            }
+            else
+            {
+                string str = string.Empty;
+                string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/showy.config");
+                if (System.IO.File.Exists(filePath))
+                {
+                    StreamReader sr = new StreamReader(filePath, Encoding.Default);
+                    str = sr.ReadToEnd();
+                    sr.Close();
+                }
+                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Showy>>(str);
+                CacheHelper.Insert("Showy", list);
+            }
+            return list;
+        }
+
+        /// <summary>
         /// Banner
         /// </summary>
         protected List<Banner> GetBanner()
@@ -378,11 +404,11 @@ namespace EGT_OTA.Controllers
         /// <summary>
         /// 判断是否包含敏感词
         /// </summary>
-        protected bool HasDirtyWord(string content)
+        protected string HasDirtyWord(string content)
         {
             if (string.IsNullOrWhiteSpace(content))
             {
-                return false;
+                return "";
             }
             content = content.Trim();
             var list = GetDirtyWord();
@@ -390,10 +416,10 @@ namespace EGT_OTA.Controllers
             {
                 if (content.Contains(list[i]))
                 {
-                    return true;
+                    return list[i];
                 }
             }
-            return false;
+            return "";
         }
 
         /// <summary>

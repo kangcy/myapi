@@ -327,6 +327,34 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
+        /// Showy列表
+        /// </summary>
+        public ActionResult Showy()
+        {
+            try
+            {
+                var pager = new Pager();
+                var list = GetShowy();
+                var recordCount = list.Count();
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                list = list.Skip((pager.Index - 1) * pager.Size).Take(pager.Size).ToList();
+                var result = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = list
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("SystemController_Showy:" + ex.Message);
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
         /// 图片验证码
         /// </summary>
         public ActionResult Validate()
@@ -380,9 +408,10 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "存在违禁词" }, JsonRequestBehavior.AllowGet);
                 }
-                if (HasDirtyWord(title))
+                var dirtyword = HasDirtyWord(title);
+                if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
-                    return Json(new { result = false, message = "您输入的内容含有敏感内容，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "您输入的内容含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
                 }
                 return Json(new { result = true, message = "" }, JsonRequestBehavior.AllowGet);
             }
