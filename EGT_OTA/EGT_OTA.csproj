@@ -227,6 +227,7 @@
     <Compile Include="Controllers\Api\OrderController.cs" />
     <Compile Include="Controllers\Api\WeixinController.cs" />
     <Compile Include="Controllers\Api\UserActionController.cs" />
+    <Compile Include="Controllers\Api\ArticleCustomController.cs" />
     <Compile Include="Controllers\AppHelper.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\BackController.cs" />
@@ -338,6 +339,7 @@
     <Compile Include="Models\App\UserAction.cs" />
     <Compile Include="Models\App\Red.cs" />
     <Compile Include="Models\App\Showy.cs" />
+    <Compile Include="Models\App\ArticleCustom.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Base\BasicRepository.cs" />
     <Compile Include="Models\Base\WebApplication.cs" />
@@ -430,6 +432,7 @@
     <Content Include="Images\avatar.png" />
     <Content Include="Images\Banner\banner.png" />
     <Content Include="Images\base\title.png" />
+    <Content Include="Images\articledetail.jpg" />
     <Content Include="Images\Showy\13\01.png" />
     <Content Include="Images\Showy\13\02.png" />
     <Content Include="Images\Showy\13\03.png" />

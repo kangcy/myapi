@@ -71,6 +71,7 @@ namespace EGT_OTA.Models
             repo.Single<Background>(x => x.ID == 0);//背景
             repo.Single<UserAction>(x => x.ID == 0);//用户操作
             repo.Single<Red>(x => x.ID == 0);//红包
+            repo.Single<ArticleCustom>(x => x.ID == 0);//文章自定义
         }
     }
 }
