@@ -325,6 +325,13 @@ namespace EGT_OTA.Controllers
                     model.TemplateJson = new Template();
                 }
 
+                //漂浮装扮
+                var custom = db.Single<ArticleCustom>(x => x.ArticleNumber == model.Number);
+                if (custom != null)
+                {
+                    model.Showy = custom.ShowyUrl;
+                }
+
                 return Json(new { result = true, message = model }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

@@ -40,19 +40,15 @@ namespace EGT_OTA.Controllers.Api
                     result.message = "参数异常";
                     return JsonConvert.SerializeObject(result);
                 }
-                var id = ZNRequest.GetInt("EditID");
-                ArticleCustom model = new ArticleCustom();
-                if (id > 0)
+                ArticleCustom model = db.Single<ArticleCustom>(x => x.ArticleNumber == number);
+                if (model == null)
                 {
-                    model = db.Single<ArticleCustom>(x => x.ID == id);
-                }
-                else
-                {
+                    model = new ArticleCustom();
                     model.ArticleNumber = number;
                 }
                 model.ShowyUrl = url;
                 var success = false;
-                if (id == 0)
+                if (model.ID == 0)
                 {
                     success = Tools.SafeInt(db.Add<ArticleCustom>(model)) > 0;
                 }

@@ -337,6 +337,12 @@ namespace EGT_OTA.Models
         [SubSonicIgnore]
         public Share Share { get; set; }
 
+        /// <summary>
+        /// 漂浮装扮
+        /// </summary>
+        [SubSonicIgnore]
+        public string Showy { get; set; }
+
         #endregion
     }
 

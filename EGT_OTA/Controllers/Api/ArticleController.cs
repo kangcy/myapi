@@ -115,6 +115,14 @@ namespace EGT_OTA.Controllers.Api
                         model.TemplateJson = new Template();
                     }
                 }
+
+                //漂浮装扮
+                var custom = db.Single<ArticleCustom>(x => x.ArticleNumber == model.Number);
+                if (custom != null)
+                {
+                    model.Showy = custom.ShowyUrl;
+                }
+
                 result.result = true;
                 result.message = model;
             }
