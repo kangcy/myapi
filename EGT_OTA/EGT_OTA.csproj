@@ -430,7 +430,7 @@
     <Content Include="Home\preview.html" />
     <Content Include="Home\user.html" />
     <Content Include="Images\avatar.png" />
-    <Content Include="Images\Banner\banner.png" />
+    <Content Include="Images\Banner\banner.jpg" />
     <Content Include="Images\base\title.png" />
     <Content Include="Images\articledetail.jpg" />
     <Content Include="Images\Showy\13\01.png" />
