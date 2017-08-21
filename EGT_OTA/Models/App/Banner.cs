@@ -46,5 +46,15 @@ namespace EGT_OTA.Models
         /// 封面
         /// </summary>
         public string Cover { get; set; }
+
+        /// <summary>
+        /// 分享语
+        /// </summary>
+        public string ShareTitle { get; set; }
+
+        /// <summary>
+        /// 分享图标
+        /// </summary>
+        public string ShareIcon { get; set; }
     }
 }

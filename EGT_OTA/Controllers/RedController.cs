@@ -131,5 +131,55 @@ namespace EGT_OTA.Controllers
                 return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        /// <summary>
+        /// 管理员打赏红包
+        /// </summary>
+        public ActionResult AdminRed()
+        {
+            try
+            {
+                var number = ZNRequest.GetString("number");
+                if (string.IsNullOrWhiteSpace(number))
+                {
+                    return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var model = db.Single<Red>(x => x.ToUserNumber == number && x.RedType == Enum_RedType.Admin);
+                if (model != null)
+                {
+                    if (model.Status == Enum_Status.Approved)
+                    {
+                        return Json(new { result = false, message = "已领取红包" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                if (model == null)
+                {
+                    model = new Red();
+                    model.ToUserNumber = number;
+                    model.Price = new Random().Next(10, 500);
+                    if (model.Price <= 0)
+                    {
+                        model.Price = 10;
+                    }
+                    if (model.Price > 500)
+                    {
+                        model.Price = 500;
+                    }
+                    model.Status = Enum_Status.Audit;
+                    model.Number = Guid.NewGuid().ToString("N");
+                    model.RedType = Enum_RedType.Admin;
+                    model.CreateDate = DateTime.Now;
+                    db.Add<Red>(model);
+                }
+                //用户新增红包
+                return Json(new { result = true, message = model.Price }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Red_LoginRed:" + ex.Message);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

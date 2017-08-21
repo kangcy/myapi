@@ -231,6 +231,7 @@
     <Compile Include="Controllers\AppHelper.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\BackController.cs" />
+    <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\Filter\ArticlePowerAttribute.cs" />
     <Compile Include="Controllers\Filter\DeflateCompressionAttribute.cs" />
@@ -433,6 +434,7 @@
     <Content Include="Images\Banner\banner.jpg" />
     <Content Include="Images\base\title.png" />
     <Content Include="Images\articledetail.jpg" />
+    <Content Include="Images\red.jpg" />
     <Content Include="Images\Showy\13\01.png" />
     <Content Include="Images\Showy\13\02.png" />
     <Content Include="Images\Showy\13\03.png" />
@@ -1041,6 +1043,7 @@
     <Content Include="Views\Back\Password.cshtml" />
     <Content Include="Views\Back\Red.cshtml" />
     <Content Include="Views\Red\LoginIndex.cshtml" />
+    <Content Include="Views\Banner\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
