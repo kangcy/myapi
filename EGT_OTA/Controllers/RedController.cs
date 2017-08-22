@@ -144,19 +144,16 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
                 }
-
-                var model = db.Single<Red>(x => x.ToUserNumber == number && x.RedType == Enum_RedType.Admin);
-                if (model != null)
+                var exist = db.Find<Red>(x => x.ToUserNumber == number && x.RedType == Enum_RedType.Admin).ToList().Exists(x => x.CreateDate.ToString("yyyyMMdd") == DateTime.Now.ToString("yyyyMMdd"));
+                if (exist)
                 {
-                    if (model.Status == Enum_Status.Approved)
-                    {
-                        return Json(new { result = false, message = "已领取红包" }, JsonRequestBehavior.AllowGet);
-                    }
+                    return Json(new { result = false, message = "今日已打赏红包" }, JsonRequestBehavior.AllowGet);
                 }
-                if (model == null)
+                var model = new Red();
+                model.ToUserNumber = number;
+                model.Price = ZNRequest.GetInt("price");
+                if (model.Price <= 0 || model.Price > 500)
                 {
-                    model = new Red();
-                    model.ToUserNumber = number;
                     model.Price = new Random().Next(10, 500);
                     if (model.Price <= 0)
                     {
@@ -166,18 +163,21 @@ namespace EGT_OTA.Controllers
                     {
                         model.Price = 500;
                     }
-                    model.Status = Enum_Status.Audit;
-                    model.Number = Guid.NewGuid().ToString("N");
-                    model.RedType = Enum_RedType.Admin;
-                    model.CreateDate = DateTime.Now;
-                    db.Add<Red>(model);
                 }
+                model.Status = Enum_Status.Audit;
+                model.Number = Guid.NewGuid().ToString("N");
+                model.RedType = Enum_RedType.Admin;
+                model.CreateDate = DateTime.Now;
+                db.Add<Red>(model);
+
+                //推送消息
+
                 //用户新增红包
                 return Json(new { result = true, message = model.Price }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLoger.Error("Red_LoginRed:" + ex.Message);
+                LogHelper.ErrorLoger.Error("Red_AdminRed:" + ex.Message);
                 return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
