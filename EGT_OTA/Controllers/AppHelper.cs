@@ -67,6 +67,9 @@ namespace EGT_OTA.Controllers
                         case Enum_PushType.Money:
                             result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有好友打赏啦，快去看看吧", "", url + "Images/push.png", Enum_PushType.Money.ToString(), beginTime, endTime);
                             break;
+                        case Enum_PushType.Red:
+                            result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "小微篇送您一个红包，快去看看吧", "", url + "Images/push.png", Enum_PushType.Red.ToString(), beginTime, endTime);
+                            break;
                         case Enum_PushType.Fan:
                             result = message.PushTemplate(Enum_Push.Single, "小微篇提醒您", "有新的粉丝啦，快去看看吧", "", url + "Images/push.png", Enum_PushType.Fan.ToString(), beginTime, endTime);
                             break;

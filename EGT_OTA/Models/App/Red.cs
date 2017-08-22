@@ -48,6 +48,12 @@ namespace EGT_OTA.Models
         /// 创建日期
         /// </summary>
         public DateTime CreateDate { get; set; }
+
+        /// <summary>
+        /// 创建日期
+        /// </summary>
+        [SubSonicIgnore]
+        public string CreateDateText { get; set; }
     }
 
     public class RedJson : Red

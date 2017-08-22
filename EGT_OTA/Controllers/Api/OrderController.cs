@@ -289,5 +289,53 @@ namespace EGT_OTA.Controllers.Api
             }
             return JsonConvert.SerializeObject(result);
         }
+
+        /// <summary>
+        /// 我的红包
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Red/ToMe_1_3")]
+        public string ToMe_1_4()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var UserNumber = ZNRequest.GetString("UserNumber");
+                if (string.IsNullOrWhiteSpace(UserNumber))
+                {
+                    result.message = new { records = 0, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var query = new SubSonic.Query.Select(provider).From<Red>().Where<Red>(x => x.ToUserNumber == UserNumber);
+                var recordCount = query.GetRecordCount();
+                if (recordCount == 0)
+                {
+                    result.message = new { records = 0, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var pager = new Pager();
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Red>();
+                list.ForEach(x =>
+                {
+                    x.CreateDateText = x.CreateDate.ToString("yyyy-MM-dd");
+                });
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = list
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Red_ToMe_1_3:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
     }
 }

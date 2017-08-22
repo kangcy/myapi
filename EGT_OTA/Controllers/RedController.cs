@@ -69,7 +69,7 @@ namespace EGT_OTA.Controllers
                 var model = db.Single<Red>(x => x.ToUserNumber == number && x.RedType == Enum_RedType.Login);
                 if (model != null)
                 {
-                    if (model.Status == Enum_Status.Approved)
+                    if (model.Status == Enum_Red.Approved)
                     {
                         return Json(new { result = false, message = "已领取红包" }, JsonRequestBehavior.AllowGet);
                     }
@@ -87,7 +87,7 @@ namespace EGT_OTA.Controllers
                     {
                         model.Price = 500;
                     }
-                    model.Status = Enum_Status.Audit;
+                    model.Status = Enum_Red.Audit;
                     model.Number = Guid.NewGuid().ToString("N");
                     model.RedType = Enum_RedType.Login;
                     model.CreateDate = DateTime.Now;
@@ -104,9 +104,9 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
-        /// 打开登陆红包
+        /// 打开红包
         /// </summary>
-        public ActionResult OpenLoginRed()
+        public ActionResult OpenRed()
         {
             try
             {
@@ -116,18 +116,18 @@ namespace EGT_OTA.Controllers
                     return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
                 }
 
-                var model = db.Single<Red>(x => x.ToUserNumber == number && x.RedType == Enum_RedType.Login && x.Status == Enum_Status.Audit);
+                var model = db.Single<Red>(x => x.ToUserNumber == number && x.Status == Enum_Red.Audit);
                 if (model == null)
                 {
-                    return Json(new { result = false, message = "已领取红包" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "红包已领取" }, JsonRequestBehavior.AllowGet);
                 }
-                model.Status = Enum_Status.Approved;
+                model.Status = Enum_Red.Approved;
                 db.Update<Red>(model);
                 return Json(new { result = true, message = "" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                LogHelper.ErrorLoger.Error("Red_OpenLoginRed:" + ex.Message);
+                LogHelper.ErrorLoger.Error("Red_OpenRed:" + ex.Message);
                 return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
@@ -164,13 +164,14 @@ namespace EGT_OTA.Controllers
                         model.Price = 500;
                     }
                 }
-                model.Status = Enum_Status.Audit;
+                model.Status = Enum_Red.Audit;
                 model.Number = Guid.NewGuid().ToString("N");
                 model.RedType = Enum_RedType.Admin;
                 model.CreateDate = DateTime.Now;
                 db.Add<Red>(model);
 
                 //推送消息
+                new AppHelper().Push(model.ToUserNumber, 0, "", "", Enum_PushType.Red);
 
                 //用户新增红包
                 return Json(new { result = true, message = model.Price }, JsonRequestBehavior.AllowGet);

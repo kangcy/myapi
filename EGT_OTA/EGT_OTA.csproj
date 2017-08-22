@@ -273,6 +273,7 @@
     <Compile Include="Enum\Enum_PayType.cs" />
     <Compile Include="Enum\Enum_RedType.cs" />
     <Compile Include="Enum\Enum_Recommend.cs" />
+    <Compile Include="Enum\Enum_Red.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -101,7 +101,7 @@
 			</div>
 		</div>
 		<!--漂浮特效-->
-		<div id="snowwrapper" class="hide"></div>
+		<canvas id="snowwrapper"></canvas>
 		<img id="music1" class="hide" src="img/btn_music.png" onclick="switchsound()" />
 		<div id="wrapper2"></div>
 		<div class="hide" id="scroll-wrapper">
@@ -137,7 +137,7 @@
 					</div>
 				</div>
 				<div class="detail2 cover fl tl">
-					<p class="f16 c333 tc hide" id="title1"></p>
+					<p class="f16 c333 tc hide mb10" id="title1"></p>
 					<div class="c333 full" id="desc">
 					</div>
 				</div>
@@ -228,13 +228,13 @@
 					var part = parts[i];
 					if(part.Types == 1) {
 						//图片
-						html.push('<div class="full f13 mt5"><img src="' + base.ShowThumb(part.Introduction, 1) + '" class="full" /></div>');
+						html.push('<div class="full f13 fl mb10"><img src="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
 					} else if(part.Types == 2) {
 						//文本
-						html.push('<div class="full f13 mt5">' + UnUnicodeText(part.Introduction) + '</div>');
+						html.push('<div class="full f13 fl mb10">' + UnUnicodeText(part.Introduction) + '</div>');
 					} else if(part.Types == 3) {
 						//视频
-						html.push('<div class="full f13 mt5 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
+						html.push('<div class="full f13 fl mb10 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
 					}
 				}
 			}
@@ -287,11 +287,11 @@
 			$("#main0,#main1").addClass("hide");
 			$("#main" + mainIndex).removeClass("hide");
 
-			/*mui('#snowwrapper').load("part/snow/snow.html", function(response) {
-				LoadScript("part/snow/snow.js", function() {
-					$(".snow-canvas").snow();
+			if(!base.IsNullOrEmpty(data.Showy)) {
+				LoadScript("js/snow.js", function() {
+					snow.init("snowwrapper", 10, data.Showy)
 				});
-			});*/
+			}
 
 			//打开外链
 			mui('#desc').on('tap', 'a.link', function() {

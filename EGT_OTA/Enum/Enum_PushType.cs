@@ -41,6 +41,12 @@ namespace EGT_OTA.Models
         public const int Article = 5;
 
         /// <summary>
+        /// 系统红包
+        /// </summary>
+        [EnumAttribute("系统红包")]
+        public const int Red = 6;
+
+        /// <summary>
         /// APP升级
         /// </summary>
         [EnumAttribute("APP升级")]

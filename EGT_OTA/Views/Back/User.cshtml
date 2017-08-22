@@ -110,7 +110,7 @@
                         <th class="cell" style="width: 100px;">登录次数</th>
                         <th class="cell" style="width: 160px;">创建日期</th>
                         <th class="cell" style="width: 160px;">上次登录</th>
-                        <th class="cell" style="width: 150px;">操作</th>
+                        <th class="cell" style="width: 200px;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -172,6 +172,7 @@
                                 @list[i].LastLoginDate.ToString("yyyy-MM-dd hh:mm:ss")
                             </td>
                             <td>
+                                <button type="button" class="el-button el-button--primary el-button--small btnRed" index="@list[i].Number"><span>打赏</span></button>
                                 @if (list[i].IsRecommend != Enum_Recommend.Approved)
                                 {
                                     <button type="button" class="el-button el-button--success el-button--small btnRecommend" index="@list[i].ID"><span>推荐</span></button>
@@ -196,6 +197,18 @@
             </table>
         </div>
         <div id="divPager" align="center" style="margin-top: 30px;"></div>
+    </div>
+    <div class="el-form-item fl" id="red" style="display: none; padding: 20px; width: 100%; height: 100%; position: relative;">
+        <label class="el-form-item__label">红包</label>
+        <div class="el-form-item__content inline fl">
+            <div class="btn-group">
+                <div class="el-input el-input--small">
+                    <input id="price" placeholder="红包金额" size="small" type="text" class="el-input__inner" value="0">
+                </div>
+            </div>
+        </div>
+        <p style="font-size: 11px; float: left; margin-top: 10px;">可自定义红包金额，最高5元，填0 随机生成0.1-5元红包</p>
+        <button type="button" class="el-button el-button--primary" id="btnRed" style="position: absolute; right: 20px; bottom: 20px;"><span>打赏</span></button>
     </div>
 </div>
 @section Scripts{
@@ -377,6 +390,72 @@
                 });
                 isloading = false;
             })
+
+            //打赏
+            $(".btnRed").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                var id = this.getAttribute("index");
+                $("#price").attr("usernumber", id);
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    area: ['300px', '300px'],
+                    title: "打赏",
+                    content: $('#red')
+                });
+                isloading = false;
+            });
+
+            //打赏
+            $("#btnRed").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                var price = $("#price").val()
+                if (isNaN(price)) {
+                    isloading = false;
+                    layer.alert("红包金额格式错误");
+                    return;
+                }
+                if (price < 0) {
+                    isloading = false;
+                    layer.alert("红包金额格式错误");
+                    return;
+                }
+                if (/^\d+(\.\d{1,2})?$/.test(price)) {
+                    if (price > 5) {
+                        isloading = false;
+                        layer.alert("最多打赏5元");
+                        return;
+                    }
+                    price = price * 100;
+                } else {
+                    isloading = false;
+                    layer.alert("红包金额格式错误");
+                    return;
+                }
+                layer.closeAll();
+                var number = $("#price").attr("usernumber")
+                $.ajax({
+                    url: "@(ViewBag.RootUrl)Red/AdminRed",
+                    data: { number: number, price: price },
+                    dataType: "json",
+                    success: function (data) {
+                        isloading = false;
+                        $("#price").val(0);
+                        if (data.result) {
+                            layer.alert("成功打赏：" + parseFloat(data.message / 100).toFixed(2) + "元");
+                        } else {
+                            layer.alert(data.message);
+                        }
+                    }
+                });
+                isloading = false;
+            });
         });
     </script>
 }
