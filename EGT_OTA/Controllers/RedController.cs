@@ -94,7 +94,7 @@ namespace EGT_OTA.Controllers
                     db.Add<Red>(model);
                 }
                 //用户新增红包
-                return Json(new { result = true, message = model.Price }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = true, message = model.Price, number = model.Number }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -110,13 +110,14 @@ namespace EGT_OTA.Controllers
         {
             try
             {
+                var usernumber = ZNRequest.GetString("usernumber");
                 var number = ZNRequest.GetString("number");
                 if (string.IsNullOrWhiteSpace(number))
                 {
                     return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
                 }
 
-                var model = db.Single<Red>(x => x.ToUserNumber == number && x.Status == Enum_Red.Audit);
+                var model = db.Single<Red>(x => x.ToUserNumber == usernumber && x.Number == number && x.Status == Enum_Red.Audit);
                 if (model == null)
                 {
                     return Json(new { result = false, message = "红包已领取" }, JsonRequestBehavior.AllowGet);

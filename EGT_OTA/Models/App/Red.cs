@@ -50,6 +50,12 @@ namespace EGT_OTA.Models
         public DateTime CreateDate { get; set; }
 
         /// <summary>
+        /// 红包来源
+        /// </summary>
+        [SubSonicIgnore]
+        public string RedTypeText { get; set; }
+
+        /// <summary>
         /// 创建日期
         /// </summary>
         [SubSonicIgnore]

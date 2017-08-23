@@ -17,9 +17,9 @@ namespace EGT_OTA.Models
         public const int Login = 1;
 
         /// <summary>
-        /// 管理员打赏红包
+        /// 小微篇打赏红包
         /// </summary>
-        [EnumAttribute("管理员打赏红包")]
+        [EnumAttribute("小微篇打赏红包")]
         public const int Admin = 2;
     }
 }

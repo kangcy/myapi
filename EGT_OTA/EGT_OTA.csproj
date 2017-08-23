@@ -436,6 +436,7 @@
     <Content Include="Images\base\title.png" />
     <Content Include="Images\articledetail.jpg" />
     <Content Include="Images\red.jpg" />
+    <Content Include="Images\Red\redshare.jpg" />
     <Content Include="Images\Showy\13\01.png" />
     <Content Include="Images\Showy\13\02.png" />
     <Content Include="Images\Showy\13\03.png" />

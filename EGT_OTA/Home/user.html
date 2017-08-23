@@ -11,6 +11,20 @@
 		<link rel="stylesheet" href="css/loading.css">
 		<link rel="stylesheet" href="css/animate.css">
 		<style type="text/css">
+			html,
+			#body {
+				max-width: 750px;
+			}
+			
+			html,
+			body,
+			#body {
+				width: 100%;
+				min-height: 100%;
+				margin: 0 auto;
+				font-family: Helvetica Neue, Helvetica, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+			}
+			
 			.avatar {
 				margin-top: -2.5rem;
 				text-align: center;
@@ -225,50 +239,48 @@
 	</head>
 
 	<body>
-		<div class="mui-content mui-scroll-wrapper">
+		<div class="mui-content">
 			<div class="loading" id="loader">
 				<div class="card">
 					<span class="circles-loader"></span>
 				</div>
 			</div>
-			<div class="mui-scroll">
-				<div class="bg" id="bg"></div>
-				<div class="avatar">
-					<img id="avatar" src="img/avatar.png" />
-				</div>
-				<div class="f15 tc mt5 c000 bold" id="nickname"></div>
-				<div class="signature mt5 tc f12 c999" id="signature"></div>
-				<div style="padding:0.3125rem 5%;" class="mt10 f13 c000">
-					<div class="flex-box flex-row f13 tc">
-						<div style="flex:0 0 25%;" class="flex-item hide" id="showZan">
-							<p class="f25 mb0 blue bold" id="showZanNum">0</p>
-							<p>喜欢</p>
-						</div>
-						<div style="flex:0 0 25%;" class="flex-item hide" id="showFollow">
-							<p class="f25 mb0 blue bold" id="showFollowNum">0</p>
-							<p>关注</p>
-						</div>
-						<div style="flex:0 0 25%;" class="flex-item hide" id="showFan">
-							<p class="f25 mb0 blue bold" id="showFanNum">0</p>
-							<p>粉丝</p>
-						</div>
-						<div style="flex:0 0 25%;" class="flex-item hide" id="showKeep">
-							<p class="f25 mb0 blue bold" id="showKeepNum">0</p>
-							<p>收藏</p>
-						</div>
-					</div>
-				</div>
-				<div id="article" class="hide f13 c999 full">
-					<div class="head tl"><span class="ml15" id="a_title">0篇文章</span></div>
-					<div id="a_list">
-					</div>
-					<div id="none" class="mb20 hide">
-						<p class="full tc f13 c333 mt50">暂未发表过动态</p>
-					</div>
-				</div>
-				<!--下载-->
-				<div id="download" class="download hide" onclick="Download()"><i class="mui-icon mui-icon-download"></i><span class="f13">免费制作你自己的图文故事</span></div>
+			<div class="bg" id="bg"></div>
+			<div class="avatar">
+				<img id="avatar" src="img/avatar.png" />
 			</div>
+			<div class="f15 tc mt5 c000 bold" id="nickname"></div>
+			<div class="signature mt5 tc f12 c999" id="signature"></div>
+			<div style="padding:0.3125rem 5%;" class="mt10 f13 c000">
+				<div class="flex-box flex-row f13 tc">
+					<div style="flex:0 0 25%;" class="flex-item hide" id="showZan">
+						<p class="f25 mb0 blue bold" id="showZanNum">0</p>
+						<p>喜欢</p>
+					</div>
+					<div style="flex:0 0 25%;" class="flex-item hide" id="showFollow">
+						<p class="f25 mb0 blue bold" id="showFollowNum">0</p>
+						<p>关注</p>
+					</div>
+					<div style="flex:0 0 25%;" class="flex-item hide" id="showFan">
+						<p class="f25 mb0 blue bold" id="showFanNum">0</p>
+						<p>粉丝</p>
+					</div>
+					<div style="flex:0 0 25%;" class="flex-item hide" id="showKeep">
+						<p class="f25 mb0 blue bold" id="showKeepNum">0</p>
+						<p>收藏</p>
+					</div>
+				</div>
+			</div>
+			<div id="article" class="hide f13 c999 full">
+				<div class="head tl"><span class="ml15" id="a_title">0篇文章</span></div>
+				<div id="a_list">
+				</div>
+				<div id="none" class="mb20 hide">
+					<p class="full tc f13 c333 mt50">暂未发表过动态</p>
+				</div>
+			</div>
+			<!--下载-->
+			<div id="download" class="download hide" onclick="Download()"><i class="mui-icon mui-icon-download"></i><span class="f13">免费制作你自己的图文故事</span></div>
 		</div>
 	</body>
 
@@ -287,7 +299,7 @@
 	});
 
 	mui.ready(function() {
-		$bg.style.minHeight = window.innerWidth * 3 / 4 + "px";
+		$bg.style.minHeight = (window.innerWidth > 750 ? 750 : window.innerWidth) * 3 / 4 + "px";
 		$bg.style.background = "#eee";
 		$bg.style.backgroundSize = "cover";
 
@@ -296,8 +308,6 @@
 			mui.alert("参数异常");
 			return false;
 		}
-
-		base.InitScroll();
 
 		LoadUserInfo(key);
 		LoadArticle(key);

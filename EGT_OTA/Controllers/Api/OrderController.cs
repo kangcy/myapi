@@ -65,7 +65,7 @@ namespace EGT_OTA.Controllers.Api
                     //var toUser = allusers.FirstOrDefault(y => y.Number == x.ToUserNumber);
                     OrderJson model = new OrderJson();
                     model.ID = x.ID;
-                    model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd");
+                    model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd hh:mm:ss");
                     model.Price = x.Price;
                     if (fromUser != null)
                     {
@@ -141,7 +141,7 @@ namespace EGT_OTA.Controllers.Api
                     {
                         OrdersJson model = new OrdersJson();
                         model.ID = x.ID;
-                        model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd");
+                        model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd hh:mm:ss");
                         model.Price = x.Price;
                         model.UserID = user.ID;
                         model.UserNumber = user.Number;
@@ -207,7 +207,7 @@ namespace EGT_OTA.Controllers.Api
                     {
                         OrdersJson model = new OrdersJson();
                         model.ID = x.ID;
-                        model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd");
+                        model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd hh:mm:ss");
                         model.Price = x.Price;
                         model.UserID = user.ID;
                         model.UserNumber = user.Number;
@@ -268,7 +268,7 @@ namespace EGT_OTA.Controllers.Api
                 {
                     OrdersJson model = new OrdersJson();
                     model.ID = x.ID;
-                    model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd");
+                    model.CreateDate = x.CreateDate.ToString("yyyy-MM-dd hh:mm:ss");
                     model.Price = Tools.SafeInt(System.Configuration.ConfigurationManager.AppSettings["applymoney"]) * 100;
                     newlist.Add(model);
                 });
@@ -319,7 +319,8 @@ namespace EGT_OTA.Controllers.Api
                 var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Red>();
                 list.ForEach(x =>
                 {
-                    x.CreateDateText = x.CreateDate.ToString("yyyy-MM-dd");
+                    x.RedTypeText = EnumBase.GetDescription(typeof(Enum_RedType), x.RedType);
+                    x.CreateDateText = x.CreateDate.ToString("yyyy-MM-dd hh:mm:ss");
                 });
                 result.result = true;
                 result.message = new
