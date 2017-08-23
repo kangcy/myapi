@@ -86,35 +86,9 @@ namespace EGT_OTA.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
             var list = new List<PushLog>();
-            switch (pushtype)
-            {
-                case Enum_PushType.Article:
-                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Article && x.Number == number).ToList();
-                    logdb.DeleteMany<PushLog>(list);
-                    break;
-                case Enum_PushType.Comment:
-                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Comment && x.Number == number).ToList();
-                    logdb.DeleteMany<PushLog>(list);
-                    break;
-                case Enum_PushType.Money:
-                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Money && x.Number == number).ToList();
-                    logdb.DeleteMany<PushLog>(list);
-                    break;
-                case Enum_PushType.Fan:
-                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Fan && x.Number == number).ToList();
-                    logdb.DeleteMany<PushLog>(list);
-                    break;
-                case Enum_PushType.FanArticle:
-                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.FanArticle && x.Number == number).ToList();
-                    logdb.DeleteMany<PushLog>(list);
-                    break;
-                case Enum_PushType.Update:
-                    list = logdb.Find<PushLog>(x => x.PushType == Enum_PushType.Update && x.Number == number).ToList();
-                    logdb.DeleteMany<PushLog>(list);
-                    break;
-                default:
-                    break;
-            }
+
+            list = logdb.Find<PushLog>(x => x.PushType == pushtype && x.Number == number).ToList();
+            logdb.DeleteMany<PushLog>(list);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
