@@ -9598,12 +9598,20 @@ img {
     width: 100% !important;
 }
 
+.mt15 {
+    margin-top: 15px !important;
+}
+
 .ml15 {
     margin-left: 15px !important;
 }
 
 .mb0 {
     margin-bottom: 0px !important;
+}
+
+.mb15 {
+    margin-bottom: 15px !important;
 }
 
 .f12 {
