@@ -32,10 +32,11 @@ namespace EGT_OTA.Models
 
         }
 
-        public Showy(string name, List<string> cover, int status = 1)
+        public Showy(string name, List<string> cover, List<string> icon, int status = 1)
         {
             this.Name = name;
             this.Cover = cover;
+            this.Icon = icon;
             this.Status = status;
         }
 
@@ -45,9 +46,14 @@ namespace EGT_OTA.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// 图片
+        /// 漂浮图标
         /// </summary>
         public List<string> Cover { get; set; }
+
+        /// <summary>
+        /// 预览图标
+        /// </summary>
+        public List<string> Icon { get; set; }
 
         /// <summary>
         /// 状态
