@@ -32,11 +32,10 @@ namespace EGT_OTA.Models
 
         }
 
-        public Showy(string name, List<string> cover, List<string> icon, int status = 1)
+        public Showy(string name, List<ShowyCover> cover, int status = 1)
         {
             this.Name = name;
             this.Cover = cover;
-            this.Icon = icon;
             this.Status = status;
         }
 
@@ -48,12 +47,49 @@ namespace EGT_OTA.Models
         /// <summary>
         /// 漂浮图标
         /// </summary>
-        public List<string> Cover { get; set; }
+        public List<ShowyCover> Cover { get; set; }
 
         /// <summary>
-        /// 预览图标
+        /// 状态
         /// </summary>
-        public List<string> Icon { get; set; }
+        public int Status { get; set; }
+    }
+
+    public class ShowyCover
+    {
+        public ShowyCover() { }
+
+        public ShowyCover(string cover, int count, int showtype = 0, int status = 1)
+        {
+            this.Cover = cover;
+            this.Count = Count;
+            this.ShowType = showtype;
+            this.Status = status;
+        }
+
+        public string Cover { get; set; }
+
+        /// <summary>
+        /// 展示图片个数
+        /// </summary>
+        public int Count { get; set; }
+
+        /// <summary>
+        /// 展示方式
+        /// 0：默认
+        /// 1：气球
+        /// 2：心形
+        /// 3：泡泡
+        /// 4：黑泡泡
+        /// 5：小雪
+        /// 6：小雨
+        /// 7：暴雨
+        /// 8：暴雪
+        /// 9：红包
+        /// 10：爆竹
+        /// 11：元宝
+        /// </summary>
+        public int ShowType { get; set; }
 
         /// <summary>
         /// 状态

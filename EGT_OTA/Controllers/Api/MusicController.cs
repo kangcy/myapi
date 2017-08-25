@@ -16,6 +16,7 @@ using SubSonic.Repository;
 using SubSonic.DataProviders;
 using Newtonsoft.Json.Linq;
 using HtmlAgilityPack;
+using System.Text.RegularExpressions;
 
 namespace EGT_OTA.Controllers.Api
 {

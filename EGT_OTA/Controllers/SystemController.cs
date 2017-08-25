@@ -50,7 +50,7 @@ namespace EGT_OTA.Controllers
                     currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_ios_url"];
                 }
 
-                if (version == currVersion)
+                if (Tools.SafeDouble(version) >= Tools.SafeDouble(currVersion))
                 {
                     return Json(new { result = false, message = "当前已是最新版本" }, JsonRequestBehavior.AllowGet);
                 }
