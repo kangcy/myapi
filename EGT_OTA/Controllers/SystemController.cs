@@ -334,7 +334,7 @@ namespace EGT_OTA.Controllers
             try
             {
                 var pager = new Pager();
-                var list = GetShowy();
+                var list = GetShowy().FindAll(x => x.Status == 1);
                 var recordCount = list.Count();
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
                 list = list.Skip((pager.Index - 1) * pager.Size).Take(pager.Size).ToList();
