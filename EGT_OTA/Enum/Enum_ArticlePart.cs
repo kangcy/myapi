@@ -33,5 +33,11 @@ namespace EGT_OTA.Models
         /// </summary>
         [EnumAttribute("视频")]
         public const int Video = 3;
+
+        /// <summary>
+        /// 分隔
+        /// </summary>
+        [EnumAttribute("分隔")]
+        public const int Line = 4;
     }
 }
