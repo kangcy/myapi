@@ -46,6 +46,7 @@ namespace EGT_OTA.Controllers.Api
                 {
                     var model = new ArticlePart();
                     model.Introduction = x;
+                    model.IntroExpand = string.Empty;
                     model.ArticleNumber = number;
                     model.Types = Enum_ArticlePart.Pic;
                     model.CreateUserNumber = user.Number;

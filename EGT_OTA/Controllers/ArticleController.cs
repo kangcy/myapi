@@ -215,6 +215,7 @@ namespace EGT_OTA.Controllers
                             part.ArticleNumber = model.Number;
                             part.Types = Enum_ArticlePart.Pic;
                             part.Introduction = covers[i];
+                            part.IntroExpand = string.Empty;
                             part.SortID = Tools.SafeInt(i);
                             part.Status = Enum_Status.Audit;
                             part.CreateDate = DateTime.Now;
@@ -291,6 +292,7 @@ namespace EGT_OTA.Controllers
                                 part.ArticleNumber = model.Number;
                                 part.Types = x.PartType;
                                 part.Introduction = x.Introduction;
+                                part.IntroExpand = x.IntroExpand;
                                 part.SortID = Tools.SafeInt(x.SortID);
                                 part.Status = Enum_Status.Audit;
                                 part.CreateDate = DateTime.Now;
@@ -306,6 +308,7 @@ namespace EGT_OTA.Controllers
                                 if (part != null)
                                 {
                                     part.Introduction = x.Introduction;
+                                    part.IntroExpand = x.IntroExpand;
                                     part.SortID = Tools.SafeInt(x.SortID);
                                     db.Update<ArticlePart>(part);
                                 }

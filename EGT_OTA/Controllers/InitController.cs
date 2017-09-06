@@ -749,9 +749,9 @@ namespace EGT_OTA.Controllers
                 Keeps = new Random().Next(100),
                 ArticlePart = new List<ArticlePart>
                 {
-                    new ArticlePart(string.Empty,Enum_ArticlePart.Pic,0,Server.MapPath("~/Init/Article/1.jpg")),
-                    new ArticlePart(string.Empty,Enum_ArticlePart.Pic,0,Server.MapPath("~/Init/Article/2.jpg")),
-                    new ArticlePart(string.Empty,Enum_ArticlePart.Pic,0,Server.MapPath("~/Init/Article/3.jpg"))
+                    //new ArticlePart(string.Empty,Enum_ArticlePart.Pic,0,Server.MapPath("~/Init/Article/1.jpg")),
+                    //new ArticlePart(string.Empty,Enum_ArticlePart.Pic,0,Server.MapPath("~/Init/Article/2.jpg")),
+                    //new ArticlePart(string.Empty,Enum_ArticlePart.Pic,0,Server.MapPath("~/Init/Article/3.jpg"))
                 }
             });
 

@@ -30,10 +30,11 @@ namespace EGT_OTA.Models
     {
         public ArticlePart() { }
 
-        public ArticlePart(string number, int type, int sortId, string introduction)
+        public ArticlePart(string number, int type, int sortId, string introduction, string introExpand)
         {
             this.ArticleNumber = number;
             this.Introduction = introduction;
+            this.IntroExpand = introExpand;
             this.Types = type;
             this.SortID = sortId;
             this.CreateDate = DateTime.Now;
@@ -57,6 +58,12 @@ namespace EGT_OTA.Models
         /// </summary>
         [SubSonicLongString, SubSonicNullString]
         public string Introduction { get; set; }
+
+        /// <summary>
+        /// 详细扩展
+        /// </summary>
+        [SubSonicNullString]
+        public string IntroExpand { get; set; }
 
         public int SortID { get; set; }
 
@@ -90,6 +97,11 @@ namespace EGT_OTA.Models
         /// 内容
         /// </summary>
         public string Introduction { get; set; }
+
+        /// <summary>
+        /// 内容拓展
+        /// </summary>
+        public string IntroExpand { get; set; }
 
         /// <summary>
         /// 类型

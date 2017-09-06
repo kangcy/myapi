@@ -102,7 +102,7 @@ namespace EGT_OTA.Controllers.Api
                 //文章部分
                 model.ArticlePart = db.Find<ArticlePart>(x => x.ArticleNumber == model.Number).OrderBy(x => x.SortID).ToList();
 
-                model.CreateDateText = DateTime.Now.ToString("yyyy-MM-dd");
+                model.CreateDateText = model.CreateDate.ToString("yyyy-MM-dd");
                 model.ShareUrl = System.Configuration.ConfigurationManager.AppSettings["share_url"] + model.Number;
 
                 //模板配置

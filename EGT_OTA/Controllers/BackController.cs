@@ -146,6 +146,11 @@ namespace EGT_OTA.Controllers
             {
                 query = query.And("CreateUserNumber").IsEqualTo(usernumber);
             }
+            var articlenumber = ZNRequest.GetString("articlenumber");
+            if (!string.IsNullOrWhiteSpace(articlenumber))
+            {
+                query = query.And("Number").IsEqualTo(articlenumber);
+            }
             var status = ZNRequest.GetInt("status", -1);
             if (status > -1)
             {
@@ -308,7 +313,7 @@ namespace EGT_OTA.Controllers
                 //文章部分
                 model.ArticlePart = new SubSonic.Query.Select(provider).From<ArticlePart>().Where<ArticlePart>(x => x.ArticleNumber == model.Number).OrderAsc("SortID").ExecuteTypedList<ArticlePart>();
 
-                model.CreateDateText = DateTime.Now.ToString("yyyy-MM-dd");
+                model.CreateDateText = model.CreateDate.ToString("yyyy-MM-dd");
 
                 //模板配置
                 model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);

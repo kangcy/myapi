@@ -14,6 +14,13 @@
             <div class="el-form-item inline fl ml15">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
+                        <input id="articlenumber" placeholder="文章编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.articlenumber)">
+                    </div>
+                </div>
+            </div>
+            <div class="el-form-item inline fl ml15">
+                <div class="el-form-item__content">
+                    <div class="el-input el-input--small">
                         <input id="usernumber" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
                     </div>
                 </div>
@@ -79,8 +86,8 @@
                 <label class="el-form-item__label">分类</label>
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
-                        <button id="filter_articletype" index="0" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            其他
+                        <button id="filter_articletype" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            不限
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
@@ -272,6 +279,7 @@
                             page: page,
                             rows: pageSize,
                             title: $("#title").val().trim(),
+                            articlenumber: $("#articlenumber").val().trim(),
                             usernumber: $("#usernumber").val().trim(),
                             status: $("#status").attr("index"),
                             submission: $("#submission").attr("index"),
@@ -288,6 +296,7 @@
                     page: 1,
                     rows: pageSize,
                     title: $("#title").val().trim(),
+                    articlenumber: $("#articlenumber").val().trim(),
                     usernumber: $("#usernumber").val().trim(),
                     status: $("#status").attr("index"),
                     submission: $("#submission").attr("index"),
@@ -433,7 +442,7 @@
                         isloading = false;
                         $("#price").val(0);
                         if (data.result) {
-                            layer.alert("成功打赏：" + parseFloat(data.message/100).toFixed(2) + "元");
+                            layer.alert("成功打赏：" + parseFloat(data.message / 100).toFixed(2) + "元");
                         } else {
                             layer.alert(data.message);
                         }

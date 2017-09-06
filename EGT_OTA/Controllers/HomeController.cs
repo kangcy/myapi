@@ -133,7 +133,7 @@ namespace EGT_OTA.Controllers
                 //文章部分
                 model.ArticlePart = new SubSonic.Query.Select(provider).From<ArticlePart>().Where<ArticlePart>(x => x.ArticleNumber == model.Number).OrderAsc("SortID").ExecuteTypedList<ArticlePart>();
 
-                model.CreateDateText = DateTime.Now.ToString("yyyy-MM-dd");
+                model.CreateDateText = model.CreateDate.ToString("yyyy-MM-dd");
 
                 //模板配置
                 model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);
