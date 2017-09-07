@@ -161,7 +161,8 @@
 <script src="min/base.min.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
 <script type="text/javascript">
-	
+	var RootUrl = "http://localhost/app/";
+	//var RootUrl = "http://www.xiaoweipian.com/";
 
 	var MusicID = 0;
 	var MusicUrl = "";
@@ -303,7 +304,7 @@
 			$("#main" + mainIndex).removeClass("hide");
 
 			if(!base.IsNullOrEmpty(data.Showy)) {
-				LoadScript("js/snow.js", function() {
+				LoadScript("min/snow.min.js", function() {
 					var srcs = data.Showy.split("|");
 					if(srcs.length >= 3) {
 						snow.init(srcs[0], srcs[1], srcs[2])
