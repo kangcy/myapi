@@ -170,6 +170,7 @@
 	var CurrTemplate = 0;
 	var CurrCover = "";
 	var AutoMusic = 0;
+	var $wrapper2 = base.Get("wrapper2");
 	var isLoading = false;
 
 	mui.init({
@@ -186,21 +187,20 @@
 		//    event.preventDefault();
 		//});
 
-		$("#wrapper2").css({
-			"width": (document.getElementsByTagName("html")[0].clientWidth - document.getElementsByTagName("html")[0].offsetLeft * 2) + "px",
-			"height": window.innerHeight + "px",
-			"position": "fixed",
-			"z-index": -1
-		});
-		$("#detail1").css("margin-top", (window.innerHeight - 50) * 0.3 + "px");
-		$(".cover:eq(0)").css("min-height", window.innerHeight * 0.526 + "px");
+		$wrapper2.style.width = (document.getElementsByTagName("html")[0].clientWidth - document.getElementsByTagName("html")[0].offsetLeft * 2) + "px";
+		$wrapper2.style.height = window.innerHeight + "px";
+		$wrapper2.style.position = "fixed";
+		$wrapper2.style.zIndex = "-1";
+
+		base.Get("detail1").style.marginTop = (window.innerHeight - 50) * 0.3 + "px";
+		base.Get(".cover")[0].style.minHeight = window.innerHeight * 0.526 + "px";
 
 		var key = GetParameter("key");
 		var xwp = GetParameter("xwp");
 		if(base.IsNullOrEmpty(key) || base.IsNullOrEmpty(xwp)) {
-			document.getElementById("errormsg").innerText = "参数异常";
-			document.getElementById("error").classList.remove("hide");
-			document.getElementById("loader").classList.add("hide");
+			base.Get("errormsg").innerText = "参数异常";
+			base.Get("error").classList.remove("hide");
+			base.Get("loader").classList.add("hide");
 			return;
 		}
 

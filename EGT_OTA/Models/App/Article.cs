@@ -343,6 +343,12 @@ namespace EGT_OTA.Models
         [SubSonicIgnore]
         public string Showy { get; set; }
 
+        /// <summary>
+        /// 主题色
+        /// </summary>
+        [SubSonicIgnore]
+        public string ThemeColor { get; set; }
+
         #endregion
     }
 
