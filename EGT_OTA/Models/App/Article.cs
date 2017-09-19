@@ -153,6 +153,18 @@ namespace EGT_OTA.Models
         /// </summary>
         public int Submission { get; set; }
 
+        /// <summary>
+        /// 主题色
+        /// </summary>
+        [SubSonicNullString]
+        public string ThemeColor { get; set; }
+
+        /// <summary>
+        /// 背景色
+        /// </summary>
+        [SubSonicNullString]
+        public string ThemeCover { get; set; }
+
         #region  定位
 
         /// <summary>
@@ -342,12 +354,6 @@ namespace EGT_OTA.Models
         /// </summary>
         [SubSonicIgnore]
         public string Showy { get; set; }
-
-        /// <summary>
-        /// 主题色
-        /// </summary>
-        [SubSonicIgnore]
-        public string ThemeColor { get; set; }
 
         #endregion
     }

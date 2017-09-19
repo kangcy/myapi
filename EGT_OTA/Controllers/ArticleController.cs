@@ -177,6 +177,9 @@ namespace EGT_OTA.Controllers
                 model.CityCode = ZNRequest.GetString("CityCode");
                 model.Latitude = Tools.SafeDouble(ZNRequest.GetString("Latitude"));
                 model.Longitude = Tools.SafeDouble(ZNRequest.GetString("Longitude"));
+                model.ThemeColor = ZNRequest.GetString("ThemeColor");
+                model.ThemeCover = ZNRequest.GetString("ThemeCover");
+                model.Template = ZNRequest.GetInt("Template");
                 model.UpdateUserNumber = user.Number;
                 model.UpdateDate = DateTime.Now;
                 model.UpdateIP = Tools.GetClientIP;
@@ -184,7 +187,6 @@ namespace EGT_OTA.Controllers
                 model.Submission = Enum_Submission.TemporaryApproved;//默认临时投稿审核
 
                 var result = false;
-
                 if (model.ID == 0)
                 {
                     var cover = ZNRequest.GetString("Cover");
@@ -263,6 +265,22 @@ namespace EGT_OTA.Controllers
                     }
 
                     result = db.Update<Article>(model) > 0;
+
+
+                    //取消自定义模板启用
+                    if (model.Template != 1)
+                    {
+                        var list = db.Find<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved).ToList();
+                        if (list.Count > 0)
+                        {
+                            list.ForEach(x =>
+                            {
+                                x.IsUsed = Enum_Used.Audit;
+                            });
+                            db.UpdateMany<Background>(list);
+                        }
+                    }
+
 
                     ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
                     model.TypeName = articleType == null ? string.Empty : articleType.Name;
