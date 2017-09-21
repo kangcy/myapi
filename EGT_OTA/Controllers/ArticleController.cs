@@ -70,6 +70,7 @@ namespace EGT_OTA.Controllers
 
                 if (result)
                 {
+                    //同步文章内容
                     List<ArticlePart> list = new List<ArticlePart>();
                     var parts = db.Find<ArticlePart>(x => x.ArticleNumber == number).ToList();
                     parts.ForEach(x =>
@@ -82,6 +83,27 @@ namespace EGT_OTA.Controllers
                         list.Add(x);
                     });
                     db.AddMany<ArticlePart>(list);
+
+                    //同步文章个性化设置
+                    var custom = db.Single<ArticleCustom>(x => x.ArticleNumber == number);
+                    if (custom != null)
+                    {
+                        custom.ArticleNumber = model.Number;
+                        custom.ID = 0;
+                        db.Add<ArticleCustom>(custom);
+                    }
+
+                    //同步文章自定义背景
+                    var background = db.Find<Background>(x => x.ArticleNumber == number).ToList();
+                    if (background.Count > 0)
+                    {
+                        background.ForEach(x =>
+                        {
+                            x.ArticleNumber = model.Number;
+                            x.ID = 0;
+                        });
+                        db.AddMany<Background>(background);
+                    }
                 }
                 if (result)
                 {
@@ -344,6 +366,24 @@ namespace EGT_OTA.Controllers
                 }
                 if (result)
                 {
+                    //更新漂浮
+                    var url = ZNRequest.GetString("ShowyUrl");
+                    ArticleCustom custom = db.Single<ArticleCustom>(x => x.ArticleNumber == model.Number);
+                    if (custom == null)
+                    {
+                        custom = new ArticleCustom();
+                        custom.ArticleNumber = model.Number;
+                    }
+                    custom.ShowyUrl = url;
+                    if (custom.ID == 0)
+                    {
+                        db.Add<ArticleCustom>(custom);
+                    }
+                    else
+                    {
+                        db.Update<ArticleCustom>(custom);
+                    }
+
                     return Json(new
                     {
                         result = true,
