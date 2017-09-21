@@ -114,7 +114,7 @@
 		<canvas id="snowcanvas"></canvas>
 		<img id="music1" class="hide" src="img/btn_music.png" onclick="switchsound()" />
 		<div id="wrapper2"></div>
-		<div class="hide" id="scroll-wrapper">
+		<div id="wrapper" class="hide">
 			<div class="mui-content" style="overflow-x: hidden;" id="wrapper1">
 				<!--通用样式-->
 				<div id="main0" class="f13 tl mt10 hide">
@@ -125,7 +125,6 @@
 							<span class="mb0 ml10 user mt5" userid="0" id="nickname0"></span>
 							<span class="mt0 mb0 ml10 f13" id="views0"></span>
 							<p id="music0" play="on" class="music mt10" onclick="switchsound()">
-								<i></i>
 								<span id="musicname0"></span>
 							</p>
 						</div>
@@ -146,7 +145,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="detail2 cover fl tl">
+				<div class="detail2 cover fl tl" id="cover">
 					<p class="f16 tc hide mt10 mb20" id="title1"></p>
 					<div class="c333 full" id="desc">
 					</div>
@@ -170,13 +169,13 @@
 	var CurrTemplate = 0;
 	var CurrTemplateType = 0;
 	var CurrCover = "";
+	var CurrColor = "";
 	var AutoMusic = 0;
 	var CurrBackgroundName = "";
 	var $wrapper = base.Get("wrapper"); //内容父背景（放图片背景色）
 	var $wrapper1 = base.Get("wrapper1"); //内容子背景（放背景图片） 
 	var $wrapper2 = base.Get("wrapper2"); //纯色背景
 	var $cover = base.Get("cover"); //非纯色内容透明度底
-	var $wrapper2 = base.Get("wrapper2");
 	var isLoading = false;
 
 	mui.init({
@@ -234,7 +233,7 @@
 			ArticleID = data.ID;
 			document.title = UnUnicodeText(data.Title);
 
-			$("#scroll-wrapper,#snowwrapper").removeClass("hide");
+			$("#wrapper,#snowwrapper").removeClass("hide");
 
 			AutoMusic = data.AutoMusic;
 			MusicUrl = data.MusicUrl;
@@ -262,7 +261,6 @@
 			}
 
 			//排版
-			CurrCover = data.Cover;
 			CurrTemplate = data.Template;
 			if(CurrTemplate == 1) {
 				CurrTemplateType = 1;
@@ -271,7 +269,7 @@
 				if(data.TemplateJson.ID > 0) {
 					CurrTemplateType = data.TemplateJson.TemplateType;
 					CurrCover = data.TemplateJson.Cover;
-					$("#scroll-wrapper").css("background-color", data.TemplateJson.Background);
+					CurrColor = data.TemplateJson.Background;
 				}
 			}
 			CurrBackground = data.BackgroundJson;
@@ -287,8 +285,6 @@
 			base.Get("views1").style.color = color;
 			CurrBackgroundName = data.ThemeCover;
 
-			ChangeBg();
-
 			$("#musicname0,#musicname1").html(data.MusicName);
 			$("#useravatar0,#useravatar1").attr({
 				"src": base.ShowThumb(data.Avatar, 1),
@@ -299,6 +295,8 @@
 			$("#createdate0,#createdate1").html(data.CreateDateText);
 			$("#views0,#views1").html("阅读  " + data.Views);
 			$("#desc").html(UnUnicodeText(html.join("")));
+
+			ChangeBg();
 
 			ChangeMusic(CurrTemplateType);
 
@@ -322,7 +320,7 @@
 			if(!base.IsNullOrEmpty(data.Showy)) {
 				LoadScript("min/snow.min.js", function() {
 					var srcs = data.Showy.split("|");
-					if(srcs.length >= 3) {
+					if(srcs.length > 2) {
 						snow.init(srcs[0], srcs[1], srcs[2])
 					} else {
 						snow.init(data.Showy, 1, 0)
@@ -357,34 +355,40 @@
 			base.Get("main1").classList.remove("hide");
 		}
 
-		/*if(CurrTemplate > 0) {
+		if(CurrTemplate > 0) {
 			$("#title1").removeClass("hide");
 		} else {
 			$("#title1").addClass("hide");
-		}*/
+		}
 
 		//纯白背景
 		if(CurrTemplate == 0) {
-			$("#scroll-wrapper").css("background-color", "transparent");
-			$("#wrapper1").css("background", "none");
-			$("#wrapper2").css("background", "#fff");
-			$(".cover").css("background", "RGBA(255, 255, 255, 1");
+			if(!base.IsNullOrEmpty(CurrBackgroundName)) {
+				$wrapper.style.backgroundColor = "transparent";
+				$wrapper1.style.background = "";
+				$cover.style.backgroundColor = "transparent";
+				$wrapper2.style.background = "";
+				$wrapper2.className = CurrBackgroundName;
+			}
 		} else if(CurrTemplate > 1) {
-			$("#wrapper2").css("background", "none");
-			$("#wrapper1").css({
-				"background": "url(" + CurrCover + ") top center no-repeat",
-				"background-size": "100% auto"
-			});
-			$(".cover").css("background", "RGBA(255, 255, 255, 0.5");
+			//模板
+			$wrapper2.style.background = "";
+			$wrapper2.className = "";
+			$wrapper.style.backgroundColor = CurrColor;
+			$wrapper1.style.background = "url(" + CurrCover + ") top center no-repeat";
+			$wrapper1.style.backgroundSize = "100% auto";
+			$cover.style.backgroundColor = "RGBA(255, 255, 255, 0.5)";
 		} else {
-			$("#scroll-wrapper").css("background-color", "transparent");
-			$("#wrapper1").css("background", "none");
+			//自定义
+			$wrapper.style.backgroundColor = "transparent";
+			$wrapper1.style.background = "";
 			if(CurrBackground == null) {
 				//全屏
-				$("#wrapper2").css("background", "#fff");
+				$wrapper2.style.background = "";
+				$wrapper2.className = "";
 			} else {
 				//背景透明度
-				$(".cover").css("background", "RGBA(255, 255, 255, " + (100 - CurrBackground.Transparency) / 100 + ")");
+				$cover.style.backgroundColor = "RGBA(255, 255, 255, " + (100 - CurrBackground.Transparency) / 100 + ")";
 
 				var url = CurrBackground.Url;
 				if(CurrBackground.High == 0) {
@@ -392,20 +396,17 @@
 				} else {
 					url = base.ShowThumb(url, 0);
 				}
+				$wrapper2.className = "";
 				switch(CurrBackground.Full) {
 					case 0:
 						//居顶 
-						$("#wrapper2").css({
-							"background": "url(" + url + ") no-repeat top center",
-							"background-size": "100% auto"
-						});
+						$wrapper2.style.background = "url(" + url + ") no-repeat top center";
+						$wrapper2.style.backgroundSize = "100% 15.5rem";
 						break;
 					case 1:
 						//全屏
-						$("#wrapper2").css({
-							"background": "url(" + url + ") center center no-repeat",
-							"background-size": "100% 100%",
-						});
+						$wrapper2.style.background = "url(" + url + ") center center no-repeat";
+						$wrapper2.style.backgroundSize = "100% auto";
 						break;
 					default:
 						break;

@@ -39,8 +39,8 @@
 			.download {
 				text-align: center;
 				width: 90%;
-				height: 3rem;
-				line-height: 3rem;
+				height: 2.5rem;
+				line-height: 2.5rem;
 				color: #fff;
 				display: block;
 				border-radius: 8px;
@@ -48,6 +48,8 @@
 				margin: 1rem 5%;
 				text-shadow: none;
 				float: left;
+				position: fixed;
+				bottom: 0px;
 			}
 			
 			.comment {
@@ -132,18 +134,17 @@
 		<canvas id="snowcanvas"></canvas>
 		<img id="music1" class="hide" src="img/btn_music.png" onclick="switchsound()" />
 		<div id="wrapper2"></div>
-		<div class="hide" id="scroll-wrapper">
+		<div id="wrapper" class="hide">
 			<div class="mui-content" style="overflow-x: hidden;" id="wrapper1">
 				<!--通用样式-->
 				<div id="main0" class="f13 tl mt10 hide">
 					<div class="detail">
 						<div class="full tl mb5">
-							<p class="f16 c000 mb10" id="title0"></p>
-							<span class="mt0 mb0 csubtitle f13" id="createdate0"></span>
-							<span class="mb0 ml10 user mt5 blue" userid="0" id="nickname0"></span>
-							<span class="mt0 mb0 ml10 csubtitle f13" id="views0"></span>
+							<p class="f16 mb10" id="title0"></p>
+							<span class="mt0 mb0 f13" id="createdate0"></span>
+							<span class="mb0 ml10 user mt5" userid="0" id="nickname0"></span>
+							<span class="mt0 mb0 ml10 f13" id="views0"></span>
 							<p id="music0" play="on" class="music mt10" onclick="switchsound()">
-								<i></i>
 								<span id="musicname0"></span>
 							</p>
 						</div>
@@ -156,16 +157,16 @@
 							<img id="useravatar1" class="full fl" />
 						</div>
 						<div class="fr tl" style="width: 77%; display: inline-block;">
-							<p class="user ml10 mt10 mb0 textshadow f15 cfff fl full bold" userid="0" id="nickname1"></p>
-							<p class="ml10 mb0 mt10 cfff textshadow f13 full">
+							<p class="user ml10 mt15 mb5 f15 fl full bold" userid="0" id="nickname1"></p>
+							<p class="ml10 mb0 mt20 f13 full">
 								<span id="createdate1" class="mr10"></span>
 								<span class="ml15" id="views1"></span>
 							</p>
 						</div>
 					</div>
 				</div>
-				<div class="detail2 cover fl tl">
-					<p class="f16 c333 tc hide mb10" id="title1"></p>
+				<div class="detail2 cover fl tl" id="cover">
+					<p class="f16 tc hide mt10 mb20" id="title1"></p>
 					<div class="c333 full" id="desc">
 					</div>
 				</div>
@@ -181,12 +182,12 @@
 							<div class="list" id="commentlist">
 							</div>
 						</div>
-						<!--下载-->
-						<div id="download" class="download" onclick="Download()"><i class="mui-icon mui-icon-download"></i><span class="f13">免费制作你自己的图文故事</span></div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<!--下载-->
+		<div id="download" class="download" onclick="Download()"><i class="mui-icon mui-icon-download"></i><span class="f13">免费制作你自己的图文故事</span></div>
 	</body>
 
 </html>
@@ -204,8 +205,15 @@
 	var MusicUrl = "";
 	var ArticleID = 0;
 	var CurrTemplate = 0;
+	var CurrTemplateType = 0;
 	var CurrCover = "";
+	var CurrColor = "";
 	var AutoMusic = 0;
+	var CurrBackgroundName = "";
+	var $wrapper = base.Get("wrapper"); //内容父背景（放图片背景色）
+	var $wrapper1 = base.Get("wrapper1"); //内容子背景（放背景图片） 
+	var $wrapper2 = base.Get("wrapper2"); //纯色背景
+	var $cover = base.Get("cover"); //非纯色内容透明度底
 	var isLoading = false;
 
 	mui.init({
@@ -222,14 +230,14 @@
 		//    event.preventDefault();
 		//});
 
-		$("#wrapper2").css({
-			"width": (document.getElementsByTagName("html")[0].clientWidth - document.getElementsByTagName("html")[0].offsetLeft * 2) + "px",
-			"height": window.innerHeight + "px",
-			"position": "fixed",
-			"z-index": -1
-		});
-		$("#detail1").css("margin-top", (window.innerHeight - 50) * 0.3 + "px");
-		$(".cover:eq(0)").css("min-height", window.innerHeight * 0.526 + "px");
+		$wrapper2.style.width = (document.getElementsByTagName("html")[0].clientWidth - document.getElementsByTagName("html")[0].offsetLeft * 2) + "px";
+		$wrapper2.style.height = window.innerHeight + "px";
+		$wrapper2.style.position = "fixed";
+		$wrapper2.style.zIndex = "-1";
+		$wrapper.style.marginBottom = "4rem";
+
+		base.Get("detail1").style.marginTop = (window.innerHeight - 50) * 0.3 + "px";
+		base.Get(".cover")[0].style.minHeight = window.innerHeight * 0.526 + "px";
 
 		var key = GetParameter("key");
 		if(base.IsNullOrEmpty(key)) {
@@ -240,7 +248,7 @@
 		LoadArticle(key, xwp, "");
 		LoadComment(key);
 
-		mui("#scroll-wrapper").on('tap', '.user', function(event) {
+		mui("#wrapper").on('tap', '.user', function(event) {
 			var userNumber = this.getAttribute("userid");
 			window.location.href = RootUrl + "u/" + userNumber;
 		});
@@ -308,10 +316,10 @@
 				if(pwd != data.ArticlePowerPwd) {
 					$("#password").removeClass("hide");
 				} else {
-					$("#scroll-wrapper").removeClass("hide");
+					$("#wrapper").removeClass("hide");
 				}
 			} else {
-				$("#scroll-wrapper").removeClass("hide");
+				$("#wrapper").removeClass("hide");
 			}
 
 			var wx_url = window.location.href;
@@ -386,22 +394,29 @@
 			}
 
 			//排版
-			CurrCover = data.Cover;
-			var mainIndex = 0;
 			CurrTemplate = data.Template;
 			if(CurrTemplate == 1) {
-				mainIndex = 1;
+				CurrTemplateType = 1;
 			}
 			if(data.TemplateJson != null) {
 				if(data.TemplateJson.ID > 0) {
-					mainIndex = data.TemplateJson.TemplateType;
+					CurrTemplateType = data.TemplateJson.TemplateType;
 					CurrCover = data.TemplateJson.Cover;
-					$("#scroll-wrapper").css("background-color", data.TemplateJson.Background);
+					CurrColor = data.TemplateJson.Background;
 				}
 			}
 			CurrBackground = data.BackgroundJson;
 
-			ChangeBg();
+			var color = base.IsNullOrEmpty(data.ThemeColor) ? "#333" : data.ThemeColor;
+			base.Get("title0").style.color = color;
+			base.Get("title1").style.color = color;
+			base.Get("createdate0").style.color = color;
+			base.Get("createdate1").style.color = color;
+			base.Get("nickname0").style.color = color;
+			base.Get("nickname1").style.color = color;
+			base.Get("views0").style.color = color;
+			base.Get("views1").style.color = color;
+			CurrBackgroundName = data.ThemeCover;
 
 			$("#musicname0,#musicname1").html(data.MusicName);
 			$("#useravatar0,#useravatar1").attr({
@@ -414,7 +429,9 @@
 			$("#views0,#views1").html("阅读  " + data.Views);
 			$("#desc").html(UnUnicodeText(html.join("")));
 
-			ChangeMusic(mainIndex);
+			ChangeBg();
+
+			ChangeMusic(CurrTemplateType);
 
 			document.getElementById("loader").classList.add("hide");
 
@@ -430,14 +447,14 @@
 			});
 
 			$("#main0,#main1").addClass("hide");
-			$("#main" + mainIndex).removeClass("hide");
+			$("#main" + CurrTemplateType).removeClass("hide");
 
 			$("#bottom").removeClass("hide");
 
 			if(!base.IsNullOrEmpty(data.Showy)) {
 				LoadScript("min/snow.min.js", function() {
 					var srcs = data.Showy.split("|");
-					if(srcs.length >= 3) {
+					if(srcs.length > 2) {
 						snow.init(srcs[0], srcs[1], srcs[2])
 					} else {
 						snow.init(data.Showy, 1, 0)
@@ -460,6 +477,18 @@
 
 	//背景状态切换
 	function ChangeBg() {
+
+		//纯白背景
+		if(CurrTemplateType == 0) {
+			if(!base.IsNullOrEmpty(CurrBackgroundName)) {
+				base.Get("main1").classList.add("hide");
+				base.Get("main0").classList.remove("hide");
+			}
+		} else {
+			base.Get("main0").classList.add("hide");
+			base.Get("main1").classList.remove("hide");
+		}
+
 		if(CurrTemplate > 0) {
 			$("#title1").removeClass("hide");
 		} else {
@@ -468,26 +497,32 @@
 
 		//纯白背景
 		if(CurrTemplate == 0) {
-			$("#scroll-wrapper").css("background-color", "transparent");
-			$("#wrapper1").css("background", "none");
-			$("#wrapper2").css("background", "#fff");
-			$(".cover").css("background", "RGBA(255, 255, 255, 1");
+			if(!base.IsNullOrEmpty(CurrBackgroundName)) {
+				$wrapper.style.backgroundColor = "transparent";
+				$wrapper1.style.background = "";
+				$cover.style.backgroundColor = "transparent";
+				$wrapper2.style.background = "";
+				$wrapper2.className = CurrBackgroundName;
+			}
 		} else if(CurrTemplate > 1) {
-			$("#wrapper2").css("background", "none");
-			$("#wrapper1").css({
-				"background": "url(" + CurrCover + ") top center no-repeat",
-				"background-size": "100% auto"
-			});
-			$(".cover").css("background", "RGBA(255, 255, 255, 0.5");
+			//模板
+			$wrapper2.style.background = "";
+			$wrapper2.className = "";
+			$wrapper.style.backgroundColor = CurrColor;
+			$wrapper1.style.background = "url(" + CurrCover + ") top center no-repeat";
+			$wrapper1.style.backgroundSize = "100% auto";
+			$cover.style.backgroundColor = "RGBA(255, 255, 255, 0.5)";
 		} else {
-			$("#scroll-wrapper").css("background-color", "transparent");
-			$("#wrapper1").css("background", "none");
+			//自定义
+			$wrapper.style.backgroundColor = "transparent";
+			$wrapper1.style.background = "";
 			if(CurrBackground == null) {
 				//全屏
-				$("#wrapper2").css("background", "#fff");
+				$wrapper2.style.background = "";
+				$wrapper2.className = "";
 			} else {
 				//背景透明度
-				$(".cover").css("background", "RGBA(255, 255, 255, " + (100 - CurrBackground.Transparency) / 100 + ")");
+				$cover.style.backgroundColor = "RGBA(255, 255, 255, " + (100 - CurrBackground.Transparency) / 100 + ")";
 
 				var url = CurrBackground.Url;
 				if(CurrBackground.High == 0) {
@@ -495,20 +530,17 @@
 				} else {
 					url = base.ShowThumb(url, 0);
 				}
+				$wrapper2.className = "";
 				switch(CurrBackground.Full) {
 					case 0:
 						//居顶 
-						$("#wrapper2").css({
-							"background": "url(" + url + ") no-repeat top center",
-							"background-size": "100% auto"
-						});
+						$wrapper2.style.background = "url(" + url + ") no-repeat top center";
+						$wrapper2.style.backgroundSize = "100% 15.5rem";
 						break;
 					case 1:
 						//全屏
-						$("#wrapper2").css({
-							"background": "url(" + url + ") center center no-repeat",
-							"background-size": "100% 100%",
-						});
+						$wrapper2.style.background = "url(" + url + ") center center no-repeat";
+						$wrapper2.style.backgroundSize = "100% auto";
 						break;
 					default:
 						break;

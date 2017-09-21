@@ -142,41 +142,34 @@
 
 .music {
 	width: 100%;
-	height: 42px;
+	height: 2rem;
 	border-radius: 5px;
-	margin: 10px 8px 0 0;
 	background: #f6f6f6;
 	padding: 0;
-	line-height: 42px;
+	line-height: 2rem;
 	cursor: pointer;
+	text-indent: 2.5rem;
 }
 
-.music[play=on] i {
+.music[play=on] {
 	background-image: url("../img/on.png");
-}
-
-.music[play=stop] i {
-	background-image: url("../img/off.png");
-}
-
-.music i {
-	float: left;
-	width: 25px;
-	height: 25px;
-	background-size: contain;
 	background-repeat: no-repeat;
-	background-position: center;
-	margin: 8px 10px 0 15px;
+	background-size: 1.5rem;
+	background-position: 0.5rem center;
+}
+
+.music[play=stop] {
+	background-image: url(../img/off.png);
+	background-repeat: no-repeat;
+	background-size: 1.5rem;
+	background-position: 0.5rem center;
 }
 
 .music span {
-	width: calc(100% - 70px);
-	width: -webkit-calc(100% - 70px);
 	margin: 0;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	float: left;
 	text-align: left;
 }
 
