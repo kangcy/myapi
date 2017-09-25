@@ -327,6 +327,12 @@ namespace EGT_OTA.Models
         [SubSonicIgnore]
         public Share Share { get; set; }
 
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        [SubSonicIgnore]
+        public string CreateDateText { get; set; }
+
         #endregion
     }
 }

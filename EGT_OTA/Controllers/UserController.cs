@@ -1534,6 +1534,8 @@ namespace EGT_OTA.Controllers
             //我收藏的文章
             user.Keeps = new SubSonic.Query.Select(provider, "ID").From<Keep>().Where<Keep>(x => x.CreateUserNumber == user.Number).GetRecordCount();
 
+            user.CreateDateText = user.CreateDate.ToString("yyyy-MM-dd");
+
             user.ShareUrl = System.Configuration.ConfigurationManager.AppSettings["share_url"] + "u/" + user.Number;
             return user;
         }
