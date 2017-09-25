@@ -38,14 +38,14 @@
 			
 			.download {
 				text-align: center;
-				width: 90%;
+				width: 17rem;
 				height: 2.5rem;
 				line-height: 2.5rem;
 				color: #fff;
 				display: block;
 				border-radius: 8px;
 				background: #3395ed;
-				margin: 1rem 5%;
+				margin: 1rem 1.5rem;
 				text-shadow: none;
 				float: left;
 				position: fixed;
@@ -103,7 +103,7 @@
 		</style>
 	</head>
 
-	<body>
+	<body style="position:relative;">
 		<div id="delete" class="full tc hide">
 			<img src="img/stop.png" class="none" />
 			<p class="mt20 f12 c999">当前文章已删除</p>
@@ -198,8 +198,8 @@
 <script src="min/WeixinApi.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
 <script type="text/javascript">
-	var RootUrl = "http://localhost/app/";
-	//var RootUrl = "http://www.xiaoweipian.com/";
+	//var RootUrl = "http://localhost/app/";
+	var RootUrl = "http://www.xiaoweipian.com/";
 
 	var MusicID = 0;
 	var MusicUrl = "";
@@ -555,6 +555,7 @@
 		if(!base.IsNullOrEmpty(MusicUrl)) {
 			if(AutoMusic == 1) {
 				document.addEventListener('touchstart', startsound);
+				document.addEventListener('mousedown', startsound);
 			}
 			$("#music" + index).removeClass("hide");
 		} else {
