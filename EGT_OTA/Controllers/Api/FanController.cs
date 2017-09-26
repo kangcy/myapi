@@ -82,9 +82,8 @@ namespace EGT_OTA.Controllers.Api
                 }
                 else
                 {
-                    user.Follows = db.Find<Fan>(x => x.CreateUserNumber == user.Number).Count;
                     result.result = true;
-                    result.message = user.Follows;
+                    result.message = db.Find<Fan>(x => x.CreateUserNumber == user.Number).Count;
                 }
             }
             catch (Exception ex)
@@ -128,7 +127,7 @@ namespace EGT_OTA.Controllers.Api
                 if (success)
                 {
                     result.result = true;
-                    result.message = "";
+                    result.message = db.Find<Fan>(x => x.CreateUserNumber == user.Number).Count;
                 }
             }
             catch (Exception ex)
