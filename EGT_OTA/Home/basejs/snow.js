@@ -390,7 +390,7 @@ var snow = new function() {
 				e = window.innerWidth,
 				f = window.innerHeight;
 			c.width = e, c.height = f;
-			for(var g = 55, h = [], i = 0; g > i; i++) h.push({
+			for(var g = 25, h = [], i = 0; g > i; i++) h.push({
 				x: Math.random() * e,
 				y: Math.random() * f,
 				r: 4 * Math.random() + 1,
@@ -439,7 +439,7 @@ var snow = new function() {
 				e = window.innerWidth,
 				f = window.innerHeight;
 			c.width = e, c.height = f;
-			for(var g = 55, h = [], i = 0; g > i; i++) {
+			for(var g = 50, h = [], i = 0; g > i; i++) {
 				h.push({
 					x: Math.random() * e,
 					y: Math.random() * f,
@@ -448,7 +448,7 @@ var snow = new function() {
 				});
 			}
 			var j = 0;
-			snowinterval = setInterval(a, 25);
+			snowinterval = setInterval(a, 33);
 		}
 	};
 	//暴雨
@@ -490,7 +490,7 @@ var snow = new function() {
 				e = window.innerWidth,
 				f = window.innerHeight;
 			c.width = e, c.height = f;
-			for(var g = 95, h = [], i = 0; g > i; i++) {
+			for(var g = 50, h = [], i = 0; g > i; i++) {
 				h.push({
 					x: Math.random() * e,
 					y: Math.random() * f,
@@ -499,7 +499,7 @@ var snow = new function() {
 				});
 			}
 			var j = 0;
-			snowinterval = setInterval(a, 10);
+			snowinterval = setInterval(a, 20);
 		}
 	};
 	//暴雪
