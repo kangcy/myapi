@@ -267,8 +267,7 @@ namespace EGT_OTA.Controllers.Api
                 var name = SqlFilter(ZNRequest.GetString("name"));
                 if (string.IsNullOrWhiteSpace(name))
                 {
-                    result.message = "参数异常";
-                    return JsonConvert.SerializeObject(result);
+                    name = "全部";
                 }
 
                 var pager = new Pager();
@@ -313,7 +312,14 @@ namespace EGT_OTA.Controllers.Api
                     var childNodes = subDoc.DocumentNode.SelectNodes("//span[@class='song_name']");
                     foreach (HtmlNode child in childNodes)
                     {
-                        music.Child.Add(new MusicMenuChild(child.ChildNodes[1].InnerText, child.ChildNodes[3].InnerText));
+                        string str = UrlDecode(child.ChildNodes[1].Attributes["href"].Value.Trim());
+
+                        //http://mp3.sogou.com/tiny/song?tid=53ae8d5df3b8619c&
+                        //query=%CE%D2%B5%C4%B4%F3%D1%A7+%28%A1%B6%CB%AF%D4%DA%CE%D2%C9%CF%C6%CC%B5%C4%D0%D6%B5%DC%A1%B7%CD%F8%BE%E7%D6%F7%CC%E2%C7%FA%29
+                        //&song_name=%CE%D2%B5%C4%B4%F3%D1%A7+%28%A1%B6%CB%AF%D4%DA%CE%D2%C9%CF%C6%CC%B5%C4%D0%D6%B5%DC%A1%B7%CD%F8%BE%E7%D6%F7%CC%E2%C7%FA%29
+                        //&play=http%3A%2F%2Fcc.stream.qqmusic.qq.com%2FC1000049sd542ATdQL.m4a%3Ffromtag%3D52
+
+                        music.Child.Add(new MusicMenuChild(ChangeLan(child.ChildNodes[1].Attributes["href"].Value.Trim().Split('&')[1].Replace("query=", "")), UrlDecode(child.ChildNodes[3].Attributes["href"].Value.Trim().Split('&')[1].Replace("query=", ""))));
                     }
                     list.Add(music);
                 }
@@ -336,7 +342,13 @@ namespace EGT_OTA.Controllers.Api
             return JsonConvert.SerializeObject(result);
         }
 
-
-
+        public string ChangeLan(string text)
+        {
+            byte[] bs = Encoding.Default.GetBytes(text);
+            bs = Encoding.Convert(Encoding.Default, Encoding.GetEncoding("GBK"), bs);
+            string str = Encoding.GetEncoding("GBK").GetString(bs);
+            str = System.Web.HttpContext.Current.Server.HtmlDecode(text);
+            return str;
+        }
     }
 }
