@@ -252,5 +252,91 @@ namespace EGT_OTA.Controllers.Api
             }
             return JsonConvert.SerializeObject(result);
         }
+
+        /// <summary>
+        /// 搜搜音乐模块
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Music/SearchMenu")]
+        public string SearchMenu()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var name = SqlFilter(ZNRequest.GetString("name"));
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    result.message = "参数异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+
+                var pager = new Pager();
+                pager.Size = 20;
+
+                var totalPage = 100;
+                var recordCount = pager.Size * totalPage;
+
+                var url = string.Format("http://mp3.sogou.com/tiny/dissList?query={0}&diss_type_name={0}&page={1}", name, pager.Index);
+
+                WebClient wc = new WebClient();
+                byte[] pageSourceBytes = wc.DownloadData(new Uri(url));
+                string source = Encoding.GetEncoding("GBK").GetString(pageSourceBytes);
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(source);
+                HtmlNodeCollection listNodes = doc.DocumentNode.SelectSingleNode("//*[@class='playlist_list']").SelectNodes("li");
+
+                //最后一页
+                if (listNodes.Count < pager.Size)
+                {
+                    totalPage = pager.Index;
+                    if (totalPage > 1)
+                    {
+                        recordCount = (pager.Index - 1) * pager.Size + listNodes.Count;
+                    }
+                    else
+                    {
+                        recordCount = listNodes.Count;
+                    }
+                }
+                var list = new List<MusicMenu>();
+                foreach (HtmlNode node in listNodes)
+                {
+                    HtmlDocument subDoc = new HtmlDocument();
+                    subDoc.LoadHtml(node.InnerHtml);
+
+                    var music = new MusicMenu();
+                    music.Cover = subDoc.DocumentNode.SelectNodes("//img")[0].Attributes["src"].Value.Trim();
+                    music.Name = subDoc.DocumentNode.SelectSingleNode("//span[@class='play_name']").SelectSingleNode("a").Attributes["title"].Value.Trim();
+                    music.Child = new List<MusicMenuChild>();
+
+                    var childNodes = subDoc.DocumentNode.SelectNodes("//span[@class='song_name']");
+                    foreach (HtmlNode child in childNodes)
+                    {
+                        music.Child.Add(new MusicMenuChild(child.ChildNodes[1].InnerText, child.ChildNodes[3].InnerText));
+                    }
+                    list.Add(music);
+                }
+
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = list
+                };
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Music_SearchMenu:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+
+
     }
 }

@@ -58,6 +58,33 @@ namespace EGT_OTA.Models
         public string FileUrl { get; set; }
     }
 
+    public class MusicMenu
+    {
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get; set; }
+
+        public string Cover { get; set; }
+
+        public List<MusicMenuChild> Child { get; set; }
+    }
+
+    public class MusicMenuChild
+    {
+        public MusicMenuChild() { }
+
+        public MusicMenuChild(string name, string author)
+        {
+            this.Name = name;
+            this.Author = author;
+        }
+
+        public string Name { get; set; }
+
+        public string Author { get; set; }
+    }
+
     [Serializable]
     public class MusicJson
     {
