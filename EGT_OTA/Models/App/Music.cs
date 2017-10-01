@@ -67,6 +67,8 @@ namespace EGT_OTA.Models
 
         public string Cover { get; set; }
 
+        public string Link { get; set; }
+
         public List<MusicMenuChild> Child { get; set; }
     }
 

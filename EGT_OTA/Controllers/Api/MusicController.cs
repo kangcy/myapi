@@ -305,6 +305,7 @@ namespace EGT_OTA.Controllers.Api
                     subDoc.LoadHtml(node.InnerHtml);
 
                     var music = new MusicMenu();
+                    music.Link = node.ChildNodes[0].Attributes["href"].Value.Trim();
                     music.Cover = subDoc.DocumentNode.SelectNodes("//img")[0].Attributes["src"].Value.Trim();
                     music.Name = subDoc.DocumentNode.SelectSingleNode("//span[@class='play_name']").SelectSingleNode("a").Attributes["title"].Value.Trim();
                     music.Child = new List<MusicMenuChild>();
@@ -312,12 +313,6 @@ namespace EGT_OTA.Controllers.Api
                     var childNodes = subDoc.DocumentNode.SelectNodes("//span[@class='song_name']");
                     foreach (HtmlNode child in childNodes)
                     {
-
-                        //http://mp3.sogou.com/tiny/song?tid=53ae8d5df3b8619c&
-                        //query=%CE%D2%B5%C4%B4%F3%D1%A7+%28%A1%B6%CB%AF%D4%DA%CE%D2%C9%CF%C6%CC%B5%C4%D0%D6%B5%DC%A1%B7%CD%F8%BE%E7%D6%F7%CC%E2%C7%FA%29
-                        //&song_name=%CE%D2%B5%C4%B4%F3%D1%A7+%28%A1%B6%CB%AF%D4%DA%CE%D2%C9%CF%C6%CC%B5%C4%D0%D6%B5%DC%A1%B7%CD%F8%BE%E7%D6%F7%CC%E2%C7%FA%29
-                        //&play=http%3A%2F%2Fcc.stream.qqmusic.qq.com%2FC1000049sd542ATdQL.m4a%3Ffromtag%3D52
-
                         music.Child.Add(new MusicMenuChild(ChangeLan(child.ChildNodes[1].Attributes["href"].Value.Trim().Split('&')[1].Replace("query=", "")), ChangeLan(child.ChildNodes[3].Attributes["href"].Value.Trim().Split('&')[1].Replace("query=", ""))));
                     }
                     list.Add(music);
@@ -336,6 +331,72 @@ namespace EGT_OTA.Controllers.Api
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("Api_Music_SearchMenu:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
+        /// 搜搜音乐模块
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Music/SearchMenuList")]
+        public string SearchMenuList()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                //http://mp3.sogou.com/tiny/diss?diss_id=1739846437&query=YouTube上最受欢迎的50首音乐&diss_name=YouTube上最受欢迎的50首音乐
+                var list = new List<Music>();
+                var url = SqlFilter(ZNRequest.GetString("url"));
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    result.result = true;
+                    result.message = new
+                    {
+                        currpage = 1,
+                        records = 0,
+                        totalpage = 1,
+                        list = list
+                    };
+                    return JsonConvert.SerializeObject(result);
+                }
+                url = "http://mp3.sogou.com" + url;
+
+                WebClient wc = new WebClient();
+                byte[] pageSourceBytes = wc.DownloadData(new Uri(url));
+                string source = Encoding.GetEncoding("GBK").GetString(pageSourceBytes);
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(source);
+                HtmlNodeCollection listNodes = doc.DocumentNode.SelectSingleNode("//*[@id='music_list']").SelectNodes("li");
+                foreach (HtmlNode node in listNodes)
+                {
+                    var param = node.Attributes["param"].Value.Trim();
+                    var parts = param.Replace("[", "").Replace("]", "").Replace("#", "").Split(',');
+                    var music = new Music();
+                    music.ID = Tools.SafeInt(parts[6]);
+                    music.Name = parts[3];
+                    music.Author = parts[5];
+                    music.Remark = parts[7];
+                    music.Cover = "http://imgcache.qq.com/music/photo/album_300/" + parts[6].Substring(parts[6].Length - 2) + "/300_albumpic_" + music.ID + "_0.jpg";
+                    music.FileUrl = parts[2];
+                    list.Add(music);
+                }
+
+                result.result = true;
+                result.message = new
+                {
+                    currpage = 1,
+                    records = listNodes.Count,
+                    totalpage = 1,
+                    list = list
+                };
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Music_SearchMenuList:" + ex.Message);
                 result.message = ex.Message;
             }
             return JsonConvert.SerializeObject(result);
