@@ -347,9 +347,10 @@ namespace EGT_OTA.Controllers.Api
             ApiResult result = new ApiResult();
             try
             {
-                //http://mp3.sogou.com/tiny/diss?diss_id=1739846437&query=YouTube上最受欢迎的50首音乐&diss_name=YouTube上最受欢迎的50首音乐
+
                 var list = new List<Music>();
-                var url = SqlFilter(ZNRequest.GetString("url"));
+                var url = ZNRequest.GetString("url");
+                //url = "http://mp3.sogou.com/tiny/diss?diss_id=1739846437&query=YouTube上最受欢迎的50首音乐&diss_name=YouTube上最受欢迎的50首音乐";
                 if (string.IsNullOrWhiteSpace(url))
                 {
                     result.result = true;
