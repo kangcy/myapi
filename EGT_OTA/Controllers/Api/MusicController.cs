@@ -305,7 +305,7 @@ namespace EGT_OTA.Controllers.Api
                     subDoc.LoadHtml(node.InnerHtml);
 
                     var music = new MusicMenu();
-                    music.Link = node.ChildNodes[0].Attributes["href"].Value.Trim();
+                    music.Link = ChangeLan(node.ChildNodes[0].Attributes["href"].Value.Trim());
                     music.Cover = subDoc.DocumentNode.SelectNodes("//img")[0].Attributes["src"].Value.Trim();
                     music.Name = subDoc.DocumentNode.SelectSingleNode("//span[@class='play_name']").SelectSingleNode("a").Attributes["title"].Value.Trim();
                     music.Child = new List<MusicMenuChild>();
