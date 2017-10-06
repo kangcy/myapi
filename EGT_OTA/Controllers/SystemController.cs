@@ -42,7 +42,6 @@ namespace EGT_OTA.Controllers
                 var currUrl = "";
                 if (client == "android")
                 {
-                    currVersion = System.Configuration.ConfigurationManager.AppSettings["curr_android_version"];
                     switch (source)
                     {
                         case 1:
@@ -50,16 +49,17 @@ namespace EGT_OTA.Controllers
                         case 3:
                         case 4:
                         case 5:
+                            currVersion = System.Configuration.ConfigurationManager.AppSettings["curr_android_version_" + source.ToString()];
                             currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_android_url_" + source.ToString()];
                             break;
                         default:
+                            currVersion = System.Configuration.ConfigurationManager.AppSettings["curr_android_version_1"];
                             currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_android_url_1"];
                             break;
                     }
                 }
                 else
                 {
-                    currVersion = System.Configuration.ConfigurationManager.AppSettings["curr_ios_version"];
                     switch (source)
                     {
                         case 1:
@@ -67,14 +67,15 @@ namespace EGT_OTA.Controllers
                         case 3:
                         case 4:
                         case 5:
+                            currVersion = System.Configuration.ConfigurationManager.AppSettings["curr_ios_version_" + source.ToString()];
                             currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_ios_url_" + source.ToString()];
                             break;
                         default:
+                            currVersion = System.Configuration.ConfigurationManager.AppSettings["curr_ios_version_1"];
                             currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_ios_url_1"];
                             break;
                     }
                 }
-
                 if (Tools.SafeDouble(version) >= Tools.SafeDouble(currVersion))
                 {
                     return Json(new { result = false, message = "当前已是最新版本" }, JsonRequestBehavior.AllowGet);
