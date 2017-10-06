@@ -31,6 +31,7 @@ namespace EGT_OTA.Controllers
             {
                 var client = ZNRequest.GetString("client");
                 var version = ZNRequest.GetString("version");
+                var source = ZNRequest.GetInt("source", 1);
 
                 if (string.IsNullOrWhiteSpace(client) || string.IsNullOrWhiteSpace(version))
                 {
@@ -42,12 +43,36 @@ namespace EGT_OTA.Controllers
                 if (client == "android")
                 {
                     currVersion = System.Configuration.ConfigurationManager.AppSettings["curr_android_version"];
-                    currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_android_url"];
+                    switch (source)
+                    {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                            currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_android_url_" + source.ToString()];
+                            break;
+                        default:
+                            currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_android_url_1"];
+                            break;
+                    }
                 }
                 else
                 {
                     currVersion = System.Configuration.ConfigurationManager.AppSettings["curr_ios_version"];
-                    currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_ios_url"];
+                    switch (source)
+                    {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                            currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_ios_url_" + source.ToString()];
+                            break;
+                        default:
+                            currUrl = System.Configuration.ConfigurationManager.AppSettings["curr_ios_url_1"];
+                            break;
+                    }
                 }
 
                 if (Tools.SafeDouble(version) >= Tools.SafeDouble(currVersion))
