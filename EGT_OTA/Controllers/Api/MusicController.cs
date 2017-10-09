@@ -305,7 +305,7 @@ namespace EGT_OTA.Controllers.Api
                     subDoc.LoadHtml(node.InnerHtml);
 
                     var music = new MusicMenu();
-                    music.Link = ChangeLan(node.ChildNodes[0].Attributes["href"].Value.Trim());
+                    music.Link = UrlDecode_Encoding(node.ChildNodes[0].Attributes["href"].Value.Trim());
                     music.Cover = subDoc.DocumentNode.SelectNodes("//img")[0].Attributes["src"].Value.Trim();
                     music.Name = subDoc.DocumentNode.SelectSingleNode("//span[@class='play_name']").SelectSingleNode("a").Attributes["title"].Value.Trim();
                     music.Child = new List<MusicMenuChild>();
@@ -313,7 +313,7 @@ namespace EGT_OTA.Controllers.Api
                     var childNodes = subDoc.DocumentNode.SelectNodes("//span[@class='song_name']");
                     foreach (HtmlNode child in childNodes)
                     {
-                        music.Child.Add(new MusicMenuChild(ChangeLan(child.ChildNodes[1].Attributes["href"].Value.Trim().Split('&')[1].Replace("query=", "")), ChangeLan(child.ChildNodes[3].Attributes["href"].Value.Trim().Split('&')[1].Replace("query=", ""))));
+                        music.Child.Add(new MusicMenuChild(UrlDecode_Encoding(child.ChildNodes[1].Attributes["href"].Value.Trim().Split('&')[1].Replace("query=", "")), UrlDecode_Encoding(child.ChildNodes[3].Attributes["href"].Value.Trim().Split('&')[1].Replace("query=", ""))));
                     }
                     list.Add(music);
                 }
@@ -350,7 +350,6 @@ namespace EGT_OTA.Controllers.Api
 
                 var list = new List<Music>();
                 var url = ZNRequest.GetString("url");
-                //url = "http://mp3.sogou.com/tiny/diss?diss_id=1739846437&query=YouTube上最受欢迎的50首音乐&diss_name=YouTube上最受欢迎的50首音乐";
                 if (string.IsNullOrWhiteSpace(url))
                 {
                     result.result = true;
@@ -364,13 +363,12 @@ namespace EGT_OTA.Controllers.Api
                     return JsonConvert.SerializeObject(result);
                 }
                 url = "http://mp3.sogou.com" + url;
-
                 WebClient wc = new WebClient();
                 byte[] pageSourceBytes = wc.DownloadData(new Uri(url));
                 string source = Encoding.GetEncoding("GBK").GetString(pageSourceBytes);
                 HtmlDocument doc = new HtmlDocument();
                 doc.LoadHtml(source);
-                HtmlNodeCollection listNodes = doc.DocumentNode.SelectSingleNode("//*[@id='music_list']").SelectNodes("li");
+                HtmlNodeCollection listNodes = doc.DocumentNode.SelectSingleNode("//div[@id='music_list']").SelectNodes("li");
                 foreach (HtmlNode node in listNodes)
                 {
                     var param = node.Attributes["param"].Value.Trim();
@@ -384,7 +382,6 @@ namespace EGT_OTA.Controllers.Api
                     music.FileUrl = parts[2];
                     list.Add(music);
                 }
-
                 result.result = true;
                 result.message = new
                 {
@@ -393,7 +390,6 @@ namespace EGT_OTA.Controllers.Api
                     totalpage = 1,
                     list = list
                 };
-
             }
             catch (Exception ex)
             {
@@ -403,7 +399,84 @@ namespace EGT_OTA.Controllers.Api
             return JsonConvert.SerializeObject(result);
         }
 
-        public string ChangeLan(string text)
+        /// <summary>
+        /// 榜单排行榜
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Music/SearchTop")]
+        public string SearchTop()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var list = new List<MusicTop>();
+
+                if (CacheHelper.Exists("MusicTop"))
+                {
+                    list = (List<MusicTop>)CacheHelper.GetCache("MusicTop");
+                }
+                else
+                {
+                    var url = "http://mp3.sogou.com/bang_list.html";
+                    WebClient wc = new WebClient();
+                    byte[] pageSourceBytes = wc.DownloadData(new Uri(url));
+                    string source = Encoding.GetEncoding("UTF-8").GetString(pageSourceBytes);
+                    HtmlDocument doc = new HtmlDocument();
+                    doc.LoadHtml(source);
+                    HtmlNodeCollection listNodes = doc.DocumentNode.SelectNodes("//div[@class='m_tit']");
+                    var index = 0;
+                    foreach (HtmlNode node in listNodes)
+                    {
+                        HtmlDocument subDoc = new HtmlDocument();
+                        subDoc.LoadHtml(node.InnerHtml);
+
+                        MusicTop top = new MusicTop();
+                        top.Name = subDoc.DocumentNode.ChildNodes[1].InnerText;
+                        top.Child = new List<Music>();
+
+                        HtmlNodeCollection childListNodes = doc.DocumentNode.SelectNodes("//ul[@class='bang_list']")[index].SelectNodes("./li");
+                        foreach (HtmlNode childNode in childListNodes)
+                        {
+                            var param = childNode.SelectSingleNode("./a[last()]").Attributes["onclick"].Value.Trim();
+                            param = param.Substring(param.IndexOf("#"), param.Length - param.IndexOf("#"));
+                            param = param.Substring(0, param.LastIndexOf("#"));
+                            var parts = param.Replace("#", "").Split(',');
+                            var music = new Music();
+                            music.ID = Tools.SafeInt(parts[6]);
+                            music.Name = parts[3];
+                            music.Author = parts[5];
+                            music.Remark = parts[7];
+                            music.Cover = "http://imgcache.qq.com/music/photo/album_300/" + parts[6].Substring(parts[6].Length - 2) + "/300_albumpic_" + music.ID + "_0.jpg";
+                            music.FileUrl = parts[2];
+                            top.Child.Add(music);
+                        }
+                        list.Add(top);
+                        index += 1;
+                    }
+                    if (list.Count > 0)
+                    {
+                        CacheHelper.Insert("MusicTop", list, TimeSpan.FromDays(1));
+                    }
+                }
+                result.result = true;
+                result.message = new
+                {
+                    currpage = 1,
+                    records = list.Count,
+                    totalpage = 1,
+                    list = list
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Music_SearchTop:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        public string UrlDecode_Encoding(string text)
         {
             return System.Web.HttpUtility.UrlDecode(text, Encoding.GetEncoding("GB2312"));
         }

@@ -87,6 +87,19 @@ namespace EGT_OTA.Models
         public string Author { get; set; }
     }
 
+    /// <summary>
+    /// 榜单
+    /// </summary>
+    public class MusicTop
+    {
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get; set; }
+
+        public List<Music> Child { get; set; }
+    }
+
     [Serializable]
     public class MusicJson
     {
