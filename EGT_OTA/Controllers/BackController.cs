@@ -166,6 +166,11 @@ namespace EGT_OTA.Controllers
             {
                 query = query.And("ArticlePower").IsEqualTo(articlepower);
             }
+            var recommend = ZNRequest.GetInt("recommend", -1);
+            if (recommend > -1)
+            {
+                query = query.And("Recommend").IsEqualTo(recommend);
+            }
             var articletype = ZNRequest.GetInt("articletype", -1);
             if (articletype > -1)
             {
@@ -203,6 +208,7 @@ namespace EGT_OTA.Controllers
             ViewBag.usernumber = usernumber;
             ViewBag.status = status;
             ViewBag.submission = submission;
+            ViewBag.recommend = recommend;
             ViewBag.articlepower = articlepower;
             ViewBag.RecordCount = recordCount;
             ViewBag.CurrPage = pager.Index;
@@ -212,6 +218,35 @@ namespace EGT_OTA.Controllers
             ViewBag.key = ZNRequest.GetString("key");
             ViewBag.xwp = ZNRequest.GetString("xwp");
             return View();
+        }
+
+        /// <summary>
+        /// 文章置顶、取消置顶、推荐、取消推荐
+        /// </summary>
+        public ActionResult ArticleTop()
+        {
+            var message = "";
+            try
+            {
+                var id = ZNRequest.GetInt("id");
+                var recommend = ZNRequest.GetInt("status");
+                Article article = db.Single<Article>(x => x.ID == id);
+                if (article == null)
+                {
+                    return Json(new { result = false, message = "文章不存在" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Recommend").EqualTo(recommend).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_ArticleTop:" + ex.Message);
+                message = ex.Message;
+            }
+            return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

@@ -64,6 +64,24 @@
             </div>
 
             <div class="el-form-item inline fl ml15">
+                <label class="el-form-item__label">推荐状态</label>
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button type="button" id="recommend" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            不限
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'recommend','不限')" class="ddl_recommend" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(98,'recommend','推荐')" class="ddl_recommend" index="98">推荐</a></li>
+                            <li><a href="#" onclick="change(99,'recommend','置顶')" class="ddl_recommend" index="99">置顶</a></li>
+                            <li><a href="#" onclick="change(100,'recommend','系统消息')" class="ddl_recommend" index="100">系统消息</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="el-form-item inline fl ml15">
                 <label class="el-form-item__label">权限</label>
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
@@ -129,7 +147,7 @@
                         <th class="cell" style="width: 100px;">投稿</th>
                         <th class="cell" style="width: 250px;">定位</th>
                         <th class="cell" style="width: 160px;">创建日期</th>
-                        <th class="cell" style="width: 200px;">操作</th>
+                        <th class="cell" style="width: 400px;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -154,12 +172,16 @@
                                 }
                             }
                         <tr>
+                            @{
+                            var userlink = ViewBag.RootUrl + "Home/user.html?key=" + list[i].CreateUserNumber;
+                            }
                             <td class="cell">
-                                <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
+                                <a href="@userlink" class="underline" target="_blank">
+                                    <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;"></a>
                             </td>
                             <td>
                                 <div class="cell">
-                                    <span class="nickname" nickname="@list[i].NickName"></span>
+                                    <a href="@userlink" class="underline" target="_blank"><span class="nickname" nickname="@list[i].NickName"></span></a>
                                     <p class="mb0">(@list[i].CreateUserNumber)</p>
                                 </div>
                             </td>
@@ -195,7 +217,21 @@
                                 <button type="button" class="el-button el-button--primary el-button--small btnRed" index="@list[i].CreateUserNumber" articleid="@list[i].ID"><span>打赏</span></button>
                                 @if (list[i].Status == Enum_Deal.Approved)
                                 {
-                                    <button type="button" class="el-button el-button--danger el-button--small btnAudit" index="@list[i].ID"><span>取消审核</span></button>
+                                    <button type="button" class="el-button el-button--warning el-button--small btnAudit" index="@list[i].ID"><span>取消审核</span></button>
+                                }
+                                @if (list[i].Recommend == Enum_ArticleRecommend.None && list[i].ArticlePower == Enum_ArticlePower.Public && list[i].Status == Enum_Status.Approved && (list[i].Submission == Enum_Submission.Approved || list[i].Submission == Enum_Submission.TemporaryApproved))
+                                {
+                                    <button type="button" class="el-button el-button--primary el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.Top"><span>置顶</span></button>
+                                    <button type="button" class="el-button el-button--primary el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.Recommend"><span>推荐</span></button>
+                                    <button type="button" class="el-button el-button--primary el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.System"><span>系统消息</span></button>
+                                }
+                                @if (list[i].Recommend == Enum_ArticleRecommend.Top)
+                                {
+                                    <button type="button" class="el-button el-button--warning el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.None"><span>取消置顶</span></button>
+                                }
+                                @if (list[i].Recommend == Enum_ArticleRecommend.Recommend)
+                                {
+                                    <button type="button" class="el-button el-button--warning el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.None"><span>取消推荐</span></button>
                                 }
                                 @if ((list[i].Submission == Enum_Submission.Approved || list[i].Submission == Enum_Submission.TemporaryApproved) && list[i].ArticlePower == Enum_ArticlePower.Public && list[i].Status == Enum_Status.Approved)
                                 {
@@ -255,6 +291,7 @@
             $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
             $(".ddl_submission[index=" + parseInt(@(ViewBag.submission)) + "]").eq(0).trigger("click");
             $(".ddl_articlepower[index=" + parseInt(@(ViewBag.articlepower)) + "]").eq(0).trigger("click");
+            $(".ddl_recommend[index=" + parseInt(@(ViewBag.recommend)) + "]").eq(0).trigger("click");
             $(".ddl_filter_articletype[index=" + parseInt(@(ViewBag.articletype)) + "]").eq(0).trigger("click");
 
             var currentIndex = parseInt(@(ViewBag.CurrPage));
@@ -283,6 +320,7 @@
                             usernumber: $("#usernumber").val().trim(),
                             status: $("#status").attr("index"),
                             submission: $("#submission").attr("index"),
+                            recommend: $("#recommend").attr("index"),
                             articlepower: $("#articlepower").attr("index"),
                             articletype: $("#filter_articletype").attr("index")
                         }
@@ -300,6 +338,7 @@
                     usernumber: $("#usernumber").val().trim(),
                     status: $("#status").attr("index"),
                     submission: $("#submission").attr("index"),
+                    recommend: $("#recommend").attr("index"),
                     articlepower: $("#articlepower").attr("index"),
                     articletype: $("#filter_articletype").attr("index")
                 }
@@ -325,6 +364,51 @@
                     $.ajax({
                         url: "@(ViewBag.RootUrl)Back/ArticleAudit",
                         data: { id: id },
+                        dataType: "json",
+                        success: function (data) {
+                            isloading = false;
+                            layer.alert(data.message);
+                            if (data.result) {
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }, function () {
+
+                });
+                isloading = false;
+            })
+
+            //置顶、取消置顶、推荐、取消推荐
+            $(".btnRecommend").click(function () {
+                if (isloading) {
+                    return;
+                }
+                isloading = true;
+                var id = this.getAttribute("index");
+                var status = parseInt(this.getAttribute("status"));
+                var title = "";
+                switch (status) {
+                    case 98:
+                        title = "推荐";
+                        break;
+                    case 99:
+                        title = "置顶";
+                        break;
+                    case 100:
+                        title = "系统消息";
+                        break;
+                    default:
+                        title = "取消推荐";
+                        break;
+                }
+                layer.confirm('确认执行当前操作吗？', {
+                    title: title,
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: "@(ViewBag.RootUrl)Back/ArticleTop",
+                        data: { id: id, status: status },
                         dataType: "json",
                         success: function (data) {
                             isloading = false;

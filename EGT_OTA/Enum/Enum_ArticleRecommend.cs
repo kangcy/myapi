@@ -17,10 +17,16 @@ namespace EGT_OTA.Models
         public const int None = 0;
 
         /// <summary>
-        /// 精
+        /// 推荐
         /// </summary>
-        [EnumAttribute("精")]
-        public const int Recommend = 99;
+        [EnumAttribute("推荐")]
+        public const int Recommend = 98;
+
+        /// <summary>
+        /// 置顶
+        /// </summary>
+        [EnumAttribute("置顶")]
+        public const int Top = 99;
 
         /// <summary>
         /// 系统

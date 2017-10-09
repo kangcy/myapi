@@ -135,12 +135,15 @@
                                 }
                             }
                         <tr>
+                            @{
+                            var link = ViewBag.RootUrl + "Home/user.html?key=" + list[i].Number;
+                            }
                             <td class="cell">
-                                <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
+                                <a href="@link" class="underline" target="_blank"><img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;"></a>
                             </td>
                             <td>
                                 <div class="cell">
-                                    <span class="nickname" nickname="@list[i].NickName"></span>
+                                    <a href="@link" class="underline" target="_blank"><span class="nickname" nickname="@list[i].NickName"></span></a>
                                     <p class="mb0">(@list[i].Number)</p>
                                 </div>
                             </td>
