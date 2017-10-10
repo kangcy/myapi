@@ -154,7 +154,7 @@ namespace EGT_OTA.Controllers.Api
             ApiResult result = new ApiResult();
             try
             {
-                var UserNumber = ZNRequest.GetString("Number");
+                var UserNumber = ZNRequest.GetString("UserNumber");
                 var nickname = ZNRequest.GetString("NickName");
                 var pager = new Pager();
                 var query = new SubSonic.Query.Select(provider).From<User>().Where<User>(x => x.Status == Enum_Status.Approved);
