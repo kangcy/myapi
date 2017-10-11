@@ -40,8 +40,9 @@
                     <tr>
                         <th class="cell" style="width: 100px;">用户头像</th>
                         <th class="cell" style="width: 150px;">用户昵称(编号)</th>
-                        <th class="cell">反馈</th>
-                        <th class="cell">联系方式</th>
+                        <th class="cell" style="width: 200px;">反馈</th>
+                        <th class="cell" style="width: 100px;">联系方式</th>
+                        <th class="cell">图片</th>
                         <th class="cell" style="width: 100px;">状态</th>
                         <th class="cell" style="width: 110px;">创建日期</th>
                         <th class="cell" style="width: 150px;">操作</th>
@@ -83,6 +84,19 @@
                             </td>
                             <td class="cell">
                                 @list[i].QQ
+                            </td>
+                            <td class="cell">
+                                @{
+                            if (!string.IsNullOrWhiteSpace(list[i].Cover))
+                            {
+                                var str = list[i].Cover.Split(',');
+                                for (var j = 0; j < str.Length; j++)
+                                {
+                                    var imgurl = "http://www.xiaoweipian.com/" + str[j];
+                                    <img src="@imgurl" style="width:200px;display:inline-block;margin:10px;" class="cover" />
+                                }
+                            }
+                                }
                             </td>
                             <td class="cell">
                                 @EnumBase.GetDescription(typeof(Enum_Deal), @list[i].Status)
@@ -183,6 +197,10 @@
 
                 });
                 isloading = false;
+            })
+
+            $(".cover").click(function () {
+                window.open(this.getAttribute("src"));
             })
         });
     </script>

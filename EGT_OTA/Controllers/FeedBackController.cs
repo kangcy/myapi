@@ -49,6 +49,7 @@ namespace EGT_OTA.Controllers
                 FeedBack model = new FeedBack();
                 model.Summary = summary;
                 model.QQ = qq;
+                model.Cover = ZNRequest.GetString("Cover");
                 model.CreateDate = DateTime.Now;
                 model.CreateUserNumber = user.Number;
                 model.CreateIP = Tools.GetClientIP;

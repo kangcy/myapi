@@ -40,6 +40,12 @@ namespace EGT_OTA.Models
         public string QQ { get; set; }
 
         /// <summary>
+        /// 图片
+        /// </summary>
+        [SubSonicStringLength(2500), SubSonicNullString]
+        public string Cover { get; set; }
+
+        /// <summary>
         /// 处理状态
         /// </summary>
         public int Status { get; set; }
