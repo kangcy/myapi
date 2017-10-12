@@ -52,4 +52,26 @@ namespace EGT_OTA.Models
         /// </summary>
         public string Cover { get; set; }
     }
+
+    /// <summary>
+    /// 文章模板组合
+    /// </summary>
+    [Serializable]
+    public class TemplateCombination
+    {
+        /// <summary>
+        /// 头部排版
+        /// </summary>
+        public int Top { get; set; }
+
+        /// <summary>
+        /// 背景
+        /// </summary>
+        public string Cover { get; set; }
+
+        /// <summary>
+        /// 漂浮
+        /// </summary>
+        public int Snowy { get; set; }
+    }
 }

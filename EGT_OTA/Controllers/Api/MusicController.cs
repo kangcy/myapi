@@ -347,7 +347,6 @@ namespace EGT_OTA.Controllers.Api
             ApiResult result = new ApiResult();
             try
             {
-
                 var list = new List<Music>();
                 var url = ZNRequest.GetString("url");
                 if (string.IsNullOrWhiteSpace(url))
@@ -362,13 +361,16 @@ namespace EGT_OTA.Controllers.Api
                     };
                     return JsonConvert.SerializeObject(result);
                 }
+
+                //http://mp3.sogou.comtiny/diss?diss_id=1138337852&query=卖场音乐：每次进店都有种要上T台的感觉！&diss_name=卖场音乐：每次进店都有种要上T台的感觉！
+
                 url = "http://mp3.sogou.com" + url;
                 WebClient wc = new WebClient();
                 byte[] pageSourceBytes = wc.DownloadData(new Uri(url));
                 string source = Encoding.GetEncoding("GBK").GetString(pageSourceBytes);
                 HtmlDocument doc = new HtmlDocument();
                 doc.LoadHtml(source);
-                HtmlNodeCollection listNodes = doc.DocumentNode.SelectSingleNode("//div[@id='music_list']").SelectNodes("li");
+                HtmlNodeCollection listNodes = doc.DocumentNode.SelectSingleNode("//ul[@id='music_list']").SelectNodes("li");
                 foreach (HtmlNode node in listNodes)
                 {
                     var param = node.Attributes["param"].Value.Trim();
