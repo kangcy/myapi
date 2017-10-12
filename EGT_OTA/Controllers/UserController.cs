@@ -65,7 +65,8 @@ namespace EGT_OTA.Controllers
                     user.Longitude = Tools.SafeDouble(ZNRequest.GetString("Longitude"));
                     user.Password = string.Empty;
                     user.NickName = NickName;
-                    user.Sex = ZNRequest.GetInt("Sex", Enum_Sex.Boy);
+                    user.Sex = ZNRequest.GetInt("Sex", Enum_Sex.None);
+                    user.Star = ZNRequest.GetInt("Star", Enum_Star.None);
                     user.Cover = SqlFilter(ZNRequest.GetString("Cover"));
                     if (string.IsNullOrWhiteSpace(user.Cover))
                     {
@@ -253,7 +254,8 @@ namespace EGT_OTA.Controllers
                     return Json(new { result = false, message = "您输入的内容含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
                 }
                 user.Password = DesEncryptHelper.Encrypt(password);
-                user.Sex = ZNRequest.GetInt("Sex", Enum_Sex.Boy);
+                user.Sex = ZNRequest.GetInt("Sex", Enum_Sex.None);
+                user.Star = ZNRequest.GetInt("Star", Enum_Star.None);
                 user.Cover = SqlFilter(ZNRequest.GetString("Cover"));
                 if (string.IsNullOrWhiteSpace(user.Cover))
                 {
@@ -421,6 +423,31 @@ namespace EGT_OTA.Controllers
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("UserController_EditSex" + ex.Message);
+            }
+            return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 修改性别
+        /// </summary>
+        public ActionResult EditStar()
+        {
+            try
+            {
+                User user = GetUserInfo();
+                if (user == null)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("Star").EqualTo(ZNRequest.GetInt("Star")).Where<User>(x => x.ID == user.ID).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("UserController_EditStar" + ex.Message);
             }
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
         }

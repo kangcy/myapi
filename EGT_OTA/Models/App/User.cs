@@ -83,6 +83,11 @@ namespace EGT_OTA.Models
         public int Sex { get; set; }
 
         /// <summary>
+        /// 星座
+        /// </summary>
+        public int Star { get; set; }
+
+        /// <summary>
         /// 生日
         /// </summary>
         public DateTime Birthday { get; set; }
