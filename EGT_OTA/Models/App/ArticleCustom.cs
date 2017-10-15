@@ -48,5 +48,32 @@ namespace EGT_OTA.Models
         /// </summary>
         [SubSonicNullString]
         public string ShowyUrl { get; set; }
+
+        /// <summary>
+        /// 音乐
+        /// </summary>
+        public int MusicID { get; set; }
+
+        /// <summary>
+        /// 音乐名称
+        /// </summary>
+        [SubSonicStringLength(255), SubSonicNullString]
+        public string MusicName { get; set; }
+
+        /// <summary>
+        /// 音乐外链
+        /// </summary>
+        [SubSonicStringLength(500), SubSonicNullString]
+        public string MusicUrl { get; set; }
+
+        /// <summary>
+        /// 头部排版类型
+        /// </summary>
+        public int ArticleHead { get; set; }
+
+        /// <summary>
+        /// 音乐类型
+        /// </summary>
+        public int Music { get; set; }
     }
 }

@@ -60,18 +60,53 @@ namespace EGT_OTA.Models
     public class TemplateCombination
     {
         /// <summary>
-        /// 头部排版
+        /// 头部排版类型
         /// </summary>
-        public int Top { get; set; }
+        public int ArticleHead { get; set; }
 
         /// <summary>
-        /// 背景
+        /// 音乐类型
+        /// </summary>
+        public int Music { get; set; }
+
+        /// <summary>
+        /// 标题颜色
+        /// </summary>
+        public string TitleColor { get; set; }
+
+        /// <summary>
+        /// 昵称颜色
+        /// </summary>
+        public string NickNameColor { get; set; }
+
+        /// <summary>
+        /// 浏览次数颜色
+        /// </summary>
+        public string ViewColor { get; set; }
+
+        /// <summary>
+        /// 创建时间颜色
+        /// </summary>
+        public string TimeColor { get; set; }
+
+        /// <summary>
+        /// 顶部边距
+        /// </summary>
+        public int MarginTiop { get; set; }
+
+        /// <summary>
+        /// 自定义半透明蒙层颜色
+        /// </summary>
+        public string BlurColor { get; set; }
+
+        /// <summary>
+        /// 图片背景
         /// </summary>
         public string Cover { get; set; }
 
         /// <summary>
         /// 漂浮
         /// </summary>
-        public int Snowy { get; set; }
+        public string SnowyUrl { get; set; }
     }
 }
