@@ -29,7 +29,13 @@ namespace EGT_OTA.Models
     [Serializable]
     public class ArticleCustom
     {
-        public ArticleCustom() { }
+        public ArticleCustom()
+        {
+            this.ArticleNumber = string.Empty;
+            this.ShowyUrl = string.Empty;
+            this.MusicName = string.Empty;
+            this.MusicUrl = string.Empty;
+        }
 
         /// <summary>
         /// ID
@@ -67,13 +73,13 @@ namespace EGT_OTA.Models
         public string MusicUrl { get; set; }
 
         /// <summary>
-        /// 头部排版类型
+        /// 顶部距离
         /// </summary>
-        public int ArticleHead { get; set; }
+        public int MarginTop { get; set; }
 
         /// <summary>
-        /// 音乐类型
+        /// 内容透明度
         /// </summary>
-        public int Music { get; set; }
+        public int Transparency { get; set; }
     }
 }

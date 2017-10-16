@@ -188,9 +188,6 @@ namespace EGT_OTA.Controllers
                 {
                     model.Title = "我的小微篇";
                 }
-                model.MusicID = ZNRequest.GetInt("MusicID");
-                model.MusicName = ZNRequest.GetString("MusicName");
-                model.MusicUrl = ZNRequest.GetString("MusicUrl");
                 model.Province = ZNRequest.GetString("Province");
                 model.City = ZNRequest.GetString("City");
                 model.District = ZNRequest.GetString("District");
@@ -366,15 +363,21 @@ namespace EGT_OTA.Controllers
                 }
                 if (result)
                 {
-                    //更新漂浮
-                    var url = ZNRequest.GetString("ShowyUrl");
+                    //更新自定义漂浮
+                    var ShowyUrl = ZNRequest.GetString("ShowyUrl");
+                    var MusicID = ZNRequest.GetInt("MusicID");
+                    var MusicName = ZNRequest.GetString("MusicName");
+                    var MusicUrl = ZNRequest.GetString("MusicUrl");
                     ArticleCustom custom = db.Single<ArticleCustom>(x => x.ArticleNumber == model.Number);
                     if (custom == null)
                     {
                         custom = new ArticleCustom();
                         custom.ArticleNumber = model.Number;
                     }
-                    custom.ShowyUrl = url;
+                    custom.ShowyUrl = ShowyUrl;
+                    custom.MusicID = MusicID;
+                    custom.MusicName = MusicName;
+                    custom.MusicUrl = MusicUrl;
                     if (custom.ID == 0)
                     {
                         db.Add<ArticleCustom>(custom);
@@ -466,31 +469,6 @@ namespace EGT_OTA.Controllers
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("ArticleController_EditArticleCover:" + ex.Message);
-            }
-            return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// 编辑音乐
-        /// </summary>
-        [ArticlePower]
-        public ActionResult EditArticleMusic()
-        {
-            try
-            {
-                var ArticleID = ZNRequest.GetInt("ArticleID");
-                var MusicID = ZNRequest.GetInt("MusicID");
-                var MusicName = ZNRequest.GetString("MusicName");
-                var MusicUrl = ZNRequest.GetString("MusicUrl");
-                var result = new SubSonic.Query.Update<Article>(provider).Set("MusicID").EqualTo(MusicID).Set("MusicUrl").EqualTo(MusicUrl).Set("MusicName").EqualTo(MusicName).Where<Article>(x => x.ID == ArticleID).Execute() > 0;
-                if (result)
-                {
-                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.ErrorLoger.Error("ArticleController_EditArticleMusic:" + ex.Message);
             }
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
         }
@@ -612,7 +590,7 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var list = GetArticleTemp().OrderBy(x => x.ID).ToList();
+                var list = GetArticleTemplate().OrderBy(x => x.ID).ToList();
                 var result = new
                 {
                     currpage = 1,

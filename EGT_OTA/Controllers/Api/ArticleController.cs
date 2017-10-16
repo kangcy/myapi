@@ -109,10 +109,10 @@ namespace EGT_OTA.Controllers.Api
                 model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);
                 if (model.Template > 1)
                 {
-                    model.TemplateJson = GetArticleTemp().FirstOrDefault(x => x.ID == model.Template);
+                    model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
                     if (model.TemplateJson == null)
                     {
-                        model.TemplateJson = new Template();
+                        model.TemplateJson = new ArticleTemplate();
                     }
                 }
 
@@ -121,6 +121,11 @@ namespace EGT_OTA.Controllers.Api
                 if (custom != null)
                 {
                     model.Showy = custom.ShowyUrl;
+                    model.MusicID = custom.MusicID;
+                    model.MusicName = custom.MusicName;
+                    model.MusicUrl = custom.MusicUrl;
+                    model.Transparency = custom.Transparency;
+                    model.MarginTop = custom.MarginTop;
                 }
 
                 result.result = true;

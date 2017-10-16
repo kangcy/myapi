@@ -57,17 +57,9 @@ namespace EGT_OTA.Models
     /// 文章模板组合
     /// </summary>
     [Serializable]
-    public class TemplateCombination
+    public class ArticleTemplate
     {
-        /// <summary>
-        /// 头部排版类型
-        /// </summary>
-        public int ArticleHead { get; set; }
-
-        /// <summary>
-        /// 音乐类型
-        /// </summary>
-        public int Music { get; set; }
+        public int ID { get; set; }
 
         /// <summary>
         /// 标题颜色
@@ -77,7 +69,7 @@ namespace EGT_OTA.Models
         /// <summary>
         /// 昵称颜色
         /// </summary>
-        public string NickNameColor { get; set; }
+        public string UserColor { get; set; }
 
         /// <summary>
         /// 浏览次数颜色
@@ -92,21 +84,46 @@ namespace EGT_OTA.Models
         /// <summary>
         /// 顶部边距
         /// </summary>
-        public int MarginTiop { get; set; }
+        public int MarginTop { get; set; }
 
         /// <summary>
-        /// 自定义半透明蒙层颜色
+        /// 自定义半透明蒙层透明度
         /// </summary>
-        public string BlurColor { get; set; }
+        public string Transparency { get; set; }
 
         /// <summary>
-        /// 图片背景
+        /// 页面背景颜色
         /// </summary>
-        public string Cover { get; set; }
+        public string Background { get; set; }
 
         /// <summary>
-        /// 漂浮
+        /// 背景图片是否固定
         /// </summary>
-        public string SnowyUrl { get; set; }
+        public int CoverFixed { get; set; }
+
+        /// <summary>
+        /// 背景图片
+        /// </summary>
+        public string BackgroundImage { get; set; }
+
+        /// <summary>
+        /// 预览图
+        /// </summary>
+        public string ThumbImage { get; set; }
+
+        /// <summary>
+        /// 背景图片Repeat
+        /// </summary>
+        public string BackgroundRepeat { get; set; }
+
+        /// <summary>
+        /// 背景图片Size
+        /// </summary>
+        public string BackgroundSize { get; set; }
+
+        /// <summary>
+        /// 背景描述
+        /// </summary>
+        public string Name { get; set; }
     }
 }

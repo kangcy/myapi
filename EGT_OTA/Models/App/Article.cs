@@ -138,7 +138,7 @@ namespace EGT_OTA.Models
         public string Number { get; set; }
 
         /// <summary>
-        /// 模板（0:纯白、1:自定义、2:模板）
+        /// 模板（0:纯白、1:自定义、>1:模板）
         /// </summary>
         public int Template { get; set; }
 
@@ -239,7 +239,7 @@ namespace EGT_OTA.Models
         /// 模板配置
         /// </summary>
         [SubSonicIgnore]
-        public Template TemplateJson { get; set; }
+        public ArticleTemplate TemplateJson { get; set; }
 
         /// <summary>
         /// 创建人头像
@@ -354,6 +354,16 @@ namespace EGT_OTA.Models
         /// </summary>
         [SubSonicIgnore]
         public string Showy { get; set; }
+
+        /// <summary>
+        /// 顶部距离
+        /// </summary>
+        public int MarginTop { get; set; }
+
+        /// <summary>
+        /// 内容透明度
+        /// </summary>
+        public int Transparency { get; set; }
 
         #endregion
     }

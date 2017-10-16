@@ -375,6 +375,44 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
+        /// 文章模板（新）
+        /// </summary>
+        protected List<ArticleTemplate> GetArticleTemplate()
+        {
+            List<ArticleTemplate> list = new List<ArticleTemplate>();
+            if (CacheHelper.Exists("ArticleTemplate"))
+            {
+                list = (List<ArticleTemplate>)CacheHelper.GetCache("ArticleTemplate");
+            }
+            else
+            {
+                string str = string.Empty;
+                string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/articletemp.config");
+                if (System.IO.File.Exists(filePath))
+                {
+                    StreamReader sr = new StreamReader(filePath, Encoding.Default);
+                    str = sr.ReadToEnd();
+                    sr.Close();
+                }
+                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ArticleTemplate>>(str);
+                var baseurl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+                list.ForEach(x =>
+                {
+                    if (!string.IsNullOrWhiteSpace(x.BackgroundImage))
+                    {
+                        x.BackgroundImage = baseurl + x.BackgroundImage;
+                    }
+                    if (!string.IsNullOrWhiteSpace(x.ThumbImage))
+                    {
+                        x.ThumbImage = baseurl + x.ThumbImage;
+                    }
+                });
+                CacheHelper.Insert("ArticleTemplate", list);
+            }
+            return list;
+        }
+
+        /// <summary>
         /// 敏感词
         /// </summary>
         protected List<string> GetDirtyWord()
