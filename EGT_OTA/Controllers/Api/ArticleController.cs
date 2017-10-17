@@ -107,12 +107,27 @@ namespace EGT_OTA.Controllers.Api
 
                 //模板配置
                 model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);
-                if (model.Template > 1)
+
+                //模板预览
+
+                var previewTemp = ZNRequest.GetInt("Template", 0);
+                if (previewTemp > 1)
                 {
-                    model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
+                    model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == previewTemp);
                     if (model.TemplateJson == null)
                     {
                         model.TemplateJson = new ArticleTemplate();
+                    }
+                }
+                else
+                {
+                    if (model.Template > 1)
+                    {
+                        model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
+                        if (model.TemplateJson == null)
+                        {
+                            model.TemplateJson = new ArticleTemplate();
+                        }
                     }
                 }
 

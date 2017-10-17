@@ -590,7 +590,7 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var list = GetArticleTemplate().OrderBy(x => x.ID).ToList();
+                var list = GetArticleTemplate().ToList();
                 var result = new
                 {
                     currpage = 1,

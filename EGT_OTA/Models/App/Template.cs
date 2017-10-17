@@ -122,6 +122,11 @@ namespace EGT_OTA.Models
         public string BackgroundSize { get; set; }
 
         /// <summary>
+        /// 样式名称
+        /// </summary>
+        public string Cover { get; set; }
+
+        /// <summary>
         /// 背景描述
         /// </summary>
         public string Name { get; set; }
