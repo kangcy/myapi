@@ -59,6 +59,8 @@ namespace EGT_OTA.Models
     [Serializable]
     public class ArticleTemplate
     {
+        public int SortID { get; set; }
+
         public int ID { get; set; }
 
         /// <summary>
@@ -97,7 +99,7 @@ namespace EGT_OTA.Models
         public string Background { get; set; }
 
         /// <summary>
-        /// 背景图片是否固定
+        /// 背景图片是否固定(0：随内容滚动、1：固定背景)
         /// </summary>
         public int CoverFixed { get; set; }
 
