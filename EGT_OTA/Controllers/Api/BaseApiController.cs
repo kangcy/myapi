@@ -427,6 +427,32 @@ namespace EGT_OTA.Controllers.Api
         }
 
         /// <summary>
+        /// 主题色模板
+        /// </summary>
+        protected List<ColorTemplate> GetColorTemplate()
+        {
+            List<ColorTemplate> list = new List<ColorTemplate>();
+            if (CacheHelper.Exists("ColorTemplate"))
+            {
+                list = (List<ColorTemplate>)CacheHelper.GetCache("ColorTemplate");
+            }
+            else
+            {
+                string str = string.Empty;
+                string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/colortemp.config");
+                if (System.IO.File.Exists(filePath))
+                {
+                    StreamReader sr = new StreamReader(filePath, Encoding.Default);
+                    str = sr.ReadToEnd();
+                    sr.Close();
+                }
+                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ColorTemplate>>(str);
+                CacheHelper.Insert("ColorTemplate", list);
+            }
+            return list;
+        }
+
+        /// <summary>
         /// 敏感词
         /// </summary>
         protected List<string> GetDirtyWord()

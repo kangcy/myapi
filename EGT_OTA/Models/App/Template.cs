@@ -59,8 +59,6 @@ namespace EGT_OTA.Models
     [Serializable]
     public class ArticleTemplate
     {
-        public int SortID { get; set; }
-
         public int ID { get; set; }
 
         /// <summary>
@@ -132,5 +130,34 @@ namespace EGT_OTA.Models
         /// 背景描述
         /// </summary>
         public string Name { get; set; }
+    }
+
+    /// <summary>
+    /// 文章主题色组合
+    /// </summary>
+    [Serializable]
+    public class ColorTemplate
+    {
+        public int ID { get; set; }
+
+        /// <summary>
+        /// 标题颜色
+        /// </summary>
+        public string TitleColor { get; set; }
+
+        /// <summary>
+        /// 昵称颜色
+        /// </summary>
+        public string UserColor { get; set; }
+
+        /// <summary>
+        /// 浏览次数颜色
+        /// </summary>
+        public string ViewColor { get; set; }
+
+        /// <summary>
+        /// 创建时间颜色
+        /// </summary>
+        public string TimeColor { get; set; }
     }
 }

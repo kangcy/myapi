@@ -196,9 +196,8 @@ namespace EGT_OTA.Controllers
                 model.CityCode = ZNRequest.GetString("CityCode");
                 model.Latitude = Tools.SafeDouble(ZNRequest.GetString("Latitude"));
                 model.Longitude = Tools.SafeDouble(ZNRequest.GetString("Longitude"));
-                model.ThemeColor = ZNRequest.GetString("ThemeColor");
-                model.ThemeCover = ZNRequest.GetString("ThemeCover");
                 model.Template = ZNRequest.GetInt("Template");
+                model.ColorTemplate = ZNRequest.GetInt("ColorTemplate");
                 model.UpdateUserNumber = user.Number;
                 model.UpdateDate = DateTime.Now;
                 model.UpdateIP = Tools.GetClientIP;
@@ -590,7 +589,7 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var list = GetArticleTemplate().OrderBy(x => x.SortID).ToList();
+                var list = GetArticleTemplate().ToList();
                 var result = new
                 {
                     currpage = 1,
@@ -603,6 +602,30 @@ namespace EGT_OTA.Controllers
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("ArticleController_Template:" + ex.Message);
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 主题色模板列表
+        /// </summary>
+        public ActionResult ColorTemplate()
+        {
+            try
+            {
+                var list = GetColorTemplate().ToList();
+                var result = new
+                {
+                    currpage = 1,
+                    records = list.Count(),
+                    totalpage = 1,
+                    list = list
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("ArticleController_ColorTemplate:" + ex.Message);
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
         }

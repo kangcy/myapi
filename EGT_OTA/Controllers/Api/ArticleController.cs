@@ -109,25 +109,30 @@ namespace EGT_OTA.Controllers.Api
                 model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);
 
                 //模板预览
-
-                var previewTemp = ZNRequest.GetInt("Template", 0);
+                var previewTemp = ZNRequest.GetInt("Template", -1);
                 if (previewTemp > 1)
                 {
                     model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == previewTemp);
-                    if (model.TemplateJson == null)
-                    {
-                        model.TemplateJson = new ArticleTemplate();
-                    }
                 }
                 else
                 {
                     if (model.Template > 1)
                     {
                         model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
-                        if (model.TemplateJson == null)
-                        {
-                            model.TemplateJson = new ArticleTemplate();
-                        }
+                    }
+                }
+
+                //主题色预览
+                var previewColorTemp = ZNRequest.GetInt("ColorTemplate", 0);
+                if (previewColorTemp > 0)
+                {
+                    model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == previewColorTemp);
+                }
+                else
+                {
+                    if (model.ColorTemplate > 0)
+                    {
+                        model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
                     }
                 }
 

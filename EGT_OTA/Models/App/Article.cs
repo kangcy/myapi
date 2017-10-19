@@ -143,6 +143,11 @@ namespace EGT_OTA.Models
         public int Template { get; set; }
 
         /// <summary>
+        /// 主题色（0:纯白、1:自定义、>1:模板）
+        /// </summary>
+        public int ColorTemplate { get; set; }
+
+        /// <summary>
         /// 标签
         /// </summary>
         [SubSonicNullString]
@@ -152,18 +157,6 @@ namespace EGT_OTA.Models
         /// 是否投稿启用
         /// </summary>
         public int Submission { get; set; }
-
-        /// <summary>
-        /// 主题色
-        /// </summary>
-        [SubSonicNullString]
-        public string ThemeColor { get; set; }
-
-        /// <summary>
-        /// 背景色
-        /// </summary>
-        [SubSonicNullString]
-        public string ThemeCover { get; set; }
 
         #region  定位
 
@@ -240,6 +233,12 @@ namespace EGT_OTA.Models
         /// </summary>
         [SubSonicIgnore]
         public ArticleTemplate TemplateJson { get; set; }
+
+        /// <summary>
+        /// 主题色配置
+        /// </summary>
+        [SubSonicIgnore]
+        public ColorTemplate ColorTemplateJson { get; set; }
 
         /// <summary>
         /// 创建人头像

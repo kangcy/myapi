@@ -352,17 +352,14 @@ namespace EGT_OTA.Controllers
 
                 //模板配置
                 model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);
-                if (model.Template != 1)
+                if (model.Template > 1)
                 {
                     model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
-                    if (model.TemplateJson == null)
-                    {
-                        model.TemplateJson = new ArticleTemplate();
-                    }
                 }
-                else
+
+                if (model.ColorTemplate > 0)
                 {
-                    model.TemplateJson = new ArticleTemplate();
+                    model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
                 }
 
                 //漂浮装扮
