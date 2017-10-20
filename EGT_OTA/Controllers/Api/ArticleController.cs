@@ -110,13 +110,13 @@ namespace EGT_OTA.Controllers.Api
 
                 //模板预览
                 var previewTemp = ZNRequest.GetInt("Template", -1);
-                if (previewTemp > 1)
+                if (previewTemp >= 0)
                 {
                     model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == previewTemp);
                 }
                 else
                 {
-                    if (model.Template > 1)
+                    if (model.Template >= 0)
                     {
                         model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
                     }
