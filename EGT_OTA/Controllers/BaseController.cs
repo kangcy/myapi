@@ -406,6 +406,17 @@ namespace EGT_OTA.Controllers
                     {
                         x.ThumbImage = baseurl + x.ThumbImage;
                     }
+                    if (!string.IsNullOrWhiteSpace(x.BottomImage))
+                    {
+                        x.ThumbImage = baseurl + x.BottomImage;
+                    }
+                    if (x.TopImage.Count > 0)
+                    {
+                        x.TopImage.ForEach(y =>
+                        {
+                            y.Url = baseurl + y.Url;
+                        });
+                    }
                 });
                 CacheHelper.Insert("ArticleTemplate", list);
             }

@@ -109,7 +109,7 @@ namespace EGT_OTA.Models
         /// <summary>
         /// 头部图片（可分左右两级）组合规则：url^width|url^width
         /// </summary>
-        public string TopImage { get; set; }
+        public List<TopImage> TopImage { get; set; }
 
         /// <summary>
         /// 底部图片
@@ -155,6 +155,15 @@ namespace EGT_OTA.Models
         /// 文字边框
         /// </summary>
         public string TextBorder { get; set; }
+    }
+
+    public class TopImage
+    {
+        public TopImage() { }
+
+        public string Url { get; set; }
+
+        public string Width { get; set; }
     }
 
     /// <summary>

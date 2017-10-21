@@ -44,7 +44,7 @@
 			<!--x-cover:滚动背景-->
 			<div class="root" id="x-cover">
 				<!--头-->
-				<img id="x-top" class="full fl hide" />
+				<div id="x-top" class="full fl hide"></div>
 				<!--用户-->
 				<div class="x-head mb10 full fl hide" id="x-head">
 					<div class="img-container" id="x-avatar">
@@ -346,12 +346,27 @@
 				$wrapper2.classList.remove("hide");
 			} else if(CurrTemplateJson.CoverFixed == 2) {
 				if(!base.IsNullOrEmpty(CurrTemplateJson.TopImage)) {
-					$top.setAttribute("src", CurrTemplateJson.TopImage);
+					var top = CurrTemplateJson.TopImage
+					if(top.length == 1) {
+						$top.innerHTML = '<img src="' + top[0].Url + '" class="fl" style="width:' + top[0].Width + '" />';
+					} else if(top.length == 2) {
+						$top.innerHTML = '<img src="' + top[0].Url + '" class="fl" style="width:' + top[0].Width + '" /><img src="' + top[1].Url + '" class="fr" style="width:' + top[1].Width + '" />';
+					}
 					$top.classList.remove("hide");
 				}
 				if(!base.IsNullOrEmpty(CurrTemplateJson.BottomImage)) {
 					$bottom.setAttribute("src", CurrTemplateJson.BottomImage);
 					$bottom.classList.remove("hide");
+				}
+				if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
+					$wrapper2.style.backgroundImage = "url(" + CurrTemplateJson.BackgroundImage + ")";
+					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
+						$wrapper2.style.backgroundRepeat = CurrTemplateJson.BackgroundRepeat;
+					}
+					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundSize)) {
+						$wrapper2.style.backgroundSize = CurrTemplateJson.BackgroundSize;
+					}
+					$wrapper2.classList.remove("hide");
 				}
 				if(!base.IsNullOrEmpty(CurrTemplateJson.Background)) {
 					if(CurrTemplateJson.Background.startWith("#") || CurrTemplateJson.Background.startWith("rgba")) {

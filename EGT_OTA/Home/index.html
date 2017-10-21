@@ -468,11 +468,11 @@
 				$wrapper2.classList.remove("hide");
 			} else if(CurrTemplateJson.CoverFixed == 2) {
 				if(!base.IsNullOrEmpty(CurrTemplateJson.TopImage)) {
-					var top = CurrTemplateJson.TopImage.split('|')
+					var top = CurrTemplateJson.TopImage
 					if(top.length == 1) {
-						$top.innerHTML = '<img src="' + top[0].split('^')[0] + '" class="fl" style="width:' + top[0].split('^')[1] + '" />';
+						$top.innerHTML = '<img src="' + top[0].Url + '" class="fl" style="width:' + top[0].Width + '" />';
 					} else if(top.length == 2) {
-						$top.innerHTML = '<img src="' + top[0].split('^')[0] + '" class="fl" style="width:' + top[0].split('^')[1] + '" /><img src="' + top[1].split('^')[0] + '" class="fr" style="width:' + top[1].split('^')[1] + '" />';
+						$top.innerHTML = '<img src="' + top[0].Url + '" class="fl" style="width:' + top[0].Width + '" /><img src="' + top[1].Url + '" class="fr" style="width:' + top[1].Width + '" />';
 					}
 					$top.classList.remove("hide");
 				}
