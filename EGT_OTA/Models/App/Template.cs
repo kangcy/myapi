@@ -145,6 +145,16 @@ namespace EGT_OTA.Models
         /// 是否显示头像
         /// </summary>
         public int ShowAvatar { get; set; }
+
+        /// <summary>
+        /// 图片边框
+        /// </summary>
+        public string ImgBorder { get; set; }
+
+        /// <summary>
+        /// 文字边框
+        /// </summary>
+        public string TextBorder { get; set; }
     }
 
     /// <summary>
