@@ -4,6 +4,28 @@ hr {
 	display: block
 }
 
+.border_mess {
+	height: auto;
+	padding: 1.5rem;
+	background-image: url(http://www.anybeen.cn/SdkTheme/PictureStoryTheme/PictureStoryFive/images/pic_mt_head.png), url(http://www.anybeen.cn/SdkTheme/PictureStoryTheme/PictureStoryFive/images/pic_mt_foot.png);
+	background-size: 30% auto;
+	background-position: top left, bottom right;
+	background-repeat: no-repeat;
+	position: relative;
+	display: inline-block;
+}
+
+.border_inner {
+	border: 0.375rem;
+	border-style: solid;
+	border-image-source: url(http://www.anybeen.cn/SdkTheme/PictureStoryTheme/PictureStoryFive/images/bg_pic_border.png);
+	border-image-slice: 16 16 16 16;
+	border-image-repeat: repeat;
+	position: relative;
+	display: inline-block;
+	padding: 0.5rem;
+}
+
 .border_layer01,
 .border_layer02,
 .border_layer03,

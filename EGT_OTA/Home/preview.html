@@ -10,6 +10,9 @@
 		<link href="css/loading.css" rel="stylesheet" />
 		<link href="css/articledetail.css" rel="stylesheet" />
 		<link href="css/demo.css" rel="stylesheet" />
+		<style type="text/css">
+
+		</style>
 	</head>
 
 	<body style="position:relative;">
@@ -41,9 +44,7 @@
 			<!--x-cover:滚动背景-->
 			<div class="root" id="x-cover">
 				<!--头-->
-				<div class="x-top full fl hide">
-					<img src="http://www.anybeen.cn/SdkTheme/PictureStoryTheme/PictureStoryTen/images/bg_pic_head.png" class="full fl" />
-				</div>
+				<img id="x-top" class="full fl hide" />
 				<!--用户-->
 				<div class="x-head mb10 full fl hide" id="x-head">
 					<div class="img-container" id="x-avatar">
@@ -84,9 +85,7 @@
 					<div class="x-bg-blur" id="x-bg-blur"></div>
 				</div>
 				<!--尾-->
-				<div class="x-bottom full fl hide">
-					<img src="http://www.anybeen.cn/SdkTheme/PictureStoryTheme/PictureStoryTen/images/pic_bottom.png" class="full fl" />
-				</div>
+				<img id="x-bottom" class="full fl hide" />
 			</div>
 		</div>
 	</body>
@@ -113,10 +112,12 @@
 	var UserColor = "#333"
 	var SubTitleColor = "#8c8c8c";
 	var BackgroundColor = "rgba(255, 255, 255, 0.15)";
-	var $wrapper = base.Get("wrapper"); //内容父背景（放图片背景色）
-	var $wrapper1 = base.Get("x-cover"); //内容子背景（放背景图片）
-	var $wrapper2 = base.Get("x-bg"); //纯色背景
-	var $cover = base.Get("x-bg-blur"); //非纯色内容透明度底
+	var $wrapper = base.Get("wrapper");
+	var $wrapper1 = base.Get("x-cover");
+	var $wrapper2 = base.Get("x-bg");
+	var $top = base.Get("x-top");
+	var $bottom = base.Get("x-bottom");
+	var $cover = base.Get("x-bg-blur");
 	var isLoading = false;
 
 	mui.init({
@@ -300,9 +301,11 @@
 			$wrapper1.style.background = "";
 			$cover.style.backgroundColor = "";
 			$wrapper2.style.background = "";
+			$top.classList.add("hide");
+			$bottom.classList.add("hide");
 		} else if(CurrTemplate > 1) {
 			//模板 
-			base.Get("x-avatar").style.paddingTop = CurrTemplateJson.MarginTop + "rem";
+			base.Get("x-avatar").style.marginTop = CurrTemplateJson.MarginTop + "rem";
 			$cover.style.backgroundColor = CurrTemplateJson.Transparency;
 
 			if(CurrTemplateJson.CoverFixed == 0) {
@@ -322,7 +325,7 @@
 						$wrapper.style.background = base.BrowserName() + CurrTemplateJson.Background;
 					}
 				}
-			} else {
+			} else if(CurrTemplateJson.CoverFixed == 1) {
 				if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
 					$wrapper2.style.backgroundImage = "url(" + CurrTemplateJson.BackgroundImage + ")";
 					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
@@ -341,6 +344,24 @@
 					}
 				}
 				$wrapper2.classList.remove("hide");
+			} else if(CurrTemplateJson.CoverFixed == 2) {
+				if(!base.IsNullOrEmpty(CurrTemplateJson.TopImage)) {
+					$top.setAttribute("src", CurrTemplateJson.TopImage);
+					$top.classList.remove("hide");
+				}
+				if(!base.IsNullOrEmpty(CurrTemplateJson.BottomImage)) {
+					$bottom.setAttribute("src", CurrTemplateJson.BottomImage);
+					$bottom.classList.remove("hide");
+				}
+				if(!base.IsNullOrEmpty(CurrTemplateJson.Background)) {
+					if(CurrTemplateJson.Background.startWith("#") || CurrTemplateJson.Background.startWith("rgba")) {
+						$wrapper2.style.backgroundColor = CurrTemplateJson.Background;
+					} else {
+						$wrapper2.style.background = CurrTemplateJson.Background;
+						$wrapper2.style.background = base.BrowserName() + CurrTemplateJson.Background;
+					}
+					$wrapper2.classList.remove("hide");
+				}
 			}
 		} else {
 			//自定义
@@ -370,7 +391,6 @@
 						//全屏
 						$wrapper2.style.background = "url(" + url + ") center center no-repeat";
 						$wrapper2.style.backgroundSize = "cover";
-						//$wrapper2.style.backgroundSize = "100% auto";
 						break;
 					default:
 						break;

@@ -65,8 +65,10 @@
 		<div id="wrapper" class="hide">
 			<!--x-cover:滚动背景-->
 			<div class="root" id="x-cover">
-				<!--头部-->
-				<div class="x-head mb10 hide" id="x-head">
+				<!--头-->
+				<div id="x-top" class="full fl hide"></div>
+				<!--用户-->
+				<div class="x-head mb10 full fl hide" id="x-head">
 					<div class="img-container" id="x-avatar">
 						<div class="avatar" id="x-avatar-sub">
 							<img id="useravatar0" src="../images/avatar.png" class="user">
@@ -86,7 +88,7 @@
 					</div>
 				</div>
 				<!--内容-->
-				<div class="x-content well mb10 mt20" id="x-content">
+				<div class="x-content well mb10 mt20 full fl" id="x-content">
 					<div class="section" id="desc"></div>
 					<div class="section fl tl">
 						<div class="full fl" id="bottom">
@@ -104,6 +106,8 @@
 					<!--半透明蒙层-->
 					<div class="x-bg-blur" id="x-bg-blur"></div>
 				</div>
+				<!--尾-->
+				<img id="x-bottom" class="full fl hide" />
 			</div>
 		</div>
 	</body>
@@ -136,6 +140,8 @@
 	var $wrapper1 = base.Get("x-cover"); //内容子背景（放背景图片）
 	var $wrapper2 = base.Get("x-bg"); //纯色背景
 	var $cover = base.Get("x-bg-blur"); //非纯色内容透明度底
+	var $top = base.Get("x-top");
+	var $bottom = base.Get("x-bottom");
 	var isLoading = false;
 
 	mui.init({
@@ -460,6 +466,39 @@
 					}
 				}
 				$wrapper2.classList.remove("hide");
+			} else if(CurrTemplateJson.CoverFixed == 2) {
+				if(!base.IsNullOrEmpty(CurrTemplateJson.TopImage)) {
+					var top = CurrTemplateJson.TopImage.split('|')
+					if(top.length == 1) {
+						$top.innerHTML = '<img src="' + top[0].split('^')[0] + '" class="fl" style="width:' + top[0].split('^')[1] + '" />';
+					} else if(top.length == 2) {
+						$top.innerHTML = '<img src="' + top[0].split('^')[0] + '" class="fl" style="width:' + top[0].split('^')[1] + '" /><img src="' + top[1].split('^')[0] + '" class="fr" style="width:' + top[1].split('^')[1] + '" />';
+					}
+					$top.classList.remove("hide");
+				}
+				if(!base.IsNullOrEmpty(CurrTemplateJson.BottomImage)) {
+					$bottom.setAttribute("src", CurrTemplateJson.BottomImage);
+					$bottom.classList.remove("hide");
+				}
+				if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
+					$wrapper2.style.backgroundImage = "url(" + CurrTemplateJson.BackgroundImage + ")";
+					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
+						$wrapper2.style.backgroundRepeat = CurrTemplateJson.BackgroundRepeat;
+					}
+					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundSize)) {
+						$wrapper2.style.backgroundSize = CurrTemplateJson.BackgroundSize;
+					}
+					$wrapper2.classList.remove("hide");
+				}
+				if(!base.IsNullOrEmpty(CurrTemplateJson.Background)) {
+					if(CurrTemplateJson.Background.startWith("#") || CurrTemplateJson.Background.startWith("rgba")) {
+						$wrapper2.style.backgroundColor = CurrTemplateJson.Background;
+					} else {
+						$wrapper2.style.background = CurrTemplateJson.Background;
+						$wrapper2.style.background = base.BrowserName() + CurrTemplateJson.Background;
+					}
+					$wrapper2.classList.remove("hide");
+				}
 			}
 		} else {
 			//自定义
