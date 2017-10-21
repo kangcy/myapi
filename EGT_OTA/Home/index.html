@@ -441,7 +441,7 @@
 						$wrapper.style.background = base.BrowserName() + CurrTemplateJson.Background;
 					}
 				}
-			} else {
+			} else if(CurrTemplateJson.CoverFixed == 1) {
 				if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
 					$wrapper2.style.backgroundImage = "url(" + CurrTemplateJson.BackgroundImage + ")";
 					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
