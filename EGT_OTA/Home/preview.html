@@ -10,93 +10,6 @@
 		<link href="css/loading.css" rel="stylesheet" />
 		<link href="css/articledetail.css" rel="stylesheet" />
 		<link href="css/demo.css" rel="stylesheet" />
-		<style type="text/css">
-			html,
-			#body {
-				max-width: 750px;
-			}
-			
-			html,
-			body,
-			#body {
-				width: 100%;
-				min-height: 100%;
-				margin: 0 auto;
-				font-family: Helvetica Neue, Helvetica, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
-			}
-			
-			img {
-				max-width: 100%;
-			}
-			
-			#bottom {
-				background: #fff;
-				margin: 0px;
-			}
-			
-			.download {
-				text-align: center;
-				width: 90%;
-				height: 3rem;
-				line-height: 3rem;
-				color: #fff;
-				display: block;
-				border-radius: 8px;
-				background: #3395ed;
-				margin: 1rem 5%;
-				text-shadow: none;
-				float: left;
-			}
-			
-			.comment {
-				width: auto;
-				margin: 0px;
-				padding: 15px;
-				padding-bottom: 0px;
-				-webkit-box-sizing: border-box;
-				-moz-box-sizing: border-box;
-				box-sizing: border-box;
-				border-radius: 0;
-				background-color: transparent;
-			}
-			
-			.comment .title {
-				height: 1.5rem;
-			}
-			
-			.comment .title .color-lump {
-				background: #2887F0;
-				width: 5px;
-				height: 100%;
-			}
-			
-			.comment .title h2 {
-				text-indent: 1rem;
-				font-weight: normal;
-				color: #8C8C8C;
-			}
-			
-			.comment .list {
-				width: 100%;
-				box-sizing: border-box;
-				padding: 10px 0 0;
-			}
-			
-			.summary img {
-				width: 1rem !important;
-				vertical-align: middle;
-			}
-			
-			#snowcanvas {
-				pointer-events: none;
-				position: fixed;
-				z-index: 20;
-				width: 100%;
-				height: 100%;
-				left: 0;
-				top: 0;
-			}
-		</style>
 	</head>
 
 	<body style="position:relative;">
@@ -113,42 +26,58 @@
 		<div id="snowwrapper"></div>
 		<canvas id="snowcanvas"></canvas>
 		<img id="music1" class="hide" src="img/btn_music.png" onclick="switchsound()" />
-		<div id="wrapper2"></div>
+		<div class="bounceIn" id="download-bar">
+			<img src="img/logo_blue.png">
+			<span class="download-bar-text">
+					<span class="download-bar-text-title f14">小微篇</span>
+			<span class="f10">免费制作你自己的图文故事</span>
+			</span>
+			<a href="javascript:void(0);" onclick="Download();" class="download-button f11">免费下载</a>
+		</div>
+		<!--固定背景-->
+		<div id="x-bg" class="hide"></div>
+		<!--内容-->
 		<div id="wrapper" class="hide">
-			<div class="mui-content" style="overflow-x: hidden;" id="wrapper1">
-				<!--通用样式-->
-				<div id="main0" class="f13 tl mt10 hide">
-					<div class="detail">
-						<div class="full tl mb5">
-							<p class="f16 mb10" id="title0"></p>
-							<span class="mt0 mb0 f13" id="createdate0"></span>
-							<span class="mb0 ml10 user mt5" userid="0" id="nickname0"></span>
-							<span class="mt0 mb0 ml10 f13" id="views0"></span>
-							<p id="music0" play="on" class="music mt10" onclick="switchsound()">
-								<span id="musicname0"></span>
-							</p>
+			<!--x-cover:滚动背景-->
+			<div class="root" id="x-cover">
+				<!--头部-->
+				<div class="x-head mb10 hide" id="x-head">
+					<div class="img-container" id="x-avatar">
+						<div class="avatar" id="x-avatar-sub">
+							<img id="useravatar0" src="../images/avatar.png" class="user">
 						</div>
+					</div>
+					<div class="article-meta well mt10 tc" id="x-article">
+						<p class="title thicker f20" id="title0"></p>
+						<p class="time-read mt10 f13">
+							<span id="createdate0"></span>
+							<span id="nickname0" class="user hide"></span>
+							<span class="read-count" id="views0"></span>
+						</p>
+						<p class="nickname user mt10 f13 hide" id="nickname1"></p>
+						<p id="music0" play="on" class="music mt10 mb0 hide" onclick="switchsound()">
+							<span id="musicname0" class="f11"></span>
+						</p>
 					</div>
 				</div>
-				<!--排版1-->
-				<div id="main1" class="f13 tc hide" style="position: relative;">
-					<div class="detail full fl" id="detail1">
-						<div class="fl" style="width: 23%; display: inline-block;">
-							<img id="useravatar1" class="full fl" />
-						</div>
-						<div class="fr tl" style="width: 77%; display: inline-block;">
-							<p class="user ml10 mt15 mb5 f15 fl full bold" userid="0" id="nickname1"></p>
-							<p class="ml10 mb0 mt20 f13 full">
-								<span id="createdate1" class="mr10"></span>
-								<span class="ml15" id="views1"></span>
-							</p>
+				<!--内容-->
+				<div class="x-content well mb10 mt20" id="x-content">
+					<div class="section" id="desc"></div>
+					<div class="section fl tl">
+						<div class="full fl" id="bottom">
+							<!--评论-->
+							<div class="comment fl hide" id="comment">
+								<div class="title">
+									<i class="fl color-lump" id="color-lump"></i>
+									<h2 class="fl f16" id="color-lump-text">最新评论</h2>
+								</div>
+								<div class="list" id="commentlist">
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="detail2 cover fl tl" id="cover">
-					<p class="f16 tc hide mt10 mb20" id="title1"></p>
-					<div class="c333 full" id="desc">
-					</div>
+					<!--半透明蒙层-->
+					<div class="x-bg-blur" id="x-bg-blur"></div>
 				</div>
 			</div>
 		</div>
@@ -160,22 +89,26 @@
 <script src="min/base.min.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
 <script type="text/javascript">
-	//var RootUrl = "http://localhost/app/";
-	var RootUrl = "http://www.xiaoweipian.com/";
+	var RootUrl = "http://localhost/app/";
+	//var RootUrl = "http://www.xiaoweipian.com/";
 
 	var MusicID = 0;
 	var MusicUrl = "";
 	var ArticleID = 0;
 	var CurrTemplate = 0;
-	var CurrTemplateType = 0;
 	var CurrCover = "";
 	var CurrColor = "";
-	var AutoMusic = 0;
-	var CurrBackgroundName = "";
+	var Article = null;
+	var CurrBackground = null;
+	var CurrTemplateJson = null;
+	var TitleColor = "#2887F0";
+	var UserColor = "#333"
+	var SubTitleColor = "#8c8c8c";
+	var BackgroundColor = "rgba(255, 255, 255, 0.15)";
 	var $wrapper = base.Get("wrapper"); //内容父背景（放图片背景色）
-	var $wrapper1 = base.Get("wrapper1"); //内容子背景（放背景图片） 
-	var $wrapper2 = base.Get("wrapper2"); //纯色背景
-	var $cover = base.Get("cover"); //非纯色内容透明度底
+	var $wrapper1 = base.Get("x-cover"); //内容子背景（放背景图片）
+	var $wrapper2 = base.Get("x-bg"); //纯色背景
+	var $cover = base.Get("x-bg-blur"); //非纯色内容透明度底
 	var isLoading = false;
 
 	mui.init({
@@ -192,13 +125,8 @@
 		//    event.preventDefault();
 		//});
 
-		$wrapper2.style.width = (document.getElementsByTagName("html")[0].clientWidth - document.getElementsByTagName("html")[0].offsetLeft * 2) + "px";
-		$wrapper2.style.height = window.innerHeight + "px";
-		$wrapper2.style.position = "fixed";
-		$wrapper2.style.zIndex = "-1";
-
-		base.Get("detail1").style.marginTop = (window.innerHeight - 50) * 0.3 + "px";
-		base.Get(".cover")[0].style.minHeight = window.innerHeight * 0.526 + "px";
+		$wrapper.style.paddingTop = base.Get("download-bar").clientHeight + "px";
+		$wrapper2.style.top = base.Get("download-bar").clientHeight + "px";
 
 		var key = GetParameter("key");
 		var xwp = GetParameter("xwp");
@@ -230,79 +158,70 @@
 				return;
 			}
 			data = data.message;
+			Article = data;
 			ArticleID = data.ID;
-			document.title = UnUnicodeText(data.Title);
+			data.Title = UnUnicodeText(data.Title);
+			data.NickName = UnUnicodeText(data.NickName);
+			document.title = data.Title;
 
-			$("#wrapper,#snowwrapper").removeClass("hide");
-
-			AutoMusic = data.AutoMusic;
-			MusicUrl = data.MusicUrl;
-
-			//段落
 			var html = [];
 			var parts = data.ArticlePart;
 			if(parts != null) {
 				for(var i = 0; i < parts.length; i++) {
 					var part = parts[i];
 					if(part.Types == 1) {
-						//图片
-						html.push('<div class="full f13 fl mb10 ' + part.IntroExpand + '"><img src="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
+						html.push('<div class="full f13 fl mt10 ' + part.IntroExpand + '"><img src="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
 					} else if(part.Types == 2) {
-						//文本
-						html.push('<div class="full f13 fl mb10">' + UnUnicodeText(part.Introduction) + '</div>');
+						html.push('<div class="full f13 fl mt10">' + UnUnicodeText(part.Introduction) + '</div>');
 					} else if(part.Types == 3) {
-						//视频
-						html.push('<div class="full f13 fl mb10 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
+						html.push('<div class="full f13 fl mt10 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
 					} else if(part.Types == 4) {
-						//分隔
-						html.push('<div class="full f13 fl mb10" style="display:inline-block;">' + part.Introduction + '</div>');
+						html.push('<div class="full f13 fl mt10" style="display:inline-block;">' + part.Introduction + '</div>');
 					}
 				}
 			}
-
-			//排版
+			MusicUrl = data.MusicUrl;
+			CurrBackground = data.BackgroundJson;
 			CurrTemplate = data.Template;
-			if(CurrTemplate == 1) {
-				CurrTemplateType = 1;
-			}
 			if(data.TemplateJson != null) {
-				if(data.TemplateJson.ID > 0) {
-					CurrTemplateType = data.TemplateJson.TemplateType;
-					CurrCover = data.TemplateJson.Cover;
-					CurrColor = data.TemplateJson.Background;
+				if(data.TemplateJson.ID != 1) {
+					CurrTemplateJson = data.TemplateJson;
+					if(data.ColorTemplateJson == null) {
+						TitleColor = CurrTemplateJson.TitleColor;
+						SubTitleColor = CurrTemplateJson.ViewColor;
+						UserColor = CurrTemplateJson.UserColor;
+						BackgroundColor = CurrTemplateJson.Transparency;
+						base.Get("title0").style.color = CurrTemplateJson.TitleColor;
+						base.Get("nickname0").style.color = CurrTemplateJson.UserColor;
+						base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
+						base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
+						base.Get("views0").style.color = CurrTemplateJson.ViewColor;
+						base.Get("x-avatar-sub").style.border = "2px solid " + CurrTemplateJson.TitleColor;
+					}
 				}
 			}
-			CurrBackground = data.BackgroundJson;
-
-			var color = base.IsNullOrEmpty(data.ThemeColor) ? "#333" : data.ThemeColor;
-			base.Get("title0").style.color = color;
-			base.Get("title1").style.color = color;
-			base.Get("createdate0").style.color = color;
-			base.Get("createdate1").style.color = color;
-			base.Get("nickname0").style.color = color;
-			base.Get("nickname1").style.color = color;
-			base.Get("views0").style.color = color;
-			base.Get("views1").style.color = color;
-			CurrBackgroundName = data.ThemeCover;
-
-			$("#musicname0,#musicname1").html(data.MusicName);
-			$("#useravatar0,#useravatar1").attr({
-				"src": base.ShowThumb(data.Avatar, 1),
-				"userid": data.CreateUserNumber
-			});
-			$("#title0,#title1").html(UnUnicodeText(data.Title));
-			$("#nickname0,#nickname1").html(UnUnicodeText(data.NickName)).attr("userid", data.CreateUserNumber);
-			$("#createdate0,#createdate1").html(data.CreateDateText);
-			$("#views0,#views1").html("阅读  " + data.Views);
-			$("#desc").html(UnUnicodeText(html.join("")));
+			if(data.ColorTemplateJson != null) {
+				TitleColor = data.ColorTemplateJson.TitleColor;
+				SubTitleColor = data.ColorTemplateJson.ViewColor;
+				UserColor = data.ColorTemplateJson.UserColor;
+				base.Get("title0").style.color = data.ColorTemplateJson.TitleColor;
+				base.Get("nickname0").style.color = data.ColorTemplateJson.UserColor;
+				base.Get("nickname1").style.color = data.ColorTemplateJson.UserColor;
+				base.Get("createdate0").style.color = data.ColorTemplateJson.TimeColor;
+				base.Get("views0").style.color = data.ColorTemplateJson.ViewColor;
+				base.Get("x-avatar-sub").style.border = "2px solid " + data.ColorTemplateJson.TitleColor;
+			}
+			base.Get("musicname0").innerHTML = data.MusicName;
+			base.Get("useravatar0").setAttribute("src", base.ShowThumb(data.Avatar, 1));
+			base.InnerHtml(["title", "title0"], data.Title);
+			base.InnerHtml(["nickname", "nickname0", "nickname1"], data.NickName);
+			base.InnerHtml(["createdate0"], data.CreateDateText);
+			base.InnerHtml(["views0"], "阅读  " + data.Views);
+			base.Get("x-head").classList.remove("hide");
+			base.Get("desc").innerHTML = UnUnicodeText(html.join(""));
 
 			ChangeBg();
 
-			ChangeMusic(CurrTemplateType);
-
-			document.getElementById("loader").classList.add("hide");
-
-			//实例化播放器
 			$(".youku_player").each(function() {
 				var $this = $(this);
 				ShowVideo($this.attr("id"), $this.attr("sid"));
@@ -314,8 +233,12 @@
 				});
 			});
 
-			$("#main0,#main1").addClass("hide");
-			$("#main" + CurrTemplateType).removeClass("hide");
+			document.getElementById("loader").classList.add("hide");
+			$("#wrapper").removeClass("hide");
+
+			base.Get("color-lump").style.background = TitleColor;
+			base.Get("color-lump-text").style.color = TitleColor;
+			LoadComment(key);
 
 			if(!base.IsNullOrEmpty(data.Showy)) {
 				LoadScript("min/snow.min.js", function() {
@@ -343,41 +266,74 @@
 
 	//背景状态切换
 	function ChangeBg() {
-
-		//纯白背景
-		if(CurrTemplateType == 0) {
-			if(!base.IsNullOrEmpty(CurrBackgroundName)) {
-				base.Get("main1").classList.add("hide");
-				base.Get("main0").classList.remove("hide");
-			}
+		if(CurrTemplate == 0) {
+			base.Get("x-avatar").classList.add("hide");
+			base.Get("x-article").classList.remove("tc");
+			base.Get("x-article").classList.add("tl");
+			base.Get("nickname0").classList.remove("hide");
+			base.Get("desc").classList.remove("temp");
+			base.Get("x-content").classList.remove("mt20");
+			base.Get("x-content").classList.add("mt10");
 		} else {
-			base.Get("main0").classList.add("hide");
-			base.Get("main1").classList.remove("hide");
+			base.Get("x-avatar").classList.remove("hide");
+			base.Get("x-article").classList.remove("tl");
+			base.Get("x-article").classList.add("tc");
+			base.Get("nickname1").classList.remove("hide");
+			base.Get("desc").classList.add("temp");
+			base.Get("x-content").classList.remove("mt10");
+			base.Get("x-content").classList.add("mt20");
 		}
 
-		if(CurrTemplate > 0) {
-			$("#title1").removeClass("hide");
-		} else {
-			$("#title1").addClass("hide");
-		}
+		ChangeMusic();
 
 		//纯白背景
 		if(CurrTemplate == 0) {
-			if(!base.IsNullOrEmpty(CurrBackgroundName)) {
-				$wrapper.style.backgroundColor = "transparent";
-				$wrapper1.style.background = "";
-				$cover.style.backgroundColor = "transparent";
-				$wrapper2.style.background = "";
-				$wrapper2.className = CurrBackgroundName;
-			}
-		} else if(CurrTemplate > 1) {
-			//模板
+			$wrapper.style.backgroundColor = "";
+			$wrapper1.style.background = "";
+			$cover.style.backgroundColor = "";
 			$wrapper2.style.background = "";
-			$wrapper2.className = "";
-			$wrapper.style.backgroundColor = CurrColor;
-			$wrapper1.style.background = "url(" + CurrCover + ") top center no-repeat";
-			$wrapper1.style.backgroundSize = "100% auto";
-			$cover.style.backgroundColor = "RGBA(255, 255, 255, 0.5)";
+		} else if(CurrTemplate > 1) {
+			//模板 
+			base.Get("x-avatar").style.paddingTop = CurrTemplateJson.MarginTop + "rem";
+			$cover.style.backgroundColor = CurrTemplateJson.Transparency;
+
+			if(CurrTemplateJson.CoverFixed == 0) {
+				if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
+					$wrapper1.style.backgroundImage = "url(" + CurrTemplateJson.BackgroundImage + ")";
+					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
+						$wrapper1.style.backgroundRepeat = CurrTemplateJson.BackgroundRepeat;
+					}
+
+					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundSize)) {
+						$wrapper1.style.backgroundSize = CurrTemplateJson.BackgroundSize;
+					}
+				}
+				if(!base.IsNullOrEmpty(CurrTemplateJson.Background)) {
+					$wrapper.style.background = CurrTemplateJson.Background;
+					if(!CurrTemplateJson.Background.startWith("#") && !CurrTemplateJson.Background.startWith("rgba")) {
+						$wrapper.style.background = base.BrowserName() + CurrTemplateJson.Background;
+					}
+				}
+			} else {
+				if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
+					$wrapper2.style.backgroundImage = "url(" + CurrTemplateJson.BackgroundImage + ")";
+					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
+						$wrapper2.style.backgroundRepeat = CurrTemplateJson.BackgroundRepeat;
+					}
+					if(!base.IsNullOrEmpty(CurrTemplateJson.BackgroundSize)) {
+						$wrapper2.style.backgroundSize = CurrTemplateJson.BackgroundSize;
+					}
+				}
+				if(!base.IsNullOrEmpty(CurrTemplateJson.Background)) {
+					if(CurrTemplateJson.Background.startWith("#") || CurrTemplateJson.Background.startWith("rgba")) {
+						$wrapper2.style.backgroundColor = CurrTemplateJson.Background;
+					} else {
+						$wrapper2.style.background = CurrTemplateJson.Background;
+						$wrapper2.style.background = base.BrowserName() + CurrTemplateJson.Background;
+					}
+				}
+				$wrapper2.classList.remove("hide");
+			}
 		} else {
 			//自定义
 			$wrapper.style.backgroundColor = "transparent";
@@ -389,7 +345,6 @@
 			} else {
 				//背景透明度
 				$cover.style.backgroundColor = "RGBA(255, 255, 255, " + (100 - CurrBackground.Transparency) / 100 + ")";
-
 				var url = CurrBackground.Url;
 				if(CurrBackground.High == 0) {
 					url = base.ShowThumb(url, 1);
@@ -406,7 +361,8 @@
 					case 1:
 						//全屏
 						$wrapper2.style.background = "url(" + url + ") center center no-repeat";
-						$wrapper2.style.backgroundSize = "100% auto";
+						$wrapper2.style.backgroundSize = "cover";
+						//$wrapper2.style.backgroundSize = "100% auto";
 						break;
 					default:
 						break;
@@ -417,16 +373,64 @@
 
 	//切换音乐
 	function ChangeMusic(index) {
-		MusicID = "music" + index;
+		$("#music0,#music1").addClass("hide");
+		MusicID = "music" + (CurrTemplate == 0 ? 0 : 1);
 		if(!base.IsNullOrEmpty(MusicUrl)) {
-			if(AutoMusic == 1) {
+			if(Article.AutoMusic == 1) {
 				document.addEventListener('touchstart', startsound);
-				document.addEventListener('mousedown', startsound);
 			}
-			$("#music" + index).removeClass("hide");
-		} else {
-			$("#music0,#music1").addClass("hide");
+			base.Get("music" + (CurrTemplate == 0 ? 0 : 1)).classList.remove("hide");
 		}
+	}
+
+	/**
+	 * 加载评论
+	 */
+	function LoadComment(ArticleNumber) {
+		data = {
+			page: 1,
+			rows: 10,
+			ArticleNumber: ArticleNumber,
+			New: 1
+		}
+		mui.getJSON(RootUrl + "Api/Comment/ArticleComment", data, function(data) {
+			data = JSON.parse(data);
+			if(data != null) {
+				if(data.result) {
+					data = data.message;
+					var length = data.records;
+					if(length > 0) {
+						document.getElementById('commentlist').classList.remove("hide");
+						var table = document.getElementById('commentlist');
+						for(var i = 0, len = data.list.length; i < len; i++) {
+							var div = appendStr(data.list[i]);
+							table.appendChild(div);
+						}
+						$("#comment").removeClass("hide");
+					}
+				}
+			}
+		});
+	}
+
+	/**
+	 * 评论视频HTML
+	 */
+	function appendStr(item) {
+		var div = document.createElement('div');
+		div.className = 'mui-table-view-cell';
+		var model = [];
+		model.push('<div class="mui-slider-cell mt10 mb10"><div class="oa-contact-cell mui-table">');
+		model.push('<div class="mui-table-cell oa-contact-avatar"><img src="' + base.ShowThumb(item.Avatar, 1) + '" class="user" userid="' + item.UserNumber + '" /></div>');
+		model.push('<div class="mui-table-cell pb0" style="border-bottom:1px solid ' + BackgroundColor + '">');
+		model.push('<p class="f12 user" style="color:' + UserColor + '" userid="' + item.UserNumber + '">' + UnUnicodeText(item.NickName) + '<span class="fr f11" style="color:' + SubTitleColor + '">' + item.CreateDateText + '</span></p>');
+		model.push('<p class="f11 mt5 mb5 summary" style="line-height:1.3rem;color:' + SubTitleColor + '">' + UnUnicodeText(item.Summary) + '</p>');
+		if(!base.IsNullOrEmpty(item.ParentCommentNumber)) {
+			model.push('<p class="tip mb0 f11" style="line-height:1.3rem;"><span class="user blue summary" userid="' + item.ParentUserNumber + '">@' + UnUnicodeText(item.ParentNickName) + '：</span>' + UnUnicodeText(item.ParentSummary) + '</p>');
+		}
+		model.push('</div></div>');
+		div.innerHTML = model.join('');
+		return div;
 	}
 
 	/**
@@ -458,5 +462,15 @@
 			return '<video class="video" style="width:100%;height:' + height + 'px;" autoplay="autoplay" controls="controls"><source src="' + sourceurl + '" type="video/mp4" /></video>';
 		}
 		return "";
+	}
+
+	String.prototype.startWith = function(str) {
+		var reg = new RegExp("^" + str);
+		return reg.test(this);
+	}
+
+	String.prototype.endWith = function(str) {
+		var reg = new RegExp(str + "$");
+		return reg.test(this);
 	}
 </script>

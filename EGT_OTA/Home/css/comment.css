@@ -1,10 +1,5 @@
 .mui-table-view-cell {
-	background: #fff;
-	padding: 0px 0.8rem;
-}
-
-.main {
-	border-bottom: 1px solid #eee;
+	padding: 0px;
 }
 
 .oa-contact-cell.mui-table .mui-table-cell {
@@ -54,34 +49,6 @@
 .mui-table-view-cell:after {
 	left: 0px;
 	background-color: transparent;
-}
-
-#header .curr {
-	border-bottom: 2px solid #fff;
-	padding-bottom: 0.1875rem;
-}
-
-.footer {
-	background: none;
-	border-top: 1px solid #ccc;
-}
-
-.footer .txt {
-	width: 80%;
-	padding: 2px 10px;
-	height: 30px;
-	line-height: 30px;
-	margin-top: 7px;
-	float: left;
-	border: 0px;
-	border-radius: 5px;
-	border-bottom: 1px solid #2CADFA;
-}
-
-.footer . {
-	padding: 0.175rem 0.75rem;
-	background: #2CADFA;
-	border-color: #2CADFA;
 }
 
 .red {
@@ -245,8 +212,4 @@
 	border-bottom-color: #eee;
 	left: 10px;
 	top: -12px;
-}
-
-.mui-slider .mui-slider-group .mui-slider-item img {
-	width: initial !important;
 }

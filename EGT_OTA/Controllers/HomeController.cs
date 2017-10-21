@@ -77,10 +77,32 @@ namespace EGT_OTA.Controllers
                     return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
                 }
 
-                string password = ZNRequest.GetString("ArticlePassword");
+                ////私密
+                //if (model.ArticlePower == Enum_ArticlePower.Myself)
+                //{
+                //    var newmodel = new Article();
+                //    newmodel.ID = model.ID;
+                //    newmodel.Title = model.Title;
+                //    newmodel.ArticlePower = model.ArticlePower;
+                //    newmodel.Status = model.Status;
+                //    return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
+                //}
+
+                ////加密
+                //var password = ZNRequest.GetString("ArticlePassword");
+                //if (model.ArticlePower == Enum_ArticlePower.Password && model.ArticlePowerPwd != password)
+                //{
+                //    var newmodel = new Article();
+                //    newmodel.ID = model.ID;
+                //    newmodel.Title = model.Title;
+                //    newmodel.ArticlePower = model.ArticlePower;
+                //    newmodel.Status = model.Status;
+                //    return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
+                //}
 
                 //当前用户编号
                 string xwp = ZNRequest.GetString("xwp");
+                var password = ZNRequest.GetString("ArticlePassword");
 
                 //微信分享设置
                 string url = ZNRequest.GetString("url");
@@ -115,6 +137,10 @@ namespace EGT_OTA.Controllers
                         newmodel.Share = share;
                         return Json(new { result = true, message = newmodel }, JsonRequestBehavior.AllowGet);
                     }
+                }
+                else
+                {
+                    model.ArticlePower = Enum_ArticlePower.Public;
                 }
 
                 //浏览数
