@@ -322,8 +322,8 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                User user = GetUserInfo();
-                if (user == null)
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
                 {
                     return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
                 }
@@ -332,7 +332,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "请上传头像" }, JsonRequestBehavior.AllowGet);
                 }
-                var result = new SubSonic.Query.Update<User>(provider).Set("Avatar").EqualTo(avatar).Where<User>(x => x.ID == user.ID).Execute() > 0;
+                var result = new SubSonic.Query.Update<User>(provider).Set("Avatar").EqualTo(avatar).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -352,8 +352,8 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                User user = GetUserInfo();
-                if (user == null)
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
                 {
                     return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
                 }
@@ -362,7 +362,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "请上传背景图片" }, JsonRequestBehavior.AllowGet);
                 }
-                var result = new SubSonic.Query.Update<User>(provider).Set("Cover").EqualTo(cover).Where<User>(x => x.ID == user.ID).Execute() > 0;
+                var result = new SubSonic.Query.Update<User>(provider).Set("Cover").EqualTo(cover).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -409,7 +409,12 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var result = new SubSonic.Query.Update<User>(provider).Set("Sex").EqualTo(ZNRequest.GetInt("Sex")).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("Sex").EqualTo(ZNRequest.GetInt("Sex")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -429,7 +434,12 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var result = new SubSonic.Query.Update<User>(provider).Set("Star").EqualTo(ZNRequest.GetInt("Star")).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("Star").EqualTo(ZNRequest.GetInt("Star")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -449,7 +459,12 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var result = new SubSonic.Query.Update<User>(provider).Set("UseDraw").EqualTo(ZNRequest.GetInt("UseDraw")).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("UseDraw").EqualTo(ZNRequest.GetInt("UseDraw")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -469,7 +484,12 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var result = new SubSonic.Query.Update<User>(provider).Set("DrawText").EqualTo(ZNRequest.GetString("DrawText")).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("DrawText").EqualTo(ZNRequest.GetString("DrawText")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -489,7 +509,12 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var result = new SubSonic.Query.Update<User>(provider).Set("IsPay").EqualTo(ZNRequest.GetInt("IsPay")).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("IsPay").EqualTo(ZNRequest.GetInt("IsPay")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -509,7 +534,12 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var result = new SubSonic.Query.Update<User>(provider).Set("Birthday").EqualTo(ZNRequest.GetDateTime("Birthday")).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("Birthday").EqualTo(ZNRequest.GetDateTime("Birthday")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -529,6 +559,11 @@ namespace EGT_OTA.Controllers
         {
             try
             {
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
                 var NickName = SqlFilter(ZNRequest.GetString("NickName").Trim());
                 if (string.IsNullOrEmpty(NickName))
                 {
@@ -539,7 +574,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "您输入的昵称含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
                 }
-                var result = new SubSonic.Query.Update<User>(provider).Set("NickName").EqualTo(NickName).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var result = new SubSonic.Query.Update<User>(provider).Set("NickName").EqualTo(NickName).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -559,6 +594,11 @@ namespace EGT_OTA.Controllers
         {
             try
             {
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
                 var Signature = SqlFilter(ZNRequest.GetString("Signature").Trim());
                 if (!string.IsNullOrWhiteSpace(Signature))
                 {
@@ -573,7 +613,7 @@ namespace EGT_OTA.Controllers
                 {
                     Signature = "";
                 }
-                var result = new SubSonic.Query.Update<User>(provider).Set("Signature").EqualTo(Signature).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var result = new SubSonic.Query.Update<User>(provider).Set("Signature").EqualTo(Signature).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -633,7 +673,12 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var result = new SubSonic.Query.Update<User>(provider).Set("ShareNick").EqualTo(ZNRequest.GetInt("ShareNick")).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("ShareNick").EqualTo(ZNRequest.GetInt("ShareNick")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -653,7 +698,12 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var result = new SubSonic.Query.Update<User>(provider).Set("AutoMusic").EqualTo(ZNRequest.GetInt("AutoMusic")).Where<User>(x => x.ID == ZNRequest.GetInt("ID")).Execute() > 0;
+                var id = ZNRequest.GetInt("ID");
+                if (id <= 0)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<User>(provider).Set("AutoMusic").EqualTo(ZNRequest.GetInt("AutoMusic")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
