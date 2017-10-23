@@ -754,7 +754,7 @@ namespace EGT_OTA.Controllers
 
                         using (Brush b = new SolidBrush(Color.White))
                         {
-                            g.DrawString("小微篇 @" + user.NickName, f, b, copyImage.Width, image.Height - copyImage.Height - Tools.SafeInt(copyImage.Height * 0.5));
+                            g.DrawString("小微篇 @" + (string.IsNullOrWhiteSpace(user.DrawText) ? user.NickName : user.DrawText), f, b, copyImage.Width, image.Height - copyImage.Height - Tools.SafeInt(copyImage.Height * 0.5));
                             g.DrawString("http://www.xiaoweipian.com/u/" + user.Number, f, b, Tools.SafeInt(copyImage.Height * 0.25), image.Height - Tools.SafeInt(copyImage.Height * 0.75));
                         }
                     }

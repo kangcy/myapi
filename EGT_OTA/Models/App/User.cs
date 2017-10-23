@@ -185,6 +185,12 @@ namespace EGT_OTA.Models
         public int UseDraw { get; set; }
 
         /// <summary>
+        /// 文字水印
+        /// </summary>
+        [SubSonicNullString]
+        public string DrawText { get; set; }
+
+        /// <summary>
         /// 是否推荐
         /// </summary>
         public int IsRecommend { get; set; }
