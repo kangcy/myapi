@@ -604,7 +604,7 @@ namespace EGT_OTA.Controllers
         /// <param name="height">缩略图高度</param> 
         /// <param name="height">是否添加水印（0：不添加,1：添加）</param>  
         /// <param name="height">缩略图保存路径</param> 
-        protected void MakeThumbnail(Image originalImage, string mode, int width, int height, int isDraw, string thumbnailPath)
+        protected void MakeThumbnail(User user, Image originalImage, string mode, int width, int height, int isDraw, string thumbnailPath)
         {
             int towidth = width;
             int toheight = height;
@@ -653,7 +653,7 @@ namespace EGT_OTA.Controllers
                 ///添加水印
                 if (isDraw == 1)
                 {
-                    bitmap = WaterMark(bitmap);
+                    bitmap = WaterMark(bitmap, user);
                 }
                 //以jpg格式保存缩略图  
 
@@ -721,7 +721,7 @@ namespace EGT_OTA.Controllers
         /// 添加水印
         /// </summary>
         /// <param name="bitmap">原始图片</param>
-        protected Image WaterMark(Image image)
+        protected Image WaterMark(Image image, User user)
         {
             ///读取水印配置
             CommonConfig.ConfigItem watermarkmodel = CommonConfig.Instance.GetConfig("WaterMark");
@@ -736,18 +736,28 @@ namespace EGT_OTA.Controllers
                     int height = 0;
                     switch (watermarkmodel.Location)
                     {
-                        case 1: width = 0; height = 0; break;//左上角
-                        case 2: width = (image.Width - copyImage.Width) / 2; height = 0; break;//左上居中
+                        case 1: width = 0; height = 0; break;//左上
+                        case 2: width = (image.Width - copyImage.Width) / 2; height = 0; break;//左中
                         case 3: width = image.Width - copyImage.Width; height = 0; break;//右上
                         case 4: width = 0; height = (image.Height - copyImage.Height) / 2; break;//左中
-                        case 5: width = (image.Width - copyImage.Width) / 2; height = (image.Height - copyImage.Height) / 2; break;//中间
-                        case 6: width = image.Width - copyImage.Width; height = (image.Height - copyImage.Height) / 2; break;
-                        case 7: width = 0; height = image.Height - copyImage.Height; break;
-                        case 8: width = (image.Width - copyImage.Width) / 2; height = image.Height - copyImage.Height; break;
-                        case 9: width = image.Width - copyImage.Width; height = image.Height - copyImage.Height; break;//右下角
+                        case 5: width = (image.Width - copyImage.Width) / 2; height = (image.Height - copyImage.Height) / 2; break;//中中
+                        case 6: width = image.Width - copyImage.Width; height = (image.Height - copyImage.Height) / 2; break;//右中
+                        //case 7: width = 0; height = image.Height - copyImage.Height; break;//左下
+                        case 7: width = Tools.SafeInt(copyImage.Height * 0.25); height = image.Height - copyImage.Height - Tools.SafeInt(copyImage.Height / 4.5) - Tools.SafeInt(copyImage.Height * 0.5); break;//左下
+                        case 8: width = (image.Width - copyImage.Width) / 2; height = image.Height - copyImage.Height; break;//中下
+                        case 9: width = image.Width - copyImage.Width; height = image.Height - copyImage.Height; break;//右下
                     }
                     Graphics g = Graphics.FromImage(image);
                     g.DrawImage(copyImage, new Rectangle(width, height, Convert.ToInt16(watermarkmodel.Width), Convert.ToInt16(watermarkmodel.Height)), 0, 0, copyImage.Width, copyImage.Height, GraphicsUnit.Pixel);
+                    using (Font f = new Font("宋体", 20))
+                    {
+
+                        using (Brush b = new SolidBrush(Color.White))
+                        {
+                            g.DrawString("小微篇 @" + user.NickName, f, b, copyImage.Width, image.Height - copyImage.Height - Tools.SafeInt(copyImage.Height * 0.5));
+                            g.DrawString("http://www.xiaoweipian.com/u/" + user.Number, f, b, Tools.SafeInt(copyImage.Height * 0.25), image.Height - Tools.SafeInt(copyImage.Height * 0.75));
+                        }
+                    }
                     g.Dispose();
                     copyImage.Dispose();
                 }

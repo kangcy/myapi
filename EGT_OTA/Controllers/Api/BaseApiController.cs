@@ -618,7 +618,7 @@ namespace EGT_OTA.Controllers.Api
         /// <param name="height">缩略图高度</param> 
         /// <param name="height">是否添加水印（0：不添加,1：添加）</param>  
         /// <param name="height">缩略图保存路径</param> 
-        protected void MakeThumbnail(Image originalImage, string mode, int width, int height, int isDraw, string thumbnailPath)
+        protected void MakeThumbnail(User user, Image originalImage, string mode, int width, int height, int isDraw, string thumbnailPath)
         {
             int towidth = width;
             int toheight = height;

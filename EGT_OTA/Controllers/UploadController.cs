@@ -153,7 +153,7 @@ namespace EGT_OTA.Controllers
                                 Graphics g = Graphics.FromImage(returnBmp);
                                 g.DrawImage(Origninal, 0, 0, Origninal.Width, Origninal.Height);
                                 g.Dispose();
-                                MakeThumbnail((Image)returnBmp, mode.Mode, mode.Width, mode.Height, isDraw, savePath + "\\" + filename.Replace(".", "_" + i + "."));
+                                MakeThumbnail(user, (Image)returnBmp, mode.Mode, mode.Width, mode.Height, isDraw, savePath + "\\" + filename.Replace(".", "_" + i + "."));
                             }
 
                         }
@@ -166,7 +166,7 @@ namespace EGT_OTA.Controllers
                 //添加水印
                 if (isDraw == 1)
                 {
-                    image2 = WaterMark(image2);
+                    image2 = WaterMark(image2, user);
                 }
                 EncoderParameter p;
                 EncoderParameters ps;
@@ -250,7 +250,7 @@ namespace EGT_OTA.Controllers
                     Image image = Image.FromStream(ms, true);
                     if (isDraw == 1)
                     {
-                        image = WaterMark(image);
+                        image = WaterMark(image, user);
                     }
 
                     image.Save(savePath + "\\" + filename.Replace(".", "_0."));
@@ -271,7 +271,7 @@ namespace EGT_OTA.Controllers
                                 Graphics g = Graphics.FromImage(returnBmp);
                                 g.DrawImage(Origninal, 0, 0, Origninal.Width, Origninal.Height);
                                 g.Dispose();
-                                MakeThumbnail((Image)returnBmp, mode.Mode, mode.Width, mode.Height, isDraw, savePath + "\\" + filename.Replace(".", "_" + index + "."));
+                                MakeThumbnail(user, (Image)returnBmp, mode.Mode, mode.Width, mode.Height, isDraw, savePath + "\\" + filename.Replace(".", "_" + index + "."));
                             }
                         }
                     }
