@@ -604,23 +604,23 @@ namespace EGT_OTA.Controllers
         /// <param name="height">缩略图高度</param> 
         /// <param name="height">是否添加水印（0：不添加,1：添加）</param>  
         /// <param name="height">缩略图保存路径</param> 
-        protected void MakeThumbnail(User user, Image originalImage, string mode, int width, int height, int isDraw, string thumbnailPath)
+        protected void MakeThumbnail(User user, Image originalImage, UploadConfig.ThumbMode mode, string thumbnailPath)
         {
-            int towidth = width;
-            int toheight = height;
+            int towidth = mode.Width;
+            int toheight = mode.Height;
             int x = 0;
             int y = 0;
             int ow = originalImage.Width;//原图宽度
             int oh = originalImage.Height;//原图高度
-            switch (mode)
+            switch (mode.Mode)
             {
                 case "HW"://指定高宽缩放（可能变形）                  
                     break;
                 case "W"://指定宽，高按比例                      
-                    toheight = originalImage.Height * width / originalImage.Width;
+                    toheight = originalImage.Height * mode.Width / originalImage.Width;
                     break;
                 case "H"://指定高，宽按比例  
-                    towidth = originalImage.Width * height / originalImage.Height;
+                    towidth = originalImage.Width * mode.Height / originalImage.Height;
                     break;
                 case "Cut"://指定高宽裁减（不变形）                  
                     if ((double)originalImage.Width / (double)originalImage.Height > (double)towidth / (double)toheight)
@@ -633,7 +633,7 @@ namespace EGT_OTA.Controllers
                     else
                     {
                         ow = originalImage.Width;
-                        oh = originalImage.Width * height / towidth;
+                        oh = originalImage.Width * mode.Height / towidth;
                         x = 0;
                         y = (originalImage.Height - oh) / 2;
                     }
@@ -651,27 +651,15 @@ namespace EGT_OTA.Controllers
             try
             {
                 ///添加水印
-                if (isDraw == 1)
+                if (mode.IsDraw == 1 && user.UseDraw == 1)
                 {
                     bitmap = WaterMark(bitmap, user);
                 }
-                //以jpg格式保存缩略图  
-
-                //#region  高质量
-
-                //var myImageCodecInfo = GetEncoderInfo("image/jpeg");
-                //var myEncoder = System.Drawing.Imaging.Encoder.Quality;
-                //var myEncoderParameters = new EncoderParameters(1);
-                //var myEncoderParameter = new EncoderParameter(myEncoder, 100L);
-                //myEncoderParameters.Param[0] = myEncoderParameter;
-                //bitmap.Save(thumbnailPath, myImageCodecInfo, myEncoderParameters);
-
-                //#endregion
 
                 EncoderParameter p;
                 EncoderParameters ps;
                 ps = new EncoderParameters(1);
-                p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+                p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 80L);
                 ps.Param[0] = p;
                 ImageCodecInfo ii = GetCodecInfo("image/jpeg");
 
@@ -743,19 +731,22 @@ namespace EGT_OTA.Controllers
                         case 5: width = (image.Width - copyImage.Width) / 2; height = (image.Height - copyImage.Height) / 2; break;//中中
                         case 6: width = image.Width - copyImage.Width; height = (image.Height - copyImage.Height) / 2; break;//右中
                         //case 7: width = 0; height = image.Height - copyImage.Height; break;//左下
-                        case 7: width = Tools.SafeInt(copyImage.Height * 0.25); height = image.Height - copyImage.Height - Tools.SafeInt(copyImage.Height / 4.5) - Tools.SafeInt(copyImage.Height * 0.5); break;//左下
+                        case 7: width = copyImage.Width; height = image.Height - Tools.SafeInt(copyImage.Height * 1.8); break;//左下
                         case 8: width = (image.Width - copyImage.Width) / 2; height = image.Height - copyImage.Height; break;//中下
                         case 9: width = image.Width - copyImage.Width; height = image.Height - copyImage.Height; break;//右下
                     }
                     Graphics g = Graphics.FromImage(image);
                     g.DrawImage(copyImage, new Rectangle(width, height, Convert.ToInt16(watermarkmodel.Width), Convert.ToInt16(watermarkmodel.Height)), 0, 0, copyImage.Width, copyImage.Height, GraphicsUnit.Pixel);
-                    using (Font f = new Font("宋体", 20))
+                    using (Font f = new Font("Verdana", 8))
                     {
 
                         using (Brush b = new SolidBrush(Color.White))
                         {
-                            g.DrawString("小微篇 @" + (string.IsNullOrWhiteSpace(user.DrawText) ? user.NickName : user.DrawText), f, b, copyImage.Width, image.Height - copyImage.Height - Tools.SafeInt(copyImage.Height * 0.5));
-                            g.DrawString("http://www.xiaoweipian.com/u/" + user.Number, f, b, Tools.SafeInt(copyImage.Height * 0.25), image.Height - Tools.SafeInt(copyImage.Height * 0.75));
+                            g.DrawString("小微篇@" + (string.IsNullOrWhiteSpace(user.DrawText) ? user.NickName : user.DrawText), f, b, copyImage.Width, image.Height - Tools.SafeInt(copyImage.Height * 2));
+                            g.DrawString("http://www.xiaoweipian.com/u/" + user.Number, f, b, copyImage.Width, image.Height - copyImage.Height);
+
+                            //g.DrawString("小微篇@" + (string.IsNullOrWhiteSpace(user.DrawText) ? user.NickName : user.DrawText), f, b, Tools.SafeInt(copyImage.Width * 0.4), image.Height - copyImage.Height / 2);
+                            //g.DrawString("http://www.xiaoweipian.com/u/" + user.Number, f, b, Tools.SafeInt(copyImage.Width * 0.05), image.Height - Tools.SafeInt(copyImage.Height * 0.25));
                         }
                     }
                     g.Dispose();

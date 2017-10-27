@@ -125,20 +125,8 @@ namespace EGT_OTA.Controllers
 
                 #region  保存缩略图
 
-                int isDraw = 0;//是否生成水印
-                int isThumb = 1;//是否生成缩略图
                 var user = db.Single<User>(x => x.Number == number);
-                if (user != null)
-                {
-                    isDraw = user.UseDraw;
-                }
-
-                if (standards != "Article")
-                {
-                    isDraw = 0;
-                }
-
-                if (isThumb == 1 && !String.IsNullOrEmpty(standards))
+                if (!String.IsNullOrEmpty(standards))
                 {
                     UploadConfig.ConfigItem config = UploadConfig.Instance.GetConfig(standards);
                     if (config != null)
@@ -153,7 +141,7 @@ namespace EGT_OTA.Controllers
                                 Graphics g = Graphics.FromImage(returnBmp);
                                 g.DrawImage(Origninal, 0, 0, Origninal.Width, Origninal.Height);
                                 g.Dispose();
-                                MakeThumbnail(user, (Image)returnBmp, mode.Mode, mode.Width, mode.Height, isDraw, savePath + "\\" + filename.Replace(".", "_" + i + "."));
+                                MakeThumbnail(user, (Image)returnBmp, mode, savePath + "\\" + filename.Replace(".", "_" + i + "."));
                             }
 
                         }
@@ -163,15 +151,15 @@ namespace EGT_OTA.Controllers
                 #endregion
 
                 Image image2 = Image.FromStream(ms, true);
-                //添加水印
-                if (isDraw == 1)
-                {
-                    image2 = WaterMark(image2, user);
-                }
+                //原图不添加水印
+                //if (isDraw == 1)
+                //{
+                //    image2 = WaterMark(image2, user);
+                //}
                 EncoderParameter p;
                 EncoderParameters ps;
                 ps = new EncoderParameters(1);
-                p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 100L);
+                p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 80L);
                 ps.Param[0] = p;
                 ImageCodecInfo ii = GetCodecInfo("image/jpeg");
                 image2.Save(savePath + "\\" + filename.Replace(".", "_0."), ii, ps);
@@ -204,29 +192,15 @@ namespace EGT_OTA.Controllers
         {
             var standards = ZNRequest.GetString("standard");//缩略图规格名称
             var number = ZNRequest.GetString("number");//用户编号
-
-            int isDraw = 0;//是否生成水印
-            int isThumb = 1;//是否生成缩略图
             var user = db.Single<User>(x => x.Number == number);
-            if (user != null)
-            {
-                isDraw = user.UseDraw;
-            }
-
-            if (standards != "Article")
-            {
-                isDraw = 0;
-            }
-
             UploadConfig.ConfigItem config = null;
-            if (isThumb == 1 && !String.IsNullOrEmpty(standards))
+            if (!String.IsNullOrEmpty(standards))
             {
                 config = UploadConfig.Instance.GetConfig(standards);
             }
             var folder = ZNRequest.GetString("folder");
             var basePath = "Upload/Images/" + standards + "/" + DateTime.Now.ToString("yyyyMMdd") + "/" + number + "/";
             string savePath = Server.MapPath("~/" + basePath);
-
             if (!Directory.Exists(savePath))
             {
                 Directory.CreateDirectory(savePath);
@@ -245,13 +219,12 @@ namespace EGT_OTA.Controllers
                     int l = file.ContentLength;
                     byte[] buffer = new byte[l];
                     Stream ms = file.InputStream;
-                    //System.Drawing.Bitmap image = new System.Drawing.Bitmap(ms);
-
                     Image image = Image.FromStream(ms, true);
-                    if (isDraw == 1)
-                    {
-                        image = WaterMark(image, user);
-                    }
+                    //原图不添加水印
+                    //if (isDraw == 1)
+                    //{
+                    //    image = WaterMark(image, user);
+                    //}
 
                     image.Save(savePath + "\\" + filename.Replace(".", "_0."));
 
@@ -271,7 +244,7 @@ namespace EGT_OTA.Controllers
                                 Graphics g = Graphics.FromImage(returnBmp);
                                 g.DrawImage(Origninal, 0, 0, Origninal.Width, Origninal.Height);
                                 g.Dispose();
-                                MakeThumbnail(user, (Image)returnBmp, mode.Mode, mode.Width, mode.Height, isDraw, savePath + "\\" + filename.Replace(".", "_" + index + "."));
+                                MakeThumbnail(user, (Image)returnBmp, mode, savePath + "\\" + filename.Replace(".", "_" + index + "."));
                             }
                         }
                     }

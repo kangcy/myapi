@@ -107,6 +107,10 @@ namespace EGT_OTA.Helper.Config
                                         mode.Mode = thumb[0];
                                         mode.Width = int.Parse(thumb[1]);
                                         mode.Height = int.Parse(thumb[2]);
+                                        if (thumb.Length > 3)
+                                        {
+                                            mode.IsDraw = int.Parse(thumb[3]);
+                                        }
                                         modeList.Add(mode);
                                     }
                                     item.ModeList = modeList;
@@ -239,14 +243,21 @@ namespace EGT_OTA.Helper.Config
             /// 生成缩略图的方式
             /// </summary>
             public string Mode { get; set; }
+
             /// <summary>
             /// 缩略图的宽
             /// </summary>
             public int Width { get; set; }
+
             /// <summary>
             /// 缩略图的高
             /// </summary>
             public int Height { get; set; }
+
+            /// <summary>
+            /// 是否添加水印
+            /// </summary>
+            public int IsDraw { get; set; }
         }
 
         #endregion
