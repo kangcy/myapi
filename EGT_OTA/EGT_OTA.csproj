@@ -1025,6 +1025,11 @@
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\nugetexample.js" />
+    <Content Include="Scripts\swipe\animate.min.css" />
+    <Content Include="Scripts\swipe\iscroll.js" />
+    <Content Include="Scripts\swipe\swiper.animate1.0.2.min.js" />
+    <Content Include="Scripts\swipe\swiper.min.css" />
+    <Content Include="Scripts\swipe\swiper.min.js" />
     <Content Include="System\Video\1.png" />
     <Content Include="System\Video\2.png" />
     <Content Include="System\Video\3.png" />
@@ -1055,6 +1060,7 @@
     <Content Include="Views\Back\Red.cshtml" />
     <Content Include="Views\Red\LoginIndex.cshtml" />
     <Content Include="Views\Banner\Index.cshtml" />
+    <Content Include="Views\Back\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

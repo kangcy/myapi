@@ -1,0 +1,68 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using EGT_OTA.Models
+<div>
+    <div class="el-card__header">
+        <div class="clearfix">
+            <p>创建</p>
+            <div class="el-form-item inline fl">
+                <div class="el-form-item inline fl">
+                    <div class="el-form-item__content">
+                        <div class="el-input el-input--small">
+                            <input id="usernumber" placeholder="文章标题" size="small" type="text" class="el-input__inner">
+                        </div>
+                    </div>
+                </div>
+                <div class="el-form-item inline fl ml15">
+                    <label class="el-form-item__label">权限</label>
+                    <div class="el-form-item__content inline fl">
+                        <div class="btn-group">
+                            <button id="articlepower" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                                不限
+                                                  <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu tc">
+                                <li><a href="#" onclick="change(-1,'articlepower','不限')" class="ddl_articlepower" index="-1">不限</a></li>
+                                <li><a href="#" onclick="change(3,'articlepower','公开')" class="ddl_articlepower" index="3">公开</a></li>
+                                <li><a href="#" onclick="change(2,'articlepower','限制可见')" class="ddl_articlepower" index="2">限制可见</a></li>
+                                <li><a href="#" onclick="change(1,'articlepower','密码可见')" class="ddl_articlepower" index="1">密码可见</a></li>
+                                <li><a href="#" onclick="change(0,'articlepower','私密')" class="ddl_articlepower" index="1">私密</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fr">
+                <button type="button" class="el-button el-button--primary" id="search"><span>创建</span></button>
+                <button type="button" class="el-button el-button--default" id="reset"><span>取消</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="el-card__body">
+        <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition full f12 tc" style="overflow: auto;">
+            <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body full">
+                <thead>
+                    <tr>
+                        <th class="cell" style="width: 100px;">用户头像</th>
+                        <th class="cell" style="width: 150px;">用户昵称(编号)</th>
+                        <th class="cell" style="width: 200px;">反馈</th>
+                        <th class="cell" style="width: 100px;">联系方式</th>
+                        <th class="cell">图片</th>
+                        <th class="cell" style="width: 100px;">状态</th>
+                        <th class="cell" style="width: 110px;">创建日期</th>
+                        <th class="cell" style="width: 150px;">操作</th>
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+
+        var isloading = false;
+        $(document).ready(function () {
+
+        });
+    </script>
+}

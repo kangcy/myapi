@@ -1089,5 +1089,21 @@ namespace EGT_OTA.Controllers
         }
 
         #endregion
+
+        #region 创建
+
+        /// <summary>
+        /// 创建
+        /// </summary>
+        [BackPower]
+        public ActionResult Add()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
+            return View();
+        }
+
+        #endregion
     }
 }

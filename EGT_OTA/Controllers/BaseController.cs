@@ -731,19 +731,19 @@ namespace EGT_OTA.Controllers
                         case 5: width = (image.Width - copyImage.Width) / 2; height = (image.Height - copyImage.Height) / 2; break;//中中
                         case 6: width = image.Width - copyImage.Width; height = (image.Height - copyImage.Height) / 2; break;//右中
                         //case 7: width = 0; height = image.Height - copyImage.Height; break;//左下
-                        case 7: width = copyImage.Width; height = image.Height - Tools.SafeInt(copyImage.Height * 1.8); break;//左下
+                        case 7: width = 10; height = image.Height - Tools.SafeInt(copyImage.Height * 2); break;//左下
                         case 8: width = (image.Width - copyImage.Width) / 2; height = image.Height - copyImage.Height; break;//中下
                         case 9: width = image.Width - copyImage.Width; height = image.Height - copyImage.Height; break;//右下
                     }
                     Graphics g = Graphics.FromImage(image);
                     g.DrawImage(copyImage, new Rectangle(width, height, Convert.ToInt16(watermarkmodel.Width), Convert.ToInt16(watermarkmodel.Height)), 0, 0, copyImage.Width, copyImage.Height, GraphicsUnit.Pixel);
-                    using (Font f = new Font("Verdana", 8))
+                    using (Font f = new Font("Verdana", 10))
                     {
 
                         using (Brush b = new SolidBrush(Color.White))
                         {
-                            g.DrawString("小微篇@" + (string.IsNullOrWhiteSpace(user.DrawText) ? user.NickName : user.DrawText), f, b, copyImage.Width, image.Height - Tools.SafeInt(copyImage.Height * 2));
-                            g.DrawString("http://www.xiaoweipian.com/u/" + user.Number, f, b, copyImage.Width, image.Height - copyImage.Height);
+                            g.DrawString((string.IsNullOrWhiteSpace(user.DrawText) ? user.NickName : user.DrawText), f, b, Tools.SafeInt(watermarkmodel.Width) + 15, image.Height - Tools.SafeInt(copyImage.Height * 2));
+                            g.DrawString("http://www.xiaoweipian.com/u/" + user.Number, f, b, 10, image.Height - copyImage.Height);
 
                             //g.DrawString("小微篇@" + (string.IsNullOrWhiteSpace(user.DrawText) ? user.NickName : user.DrawText), f, b, Tools.SafeInt(copyImage.Width * 0.4), image.Height - copyImage.Height / 2);
                             //g.DrawString("http://www.xiaoweipian.com/u/" + user.Number, f, b, Tools.SafeInt(copyImage.Width * 0.05), image.Height - Tools.SafeInt(copyImage.Height * 0.25));
