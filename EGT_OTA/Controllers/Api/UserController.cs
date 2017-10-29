@@ -313,5 +313,58 @@ namespace EGT_OTA.Controllers.Api
             }
             return JsonConvert.SerializeObject(result);
         }
+
+        /// <summary>
+        /// 机器人用户
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/User/TemporaryUser")]
+        public string TemporaryUser()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var number = ZNRequest.GetString("Number");
+                if (string.IsNullOrWhiteSpace(number))
+                {
+                    result.message = new { records = 0, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var list = db.Find<User>(x => x.RelatedNumber == number).OrderBy(x => x.UserRole).ThenBy(x => x.ID).ToList();
+                var pager = new Pager();
+                var recordCount = list.Count;
+                if (recordCount == 0)
+                {
+                    result.message = new { records = 0, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                var newlist = (from l in list
+                               select new
+                               {
+                                   ID = l.ID,
+                                   NickName = l.NickName,
+                                   Signature = l.Signature,
+                                   Avatar = l.Avatar,
+                                   Cover = l.Cover,
+                                   Number = l.Number
+                               }).ToList();
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = newlist
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_User_TemporaryUser" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
     }
 }

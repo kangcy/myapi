@@ -118,8 +118,10 @@ namespace EGT_OTA.Controllers
                     user.ShowPosition = 1;
                     user.Birthday = DateTime.Now;
                     user.Number = BuildNumber();
+                    user.RelatedNumber = user.Number;
                     user.IsPay = 1;
                     user.AutoMusic = 1;
+                    user.UserRole = Enum_UserRole.Common;
                     user.ID = Tools.SafeInt(db.Add<User>(user), 0);
                     if (user.ID > 0)
                     {
@@ -292,8 +294,10 @@ namespace EGT_OTA.Controllers
                 user.ShowPosition = 1;
                 user.Status = Enum_Status.Approved;
                 user.Number = BuildNumber();
+                user.RelatedNumber = user.Number;
                 user.IsPay = 1;
                 user.AutoMusic = 1;
+                user.UserRole = Enum_UserRole.Common;
                 user.ClientID = ZNRequest.GetString("ClientID");
                 user.PhoneModel = ZNRequest.GetString("PhoneModel");
                 user.ID = Tools.SafeInt(db.Add<User>(user), 0);
@@ -313,6 +317,132 @@ namespace EGT_OTA.Controllers
                 result = ex.Message;
             }
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 机器人账号注册
+        /// </summary>
+        public ActionResult TemporaryRegister()
+        {
+            try
+            {
+                var nickname = SqlFilter(ZNRequest.GetString("NickName").Trim());
+                var number = ZNRequest.GetString("Number");
+                var code = ZNRequest.GetString("Code");
+                if (string.IsNullOrWhiteSpace(nickname) || string.IsNullOrWhiteSpace(number) || string.IsNullOrWhiteSpace(code))
+                {
+                    return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
+                }
+                var value = CookieHelper.GetCookieValue("Validate");
+                if (value.ToLower() != code.ToLower())
+                {
+                    return Json(new { result = false, message = "验证码不正确" }, JsonRequestBehavior.AllowGet);
+                }
+                var dirtyword = HasDirtyWord(nickname);
+                if (!string.IsNullOrWhiteSpace(dirtyword))
+                {
+                    return Json(new { result = false, message = "昵称含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
+                }
+                var user = new User();
+                user.NickName = nickname;
+                user.RelatedNumber = number;
+                user.Phone = string.Empty;
+                user.Password = string.Empty;
+                user.PhoneModel = ZNRequest.GetString("PhoneModel");
+                user.ClientID = ZNRequest.GetString("ClientID");
+                user.Province = ZNRequest.GetString("Province");
+                user.City = ZNRequest.GetString("City");
+                user.District = ZNRequest.GetString("District");
+                user.Street = ZNRequest.GetString("Street");
+                user.DetailName = ZNRequest.GetString("DetailName");
+                user.CityCode = ZNRequest.GetString("CityCode");
+                user.Latitude = Tools.SafeDouble(ZNRequest.GetString("Latitude"));
+                user.Longitude = Tools.SafeDouble(ZNRequest.GetString("Longitude"));
+                user.Sex = ZNRequest.GetInt("Sex", Enum_Sex.None);
+                user.Star = ZNRequest.GetInt("Star", Enum_Star.None);
+                user.Cover = System.Web.Configuration.WebConfigurationManager.AppSettings["base_url"].ToString() + "Images/User/cover01.png";
+                user.Email = string.Empty;
+                user.IsEmail = 0;
+                user.Signature = string.Empty;
+                user.Avatar = System.Web.Configuration.WebConfigurationManager.AppSettings["base_url"].ToString() + "Images/User/sysavatar" + new Random().Next(1, 36) + ".jpg";
+                user.WeiXin = string.Empty;
+                user.QQ = string.Empty;
+                user.Weibo = string.Empty;
+                user.LoginTimes = 1;
+                user.CreateDate = DateTime.Now;
+                user.LastLoginDate = DateTime.Now;
+                user.LastLoginIP = Tools.GetClientIP;
+                user.Keeps = 0;
+                user.Follows = 0;
+                user.Fans = 0;
+                user.Articles = 0;
+                user.Comments = 0;
+                user.Zans = 0;
+                user.ShowZan = 1;
+                user.ShowKeep = 1;
+                user.ShowFollow = 1;
+                user.ShowFan = 1;
+                user.ShowPush = 1;
+                user.ShowPosition = 1;
+                user.Birthday = DateTime.Now;
+                user.Number = BuildNumber();
+                user.IsPay = 1;
+                user.AutoMusic = 1;
+                user.UserRole = Enum_UserRole.Temporary;
+                user.ID = Tools.SafeInt(db.Add<User>(user), 0);
+                if (user.ID > 0)
+                {
+                    CookieHelper.ClearCookie("Validate");
+                    user.Address = user.Province + " " + user.City;
+                    user.BirthdayText = user.Birthday.ToString("yyyy-MM-dd");
+
+                    return Json(new { result = true, message = user, first = 0 }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("UserController_TemporaryRegister" + ex.Message, ex);
+            }
+            return Json(new { result = false, message = "注册失败", first = 0 }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 机器人账号登录
+        /// </summary>
+        public ActionResult TemporaryLogin()
+        {
+            try
+            {
+                var number = ZNRequest.GetString("Number");
+                User user = db.Single<User>(x => x.Number == number);
+                if (user == null)
+                {
+                    return Json(new { result = false, message = "当前账号不存在", first = 0 }, JsonRequestBehavior.AllowGet);
+                }
+
+                if (user.Status == Enum_Status.Audit)
+                {
+                    return Json(new { result = false, message = "当前账号已锁定", first = 0 }, JsonRequestBehavior.AllowGet);
+                }
+
+                if (user.Status == Enum_Status.DELETE)
+                {
+                    return Json(new { result = false, message = "当前账号已注销", first = 0 }, JsonRequestBehavior.AllowGet);
+                }
+                user.LoginTimes += 1;
+                user.LastLoginDate = DateTime.Now;
+                user.LastLoginIP = Tools.GetClientIP;
+                var result = db.Update<User>(user) > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = UserInfo(user), first = 0 }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("UserController_TemporaryLogin" + ex.Message, ex);
+            }
+            return Json(new { result = false, message = "登录失败", first = 0 }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

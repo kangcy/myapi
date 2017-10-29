@@ -27,5 +27,11 @@ namespace EGT_OTA.Models
         /// </summary>
         [EnumAttribute("超级管理员")]
         public const int SuperAdministrator = 2;
+
+        /// <summary>
+        /// 机器人用户
+        /// </summary>
+        [EnumAttribute("机器人用户")]
+        public const int Temporary = 100;
     }
 }

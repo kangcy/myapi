@@ -212,6 +212,12 @@ namespace EGT_OTA.Models
         [SubSonicNullString]
         public string PhoneModel { get; set; }
 
+        /// <summary>
+        /// 机器人关联用户编号
+        /// </summary>
+        [SubSonicNullString]
+        public string RelatedNumber { get; set; }
+
         #region  隐私管理
 
         /// <summary>
