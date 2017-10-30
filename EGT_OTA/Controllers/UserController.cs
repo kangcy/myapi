@@ -122,6 +122,7 @@ namespace EGT_OTA.Controllers
                     user.IsPay = 1;
                     user.AutoMusic = 1;
                     user.UserRole = Enum_UserRole.Common;
+                    user.DrawText = string.Empty;
                     user.ID = Tools.SafeInt(db.Add<User>(user), 0);
                     if (user.ID > 0)
                     {
@@ -389,6 +390,7 @@ namespace EGT_OTA.Controllers
                 user.IsPay = 1;
                 user.AutoMusic = 1;
                 user.UserRole = Enum_UserRole.Temporary;
+                user.DrawText = string.Empty;
                 user.ID = Tools.SafeInt(db.Add<User>(user), 0);
                 if (user.ID > 0)
                 {

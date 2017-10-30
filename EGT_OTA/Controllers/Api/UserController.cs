@@ -348,7 +348,8 @@ namespace EGT_OTA.Controllers.Api
                                    Signature = l.Signature,
                                    Avatar = l.Avatar,
                                    Cover = l.Cover,
-                                   Number = l.Number
+                                   Number = l.Number,
+                                   CreateDate = l.CreateDate.ToString("yyyy-MM-dd")
                                }).ToList();
                 result.result = true;
                 result.message = new
