@@ -287,6 +287,32 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
+        /// Search
+        /// </summary>
+        protected List<string> GetSearch()
+        {
+            List<string> list = new List<string>();
+            if (CacheHelper.Exists("Search"))
+            {
+                list = (List<string>)CacheHelper.GetCache("Search");
+            }
+            else
+            {
+                string str = string.Empty;
+                string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/search.config");
+                if (System.IO.File.Exists(filePath))
+                {
+                    StreamReader sr = new StreamReader(filePath, Encoding.Default);
+                    str = sr.ReadToEnd();
+                    sr.Close();
+                }
+                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(str);
+                CacheHelper.Insert("Search", list);
+            }
+            return list;
+        }
+
+        /// <summary>
         /// 音乐
         /// </summary>
         protected List<MusicJson> GetMusic()

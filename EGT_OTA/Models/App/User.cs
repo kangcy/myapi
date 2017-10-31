@@ -36,6 +36,8 @@ namespace EGT_OTA.Models
             this.Email = string.Empty;
             this.Phone = string.Empty;
             this.WeiXin = string.Empty;
+            this.DrawText = string.Empty;
+            this.RelatedNumber = string.Empty;
             this.CreateDate = DateTime.Now;
             this.LastLoginDate = DateTime.Now;
             this.LastLoginIP = Tools.GetClientIP;

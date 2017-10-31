@@ -353,6 +353,28 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
+        /// Search列表
+        /// </summary>
+        public ActionResult Search()
+        {
+            try
+            {
+                var list = GetSearch();
+                var result = new
+                {
+                    records = list.Count(),
+                    list = list
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("SystemController_Search:" + ex.Message);
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
         /// Showy列表
         /// </summary>
         public ActionResult Showy()
