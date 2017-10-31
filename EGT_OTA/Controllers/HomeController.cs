@@ -67,7 +67,7 @@ namespace EGT_OTA.Controllers
                 }
 
                 //已删除
-                if (model.Status == Enum_Status.DELETE)
+                if (model.Status == Enum_Status.Delete || model.Status == Enum_Status.DeleteCompletely)
                 {
                     var newmodel = new Article();
                     newmodel.ID = model.ID;

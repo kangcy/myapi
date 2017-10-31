@@ -140,7 +140,7 @@ namespace EGT_OTA.Controllers
                         return Json(new { result = false, message = "当前账号已锁定", first = 0 }, JsonRequestBehavior.AllowGet);
                     }
 
-                    if (user.Status == Enum_Status.DELETE)
+                    if (user.Status == Enum_Status.Delete || user.Status == Enum_Status.DeleteCompletely)
                     {
                         return Json(new { result = false, message = "当前账号已注销", first = 0 }, JsonRequestBehavior.AllowGet);
                     }
@@ -427,7 +427,7 @@ namespace EGT_OTA.Controllers
                     return Json(new { result = false, message = "当前账号已锁定", first = 0 }, JsonRequestBehavior.AllowGet);
                 }
 
-                if (user.Status == Enum_Status.DELETE)
+                if (user.Status == Enum_Status.Delete || user.Status == Enum_Status.DeleteCompletely)
                 {
                     return Json(new { result = false, message = "当前账号已注销", first = 0 }, JsonRequestBehavior.AllowGet);
                 }
@@ -1326,7 +1326,7 @@ namespace EGT_OTA.Controllers
                 var Number = ZNRequest.GetString("Number");
                 var UserNumber = ZNRequest.GetString("UserNumber");
                 var pager = new Pager();
-                var query = new SubSonic.Query.Select(provider).From<ArticlePart>().Where<ArticlePart>(x => x.Types == Enum_ArticlePart.Pic && x.Status != Enum_Status.DELETE);
+                var query = new SubSonic.Query.Select(provider).From<ArticlePart>().Where<ArticlePart>(x => x.Types == Enum_ArticlePart.Pic && x.Status != Enum_Status.Delete && x.Status != Enum_Status.DeleteCompletely);
                 if (Number != UserNumber)
                 {
                     query = query.And("Status").IsEqualTo(Enum_Status.Approved);
@@ -1400,7 +1400,7 @@ namespace EGT_OTA.Controllers
                 id.ForEach(x =>
                 {
                     var partid = Tools.SafeInt(x);
-                    var result = new SubSonic.Query.Update<ArticlePart>(provider).Set("Status").EqualTo(Enum_Status.DELETE).Where<ArticlePart>(y => y.ID == partid && y.CreateUserNumber == user.Number).Execute() > 0;
+                    var result = new SubSonic.Query.Update<ArticlePart>(provider).Set("Status").EqualTo(Enum_Status.Delete).Where<ArticlePart>(y => y.ID == partid && y.CreateUserNumber == user.Number).Execute() > 0;
                 });
                 return Json(new { result = true, message = "刪除成功" }, JsonRequestBehavior.AllowGet);
             }
@@ -1707,7 +1707,7 @@ namespace EGT_OTA.Controllers
             user.Fans = new SubSonic.Query.Select(provider, "ID").From<Fan>().Where<Fan>(x => x.ToUserNumber == user.Number).GetRecordCount();
 
             //我的
-            user.Articles = new SubSonic.Query.Select(provider, "ID").From<Article>().Where<Article>(x => x.CreateUserNumber == user.Number && x.Status != Enum_Status.DELETE).GetRecordCount();
+            user.Articles = new SubSonic.Query.Select(provider, "ID").From<Article>().Where<Article>(x => x.CreateUserNumber == user.Number && x.Status != Enum_Status.Delete && x.Status != Enum_Status.DeleteCompletely).GetRecordCount();
 
             //评论
             user.Comments = new SubSonic.Query.Select(provider, "ID").From<Comment>().Where<Comment>(x => x.CreateUserNumber == user.Number).GetRecordCount();

@@ -23,9 +23,16 @@ namespace EGT_OTA.Models
         public const int Approved = 1;
 
         /// <summary>
-        /// 已审核
+        /// 临时删除
         /// </summary>
-        [EnumAttribute("已删除")]
-        public const int DELETE = 2;
+        [EnumAttribute("临时删除")]
+        public const int Delete = 2;
+
+
+        /// <summary>
+        /// 彻底审核
+        /// </summary>
+        [EnumAttribute("彻底审核")]
+        public const int DeleteCompletely = 3;
     }
 }

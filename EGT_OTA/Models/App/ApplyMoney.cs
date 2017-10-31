@@ -29,4 +29,22 @@ namespace EGT_OTA.Models
         ///</summary>
         public int Status { get; set; }
     }
+
+    /// <summary>
+    /// 申请文章恢复记录
+    /// </summary>
+    [Serializable]
+    public class ApplyRevoke : BaseModelShort
+    {
+        ///<summary>
+        ///申请状态
+        ///</summary>
+        public int Status { get; set; }
+
+        /// <summary>
+        /// 文章编号
+        /// </summary>
+        [SubSonicStringLength(32), SubSonicNullString]
+        public string ArticleNumber { get; set; }
+    }
 }

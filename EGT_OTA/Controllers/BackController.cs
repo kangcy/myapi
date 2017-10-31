@@ -290,7 +290,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "文章信息异常" }, JsonRequestBehavior.AllowGet);
                 }
-                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DELETE).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.Delete).Where<Article>(x => x.ID == article.ID).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -553,7 +553,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "投稿信息异常" }, JsonRequestBehavior.AllowGet);
                 }
-                var result = new SubSonic.Query.Update<ArticleRecommend>(provider).Set("Status").EqualTo(Enum_Status.DELETE).Where<ArticleRecommend>(x => x.ID == id).Execute() > 0;
+                var result = new SubSonic.Query.Update<ArticleRecommend>(provider).Set("Status").EqualTo(Enum_Status.Delete).Where<ArticleRecommend>(x => x.ID == id).Execute() > 0;
 
                 //文章审核不过
                 result = new SubSonic.Query.Update<Article>(provider).Set("Submission").EqualTo(Enum_Submission.None).Where<Article>(x => x.Number == recommend.ArticleNumber).Execute() > 0;

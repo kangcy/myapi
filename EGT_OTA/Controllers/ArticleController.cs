@@ -76,7 +76,7 @@ namespace EGT_OTA.Controllers
                     parts.ForEach(x =>
                     {
                         x.ArticleNumber = model.Number;
-                        x.Status = Enum_Status.DELETE;
+                        x.Status = Enum_Status.Delete;
                         x.CreateDate = DateTime.Now;
                         x.CreateUserNumber = userNumber;
                         x.CreateIP = ip;
@@ -140,7 +140,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
                 }
-                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DELETE).Set("Submission").EqualTo(Enum_Submission.TemporaryApproved).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.Delete).Set("Submission").EqualTo(Enum_Submission.TemporaryApproved).Where<Article>(x => x.ID == article.ID).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -688,6 +688,58 @@ namespace EGT_OTA.Controllers
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("ArticleController_Recommend:" + ex.Message);
+            }
+            return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 文章彻底删除
+        /// </summary>
+        public ActionResult DeleteCompletely()
+        {
+            try
+            {
+                var id = ZNRequest.GetInt("ArticleID");
+                Article article = db.Single<Article>(x => x.ID == id);
+                if (article == null)
+                {
+                    return Json(new { result = false, message = "文章信息异常" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DeleteCompletely).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Article_DeleteCompletely:" + ex.Message);
+            }
+            return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 文章恢复
+        /// </summary>
+        public ActionResult Revoke()
+        {
+            try
+            {
+                var ArticleNumber = ZNRequest.GetString("ArticleNumber");
+                Article article = db.Single<Article>(x => x.Number == ArticleNumber);
+                if (article == null)
+                {
+                    return Json(new { result = false, message = "文章信息异常" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.Approved).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Article_Revoke:" + ex.Message);
             }
             return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
         }

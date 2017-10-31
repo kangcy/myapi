@@ -51,7 +51,7 @@ namespace EGT_OTA.Controllers.Api
                     return JsonConvert.SerializeObject(result);
                 }
 
-                if (model.Status == Enum_Status.DELETE)
+                if (model.Status == Enum_Status.Delete || model.Status == Enum_Status.DeleteCompletely)
                 {
                     result.message = "当前文章已删除";
                     return JsonConvert.SerializeObject(result);
@@ -244,6 +244,52 @@ namespace EGT_OTA.Controllers.Api
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("Api_Article_All:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
+        /// 已删除文章列表
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Article/DeleteAll")]
+        public string DeleteAll()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var pager = new Pager();
+                var UserNumber = ZNRequest.GetString("CreateUserNumber");
+                if (string.IsNullOrWhiteSpace(UserNumber))
+                {
+                    result.message = new { records = 0, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var query = new SubSonic.Query.Select(provider).From<Article>().Where<Article>(x => x.Status == Enum_Status.Delete && x.CreateUserNumber == UserNumber);
+
+                var recordCount = query.GetRecordCount();
+                if (recordCount == 0)
+                {
+                    result.message = new { records = recordCount, totalpage = 1 };
+                    return JsonConvert.SerializeObject(result);
+                }
+                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                var list = query.Paged(pager.Index, pager.Size).OrderDesc(new string[] { "ID" }).ExecuteTypedList<Article>();
+                List<ArticleJson> newlist = ArticleListInfo(list, UserNumber);
+                result.result = true;
+                result.message = new
+                {
+                    currpage = pager.Index,
+                    records = recordCount,
+                    totalpage = totalPage,
+                    list = newlist
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Article_DeleteAll:" + ex.Message);
                 result.message = ex.Message;
             }
             return JsonConvert.SerializeObject(result);

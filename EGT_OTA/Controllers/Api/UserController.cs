@@ -35,7 +35,7 @@ namespace EGT_OTA.Controllers.Api
                     return JsonConvert.SerializeObject(result);
                 }
                 var pager = new Pager();
-                var query = new SubSonic.Query.Select(provider).From<ArticlePart>().Where<ArticlePart>(x => x.Types == Enum_ArticlePart.Pic && x.Status != Enum_Status.DELETE);
+                var query = new SubSonic.Query.Select(provider).From<ArticlePart>().Where<ArticlePart>(x => x.Types == Enum_ArticlePart.Pic && x.Status != Enum_Status.Delete && x.Status != Enum_Status.DeleteCompletely);
                 if (Number != UserNumber)
                 {
                     query = query.And("Status").IsEqualTo(Enum_Status.Approved);
@@ -85,7 +85,7 @@ namespace EGT_OTA.Controllers.Api
                 var pager = new Pager();
 
                 //日期分组
-                var datequery = new SubSonic.Query.Select(provider, "ID", "CreateDate", "Status").From<ArticlePart>().Where<ArticlePart>(x => x.Types == Enum_ArticlePart.Pic && x.Status != Enum_Status.DELETE && x.CreateUserNumber == UserNumber);
+                var datequery = new SubSonic.Query.Select(provider, "ID", "CreateDate", "Status").From<ArticlePart>().Where<ArticlePart>(x => x.Types == Enum_ArticlePart.Pic && x.Status != Enum_Status.Delete && x.Status != Enum_Status.DeleteCompletely && x.CreateUserNumber == UserNumber);
                 if (Number != UserNumber)
                 {
                     datequery = datequery.And("Status").IsEqualTo(Enum_Status.Approved);
@@ -106,7 +106,7 @@ namespace EGT_OTA.Controllers.Api
                 newdatelist = newdatelist.Skip((pager.Index - 1) * pager.Size).Take(pager.Size).ToList();
 
                 //获取数据
-                var query = new SubSonic.Query.Select(provider).From<ArticlePart>().Where<ArticlePart>(x => x.Types == Enum_ArticlePart.Pic && x.Status != Enum_Status.DELETE && x.CreateUserNumber == UserNumber);
+                var query = new SubSonic.Query.Select(provider).From<ArticlePart>().Where<ArticlePart>(x => x.Types == Enum_ArticlePart.Pic && x.Status != Enum_Status.Delete && x.Status != Enum_Status.DeleteCompletely && x.CreateUserNumber == UserNumber);
                 if (Number != UserNumber)
                 {
                     query = query.And("Status").IsEqualTo(Enum_Status.Approved);
