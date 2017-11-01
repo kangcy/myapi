@@ -15,5 +15,11 @@ namespace EGT_OTA.Models
         /// </summary>
         [EnumAttribute("未登录")]
         public const int UnLogin = 1;
+
+        /// <summary>
+        /// 未删除
+        /// </summary>
+        [EnumAttribute("未删除")]
+        public const int Delete = 2;
     }
 }

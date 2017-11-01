@@ -51,8 +51,10 @@ namespace EGT_OTA.Controllers.Api
                     return JsonConvert.SerializeObject(result);
                 }
 
-                if (model.Status == Enum_Status.Delete || model.Status == Enum_Status.DeleteCompletely)
+                //非本人
+                if ((model.Status == Enum_Status.Delete || model.Status == Enum_Status.DeleteCompletely) && UserNumber != model.CreateUserNumber)
                 {
+                    result.code = Enum_ErrorCode.Delete;
                     result.message = "当前文章已删除";
                     return JsonConvert.SerializeObject(result);
                 }

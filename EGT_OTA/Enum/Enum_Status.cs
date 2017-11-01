@@ -30,9 +30,9 @@ namespace EGT_OTA.Models
 
 
         /// <summary>
-        /// 彻底审核
+        /// 彻底删除
         /// </summary>
-        [EnumAttribute("彻底审核")]
+        [EnumAttribute("彻底删除")]
         public const int DeleteCompletely = 3;
     }
 }

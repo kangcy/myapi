@@ -699,13 +699,8 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var id = ZNRequest.GetInt("ArticleID");
-                Article article = db.Single<Article>(x => x.ID == id);
-                if (article == null)
-                {
-                    return Json(new { result = false, message = "文章信息异常" }, JsonRequestBehavior.AllowGet);
-                }
-                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DeleteCompletely).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                var ArticleNumber = ZNRequest.GetString("ArticleNumber");
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DeleteCompletely).Where<Article>(x => x.Number == ArticleNumber).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -726,12 +721,7 @@ namespace EGT_OTA.Controllers
             try
             {
                 var ArticleNumber = ZNRequest.GetString("ArticleNumber");
-                Article article = db.Single<Article>(x => x.Number == ArticleNumber);
-                if (article == null)
-                {
-                    return Json(new { result = false, message = "文章信息异常" }, JsonRequestBehavior.AllowGet);
-                }
-                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.Approved).Where<Article>(x => x.ID == article.ID).Execute() > 0;
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.Approved).Where<Article>(x => x.Number == ArticleNumber).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
