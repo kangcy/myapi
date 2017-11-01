@@ -39,6 +39,14 @@ namespace EGT_OTA.Controllers.Api
                     result.message = "参数异常,请刷新重试";
                     return JsonConvert.SerializeObject(result);
                 }
+
+                //判断是否拉黑
+                var black = db.Exists<Black>(x => x.CreateUserNumber == user.Number && x.ToUserNumber == number);
+                if (black)
+                {
+                    result.message = "对方已被加入黑名单，请在设置页面解除";
+                    return JsonConvert.SerializeObject(result);
+                }
                 Fan model = db.Single<Fan>(x => x.CreateUserNumber == user.Number && x.ToUserNumber == number);
                 if (model == null)
                 {
