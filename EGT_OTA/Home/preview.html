@@ -96,8 +96,8 @@
 <script src="min/base.min.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
 <script type="text/javascript">
-	var RootUrl = "http://localhost/app/";
-	//var RootUrl = "http://www.xiaoweipian.com/";
+	//var RootUrl = "http://localhost/app/";
+	var RootUrl = "http://www.xiaoweipian.com/";
 
 	var MusicID = 0;
 	var MusicUrl = "";
@@ -179,7 +179,7 @@
 				for(var i = 0; i < parts.length; i++) {
 					var part = parts[i];
 					if(part.Types == 1) {
-						html.push('<div class="full f13 fl mt10 ' + part.IntroExpand + '"><img src="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
+						html.push('<div class="full f13 fl mt10 ' + part.IntroExpand + '"><img onload="LazyImg(this)" src="img/default.png" data-lazyload="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
 					} else if(part.Types == 2) {
 						html.push('<div class="full f13 fl mt10">' + UnUnicodeText(part.Introduction) + '</div>');
 					} else if(part.Types == 3) {

@@ -1098,6 +1098,10 @@ namespace EGT_OTA.Controllers
         [BackPower]
         public ActionResult Add()
         {
+            var number = ZNRequest.GetString("xwp");
+            var user = db.Single<User>(x => x.Number == number);
+            ViewBag.NickName = user.NickName;
+            ViewBag.Avatar = user.Avatar;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             ViewBag.key = ZNRequest.GetString("key");
             ViewBag.xwp = ZNRequest.GetString("xwp");

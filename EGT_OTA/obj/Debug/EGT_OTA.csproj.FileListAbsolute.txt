@@ -102,6 +102,5 @@ D:\项目\My\Api\EGT_OTA\bin\Newtonsoft.Json.xml
 D:\项目\My\Api\EGT_OTA\bin\StackExchange.Redis.xml
 D:\项目\My\Api\EGT_OTA\bin\System.Web.Http.Cors.xml
 D:\项目\My\Api\EGT_OTA\bin\System.Web.Http.WebHost.xml
-D:\项目\My\Api\EGT_OTA\obj\Debug\EGT_OTA.csprojResolveAssemblyReference.cache
 D:\项目\My\Api\EGT_OTA\obj\Debug\EGT_OTA.dll
 D:\项目\My\Api\EGT_OTA\obj\Debug\EGT_OTA.pdb

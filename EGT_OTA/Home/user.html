@@ -367,7 +367,7 @@
 						var html = [];
 						for(var y = 0; y < data.list[i].List.length; y++) {
 							var item = data.list[i].List[y];
-							html.push('<img src="' + base.ShowThumb(item.Cover, 2) + '" class="article" articleid="' + item.ID + '" articleNumber="' + item.Number + '" power="' + item.ArticlePower + '" />');
+							html.push('<img onload="LazyImg(this)" src="img/default.png" data-lazyload="' + base.ShowThumb(item.Cover, 2) + '" class="article" articleid="' + item.ID + '" articleNumber="' + item.Number + '" power="' + item.ArticlePower + '" />');
 						}
 						div2.innerHTML = html.join('');
 						table.appendChild(div2);
@@ -390,13 +390,16 @@
 
 			if(data.result) {
 				data = data.message;
-
 				document.title = data.NickName + "的专栏";
-				$bg.style.background = "url(" + base.ShowThumb(data.Cover, 1) + ") center center no-repeat";
-				$bg.style.backgroundSize = "cover";
+				LazyCover(base.ShowThumb(data.Cover, 1), function() {
+					$bg.style.background = "url(" + this.src + ") center center no-repeat";
+					$bg.style.backgroundSize = "cover";
+				});
+				LazyCover(base.ShowThumb(data.Avatar, 2), function() {
+					base.Get("avatar").setAttribute("src", this.src);
+					base.Get("avatar").classList.remove("hide");
+				});
 
-				base.Get("avatar").setAttribute("src", base.ShowThumb(data.Avatar, 2));
-				base.Get("avatar").classList.remove("hide");
 				base.Get("nickname").innerHTML = UnUnicodeText(data.NickName);
 				base.Get("signature").innerHTML = UnUnicodeText(data.Signature);
 
