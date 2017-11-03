@@ -192,7 +192,7 @@
         }
 
             .themeIcons .items {
-                width: 33.3%;
+                width: 25%;
                 display: inline;
                 float: left;
                 text-align: center;
@@ -219,6 +219,10 @@
 
             .themeIcons div.div3 {
                 background-image: url(../Back/Images/9.png);
+            }
+
+            .themeIcons div.div4 {
+                background-image: url(../Back/Images/2.png);
             }
 
         #music1 {
@@ -695,11 +699,15 @@
             <div class="div3" onclick="ShowShowy()" style="background-color: #D147EA;">
             </div>
         </div>
+        <div class="items">
+            <div class="div4" onclick="ShowMusic()" style="background-color: #9BC402;">
+            </div>
+        </div>
     </div>
 
 
     <div class="el-form-item fl" id="editText" style="display: none; padding: 20px; width: 100%; height: 100%; position: relative;">
-        <nav id="color" class="mui-bar mui-bar-tab hide" style="background: #ddd; bottom: 50px;">
+        <nav id="color" class="mui-bar mui-bar-tab hide" style="background: #ddd; bottom: 110px;">
             <div class="color fr" style="background: #000;" data-type="ForeColor" data="#000"></div>
             <div class="color fr" style="background: #808080;" data-type="ForeColor" data="#808080"></div>
             <div class="color fr" style="background: #ED2308;" data-type="ForeColor" data="#ED2308"></div>
@@ -708,7 +716,7 @@
             <div class="color fr" style="background: #167EFB;" data-type="ForeColor" data="#167EFB"></div>
             <div class="color fr" style="background: #B04FBB;" data-type="ForeColor" data="#B04FBB"></div>
         </nav>
-        <nav id="bgcolor" class="mui-bar mui-bar-tab hide" style="background: #ddd; bottom: 50px;">
+        <nav id="bgcolor" class="mui-bar mui-bar-tab hide" style="background: #ddd; bottom: 110px;">
             <div class="color fr" style="background: #fff;" data-type="BackColor" data="transparent"></div>
             <div class="color fr" style="background: #808080;" data-type="BackColor" data="#808080"></div>
             <div class="color fr" style="background: #ED2308;" data-type="BackColor" data="#ED2308"></div>
@@ -717,15 +725,14 @@
             <div class="color fr" style="background: #167EFB;" data-type="BackColor" data="#167EFB"></div>
             <div class="color fr" style="background: #B04FBB;" data-type="BackColor" data="#B04FBB"></div>
         </nav>
-        <nav id="align" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 50px;">
+        <nav id="align" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 110px;">
             <div class="menus" id="align_first">
                 <div class="menu format" id="btnRight"></div>
                 <div class="menu format" id="btnCenter"></div>
                 <div class="menu format" id="btnLeft"></div>
             </div>
         </nav>
-
-        <nav id="bold" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 50px;">
+        <nav id="bold" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 110px;">
             <div class="menus" id="bold_first">
                 <!--下划线-->
                 <div class="menu" data-type="Underline" id="btnUnderline"></div>
@@ -735,7 +742,7 @@
                 <div class="menu" data-type="Bold" id="btnBold"></div>
             </div>
         </nav>
-        <nav id="fs" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 50px;">
+        <nav id="fs" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 110px;">
             <div class="menus" id="fs_first">
                 <div class="menu fs f36" data-type="FontSize" data="7">
                     A
@@ -774,19 +781,21 @@
             <div class="menu" id="menuBold"></div>
         </nav>
         <div id="muicontent">
-            @*<iframe src="@Url.Content("~/Back/paste/demopage.html")" id="editor" class="editor" frameborder="0" width="100%"></iframe>*@
             <iframe src="@Url.Content("~/Back/paste/iframeblankpage.html")" id="editor" class="editor" frameborder="0" width="100%"></iframe>
         </div>
     </div>
 </div>
 @section Scripts{
+    <script type="text/javascript">
+        var rooturl = "@(ViewBag.RootUrl)";
+    </script>
     <script src="@Url.Content("~/Scripts/mui.min.js")"></script>
     <script src="@Url.Content("~/Scripts/base.min.js")"></script>
     <script src="@Url.Content("~/Scripts/group.min.js")"></script>
     <script src="@Url.Content("~/Scripts/music.js")"></script>
     <script src="@Url.Content("~/Scripts/swiper/swiper.min.js")"></script>
     <script src="@Url.Content("~/Back/paste/paste.js")"></script>
-    @*<script src="@Url.Content("~/Scripts/edittext.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/edittext.js")"></script>
     <script type="text/javascript">
         var isLoading = false;
         var Article = {};
@@ -820,8 +829,10 @@
         var InitParts = []; //段落
         var lineSwiper, borderSwiper, colorSwiper, tempSwiper, coolSwiper = null;
         var browserName = base.BrowserName();
+        var IsIconShow = false;
+        var IsIconScroll = false;
+        var num = 0;
         var btnIcon = base.Get("btnIcon");
-
         var lines = [{
             type: 1,
             name: "default_dashed"
@@ -1107,7 +1118,11 @@
         };
         window.onresize = function () {
             $editor.style.height = initHeight - 175 - 60 + "px";
-            base.Get("box").style.marginLeft = (window.innerWidth - 500 - window.innerWidth * 0.0833 * 2) / 2 + "px";
+            if (window.innerWidth < 1200) {
+                base.Get("box").style.marginLeft = (window.innerWidth - 500 - 20 * 2) / 2 + "px";
+            } else {
+                base.Get("box").style.marginLeft = (window.innerWidth - 500 - window.innerWidth * 0.0833 * 2 - 20 * 2) / 2 + "px";
+            }
         };
 
         //声明对象（编号，内容，状态，排序，类型，是否临时） 
@@ -1128,7 +1143,11 @@
         var title = base.Get("title");
 
         mui.ready(function () {
-            base.Get("box").style.marginLeft = (window.innerWidth - 500 - window.innerWidth * 0.0833 * 2 - 20 * 2) / 2 + "px";
+            if (window.innerWidth < 1200) {
+                base.Get("box").style.marginLeft = (window.innerWidth - 500 - 20 * 2) / 2 + "px";
+            } else {
+                base.Get("box").style.marginLeft = (window.innerWidth - 500 - window.innerWidth * 0.0833 * 2 - 20 * 2) / 2 + "px";
+            }
             Load();
             LoadTemplate();
             LoadColorTemplate();
@@ -1139,19 +1158,43 @@
 
             base.Get("myline").style.height = window.innerHeight * 0.6 + "px";
 
+            //滚动监听
+            window.addEventListener('scroll', function (e) {
+                if (IsIconShow && !IsIconScroll) {
+                    IsIconScroll = true;
+                    if (num > window.pageYOffset) {
+                        btnIcon.classList.remove("hide");
+                        btnIcon.classList.remove("bounceOutUp");
+                        btnIcon.classList.add("bounceInUp");
+                    } else {
+                        btnIcon.classList.remove("bounceInUp");
+                        btnIcon.classList.add("bounceOutUp");
+                    }
+                    num = window.pageYOffset;
+                    IsIconShow = true;
+                    IsIconScroll = false;
+                }
+            });
+
             //点击编辑
             mui('#edit').on('tap', '.edit-content', function () {
                 currEditID = this.id;
                 currEditPartID = this.getAttribute("partid");
                 var type = this.getAttribute("type");
                 if (type == "pic") {
-                    currEditImg = this.getAttribute("src");
-                    base.OpenWindow("editimage", "editimage.html", {
-                        Url: currEditImg,
-                        Source: "ArticleAvatar",
-                        Standard: "Article",
-                        ArticleNumber: ArticleNumber,
-                        PartID: currEditPartID
+                    //currEditImg = this.getAttribute("src");
+                    //base.OpenWindow("editimage", "editimage.html", {
+                    //    Url: currEditImg,
+                    //    Source: "ArticleAvatar",
+                    //    Standard: "Article",
+                    //    ArticleNumber: ArticleNumber,
+                    //    PartID: currEditPartID
+                    //});
+                    layer.open({
+                        type: 2,
+                        area: ['500px', '750px'],
+                        content: 'Pic',
+                        title: "图片编辑"
                     });
                 } else if (type == "text") {
                     //编辑文字
@@ -1170,6 +1213,10 @@
 
             //新增切换 
             mui('#edit').on('tap', '.edit-add', function () {
+                IsIconShow = false;
+                mui.later(function () {
+                    IsIconShow = true;
+                }, 250);
                 var $this = $(this);
                 currEditID = $this.parents(".edit-body").find(".edit-content").attr("id");
                 $("#edit").find(".icons").addClass("hide");
@@ -1246,7 +1293,8 @@
                 }
                 var length = $(".edit-content").length;
                 if (length <= 1) {
-                    return mui.toast("请至少保留一段内容");
+                    layer.msg("请至少保留一段内容");
+                    return false;
                 }
                 var $this = this;
                 layer.confirm('确定删除此段？', {
@@ -1269,8 +1317,6 @@
                 });
             });
         });
-
-
 
         //显示分隔
         function ShowLine() {
@@ -1479,6 +1525,16 @@
             });
         }
 
+        //音乐搜索
+        function ShowMusic() {
+            layer.open({
+                type: 2,
+                area: ['500px', '650px'],
+                content: 'Music',
+                title: "音乐搜索"
+            });
+        }
+
         //修改音乐
         function UpdateMusic(musicID, musicName, musicUrl, source) {
             MusicID = musicID;
@@ -1531,7 +1587,7 @@
                 function (data) {
                     if (data != null) {
                         if (data.result) {
-                            
+
                         } else {
                             isLoading = false;
                         }
@@ -1954,7 +2010,7 @@
                             });
                         }
                     }
-                    //IconTan(1, false);
+                    IconTan(1, false);
                 }
             });
         }

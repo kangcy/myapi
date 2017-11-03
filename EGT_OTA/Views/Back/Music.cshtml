@@ -1,0 +1,344 @@
+﻿@using EGT_OTA.Models
+@{
+    Layout = null;
+}
+@inherits System.Web.Mvc.WebViewPage
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="format-detection" content="telephone = no" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/login.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/Page.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/msgbox.css")"  />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
+    <style type="text/css">
+        .mui-search {
+            width: 90%;
+            display: inline-block;
+        }
+
+        .play {
+            background: url(../Back/Images/start.png) center center no-repeat;
+            background-size: cover;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .stop {
+            background: url(../Back/Images/stop.png) center center no-repeat;
+            background-size: cover;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .stopMusic img {
+            border-radius: 100%;
+            animation: rotate 4s linear infinite;
+            -webkit-animation: rotate 4s linear infinite;
+            -ms-animation: rotate 4s linear infinite;
+            -moz-animation: rotate 4s linear infinite;
+            -o-animation: rotate 4s linear infinite;
+        }
+
+        .mui-table-view-cell {
+            padding: 5px;
+            display: inline-block;
+            width: 100%;
+            position: relative;
+        }
+
+            .mui-table-view-cell:after {
+                left: 3.5rem;
+            }
+
+        .mui-table-view:after {
+            height: 0px;
+        }
+
+        .mui-table-view-cell:last-child:after,
+        .mui-table-view-cell:last-child:before {
+            height: 0px !important;
+        }
+
+        .mui-popup-title + .mui-popup-text {
+            display: none;
+        }
+
+        .mui-bar-tab div {
+            font-size: 16px;
+            height: 50px;
+            line-height: 50px;
+        }
+
+        .musichead {
+            position: relative;
+            height: 2rem;
+            line-height: 2.2rem;
+            padding-left: 2.5rem;
+            background: url(../images/music/top_bg.png) 0.5rem 0.4rem no-repeat;
+            background-size: 2.2rem;
+        }
+
+        .head1 {
+            border-bottom: 2px solid #b38ad0;
+            color: #b38ad0;
+            background-position: 0.5rem 0.5rem;
+        }
+
+        .head2 {
+            border-bottom: 2px solid #ff6a3c;
+            color: #ff6a3c;
+            background-position: 0.5rem -1rem;
+        }
+
+        .head3 {
+            border-bottom: 2px solid #4393fa;
+            color: #4393fa;
+            background-position: 0.5rem -2.5rem;
+        }
+
+        .head4 {
+            border-bottom: 2px solid #79c152;
+            color: #79c152;
+            background-position: 0.5rem -4rem;
+        }
+
+        .head5 {
+            border-bottom: 2px solid #7f82de;
+            color: #7f82de;
+            background-position: 0.5rem -5.5rem;
+        }
+
+        .head6 {
+            border-bottom: 2px solid #c1a852;
+            color: #c1a852;
+            background-position: 0.5rem -7rem;
+        }
+
+        .head7 {
+            border-bottom: 2px solid #6a94c9;
+            color: #6a94c9;
+            background-position: 0.5rem -8.5rem;
+        }
+
+        .head8 {
+            border-bottom: 2px solid #ef5dae;
+            color: #ef5dae;
+            background-position: 0.5rem -10rem;
+        }
+
+        .head9 {
+            border-bottom: 2px solid #e9b34b;
+            color: #e9b34b;
+            background-position: 0.5rem -11.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <div class="el-card box-card">
+                        <div class="el-card__header">
+                            <div class="clearfix">
+                                <div class="el-form-item inline fl">
+                                    <div class="el-form-item__content">
+                                        <div class="el-input el-input--small">
+                                            <input id="title" placeholder="音乐标题" size="small" type="text" class="el-input__inner">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fr">
+                                    <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
+                                    <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="scroll-view" class="el-card__body mui-table-view" style="height: 470px; overflow-x: hidden;">
+                        </div>
+
+                    </div>
+                    <div class="layui-layer-btn" style="padding-top: 10px;"><a class="layui-layer-btn0" onclick="More()">查看更多</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
+<script src="@Url.Content("~/Back/bootstrap.min.js")"></script>
+<script src="@Url.Content("~/Back/msgbox/msgbox.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Back/jquery.myPagination5.0.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/base.min.js")"></script>
+<script type="text/javascript">
+    var fileId = 0;
+    var fileName = "";
+    var fileUrl = "";
+    var currpage = 1;
+    var pagesize = 30;
+    var isloading = false;
+    $(document).ready(function () {
+        $(document).on("click",".music",function(){
+            if (base.TriggerMain) {
+                return;
+            }
+            fileId = this.getAttribute("fileId");
+            fileName = this.getAttribute("fileName");
+            fileUrl = this.getAttribute("fileUrl");
+
+            $(".music").removeClass("stopMusic");
+            $(".mui-icon").removeClass("play stop");
+            $(".mui-icon").addClass("uncheck");
+            $.each(this.querySelectorAll(".mui-icon"), function (index, item) {
+                item.classList.remove("uncheck");
+                item.classList.add("play");
+            });
+            stopsound();
+            resetsound();
+        })
+
+        //播放
+        $(document).on("click", ".play", function () {
+            base.TriggerMain = true;
+            setTimeout(function () {
+                base.TriggerMain = false;
+            }, 500)
+            this.classList.remove("play");
+            this.classList.add("stop");
+            this.parentNode.classList.add("stopMusic");
+            playsound();
+        })
+
+        //暂停
+        $(document).on("click", ".stop", function () {
+            base.TriggerMain = true;
+            setTimeout(function () {
+                base.TriggerMain = false;
+            }, 500)
+            this.parentNode.classList.remove("stopMusic");
+            this.classList.remove("stop");
+            this.classList.add("play");
+            stopsound();
+        })
+
+        //监听软键盘搜索键
+        $("#search").keydown(function (e) {
+            alert(e.keyCode)
+            if (13 == e.keyCode) {
+                if ($("#title").val().trim() == "") {
+                    layer.msg("请输入搜索内容");
+                    return false;
+                }
+                currpage = 1;
+                $("#search").trigger("click");
+            }
+        });
+
+        $("#search").click(function () {
+            if ($("#title").val().trim() == "") {
+                return;
+            }
+            layer.load();
+            var data = {
+                page: currpage,
+                rows: pagesize,
+                name: $("#title").val().trim(),
+            };
+            $.ajax({
+                url: "@(ViewBag.RootUrl)Api/Music/Search2",
+                dataType: "json",
+                data: $.param(data),
+                type: "get",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data != null) {
+                        if (data.result) {
+                            data = data.message;
+                            totalpage = data.totalpage;
+                            var length = data.list.length;
+                            if (length > 0) {
+                                var fragment = document.createDocumentFragment();
+                                $.each(data.list, function (index, item) {
+                                    fragment.appendChild(AppendHtml(item));
+                                });
+                                $("#scroll-view")[0].appendChild(fragment);
+                            }
+                        }
+                    }
+                    layer.closeAll('loading');
+                }
+            });
+        })
+
+        $("#reset").click(function () {
+            currpage = 1;
+            $("#scroll-view").html("");
+        })
+    });
+
+    function More() {
+        ++currpage;
+        $("#search").trigger("click");
+    }
+
+    function Confirm() {
+        parent.$('#parentIframe').text('我被改变了');
+        parent.layer.tips('Look here', '#parentIframe', { time: 5000 });
+        parent.layer.close(index);
+    }
+
+    function AppendHtml(item) {
+        var div = document.createElement('li');
+        div.className = 'mui-table-view-cell music';
+        div.setAttribute("fileId", item.ID);
+        div.setAttribute("fileName", item.Author + "「" + item.Name + "」");
+        div.setAttribute("fileUrl", item.FileUrl);
+        var model = [];
+        model.push('<img src="' + item.Cover + '" style="width:2rem;height:2rem;" class="fl mr10" />');
+        model.push('<p class="fl c333 f13 mb0" style="width:70%;display:inline-block;line-height:1rem;text-indent:0.5rem;">' + item.Name + '<br /><span class="fl c999 f11 mt1">' + item.Author + "「" + item.Remark + "」" + '</span></p>');
+        model.push('<span class="fr csubtitle mui-icon uncheck" style="position:absolute;right:0.5rem;top:0.4rem;"></span>');
+        div.innerHTML = model.join('');
+        return div;
+    }
+
+    var audio = null;
+    var timestamp = 0;
+
+    function resetsound() {
+        if (audio != null) {
+            document.body.removeChild(audio);
+            audio = null;
+        }
+        audio = document.createElement('audio');
+        audio.id = 'bgsound';
+        audio.loop = 'loop';
+        audio.innerHTML = '<source src="' + fileUrl + '" type="audio/mpeg">';
+        document.body.appendChild(audio);
+    }
+
+    function playsound() {
+        if (audio != null) {
+            if (audio.paused) {
+                audio.play();
+            }
+        }
+    }
+
+    function stopsound() {
+        if (audio != null) {
+            if (!audio.paused) {
+                audio.pause();
+            }
+        }
+    }
+</script>

@@ -10,11 +10,8 @@ function initEditor(html) {
     } else {
         ifrm.contentWindow.document.write("<link rel=\"stylesheet\" href=\"mui.min.css\"><body style=\"" + bodyStyle + "\">" + html + "<script src=\"../Scripts/base.min.js\" /></body>");
     }
-
     ifrm.contentWindow.document.close();
-
     objEditor = document.getElementById("editor");
-
     w = objEditor.contentWindow;
     if (isIE) {
         ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function (e) {
@@ -23,7 +20,6 @@ function initEditor(html) {
     } else {
         edDoc = objEditor.contentWindow.document;
         objEditorBody = objEditor.contentWindow.document.body.firstChild;
-        console.log(objEditorBody.innerHTML)
         ifrm.contentWindow.document.addEventListener("paste", function (e) {
             return pasteClipboardData(ifrm.id, e);
         }, false);

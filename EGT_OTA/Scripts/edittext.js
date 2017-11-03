@@ -89,21 +89,16 @@ mui.ready(function () {
     base.Get("menuBold").addEventListener('tap', function (event) {
         objEditorBody.focus();
         var node = ShowParentNode();
+        base.RemoveClass(["#btnBold", "#btnItalic", "#btnUnderline"], "curr");
         mui.each(node, function (i, item) {
             if (item == "B") {
                 base.Get("btnBold").classList.add("curr");
-            } else {
-                base.Get("btnBold").classList.remove("curr");
             }
             if (item == "I") {
                 base.Get("btnItalic").classList.add("curr");
-            } else {
-                base.Get("btnItalic").classList.remove("curr");
             }
             if (item == "U") {
                 base.Get("btnUnderline").classList.add("curr");
-            } else {
-                base.Get("btnUnderline").classList.remove("curr");
             }
         })
         base.AddClass(["#color", "#bgcolor", "#align", "#fs"], "hide");
@@ -155,18 +150,6 @@ mui.ready(function () {
 
     //超链接
     base.Get("menuLink").addEventListener('tap', SetStyle, false);
-
-    //字数限制
-    edDoc.getElementsByClassName("edit")[0].ontouchend = function () {
-        return
-        base.AddClass(["#color", "#bgcolor", "#bold", "#fs", "#align"], "hide");
-        base.RemoveClass([".curr"], "curr");
-    }
-
-    edDoc.onkeyup = function () {
-        console.log("onkeyup");
-        InsertPush();
-    }
 })
 
 //初始化对齐
@@ -302,10 +285,6 @@ function InsertPush() {
 
 //初始化文字编辑
 function InitEditText(html) {
-    if (isloading) {
-        return;
-    }
-    isloading = true;
     layer.open({
         type: 1,
         closeBtn: 1,
@@ -319,30 +298,34 @@ function InitEditText(html) {
                 return;
             }
             isLoading = true;
-
             var val = objEditorBody.innerHTML;
             if (base.IsNullOrEmpty(val)) {
                 isLoading = false;
-                return mui.toast("请编辑文字");
+                layer.msg("请编辑文字");
+                return false;
             }
-            //过滤敏感词
+            layer.load();
             $.ajax({
-                url: "System/CheckDirty",
+                url: rooturl + "System/CheckDirty",
                 data: { Title: escape(val) },
+                type: "post",
                 dataType: "json",
                 success: function (data) {
                     if (data != null) {
                         if (data.result) {
                             objEditorBody.removeAttribute("contenteditable");
-                            AddText((PartID == 0 ? base.GetUid() : currEditPartID), escape(objEditorBody.outerHTML), currEditPartID);
+                            AddText((currEditPartID == 0 ? base.GetUid() : currEditPartID), escape(objEditorBody.outerHTML), currEditPartID);
                         } else {
-                            mui.toast(data.message);
+                            layer.msg(data.message);
                         }
                     }
                     isLoading = false;
                 }
             });
+            layer.closeAll('loading');
             layer.close(index);
+            base.AddClass(["#color", "#bgcolor", "#bold", "#fs", "#align"], "hide");
+            base.RemoveClass([".curr"], "curr");
         },
         cancel: function (index, layero) {
             //取消保存
@@ -351,6 +334,8 @@ function InitEditText(html) {
                 btn: ['确定', '取消']
             }, function () {
                 layer.closeAll();
+                base.AddClass(["#color", "#bgcolor", "#bold", "#fs", "#align"], "hide");
+                base.RemoveClass([".curr"], "curr");
             }, function (index) {
                 layer.close(index);
             });

@@ -1,0 +1,122 @@
+﻿@using EGT_OTA.Models
+@{
+    Layout = null;
+}
+@inherits System.Web.Mvc.WebViewPage
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="format-detection" content="telephone = no" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/login.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/Page.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/msgbox.css")"  />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
+</head>
+<body>
+    <div id="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <div class="el-card box-card">
+                        <div class="el-card__header">
+                            <div class="clearfix">
+                                <div class="el-form-item inline fl">
+                                    <div class="el-form-item__content">
+                                        <div class="el-input el-input--small">
+                                            <input id="title" placeholder="音乐标题" size="small" type="text" class="el-input__inner">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fr">
+                                    <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
+                                    <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="scroll-view" class="el-card__body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
+<script src="@Url.Content("~/Back/bootstrap.min.js")"></script>
+<script src="@Url.Content("~/Back/msgbox/msgbox.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Back/jquery.myPagination5.0.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    var currpage = 1;
+    var pagesize = 10;
+    var isloading = false;
+    $(document).ready(function () {
+        $("#search").click(function () {
+            if ($("#title").val().trim() == "") {
+                return;
+            }
+            var data = {
+                page: currpage,
+                rows: pagesize,
+                name: $("#title").val().trim(),
+            };
+            $.ajax({
+                url: "@(ViewBag.RootUrl)Api/Music/Search",
+                dataType: "json",
+                data: $.param(data),
+                type: "get",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data != null) {
+                        if (data.result) {
+                            data = data.message;
+                            totalpage = data.totalpage;
+                            var length = data.list.length;
+                            if (length > 0) {
+                                var fragment = document.createDocumentFragment();
+                                mui.each(data.list, function (index, item) {
+                                    fragment.appendChild(AppendHtml(item));
+                                });
+                                $("#scroll-view")[0].appendChild(fragment);
+                            }
+                        }
+                    }
+                }
+            });
+        })
+
+        $("#reset").click(function () {
+            currpage = 1;
+            $("#scroll-view").html("");
+        })
+    });
+
+    function Confirm() {
+        parent.$('#parentIframe').text('我被改变了');
+        parent.layer.tips('Look here', '#parentIframe', { time: 5000 });
+        parent.layer.close(index);
+    }
+
+    function AppendHtml(item) {
+        var div = document.createElement('li');
+        div.className = 'mui-table-view-cell music';
+        div.setAttribute("fileId", item.ID);
+        div.setAttribute("fileName", item.Author + "「" + item.Name + "」");
+        div.setAttribute("fileUrl", item.FileUrl);
+        var model = [];
+        model.push('<img onload="LazyImg(this)" src="../images/avatar.png" data-lazyload="' + item.Cover + '" style="width:2rem;height:2rem;" class="fl mr10" />');
+        model.push('<p class="fl c333 f13 mb0" style="width:75%;display:inline-block;">' + item.Name + '<br /><span class="fl c999 f11 mt1">' + item.Author + "「" + item.Remark + "」" + '</span></p>');
+        model.push('<span class="fr csubtitle mui-icon uncheck" style="position:absolute;right:0.5rem;top:1rem;"></span>');
+        div.innerHTML = model.join('');
+        return div;
+    }
+</script>

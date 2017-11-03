@@ -1108,6 +1108,24 @@ namespace EGT_OTA.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 音乐
+        /// </summary>
+        public ActionResult Music()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
+        /// <summary>
+        /// 图片
+        /// </summary>
+        public ActionResult Pic()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
         #endregion
     }
 }

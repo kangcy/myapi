@@ -390,6 +390,7 @@
     <Content Include="Back\Images\082.png" />
     <Content Include="Back\Images\083.png" />
     <Content Include="Back\Images\09.png" />
+    <Content Include="Back\Images\2.png" />
     <Content Include="Back\Images\5.png" />
     <Content Include="Back\Images\6.png" />
     <Content Include="Back\Images\9.png" />
@@ -405,6 +406,8 @@
     <Content Include="Back\Images\off.png" />
     <Content Include="Back\Images\on.png" />
     <Content Include="Back\Images\prev.png" />
+    <Content Include="Back\Images\start.png" />
+    <Content Include="Back\Images\stop.png" />
     <Content Include="Back\jquery.myPagination5.0.js" />
     <Content Include="Back\layer\extend\layer.ext.js" />
     <Content Include="Back\layer\layer.js" />
@@ -1133,6 +1136,8 @@
     <Content Include="Views\Red\LoginIndex.cshtml" />
     <Content Include="Views\Banner\Index.cshtml" />
     <Content Include="Views\Back\Add.cshtml" />
+    <Content Include="Views\Back\Music.cshtml" />
+    <Content Include="Views\Back\Pic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
