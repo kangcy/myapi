@@ -367,7 +367,6 @@ namespace EGT_OTA.Controllers.Api
             try
             {
                 var list = new List<MusicTop>();
-
                 if (CacheHelper.Exists("MusicTop"))
                 {
                     list = (List<MusicTop>)CacheHelper.GetCache("MusicTop");
@@ -427,6 +426,83 @@ namespace EGT_OTA.Controllers.Api
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("Api_Music_SearchTop:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
+        /// 音乐排行榜
+        /// 接口请求地址：http://i.oppsu.cn/index.php?c=index&a=gettop100
+        /// 数据源地址：https://rss.itunes.apple.com/api/v1/CN/apple-music/top-songs/all/10/explicit.json
+        /// CN：中国
+        /// 10：取10条数据
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Music/MusicTop")]
+        public string MusicTop()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var list = new List<Music>();
+                if (CacheHelper.Exists("MusicTop"))
+                {
+                    list = (List<Music>)CacheHelper.GetCache("MusicTop");
+                }
+                else
+                {
+                    var recordCount = 0;
+                    var totalPage = 0;
+                    var json = HttpUtil.Get("https://rss.itunes.apple.com/api/v1/CN/apple-music/top-songs/all/10/explicit.json");
+                    var js = JObject.Parse(json);
+
+                    JArray arr = JArray.Parse(js["feed"]["results"].ToString());
+                    recordCount = arr.Count;
+                    foreach (JObject model in arr)
+                    {
+                        var music = new Music();
+                        music.ID = Tools.SafeInt(model["id"]);
+                        music.Name = model["name"].ToString();
+                        music.Author = model["artistName"].ToString(); ;
+                        music.Remark = model["collectionName"].ToString();
+                        music.Cover = model["artworkUrl100"].ToString();
+                        var dic = new Dictionary<string, object>();
+                        dic.Add("country", "CN");
+                        dic.Add("albumid", music.ID);
+                        var filrurl = HttpUtil.Post("http://i.oppsu.cn/index.php?c=index&a=getsongpreview", dic);
+                        try
+                        {
+                            var file = JObject.Parse(filrurl);
+                            if (Tools.SafeInt(file["status"]) == 1)
+                            {
+                                music.FileUrl = file["data"].ToString();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            music.FileUrl = "";
+                        }
+                        list.Add(music);
+                    }
+                    result.result = true;
+                    result.message = new
+                    {
+                        currpage = 1,
+                        records = recordCount,
+                        totalpage = totalPage,
+                        list = list
+                    };
+                    if (list.Count > 0)
+                    {
+                        CacheHelper.Insert("MusicTop", list, TimeSpan.FromDays(7));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Music_MusicTop:" + ex.Message);
                 result.message = ex.Message;
             }
             return JsonConvert.SerializeObject(result);

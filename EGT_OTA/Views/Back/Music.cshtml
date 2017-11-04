@@ -240,9 +240,6 @@
         });
 
         $("#search").click(function () {
-            if (base.RepeatAction()) {
-                return;
-            }
             if ($("#title").val().trim() == "") {
                 return;
             }
@@ -253,12 +250,14 @@
                 name: $("#title").val().trim(),
             };
             $.ajax({
-                url: "@(ViewBag.RootUrl)Api/Music/Search",
+                //url: "@(ViewBag.RootUrl)Api/Music/Search",
+                url: "@(ViewBag.RootUrl)Api/Music/MusicTop",
                 dataType: "json",
                 data: $.param(data),
                 type: "get",
                 success: function (data) {
                     data = JSON.parse(data);
+                    console.log(data.message);
                     if (data != null) {
                         if (data.result) {
                             data = data.message;
