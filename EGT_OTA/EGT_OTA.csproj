@@ -401,6 +401,7 @@
     <Content Include="Back\Images\btn_up.png" />
     <Content Include="Back\Images\btn_x.png" />
     <Content Include="Back\Images\icon_music.png" />
+    <Content Include="Back\Images\icon_pic_n.png" />
     <Content Include="Back\Images\icon_pic_y.png" />
     <Content Include="Back\Images\next.png" />
     <Content Include="Back\Images\off.png" />
@@ -1092,6 +1093,7 @@
     <None Include="Properties\PublishProfiles\egt.pubxml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\base.min.js" />
+    <Content Include="Scripts\cropper.min.js" />
     <Content Include="Scripts\edittext.js" />
     <Content Include="Scripts\group.min.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
@@ -1138,6 +1140,7 @@
     <Content Include="Views\Back\Add.cshtml" />
     <Content Include="Views\Back\Music.cshtml" />
     <Content Include="Views\Back\Pic.cshtml" />
+    <Content Include="Views\Back\Showy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

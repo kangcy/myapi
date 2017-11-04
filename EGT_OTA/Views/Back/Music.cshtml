@@ -15,9 +15,6 @@
     <meta name="format-detection" content="telephone = no" />
     <title></title>
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/login.css")" />
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/Page.css")" />
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/msgbox/msgbox.css")"  />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
     <style type="text/css">
         .mui-search {
@@ -176,8 +173,6 @@
 </html>
 <script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
 <script src="@Url.Content("~/Back/bootstrap.min.js")"></script>
-<script src="@Url.Content("~/Back/msgbox/msgbox.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Back/jquery.myPagination5.0.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/base.min.js")"></script>
 <script type="text/javascript">
@@ -245,6 +240,9 @@
         });
 
         $("#search").click(function () {
+            if (base.RepeatAction()) {
+                return;
+            }
             if ($("#title").val().trim() == "") {
                 return;
             }
@@ -255,7 +253,7 @@
                 name: $("#title").val().trim(),
             };
             $.ajax({
-                url: "@(ViewBag.RootUrl)Api/Music/Search2",
+                url: "@(ViewBag.RootUrl)Api/Music/Search",
                 dataType: "json",
                 data: $.param(data),
                 type: "get",

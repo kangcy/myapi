@@ -1126,6 +1126,16 @@ namespace EGT_OTA.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 漂浮
+        /// </summary>
+        public ActionResult Showy()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
+
         #endregion
     }
 }

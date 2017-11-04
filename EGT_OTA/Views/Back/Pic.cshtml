@@ -21,28 +21,49 @@
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
 </head>
 <body>
-    <div id="wrapper">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-10 col-lg-offset-1">
-                    <div class="el-card box-card">
-                        <div class="el-card__header">
-                            <div class="clearfix">
-                                <div class="el-form-item inline fl">
-                                    <div class="el-form-item__content">
-                                        <div class="el-input el-input--small">
-                                            <input id="title" placeholder="音乐标题" size="small" type="text" class="el-input__inner">
-                                        </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <div class="el-card box-card">
+                    <div class="el-card__header">
+                        <div class="clearfix">
+                            <div class="el-form-item inline fl">
+                                <div class="el-form-item__content">
+                                    <div class="el-input el-input--small">
+                                        <input id="title" placeholder="" size="small" type="text" class="el-input__inner">
                                     </div>
                                 </div>
-                                <div class="fr">
-                                    <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
-                                    <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
-                                </div>
+                            </div>
+                            <div class="fr">
+                                <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
+                                <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
                             </div>
                         </div>
-                        <div id="scroll-view" class="el-card__body">
+                    </div>
+                    <div id="scroll-view" class="el-card__body">
+                        <!--图片操作-->
+                        <div id="picupload"></div>
+                        <div id="wrapper" class="mui-iframe-wrapper full tc" style="bottom: 50px;">
+                            <img id="readyimg" style="display: none; max-width: 100%; max-height: 100%;" class="fl" />
                         </div>
+                        <footer class="mui-bar mui-bar-tab" style="background: #F4F4F4;">
+                            <a class="mui-icon blue fl mt6 ml10" style="font-size: 16px;" href="#upload">更换</a>
+                            <a class="mui-icon blue fr mt6 mr10" style="font-size: 16px;" id="confirm">完成</a>
+                            <div class="mui-title tc">
+                                <div style="width: 150px; display: inline-block;">
+                                    <div style="width: 50%; display: none;" id="rotateimgright">
+                                        <img src="../images/editimage/e1.png" style="width: 40px; height: 40px; margin-top: 3px;" onclick="rotateimgright()" />
+                                    </div>
+                                    <div style="width: 50%; display: none;" id="openpop">
+                                        <img src="../images/editimage/e2.png" style="width: 40px; height: 40px; margin-top: 3px;" onclick="openpop()" />
+                                    </div>
+                                    <div style="width: 50%; display: none;" id="closepop">
+                                        <img src="../images/editimage/e4.png" style="width: 40px; height: 40px; margin-top: 3px;" onclick="closepop()" />
+                                    </div>
+                                    <!--<div style="width:33.3%;display:inline-block;"><img src="../images/editimage/e3.png" style="width:40px;height:40px;margin-top:3px;" onclick="closepop()" /></div>-->
+                                </div>
+                            </div>
+                        </footer>
                     </div>
                 </div>
             </div>
@@ -52,71 +73,337 @@
 </html>
 <script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
 <script src="@Url.Content("~/Back/bootstrap.min.js")"></script>
-<script src="@Url.Content("~/Back/msgbox/msgbox.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Back/jquery.myPagination5.0.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/cropper.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/base.min.js")" type="text/javascript"></script>
 <script type="text/javascript">
-    var currpage = 1;
-    var pagesize = 10;
-    var isloading = false;
+    var totalheight = 0;
+    var totalwidth = window.innerWidth;
+    var Url = "";
+    var Source = "";
+    var ArticleID = 0;
+    var ArticleNumber = "";
+    var PartID = 0;
+    var isLoading = false;
+    var Standard = "";
+
     $(document).ready(function () {
-        $("#search").click(function () {
-            if ($("#title").val().trim() == "") {
+        if (base.IsNullOrEmpty(Url)) {
+
+        } else {
+            $("#readyimg").attr("src", Url).load(function () {
+                var imagewidth = $("#readyimg").width();
+                var imageheight = $("#readyimg").height();
+                if (totalheight > imageheight) {
+                    $("#readyimg").css("margin-top", (totalheight - imageheight) / 2 + "px");
+                } else if (totalwidth > imagewidth) {
+                    $("#readyimg").css("margin-left", (totalwidth - imagewidth) / 2 + "px");
+                } else {
+                    $("#readyimg").css({
+                        "width": "auto",
+                        "height": "auto"
+                    });
+                }
+                //用户封面、用户头像
+                if (Standard == "UserCover" || Standard == "UserAvatar") {
+                    openpop();
+                } else {
+                    $("#readyimg").show();
+                    base.Get("openpop").style.display = "inline-block";
+                }
+                mask.close();
+            });
+        }
+
+        base.Get("confirm").addEventListener('tap', function (event) {
+            if (base.RepeatAction()) {
                 return;
             }
-            var data = {
-                page: currpage,
-                rows: pagesize,
-                name: $("#title").val().trim(),
-            };
-            $.ajax({
-                url: "@(ViewBag.RootUrl)Api/Music/Search",
-                dataType: "json",
-                data: $.param(data),
-                type: "get",
-                success: function (data) {
-                    data = JSON.parse(data);
-                    if (data != null) {
-                        if (data.result) {
-                            data = data.message;
-                            totalpage = data.totalpage;
-                            var length = data.list.length;
-                            if (length > 0) {
-                                var fragment = document.createDocumentFragment();
-                                mui.each(data.list, function (index, item) {
-                                    fragment.appendChild(AppendHtml(item));
-                                });
-                                $("#scroll-view")[0].appendChild(fragment);
-                            }
-                        }
-                    }
+            confirm(function (src) {
+                if (base.IsNullOrEmpty(src)) {
+                    return;
                 }
+                isLoading = true;
+                var page = base.GetView('addarticle');
+                if (page) {
+                    page.evalJS("AddPic('" + (PartID == 0 ? base.GetUid() : PartID) + "','" + src + "','" + PartID + "')");
+                }
+                isLoading = false;
             });
-        })
-
-        $("#reset").click(function () {
-            currpage = 1;
-            $("#scroll-view").html("");
-        })
+        });
     });
 
-    function Confirm() {
-        parent.$('#parentIframe').text('我被改变了');
-        parent.layer.tips('Look here', '#parentIframe', { time: 5000 });
-        parent.layer.close(index);
+    var iscutimging = false;
+    var dstname = "";
+
+    //相册选取  
+    function Gallery() {
+        mui('#upload').popover('hide');
+        plus.gallery.pick(function (e) {
+            closepop(); //关闭裁剪
+
+            //压缩图片 
+            dstname = "_downloads/" + base.GetUid() + ".jpg"; //设置压缩后图片路径
+
+            //压缩图片,并重命名
+            compressImage(e.files[0], dstname, function (status, src) {
+                if (status) {
+                    $("#readyimg").hide().attr("src", src).load(function () {
+                        var imagewidth = $("#readyimg").width();
+                        var imageheight = $("#readyimg").height();
+
+                        if (totalheight > imageheight) {
+                            $("#readyimg").css("margin-top", (totalheight - imageheight) / 2 + "px");
+                        } else if (totalwidth > imagewidth) {
+                            $("#readyimg").css("margin-left", (totalwidth - imagewidth) / 2 + "px");
+                        } else {
+                            $("#readyimg").css({
+                                "width": "auto",
+                                "height": "auto"
+                            });
+                        }
+                        $("#readyimg").show();
+                    });
+                }
+            });
+        }, function (e) {
+            //outSet( "取消选择图片" ) 
+        }, {
+            filter: "image",
+            maximum: 1,
+            multiple: true,
+            system: false
+        });
     }
 
-    function AppendHtml(item) {
-        var div = document.createElement('li');
-        div.className = 'mui-table-view-cell music';
-        div.setAttribute("fileId", item.ID);
-        div.setAttribute("fileName", item.Author + "「" + item.Name + "」");
-        div.setAttribute("fileUrl", item.FileUrl);
-        var model = [];
-        model.push('<img onload="LazyImg(this)" src="../images/avatar.png" data-lazyload="' + item.Cover + '" style="width:2rem;height:2rem;" class="fl mr10" />');
-        model.push('<p class="fl c333 f13 mb0" style="width:75%;display:inline-block;">' + item.Name + '<br /><span class="fl c999 f11 mt1">' + item.Author + "「" + item.Remark + "」" + '</span></p>');
-        model.push('<span class="fr csubtitle mui-icon uncheck" style="position:absolute;right:0.5rem;top:1rem;"></span>');
-        div.innerHTML = model.join('');
-        return div;
+    //照片裁剪类  
+    function cutImg(callback) {
+        base.Get("rotateimgright").style.display = "none";
+        base.Get("openpop").style.display = "none";
+        base.Get("closepop").style.display = "none";
+
+        //用户封面、用户头像
+        if (Standard == "UserCover" || Standard == "UserAvatar") {
+            var ratio = 1 / 1;
+            switch (Standard) {
+                case "UserCover":
+                    ratio = 4 / 3;
+                    break;
+                case "UserAvatar":
+                    ratio = 1 / 1;
+                    break;
+                default:
+                    break;
+            }
+            $("#readyimg").cropper({
+                checkImageOrigin: true,
+                aspectRatio: ratio, //裁剪比例
+                autoCropArea: 1, //裁剪框大小
+                toggleDragModeOnDblclick: false,
+                dragCrop: false, //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+                zoomable: true, //是否允许放大缩小图片
+                movable: false, //是否允许移动剪裁框
+                resizable: false, //是否允许改变裁剪框大小
+                built: function () {
+                    callback();
+                    iscutimging = true;
+                    $("#readyimg").show();
+                    mui.later(function () {
+                        base.Get("rotateimgright").style.display = "inline-block";
+                    }, 1500);
+                }
+            });
+        } else {
+            $("#readyimg").cropper({
+                checkImageOrigin: true,
+                autoCropArea: 0.6, //裁剪框大小
+                toggleDragModeOnDblclick: false,
+                dragCrop: false, //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+                zoomable: true, //是否允许放大缩小图片
+                movable: true, //是否允许移动剪裁框
+                resizable: true, //是否允许改变裁剪框大小
+                built: function () {
+                    callback();
+                    iscutimging = true;
+                    $("#readyimg").show();
+                    mui.later(function () {
+                        base.Get("rotateimgright").style.display = "inline-block";
+                        base.Get("closepop").style.display = "inline-block";
+                    }, 1500);
+                }
+            });
+        }
+    }
+
+    //右旋转90度  
+    function rotateimgright() {
+        if (base.IsNullOrEmpty(dstname)) {
+            dstname = $("#readyimg").attr("src");
+        }
+        if (dstname.toLowerCase().startsWith("http://")) {
+            if (iscutimging) {
+                $("#readyimg").cropper('rotate', 90);
+            } else {
+                cutImg(function () {
+                    $("#readyimg").cropper('rotate', 90);
+                });
+            }
+        } else {
+            plus.zip.compressImage({
+                src: dstname,
+                dst: dstname,
+                overwrite: true,
+                rotate: 90 // 旋转90度
+            },
+                function (event) {
+                    dstname = event.target;
+                    $("#readyimg").cropper('rotate', 90);
+                    //$("#readyimg").attr("src", dstname + "?" + new Date().getTime());
+                },
+                function (error) {
+                    console.log("Compress error!");
+                });
+        }
+    }
+
+    //左旋转90度
+    function rotateimgleft() {
+        if (iscutimging) {
+            $("#readyimg").cropper('rotate', -90);
+        } else {
+            cutImg(function () {
+                $("#readyimg").cropper('rotate', -90);
+            });
+        }
+    }
+
+    //打开裁剪窗口
+    function openpop() {
+        cutImg(function () {
+
+        })
+    }
+
+    //关闭裁剪窗口
+    function closepop() {
+        base.Get("rotateimgright").style.display = "none";
+        base.Get("closepop").style.display = "none";
+        base.Get("openpop").style.display = "inline-block";
+        $("#readyimg").cropper('destroy');
+        iscutimging = false;
+    }
+
+    //确认照片，展示效果  
+    function confirm(callback) {
+        var imgurl = $("#readyimg").attr("src");
+        if (base.IsNullOrEmpty(imgurl)) {
+            if ($.isFunction(callback)) {
+                callback(imgurl);
+            }
+            return;
+        }
+        if (iscutimging) {
+            mask.show();
+            var dataURL = $("#readyimg").cropper("getCroppedCanvas");
+            imgurl = dataURL.toDataURL("image/jpeg", 1);
+            Upload(imgurl, callback);
+        } else {
+            if (imgurl.toLowerCase().indexOf("http") > -1) {
+                if ($.isFunction(callback)) {
+                    callback(imgurl);
+                }
+                return;
+            } else {
+                mask.show();
+                var image = new Image();
+                image.src = imgurl;
+                image.onload = function () {
+                    var imgData = getBase64Image(image);
+                    Upload(imgData, callback);
+                }
+            }
+        }
+    }
+
+    //请求上传图片
+    function Upload(imgurl, callback) {
+        base.ShowWaiting("正在上传图片");
+        HttpPost(base.UploadUrl + "Upload/Upload", {
+            str: imgurl,
+            standard: Standard,
+            Number: userinfo.Number
+        }, function (data) {
+            if (data != null) {
+                if (data.result) {
+                    if (callback) {
+                        callback(base.UploadUrl + data.message);
+                    }
+                    base.Get("closepop").style.display = "none";
+                    base.Get("openpop").style.display = "inline-block";
+                    $("#readyimg").cropper('destroy');
+                    iscutimging = false;
+                } else {
+                    mui.toast(data.message);
+                }
+                mask.close();
+            }
+        });
+    }
+
+    //压缩图片(src：压缩前原始路径,dstname：压缩后保存路径) 
+    function compressImage(src, newsrc, callback) {
+        plus.zip.compressImage({
+            src: src,
+            dst: newsrc,
+            overwrite: true,
+            quality: 90,
+            width: "500px",
+            format: "jpg"
+        },
+            function (event) {
+                if ($.isFunction(callback)) {
+                    callback(true, event.target);
+                }
+            },
+            function (error) {
+                if ($.isFunction(callback)) {
+                    mui.toast(error.message);
+                    callback(false, src);
+                }
+            });
+    }
+
+    //我的相册选择图片回调
+    function ConfirmImg(src) {
+        var $readyimg = $("#readyimg");
+        $readyimg.hide().attr("src", src).load(function () {
+            var imagewidth = $readyimg.width();
+            var imageheight = $readyimg.height();
+
+            if (totalheight >= imageheight) {
+                $readyimg.css("margin-top", (totalheight - imageheight) / 2 + "px");
+            }
+            if (totalwidth >= imagewidth) {
+                $readyimg.css("margin-left", (totalwidth - imagewidth) / 2 + "px");
+            }
+            $readyimg.css({
+                "max-width": totalwidth + "px",
+                "max-height": totalheight + "px"
+            });
+            $readyimg.cropper('replace', src)
+            $readyimg.show();
+        });
+    }
+
+    //将图片压缩转成base64 
+    function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        var width = img.width;
+        var height = img.height;
+        canvas.width = width; /*设置新的图片的宽度*/
+        canvas.height = height; /*设置新的图片的长度*/
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height); /*绘图*/
+        return canvas.toDataURL("image/jpeg", 1);
     }
 </script>

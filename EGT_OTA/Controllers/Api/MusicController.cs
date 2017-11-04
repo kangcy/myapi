@@ -58,102 +58,7 @@ namespace EGT_OTA.Controllers.Api
         }
 
         /// <summary>
-        /// 音乐搜索  
-        /// http://s.music.163.com/search/get/?type=1&offset=0&limit=5&s=爱
-        /// s: 搜索词
-        /// offset: 偏移量
-        /// limit: 返回数量
-        /// sub: 意义不明(非必须参数)；取值：false
-        /// type: 搜索类型；取值意义
-        /// 1 单曲
-        /// 10 专辑
-        /// 100 歌手
-        /// 1000 歌单
-        /// 1002 用户
-        /// 1004 MV
-        /// 1006 歌词 
-        /// 1009 主播电台 
-        /// </summary>
-        [DeflateCompression]
-        [HttpGet]
-        [Route("Api/Music/Search2")]
-        public string Search2()
-        {
-            ApiResult result = new ApiResult();
-            try
-            {
-                var name = SqlFilter(ZNRequest.GetString("name"));
-                if (string.IsNullOrWhiteSpace(name))
-                {
-                    result.message = "参数异常";
-                    return JsonConvert.SerializeObject(result);
-                }
-                var list = new List<Music>();
-                var recordCount = 0;
-                var pager = new Pager();
-                var url = "http://music.163.com/api/search/pc";
-                IDictionary<string, object> dic = new Dictionary<string, object>();
-                dic.Add("offset", (pager.Index - 1) * pager.Size);
-                dic.Add("limit", pager.Size);
-                dic.Add("type", 1);
-                dic.Add("s", name);
-                var json = HttpUtil.Post(url, dic);
-
-                var js = JObject.Parse(json);
-                if (Tools.SafeInt(js["code"]) == 200)
-                {
-                    recordCount = Tools.SafeInt(js["result"]["songCount"]);
-                    var songs = js["result"]["songs"].ToString();
-                    JArray arr = JArray.Parse(songs);
-                    foreach (JObject model in arr)
-                    {
-                        //http://p1.music.126.net/hcY73QYZt36DeGf91euboQ==/18921495602636668.jpg?param=200y200
-                        var music = new Music();
-                        music.ID = Tools.SafeInt(model["id"]);
-                        music.Name = model["name"].ToString();
-                        var artists = JArray.Parse(model["artists"].ToString());
-                        music.Author = ((JObject)artists[0])["name"].ToString();
-                        var album = JObject.Parse(model["album"].ToString());
-                        music.Remark = album["name"].ToString();
-                        music.Cover = album["picUrl"].ToString() + "?param=100y100";
-                        var dic2 = new Dictionary<string, object>();
-                        dic2.Add("url", "http://music.163.com/#/song?id=" + music.ID);
-                        var filrurl = HttpUtil.Post("http://i.oppsu.cn/link/geturl.php", dic2);
-                        try
-                        {
-                            var file = JObject.Parse(filrurl);
-                            if (Tools.SafeInt(file["status"]) == 1)
-                            {
-                                music.FileUrl = file["data"].ToString();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            music.FileUrl = "";
-                        }
-                        list.Add(music);
-                    }
-                }
-                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
-                result.result = true;
-                result.message = new
-                {
-                    currpage = pager.Index,
-                    records = recordCount,
-                    totalpage = totalPage,
-                    list = list
-                };
-            }
-            catch (Exception ex)
-            {
-                LogHelper.ErrorLoger.Error("Api_Music_Search2:" + ex.Message);
-                result.message = ex.Message;
-            }
-            return JsonConvert.SerializeObject(result);
-        }
-
-        /// <summary>
-        /// 搜搜音乐
+        /// 搜搜音乐、阿里云音乐
         /// </summary>
         [DeflateCompression]
         [HttpGet]
@@ -161,61 +66,130 @@ namespace EGT_OTA.Controllers.Api
         public string Search()
         {
             ApiResult result = new ApiResult();
+            var name = SqlFilter(ZNRequest.GetString("name"));
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                result.message = "参数异常";
+                return JsonConvert.SerializeObject(result);
+            }
+            var list = new List<Music>();
+            var pager = new Pager();
+            var recordCount = 0;
+            var totalPage = 0;
+
+            //是否调用阿里云音乐
+            var isaly = true;
             try
             {
-                var name = SqlFilter(ZNRequest.GetString("name"));
-                if (string.IsNullOrWhiteSpace(name))
+                if (isaly)
                 {
-                    result.message = "参数异常";
-                    return JsonConvert.SerializeObject(result);
-                }
-                var list = new List<Music>();
-                var recordCount = 0;
-                var pager = new Pager();
-                var url = "http://music.163.com/api/search/pc";
-                IDictionary<string, object> dic = new Dictionary<string, object>();
-                dic.Add("offset", (pager.Index - 1) * pager.Size);
-                dic.Add("limit", pager.Size);
-                dic.Add("type", 1);
-                dic.Add("s", name);
-                var json = HttpUtil.Post(url, dic);
+                    /// 音乐搜索  
+                    /// http://s.music.163.com/search/get/?type=1&offset=0&limit=5&s=爱
+                    /// s: 搜索词
+                    /// offset: 偏移量
+                    /// limit: 返回数量
+                    /// sub: 意义不明(非必须参数)；取值：false
+                    /// type: 搜索类型；取值意义
+                    /// 1 单曲
+                    /// 10 专辑
+                    /// 100 歌手
+                    /// 1000 歌单
+                    /// 1002 用户
+                    /// 1004 MV
+                    /// 1006 歌词 
+                    /// 1009 主播电台 
 
-                var js = JObject.Parse(json);
-                if (Tools.SafeInt(js["code"]) == 200)
-                {
-                    recordCount = Tools.SafeInt(js["result"]["songCount"]);
-                    var songs = js["result"]["songs"].ToString();
-                    JArray arr = JArray.Parse(songs);
-                    foreach (JObject model in arr)
+                    var url = "http://music.163.com/api/search/pc";
+                    IDictionary<string, object> dic = new Dictionary<string, object>();
+                    dic.Add("offset", (pager.Index - 1) * pager.Size);
+                    dic.Add("limit", pager.Size);
+                    dic.Add("type", 1);
+                    dic.Add("s", name);
+                    var json = HttpUtil.Post(url, dic);
+                    var js = JObject.Parse(json);
+                    if (Tools.SafeInt(js["code"]) == 200)
                     {
-                        //http://p1.music.126.net/hcY73QYZt36DeGf91euboQ==/18921495602636668.jpg?param=200y200
-                        var music = new Music();
-                        music.ID = Tools.SafeInt(model["id"]);
-                        music.Name = model["name"].ToString();
-                        var artists = JArray.Parse(model["artists"].ToString());
-                        music.Author = ((JObject)artists[0])["name"].ToString();
-                        var album = JObject.Parse(model["album"].ToString());
-                        music.Remark = album["name"].ToString();
-                        music.Cover = album["picUrl"].ToString() + "?param=100y100";
-                        var dic2 = new Dictionary<string, object>();
-                        dic2.Add("url", "http://music.163.com/#/song?id=" + music.ID);
-                        var filrurl = HttpUtil.Post("http://i.oppsu.cn/link/geturl.php", dic2);
-                        try
+                        recordCount = Tools.SafeInt(js["result"]["songCount"]);
+                        JArray arr = JArray.Parse(js["result"]["songs"].ToString());
+                        foreach (JObject model in arr)
                         {
-                            var file = JObject.Parse(filrurl);
-                            if (Tools.SafeInt(file["status"]) == 1)
+                            var music = new Music();
+                            music.ID = Tools.SafeInt(model["id"]);
+                            music.Name = model["name"].ToString();
+                            var artists = JArray.Parse(model["artists"].ToString());
+                            music.Author = ((JObject)artists[0])["name"].ToString();
+                            var album = JObject.Parse(model["album"].ToString());
+                            music.Remark = album["name"].ToString();
+                            music.Cover = album["picUrl"].ToString() + "?param=100y100";
+                            var dic2 = new Dictionary<string, object>();
+                            dic2.Add("url", "http://music.163.com/#/song?id=" + music.ID);
+                            var filrurl = HttpUtil.Post("http://i.oppsu.cn/link/geturl.php", dic2);//阿里云解析 http://i.oppsu.cn/link/
+                            try
                             {
-                                music.FileUrl = file["data"].ToString();
+                                var file = JObject.Parse(filrurl);
+                                if (Tools.SafeInt(file["status"]) == 1)
+                                {
+                                    music.FileUrl = file["data"].ToString();
+                                }
                             }
+                            catch (Exception ex)
+                            {
+                                music.FileUrl = "";
+                            }
+                            list.Add(music);
                         }
-                        catch (Exception ex)
+                    }
+                    totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
+                }
+                else
+                {
+                    totalPage = 100;
+                    recordCount = pager.Size * totalPage;
+                    var url = string.Format("http://mp3.sogou.com/music.so?st=1&query={0}&comp=1&page={1}&len={2}", name, pager.Index, pager.Size);
+                    WebClient wc = new WebClient();
+                    byte[] pageSourceBytes = wc.DownloadData(new Uri(url));
+                    string source = Encoding.GetEncoding("GBK").GetString(pageSourceBytes);
+                    HtmlDocument doc = new HtmlDocument();
+                    doc.LoadHtml(source);
+                    HtmlNodeCollection listNodes = doc.DocumentNode.SelectNodes("//li");
+                    if (listNodes.Count < pager.Size)
+                    {
+                        totalPage = pager.Index;
+                        if (totalPage > 1)
                         {
-                            music.FileUrl = "";
+                            recordCount = (pager.Index - 1) * pager.Size + listNodes.Count;
                         }
+                        else
+                        {
+                            recordCount = listNodes.Count;
+                        }
+                    }
+                    foreach (HtmlNode node in listNodes)
+                    {
+                        //[#4801424#,#2#,#http://cc.stream.qqmusic.qq.com/C100002Zobl64HwPBi.m4a?fromtag=52#,#爱#,#5017#,#小虎队#,#426766#,#华纳国语情浓13首#,#100#,#56a453131fa27a35#]
+                        //4801424
+                        //2
+                        //http://cc.stream.qqmusic.qq.com/C100002Zobl64HwPBi.m4a?fromtag=52
+                        //爱
+                        //5017
+                        //小虎队
+                        //426766
+                        //华纳国语情浓13首
+                        //100
+                        //56a453131fa27a35
+
+                        var param = node.Attributes["param"].Value.Trim();
+                        var parts = param.Replace("[", "").Replace("]", "").Replace("#", "").Split(',');
+                        var music = new Music();
+                        music.ID = Tools.SafeInt(parts[6]);
+                        music.Name = parts[3];
+                        music.Author = parts[5];
+                        music.Remark = parts[7];
+                        music.Cover = "http://imgcache.qq.com/music/photo/album_300/" + parts[6].Substring(parts[6].Length - 2) + "/300_albumpic_" + music.ID + "_0.jpg";
+                        music.FileUrl = parts[2];
                         list.Add(music);
                     }
                 }
-                var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
                 result.result = true;
                 result.message = new
                 {
@@ -231,79 +205,6 @@ namespace EGT_OTA.Controllers.Api
                 result.message = ex.Message;
             }
             return JsonConvert.SerializeObject(result);
-
-            //ApiResult result = new ApiResult();
-            //try
-            //{
-            //    var name = SqlFilter(ZNRequest.GetString("name"));
-            //    if (string.IsNullOrWhiteSpace(name))
-            //    {
-            //        result.message = "参数异常";
-            //        return JsonConvert.SerializeObject(result);
-            //    }
-            //    var list = new List<Music>();
-            //    var pager = new Pager();
-            //    var totalPage = 100;
-            //    var recordCount = pager.Size * totalPage;
-            //    var url = string.Format("http://mp3.sogou.com/music.so?st=1&query={0}&comp=1&page={1}&len={2}", name, pager.Index, pager.Size);
-            //    WebClient wc = new WebClient();
-            //    byte[] pageSourceBytes = wc.DownloadData(new Uri(url));
-            //    string source = Encoding.GetEncoding("GBK").GetString(pageSourceBytes);
-            //    HtmlDocument doc = new HtmlDocument();
-            //    doc.LoadHtml(source);
-            //    HtmlNodeCollection listNodes = doc.DocumentNode.SelectNodes("//li");
-            //    if (listNodes.Count < pager.Size)
-            //    {
-            //        totalPage = pager.Index;
-            //        if (totalPage > 1)
-            //        {
-            //            recordCount = (pager.Index - 1) * pager.Size + listNodes.Count;
-            //        }
-            //        else
-            //        {
-            //            recordCount = listNodes.Count;
-            //        }
-            //    }
-            //    foreach (HtmlNode node in listNodes)
-            //    {
-            //        //[#4801424#,#2#,#http://cc.stream.qqmusic.qq.com/C100002Zobl64HwPBi.m4a?fromtag=52#,#爱#,#5017#,#小虎队#,#426766#,#华纳国语情浓13首#,#100#,#56a453131fa27a35#]
-            //        //4801424
-            //        //2
-            //        //http://cc.stream.qqmusic.qq.com/C100002Zobl64HwPBi.m4a?fromtag=52
-            //        //爱
-            //        //5017
-            //        //小虎队
-            //        //426766
-            //        //华纳国语情浓13首
-            //        //100
-            //        //56a453131fa27a35
-
-            //        var param = node.Attributes["param"].Value.Trim();
-            //        var parts = param.Replace("[", "").Replace("]", "").Replace("#", "").Split(',');
-            //        var music = new Music();
-            //        music.ID = Tools.SafeInt(parts[6]);
-            //        music.Name = parts[3];
-            //        music.Author = parts[5];
-            //        music.Remark = parts[7];
-            //        music.Cover = "http://imgcache.qq.com/music/photo/album_300/" + parts[6].Substring(parts[6].Length - 2) + "/300_albumpic_" + music.ID + "_0.jpg";
-            //        music.FileUrl = parts[2];
-            //        list.Add(music);
-            //    }
-            //    result.result = true;
-            //    result.message = new
-            //    {
-            //        currpage = pager.Index,
-            //        records = recordCount,
-            //        totalpage = totalPage,
-            //        list = list
-            //    };
-            //}
-            //catch (Exception ex)
-            //{
-            //    LogHelper.ErrorLoger.Error("Api_Music_Search:" + ex.Message);
-            //    result.message = ex.Message;
-            //}
-            //return JsonConvert.SerializeObject(result);
         }
 
         /// <summary>
@@ -530,12 +431,6 @@ namespace EGT_OTA.Controllers.Api
             }
             return JsonConvert.SerializeObject(result);
         }
-
-        #region  网易云解析 http://i.oppsu.cn/link/
-
-
-
-        #endregion
 
         public string UrlDecode_Encoding(string text)
         {

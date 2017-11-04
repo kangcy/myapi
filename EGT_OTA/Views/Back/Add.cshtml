@@ -1533,6 +1533,18 @@
                 content: 'Music',
                 title: "音乐搜索"
             });
+            IconTan(1, false);
+        }
+
+        //漂浮
+        function ShowShowy() {
+            layer.open({
+                type: 2,
+                area: ['500px', '650px'],
+                content: 'Music',
+                title: "漂浮"
+            });
+            IconTan(1, false);
         }
 
         //修改音乐
@@ -1540,14 +1552,8 @@
             MusicID = musicID;
             MusicName = musicName;
             MusicUrl = musicUrl;
-            base.Get("musicname").innerHTML = (MusicID == 0 && base.IsNullOrEmpty(MusicName) ? "无背景音乐" : MusicName);
-            if (source == "music") {
-                plus.webview.close("musicsearch", "none");
-                plus.webview.close("music");
-            } else {
-                plus.webview.close("music", "none");
-                plus.webview.close("musicsearch");
-            }
+            base.Get("musicname0").innerHTML = musicName;
+            ChangeMusic();
         }
 
         //保存
@@ -1815,19 +1821,6 @@
                 }
                 base.Get("music" + (CurrTemplate == 0 ? 0 : 1)).classList.remove("hide");
             }
-        }
-
-        //自定义装扮
-        function ShowShowy() {
-            if (isLoading) {
-                return;
-            }
-            isLoading = true;
-            base.OpenWindow("showy", "showy.html", {
-                ArticleNumber: Article.Number
-            });
-            isLoading = false;
-            IconTan(1, false);
         }
 
         //初始化装扮 
