@@ -17,6 +17,7 @@ using SubSonic.DataProviders;
 using Newtonsoft.Json.Linq;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace EGT_OTA.Controllers.Api
 {
@@ -440,26 +441,30 @@ namespace EGT_OTA.Controllers.Api
         /// </summary>
         [DeflateCompression]
         [HttpGet]
-        [Route("Api/Music/MusicTop")]
-        public string MusicTop()
+        [Route("Api/Music/MusicTop_itunes")]
+        public string MusicTop_itunes()
         {
             ApiResult result = new ApiResult();
             try
             {
-                var list = new List<Music>();
-                if (CacheHelper.Exists("MusicTop"))
+                var recordCount = 0;
+                var totalPage = 1;
+                var country = ZNRequest.GetString("country");
+                if (string.IsNullOrWhiteSpace(country))
                 {
-                    list = (List<Music>)CacheHelper.GetCache("MusicTop");
+                    country = "CN";
+                }
+                var list = new List<Music>();
+                if (CacheHelper.Exists("MusicTop" + country))
+                {
+                    list = (List<Music>)CacheHelper.GetCache("MusicTop" + country);
                 }
                 else
                 {
-                    var recordCount = 0;
-                    var totalPage = 0;
-                    var json = HttpUtil.Get("https://rss.itunes.apple.com/api/v1/CN/apple-music/top-songs/all/10/explicit.json");
+                    var json = HttpUtil.Get("https://rss.itunes.apple.com/api/v1/" + country + "/apple-music/top-songs/all/50/explicit.json");
                     var js = JObject.Parse(json);
 
                     JArray arr = JArray.Parse(js["feed"]["results"].ToString());
-                    recordCount = arr.Count;
                     foreach (JObject model in arr)
                     {
                         var music = new Music();
@@ -469,7 +474,7 @@ namespace EGT_OTA.Controllers.Api
                         music.Remark = model["collectionName"].ToString();
                         music.Cover = model["artworkUrl100"].ToString();
                         var dic = new Dictionary<string, object>();
-                        dic.Add("country", "CN");
+                        dic.Add("country", country);
                         dic.Add("albumid", music.ID);
                         var filrurl = HttpUtil.Post("http://i.oppsu.cn/index.php?c=index&a=getsongpreview", dic);
                         try
@@ -486,19 +491,98 @@ namespace EGT_OTA.Controllers.Api
                         }
                         list.Add(music);
                     }
-                    result.result = true;
-                    result.message = new
-                    {
-                        currpage = 1,
-                        records = recordCount,
-                        totalpage = totalPage,
-                        list = list
-                    };
                     if (list.Count > 0)
                     {
-                        CacheHelper.Insert("MusicTop", list, TimeSpan.FromDays(7));
+                        CacheHelper.Insert("MusicTop" + country, list, TimeSpan.FromDays(7));
                     }
                 }
+                result.result = true;
+                result.message = new
+                {
+                    currpage = 1,
+                    records = list.Count,
+                    totalpage = totalPage,
+                    list = list
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Music_MusicTop:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
+        /// 网易云音乐排行榜
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
+        [Route("Api/Music/MusicTop")]
+        public string MusicTop()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                var totalPage = 1;
+                var hottype = ZNRequest.GetInt("hottype");
+                var list = new List<Music>();
+                if (CacheHelper.Exists("MusicTop" + hottype))
+                {
+                    list = (List<Music>)CacheHelper.GetCache("MusicTop" + hottype);
+                }
+                else
+                {
+                    string str = string.Empty;
+                    string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/Music/music" + hottype + ".config");
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        StreamReader sr = new StreamReader(filePath, Encoding.Default);
+                        str = sr.ReadToEnd();
+                        sr.Close();
+                    }
+                    var arr = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(str);
+                    foreach (JObject model in arr)
+                    {
+                        var music = new Music();
+
+                        music.ID = Tools.SafeInt(model["id"]);
+                        music.Name = model["name"].ToString();
+                        var artists = JArray.Parse(model["artists"].ToString());
+                        music.Author = ((JObject)artists[0])["name"].ToString();
+                        var album = JObject.Parse(model["album"].ToString());
+                        music.Remark = album["name"].ToString();
+                        music.Cover = album["picUrl"].ToString() + "?param=100y100";
+                        var dic2 = new Dictionary<string, object>();
+                        dic2.Add("url", "http://music.163.com/#/song?id=" + music.ID);
+                        var filrurl = HttpUtil.Post("http://i.oppsu.cn/link/geturl.php", dic2);//阿里云解析 http://i.oppsu.cn/link/
+                        try
+                        {
+                            var file = JObject.Parse(filrurl);
+                            if (Tools.SafeInt(file["status"]) == 1)
+                            {
+                                music.FileUrl = file["data"].ToString();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            music.FileUrl = "";
+                        }
+                        list.Add(music);
+                    }
+                    if (list.Count > 0)
+                    {
+                        CacheHelper.Insert("MusicTop" + hottype, list, TimeSpan.FromDays(7));
+                    }
+                }
+                result.result = true;
+                result.message = new
+                {
+                    currpage = 1,
+                    records = list.Count,
+                    totalpage = totalPage,
+                    list = list
+                };
             }
             catch (Exception ex)
             {

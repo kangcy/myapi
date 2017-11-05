@@ -375,6 +375,28 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
+        /// MusicSearch列表
+        /// </summary>
+        public ActionResult MusicSearch()
+        {
+            try
+            {
+                var list = GetMusicSearch();
+                var result = new
+                {
+                    records = list.Count(),
+                    list = list
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("SystemController_MusicSearch:" + ex.Message);
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
         /// Showy列表
         /// </summary>
         public ActionResult Showy()
