@@ -156,13 +156,12 @@
                                 </div>
                                 <div class="fr">
                                     <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
-                                    <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
+                                    <button type="button" class="el-button el-button--default" id="submit" onclick="Confirm()"><span>确认</span></button>
                                 </div>
                             </div>
                         </div>
                         <div id="scroll-view" class="el-card__body mui-table-view" style="height: 470px; overflow-x: hidden;">
                         </div>
-
                     </div>
                     <div class="layui-layer-btn" style="padding-top: 10px;"><a class="layui-layer-btn0" onclick="More()">查看更多</a></div>
                 </div>
@@ -183,7 +182,7 @@
     var pagesize = 30;
     var isloading = false;
     $(document).ready(function () {
-        $(document).on("click",".music",function(){
+        $(document).on("click", ".music", function () {
             if (base.TriggerMain) {
                 return;
             }
@@ -227,8 +226,7 @@
         })
 
         //监听软键盘搜索键
-        $("#search").keydown(function (e) {
-            alert(e.keyCode)
+        $("#title").keydown(function (e) {
             if (13 == e.keyCode) {
                 if ($("#title").val().trim() == "") {
                     layer.msg("请输入搜索内容");
@@ -249,15 +247,14 @@
                 rows: pagesize,
                 name: $("#title").val().trim(),
             };
+            $("#scroll-view").html("");
             $.ajax({
-                //url: "@(ViewBag.RootUrl)Api/Music/Search",
-                url: "@(ViewBag.RootUrl)Api/Music/MusicTop",
+                url: "@(ViewBag.RootUrl)Api/Music/Search",
                 dataType: "json",
                 data: $.param(data),
                 type: "get",
                 success: function (data) {
                     data = JSON.parse(data);
-                    console.log(data.message);
                     if (data != null) {
                         if (data.result) {
                             data = data.message;
@@ -276,11 +273,6 @@
                 }
             });
         })
-
-        $("#reset").click(function () {
-            currpage = 1;
-            $("#scroll-view").html("");
-        })
     });
 
     function More() {
@@ -289,8 +281,12 @@
     }
 
     function Confirm() {
-        parent.$('#parentIframe').text('我被改变了');
-        parent.layer.tips('Look here', '#parentIframe', { time: 5000 });
+        if (fileId == 0) {
+            layer.msg("还未选择音乐");
+            return;
+        }
+        parent.UpdateMusic(fileId, fileName, fileUrl);
+        var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
     }
 

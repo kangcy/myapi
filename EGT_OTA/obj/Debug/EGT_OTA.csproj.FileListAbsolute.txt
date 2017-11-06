@@ -105,3 +105,4 @@ D:\康春阳\api\EGT_OTA\bin\System.Web.Http.WebHost.xml
 D:\康春阳\api\EGT_OTA\obj\Debug\EGT_OTA.dll
 D:\康春阳\api\EGT_OTA\obj\Debug\EGT_OTA.pdb
 D:\康春阳\api\EGT_OTA\obj\Debug\EGT_OTA.csprojResolveAssemblyReference.cache
+D:\项目\My\Api\EGT_OTA\obj\Debug\EGT_OTA.csprojResolveAssemblyReference.cache

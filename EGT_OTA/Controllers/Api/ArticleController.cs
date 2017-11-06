@@ -21,6 +21,147 @@ namespace EGT_OTA.Controllers.Api
         /// </summary>
         [DeflateCompression]
         [HttpGet]
+        [Route("Api/Article/PcDetail")]
+        public string PcDetail()
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                string UserNumber = ZNRequest.GetString("Number");
+                if (string.IsNullOrWhiteSpace(UserNumber))
+                {
+                    result.message = "参数异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                int id = ZNRequest.GetInt("ArticleID");
+                Article model = db.Single<Article>(x => x.ID == id);
+                if (model == null)
+                {
+                    model = new Article();
+                    model.CreateDateText = DateTime.Now.ToString("yyyy-MM-dd");
+                }
+                else
+                {
+                    if (model.Status == Enum_Status.Audit)
+                    {
+                        result.message = "当前文章未通过审核";
+                        return JsonConvert.SerializeObject(result);
+                    }
+                    //非本人
+                    if ((model.Status == Enum_Status.Delete || model.Status == Enum_Status.DeleteCompletely) && UserNumber != model.CreateUserNumber)
+                    {
+                        result.code = Enum_ErrorCode.Delete;
+                        result.message = "当前文章已删除";
+                        return JsonConvert.SerializeObject(result);
+                    }
+
+                    //判断黑名单
+                    if (db.Exists<Black>(x => x.ToUserNumber == UserNumber && x.CreateUserNumber == model.CreateUserNumber))
+                    {
+                        result.message = "没有访问权限";
+                        return JsonConvert.SerializeObject(result);
+                    }
+
+                    //浏览数
+                    new SubSonic.Query.Update<Article>(provider).Set("Views").EqualTo(model.Views + 1).Where<Article>(x => x.ID == model.ID).Execute();
+                    model.Pays = new SubSonic.Query.Select(provider).From<Order>().Where<Order>(x => x.ToArticleNumber == model.Number && x.Status == Enum_Status.Approved).GetRecordCount();
+                    model.Keeps = new SubSonic.Query.Select(provider).From<Keep>().Where<Keep>(x => x.ArticleNumber == model.Number).GetRecordCount();
+                    model.Comments = new SubSonic.Query.Select(provider).From<Comment>().Where<Comment>(x => x.ArticleNumber == model.Number).GetRecordCount();
+
+                    //是否收藏
+                    model.IsKeep = new SubSonic.Query.Select(provider, "ID").From<Keep>().Where<Keep>(x => x.CreateUserNumber == UserNumber && x.ArticleNumber == model.Number).GetRecordCount() == 0 ? 0 : 1;
+
+                    //是否关注
+                    model.IsFollow = new SubSonic.Query.Select(provider, "ID").From<Fan>().Where<Fan>(x => x.CreateUserNumber == UserNumber && x.ToUserNumber == model.CreateUserNumber).GetRecordCount() == 0 ? 0 : 1;
+
+                    //是否点赞
+                    model.IsZan = new SubSonic.Query.Select(provider, "ID").From<ArticleZan>().Where<ArticleZan>(x => x.CreateUserNumber == UserNumber && x.ArticleNumber == model.Number).GetRecordCount() == 0 ? 0 : 1;
+
+                    //类型
+                    ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
+                    model.TypeName = articleType == null ? string.Empty : articleType.Name;
+
+                    //文章部分
+                    model.ArticlePart = db.Find<ArticlePart>(x => x.ArticleNumber == model.Number).OrderBy(x => x.SortID).ToList();
+
+                    //漂浮装扮
+                    var custom = db.Single<ArticleCustom>(x => x.ArticleNumber == model.Number);
+                    if (custom != null)
+                    {
+                        model.Showy = custom.ShowyUrl;
+                        model.MusicID = custom.MusicID;
+                        model.MusicName = custom.MusicName;
+                        model.MusicUrl = custom.MusicUrl;
+                        model.Transparency = custom.Transparency;
+                        model.MarginTop = custom.MarginTop;
+                    }
+
+                    model.CreateDateText = model.CreateDate.ToString("yyyy-MM-dd");
+                }
+
+                //创建人
+                User createUser = db.Single<User>(x => x.Number == UserNumber);
+                if (createUser != null)
+                {
+                    model.UserID = createUser.ID;
+                    model.NickName = createUser.NickName;
+                    model.Avatar = createUser.Avatar;
+                    model.AutoMusic = createUser.AutoMusic;
+                    model.UserCover = createUser.Cover;
+                    model.ShareNick = createUser.ShareNick;
+                    model.IsPay = createUser.IsPay;
+                }
+
+
+                model.ShareUrl = System.Configuration.ConfigurationManager.AppSettings["share_url"] + model.Number;
+
+                //模板配置
+                model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);
+
+                //模板预览
+                var previewTemp = ZNRequest.GetInt("Template", -1);
+                if (previewTemp >= 0)
+                {
+                    model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == previewTemp);
+                }
+                else
+                {
+                    if (model.Template >= 0)
+                    {
+                        model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
+                    }
+                }
+
+                //主题色预览
+                var previewColorTemp = ZNRequest.GetInt("ColorTemplate", 0);
+                if (previewColorTemp > 0)
+                {
+                    model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == previewColorTemp);
+                }
+                else
+                {
+                    if (model.ColorTemplate > 0)
+                    {
+                        model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
+                    }
+                }
+
+                result.result = true;
+                result.message = model;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Api_Article_Detail:" + ex.Message);
+                result.message = ex.Message;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        /// <summary>
+        /// 文章详情
+        /// </summary>
+        [DeflateCompression]
+        [HttpGet]
         [Route("Api/Article/Detail")]
         public string Detail()
         {

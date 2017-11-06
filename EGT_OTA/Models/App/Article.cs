@@ -45,6 +45,7 @@ namespace EGT_OTA.Models
             this.Pays = 0;
             this.TypeID = 0;
             this.TypeIDList = "-0-0-";
+            this.TypeName = string.Empty;
             this.Template = 0;
             this.ArticlePower = Enum_ArticlePower.Public;
             this.Status = Enum_Status.Approved;

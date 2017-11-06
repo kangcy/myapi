@@ -1108,6 +1108,7 @@
     <Content Include="Scripts\mui.min.js" />
     <Content Include="Scripts\music.js" />
     <Content Include="Scripts\nugetexample.js" />
+    <Content Include="Scripts\snow.js" />
     <Content Include="Scripts\swiper\animate.min.css" />
     <Content Include="Scripts\swiper\iscroll.js" />
     <Content Include="Scripts\swiper\swiper.animate1.0.2.min.js" />
