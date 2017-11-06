@@ -646,9 +646,9 @@
                             <img id="music1" class="hide" src="../Back/Images/btn_music.png" onclick="switchsound()" />
                             <div class="swiper-cover hide" id="icon-cover" onclick="IconTan(1,false)"></div>
                             <!--固定背景-->
-                            <div id="x-bg" class="hide" style="height:890px;"></div>
+                            <div id="x-bg" class="hide" style="height: 890px;"></div>
                             <!--内容-->
-                            <div id="wrapper0" class="full fl hide" style="height:890px;overflow:auto;">
+                            <div id="wrapper0" class="full fl hide" style="height: 890px; overflow: auto;">
                                 <!--x-cover:滚动背景-->
                                 <div class="root" id="x-cover">
                                     <!--头-->
@@ -1926,9 +1926,9 @@
         base.AddClass(["#music0", "#music1"], "hide");
         MusicID = "music" + (CurrTemplate == 0 ? 0 : 1);
         if (!base.IsNullOrEmpty(MusicUrl)) {
-            //if (Article.AutoMusic == 1) {
-            document.addEventListener('touchstart', startsound);
-            //}
+            if (Article.AutoMusic == 1) {
+                document.addEventListener('touchstart', startsound);
+            }
             base.Get("music" + (CurrTemplate == 0 ? 0 : 1)).classList.remove("hide");
         }
     }
@@ -1938,7 +1938,7 @@
         if (base.IsNullOrEmpty(src)) {
             return
         }
-        LoadScript("../js/snow.js", function () {
+        LoadScript("@(ViewBag.RootUrl)Scripts/snow.js", function () {
             var srcs = src.split("|");
             if (srcs.length > 2) {
                 snow.init(srcs[0], srcs[1], srcs[2])

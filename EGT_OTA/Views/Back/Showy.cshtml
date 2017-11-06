@@ -81,7 +81,7 @@
                 <div class="col-lg-10 col-lg-offset-1">
                     <div id="scroll-view" style="height: 550px; overflow-x: hidden;">
                     </div>
-                    <div class="layui-layer-btn" style="padding-top: 20px;"><a class="layui-layer-btn0" onclick="More()">确认选择</a></div>
+                    <div class="layui-layer-btn" style="padding-top: 20px;"><a class="layui-layer-btn0" onclick="Confirm()">确认选择</a></div>
                 </div>
             </div>
         </div>
@@ -97,9 +97,13 @@
 <script src="@Url.Content("~/Scripts/snow.js")"></script>
 <script type="text/javascript">
     var fileId = 0;
+    var src = "";
+    var count = "";
+    var snowtype = "";
     var isloading = false;
     $(document).ready(function () {
         $(document).on("click", ".thirdfloor", function () {
+            fileId = 1;
             $(".yescheck").removeClass("yescheck");
             this.classList.toggle("yescheck");
             if ($(".yescheck").length > 0) {
@@ -107,10 +111,9 @@
             } else {
                 $("#mypic").addClass("hide");
             }
-            var src = this.getAttribute("src");
-            var count = this.getAttribute("count");
-            var snowtype = this.getAttribute("snowtype");
-
+            src = this.getAttribute("src");
+            count = this.getAttribute("count");
+            snowtype = this.getAttribute("snowtype");
             snow.clear();
             setTimeout(function () {
                 snow.init(src, count, snowtype);
