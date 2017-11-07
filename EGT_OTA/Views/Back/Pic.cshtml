@@ -24,21 +24,21 @@
             <div class="col-lg-10 col-lg-offset-1">
                 <div id="scroll-view" class="el-card__body">
                     <div id="wrapper" class="mui-iframe-wrapper full tc" style="bottom: 50px;">
-                        <img id="readyimg" style="display: none; max-width: 100%; max-height: 100%;" class="fl" />
+                        <img id="readyimg" style="width: auto; height: auto; display: none; max-width: 100%; max-height: 100%; display: inline-block;" />
                     </div>
                     <footer class="mui-bar mui-bar-tab" style="background: #f8f8f8; border-top: 1px solid #ddd;">
-                        <a class="mui-icon blue fl mt6 ml10" style="font-size: 16px;" onclick="test()">更换</a>
-                        <a class="mui-icon blue fr mt6 mr10" style="font-size: 16px;" id="confirm">完成</a>
+                        <a class="mui-icon blue fl mt6 ml10" style="font-size: 16px; cursor: pointer;" onclick="Choose()">更换</a>
+                        <a class="mui-icon blue fr mt6 mr10" style="font-size: 16px; cursor: pointer;" onclick="Confirm()">完成</a>
                         <div class="mui-title tc">
-                            <div style="width: 150px; display: inline-block;text-align:center;">
+                            <div style="width: 150px; display: inline-block; text-align: center;">
                                 <div style="width: 50%; display: none;" id="rotateimgright">
-                                    <img src="../Back/Images/e1.png" style="width: 40px; height: 40px; margin-top: 3px;display: inline-block;" onclick="rotateimgright()" />
+                                    <img src="../Back/Images/e1.png" style="width: 40px; height: 40px; margin-top: 3px; display: inline-block;" onclick="rotateimgright()" />
                                 </div>
                                 <div style="width: 50%; display: none;" id="openpop">
-                                    <img src="../Back/Images/e2.png" style="width: 40px; height: 40px; margin-top: 3px;display: inline-block;" onclick="openpop()" />
+                                    <img src="../Back/Images/e2.png" style="width: 40px; height: 40px; margin-top: 3px; display: inline-block;" onclick="openpop()" />
                                 </div>
                                 <div style="width: 50%; display: none;" id="closepop">
-                                    <img src="../Back/Images/e4.png" style="width: 40px; height: 40px; margin-top: 3px;display: inline-block;" onclick="closepop()" />
+                                    <img src="../Back/Images/e4.png" style="width: 40px; height: 40px; margin-top: 3px; display: inline-block;" onclick="closepop()" />
                                 </div>
                             </div>
                         </div>
@@ -56,269 +56,196 @@
 <script src="@Url.Content("~/Scripts/mui.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/base.min.js")" type="text/javascript"></script>
 <script type="text/javascript">
-    var totalheight = 0;
+    var totalheight = window.innerHeight - 50;
     var totalwidth = window.innerWidth;
-    var Url = "http://localhost/app/Upload/201710232018503304_1.jpg";
+    var Url = "";
     var Source = "";
-    var ArticleID = 0;
-    var ArticleNumber = "";
-    var PartID = 0;
-    var isLoading = false;
     var Standard = "";
+    var PartID = 0;
+    var ArticleNumber = "";
+    var isLoading = false;
     var $image = $('#readyimg');
     var $inputImage = $('#inputImage');
     var uploadedImageType = 'image/jpeg';
-    var uploadedImageURL;
-    var URL = window.URL || window.webkitURL;
+    var uploadedImageURL = "";
+    var isCutImging = false;
+    jQuery.support.cors = true;
 
     $(document).ready(function () {
-        totalheight = window.innerHeight - 50;
         $("#wrapper").css({
             "top": "0px",
             "height": totalheight + "px"
         });
 
-        if (base.IsNullOrEmpty(Url)) {
+        $image[0].crossOrigin = "Anonymous";
 
+        $inputImage.change(function () {
+            var files = this.files;
+            if (files && files.length) {
+                var file = files[0];
+                if (/^image\/\w+$/.test(file.type)) {
+                    uploadedImageType = file.type;
+                    if (uploadedImageURL) {
+                        URL.revokeObjectURL(uploadedImageURL);
+                    }
+                    uploadedImageURL = URL.createObjectURL(file);
+                    if (!base.IsNullOrEmpty(uploadedImageURL)) {
+                        if (isCutImging) {
+                            closepop();
+                        }
+                        $image.hide();
+
+                        var img = new Image();
+                        img.crossOrigin = "Anonymous";
+                        img.src = uploadedImageURL;
+                        if (img.complete) {
+                            InitImg(uploadedImageURL);
+                        } else {
+                            img.onload = function () {
+                                InitImg(uploadedImageURL);
+                            };
+                        }
+                    }
+                    $inputImage.val('');
+                }
+            }
+        });
+    });
+
+    function InitImg(src) {
+        $image.attr("src", src);
+        var imagewidth = $image.width();
+        var imageheight = $image.height();
+        $image.css({
+            "width": "auto",
+            "height": "auto",
+            "margin-top": "0px",
+            "margin-left": "0px"
+        });
+        if (totalheight >= imageheight) {
+            $image.css("margin-top", (totalheight - imageheight) / 2 + "px");
+        }
+        //用户封面、用户头像
+        if (Standard == "UserCover" || Standard == "UserAvatar") {
+            openpop();
         } else {
-            $("#readyimg").attr("src", Url).load(function () {
-                var imagewidth = $("#readyimg").width();
-                var imageheight = $("#readyimg").height();
+            $image.show();
+            base.Get("openpop").style.display = "inline-block";
+        }
+    }
+
+    //初始化
+    function Init(src, source, standard, partid, articlenumber) {
+        Url = src;
+        Source = source;
+        Standard = standard;
+        PartID = partid;
+        ArticleNumber = articlenumber;
+        if (!base.IsNullOrEmpty(Url)) {
+            $image.hide().attr("src", Url).load(function () {
+                var imagewidth = $image.width();
+                var imageheight = $image.height();
+                $image.css({
+                    "width": "auto",
+                    "height": "auto",
+                    "margin-top": "0px",
+                    "margin-left": "0px"
+                });
                 if (totalheight > imageheight) {
-                    $("#readyimg").css("margin-top", (totalheight - imageheight) / 2 + "px");
-                } else if (totalwidth > imagewidth) {
-                    $("#readyimg").css("margin-left", (totalwidth - imagewidth) / 2 + "px");
-                } else {
-                    $("#readyimg").css({
-                        "width": "auto",
-                        "height": "auto"
-                    });
+                    $image.css("margin-top", (totalheight - imageheight) / 2 + "px");
                 }
                 //用户封面、用户头像
                 if (Standard == "UserCover" || Standard == "UserAvatar") {
                     openpop();
                 } else {
-                    $("#readyimg").show();
+                    $image.show();
                     base.Get("openpop").style.display = "inline-block";
                 }
             });
         }
-
-        //openpop();
-
-        var options = {
-            aspectRatio: 16 / 9,
-            preview: '.img-preview',
-            crop: function (e) {
-                $dataX.val(Math.round(e.x));
-                $dataY.val(Math.round(e.y));
-                $dataHeight.val(Math.round(e.height));
-                $dataWidth.val(Math.round(e.width));
-                $dataRotate.val(e.rotate);
-                $dataScaleX.val(e.scaleX);
-                $dataScaleY.val(e.scaleY);
-            }
-        };
-
-        if (URL) {
-            $inputImage.change(function () {
-                console.log('asdasfasdaf');
-                var files = this.files;
-                var file;
-                if (!$image.data('cropper')) {
-                    return;
-                }
-                if (files && files.length) {
-                    file = files[0];
-                    if (/^image\/\w+$/.test(file.type)) {
-                        uploadedImageType = file.type;
-                        if (uploadedImageURL) {
-                            URL.revokeObjectURL(uploadedImageURL);
-                        }
-                        uploadedImageURL = URL.createObjectURL(file);
-                        $image.attr("src", uploadedImageURL);
-                        //$image.cropper('destroy').attr('src', uploadedImageURL).cropper(options);
-                        $inputImage.val('');
-                    } else {
-                        window.alert('Please choose an image file.');
-                    }
-                }
-            });
-        } else {
-            $inputImage.prop('disabled', true).parent().addClass('disabled');
-        }
-
-        base.Get("confirm").addEventListener('tap', function (event) {
-            if (base.RepeatAction()) {
-                return;
-            }
-            confirm(function (src) {
-                if (base.IsNullOrEmpty(src)) {
-                    return;
-                }
-                isLoading = true;
-                var page = base.GetView('addarticle');
-                if (page) {
-                    page.evalJS("AddPic('" + (PartID == 0 ? base.GetUid() : PartID) + "','" + src + "','" + PartID + "')");
-                }
-                isLoading = false;
-            });
-        });
-    });
-
-    var iscutimging = false;
-    var dstname = "";
-
-    function test() {
-        return $inputImage.click();
-    }
-
-    //相册选取  
-    function Gallery() {
-        mui('#upload').popover('hide');
-        plus.gallery.pick(function (e) {
-            closepop(); //关闭裁剪
-
-            //压缩图片 
-            dstname = "_downloads/" + base.GetUid() + ".jpg"; //设置压缩后图片路径
-
-            //压缩图片,并重命名
-            compressImage(e.files[0], dstname, function (status, src) {
-                if (status) {
-                    $("#readyimg").hide().attr("src", src).load(function () {
-                        var imagewidth = $("#readyimg").width();
-                        var imageheight = $("#readyimg").height();
-
-                        if (totalheight > imageheight) {
-                            $("#readyimg").css("margin-top", (totalheight - imageheight) / 2 + "px");
-                        } else if (totalwidth > imagewidth) {
-                            $("#readyimg").css("margin-left", (totalwidth - imagewidth) / 2 + "px");
-                        } else {
-                            $("#readyimg").css({
-                                "width": "auto",
-                                "height": "auto"
-                            });
-                        }
-                        $("#readyimg").show();
-                    });
-                }
-            });
-        }, function (e) {
-            //outSet( "取消选择图片" ) 
-        }, {
-            filter: "image",
-            maximum: 1,
-            multiple: true,
-            system: false
-        });
     }
 
     //照片裁剪类  
-    function cutImg(callback) {
-        base.Get("rotateimgright").style.display = "none";
-        base.Get("openpop").style.display = "none";
-        base.Get("closepop").style.display = "none";
-
-        //用户封面、用户头像
-        if (Standard == "UserCover" || Standard == "UserAvatar") {
-            var ratio = 1 / 1;
-            switch (Standard) {
-                case "UserCover":
-                    ratio = 4 / 3;
-                    break;
-                case "UserAvatar":
-                    ratio = 1 / 1;
-                    break;
-                default:
-                    break;
-            }
-            $("#readyimg").cropper({
-                checkImageOrigin: true,
-                aspectRatio: ratio, //裁剪比例
-                autoCropArea: 1, //裁剪框大小
-                toggleDragModeOnDblclick: false,
-                dragCrop: false, //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
-                zoomable: true, //是否允许放大缩小图片
-                movable: false, //是否允许移动剪裁框
-                resizable: false, //是否允许改变裁剪框大小
-                built: function () {
-                    callback();
-                    iscutimging = true;
-                    $("#readyimg").show();
-                    mui.later(function () {
-                        base.Get("rotateimgright").style.display = "inline-block";
-                    }, 1500);
+    function CutImg(callback) {
+        if (!isCutImging) {
+            isCutImging = true;
+            base.Get("rotateimgright").style.display = "none";
+            base.Get("openpop").style.display = "none";
+            base.Get("closepop").style.display = "none";
+            //用户封面、用户头像
+            if (Standard == "UserCover" || Standard == "UserAvatar") {
+                var ratio = 1 / 1;
+                switch (Standard) {
+                    case "UserCover":
+                        ratio = 4 / 3;
+                        break;
+                    case "UserAvatar":
+                        ratio = 1 / 1;
+                        break;
+                    default:
+                        break;
                 }
-            });
-        } else {
-            $("#readyimg").cropper({
-                checkImageOrigin: true,
-                autoCropArea: 0.6, //裁剪框大小
-                toggleDragModeOnDblclick: false,
-                dragCrop: false, //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
-                zoomable: true, //是否允许放大缩小图片
-                movable: true, //是否允许移动剪裁框
-                resizable: true, //是否允许改变裁剪框大小
-                built: function () {
-                    callback();
-                    iscutimging = true;
-                    $("#readyimg").show();
-                    mui.later(function () {
+                $image.cropper({
+                    checkImageOrigin: false,
+                    aspectRatio: ratio, //裁剪比例
+                    autoCropArea: 1, //裁剪框大小
+                    toggleDragModeOnDblclick: false,
+                    dragCrop: false, //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+                    zoomable: true, //是否允许放大缩小图片
+                    movable: false, //是否允许移动剪裁框
+                    resizable: false, //是否允许改变裁剪框大小
+                    built: function () {
+                        callback();
+                        $image.show();
+                        base.Get("rotateimgright").style.display = "inline-block";
+                    }
+                });
+            } else {
+                $image.cropper({
+                    checkImageOrigin: false,
+                    autoCropArea: 0.6, //裁剪框大小
+                    toggleDragModeOnDblclick: false,
+                    dragCrop: false, //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+                    zoomable: true, //是否允许放大缩小图片
+                    movable: true, //是否允许移动剪裁框
+                    resizable: true, //是否允许改变裁剪框大小
+                    built: function () {
+                        callback();
+                        $image.show();
                         base.Get("rotateimgright").style.display = "inline-block";
                         base.Get("closepop").style.display = "inline-block";
-                    }, 1500);
-                }
-            });
+                    }
+                });
+            }
         }
     }
 
     //右旋转90度  
     function rotateimgright() {
-        if (base.IsNullOrEmpty(dstname)) {
-            dstname = $("#readyimg").attr("src");
-        }
-        if (dstname.toLowerCase().startsWith("http://")) {
-            if (iscutimging) {
-                $("#readyimg").cropper('rotate', 90);
-            } else {
-                cutImg(function () {
-                    $("#readyimg").cropper('rotate', 90);
-                });
-            }
+        if (isCutImging) {
+            $image.cropper('rotate', 90);
         } else {
-            plus.zip.compressImage({
-                src: dstname,
-                dst: dstname,
-                overwrite: true,
-                rotate: 90 // 旋转90度
-            },
-                function (event) {
-                    dstname = event.target;
-                    $("#readyimg").cropper('rotate', 90);
-                    //$("#readyimg").attr("src", dstname + "?" + new Date().getTime());
-                },
-                function (error) {
-                    console.log("Compress error!");
-                });
+            CutImg(function () {
+                $image.cropper('rotate', 90);
+            });
         }
+
     }
 
     //左旋转90度
     function rotateimgleft() {
-        if (iscutimging) {
-            $("#readyimg").cropper('rotate', -90);
+        if (isCutImging) {
+            $image.cropper('rotate', -90);
         } else {
-            cutImg(function () {
-                $("#readyimg").cropper('rotate', -90);
+            CutImg(function () {
+                $image.cropper('rotate', -90);
             });
         }
     }
 
     //打开裁剪窗口
     function openpop() {
-        cutImg(function () {
-
-        })
+        CutImg(function () { })
     }
 
     //关闭裁剪窗口
@@ -326,21 +253,59 @@
         base.Get("rotateimgright").style.display = "none";
         base.Get("closepop").style.display = "none";
         base.Get("openpop").style.display = "inline-block";
-        $("#readyimg").cropper('destroy');
-        iscutimging = false;
+        $image.cropper('destroy');
+        isCutImging = false;
     }
 
-    //确认照片，展示效果  
-    function confirm(callback) {
-        var imgurl = $("#readyimg").attr("src");
-        if (base.IsNullOrEmpty(imgurl)) {
-            if ($.isFunction(callback)) {
-                callback(imgurl);
+    //请求上传图片
+    function Upload(imgurl, callback) {
+        layer.load();
+        HttpPost(base.UploadUrl + "Upload/Upload", {
+            str: imgurl,
+            standard: Standard,
+            Number: userinfo.Number
+        }, function (data) {
+            if (data != null) {
+                if (data.result) {
+                    if (callback) {
+                        callback(base.UploadUrl + data.message);
+                    }
+                    base.Get("closepop").style.display = "none";
+                    base.Get("openpop").style.display = "inline-block";
+                    $image.cropper('destroy');
+                    isCutImging = false;
+                } else {
+                    mui.toast(data.message);
+                }
             }
+        });
+    }
+
+    //将图片压缩转成base64 
+    function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        var width = img.width;
+        var height = img.height;
+        canvas.width = width; /*设置新的图片的宽度*/
+        canvas.height = height; /*设置新的图片的长度*/
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height); /*绘图*/
+        return canvas.toDataURL("image/jpeg", 1);
+    }
+
+    //更换
+    function Choose() {
+        return $inputImage.click();
+    }
+
+    //完成
+    function Confirm() {
+        var imgurl = $image.attr("src");
+        if (base.IsNullOrEmpty(imgurl)) {
             return;
         }
-        if (iscutimging) {
-            var dataURL = $("#readyimg").cropper("getCroppedCanvas");
+        if (isCutImging) {
+            var dataURL = $image.cropper("getCroppedCanvas");
             imgurl = dataURL.toDataURL("image/jpeg", 1);
             Upload(imgurl, callback);
         } else {
@@ -358,86 +323,5 @@
                 }
             }
         }
-    }
-
-    //请求上传图片
-    function Upload(imgurl, callback) {
-        base.ShowWaiting("正在上传图片");
-        HttpPost(base.UploadUrl + "Upload/Upload", {
-            str: imgurl,
-            standard: Standard,
-            Number: userinfo.Number
-        }, function (data) {
-            if (data != null) {
-                if (data.result) {
-                    if (callback) {
-                        callback(base.UploadUrl + data.message);
-                    }
-                    base.Get("closepop").style.display = "none";
-                    base.Get("openpop").style.display = "inline-block";
-                    $("#readyimg").cropper('destroy');
-                    iscutimging = false;
-                } else {
-                    mui.toast(data.message);
-                }
-            }
-        });
-    }
-
-    //压缩图片(src：压缩前原始路径,dstname：压缩后保存路径) 
-    function compressImage(src, newsrc, callback) {
-        plus.zip.compressImage({
-            src: src,
-            dst: newsrc,
-            overwrite: true,
-            quality: 90,
-            width: "500px",
-            format: "jpg"
-        },
-            function (event) {
-                if ($.isFunction(callback)) {
-                    callback(true, event.target);
-                }
-            },
-            function (error) {
-                if ($.isFunction(callback)) {
-                    mui.toast(error.message);
-                    callback(false, src);
-                }
-            });
-    }
-
-    //我的相册选择图片回调
-    function ConfirmImg(src) {
-        var $readyimg = $("#readyimg");
-        $readyimg.hide().attr("src", src).load(function () {
-            var imagewidth = $readyimg.width();
-            var imageheight = $readyimg.height();
-
-            if (totalheight >= imageheight) {
-                $readyimg.css("margin-top", (totalheight - imageheight) / 2 + "px");
-            }
-            if (totalwidth >= imagewidth) {
-                $readyimg.css("margin-left", (totalwidth - imagewidth) / 2 + "px");
-            }
-            $readyimg.css({
-                "max-width": totalwidth + "px",
-                "max-height": totalheight + "px"
-            });
-            $readyimg.cropper('replace', src)
-            $readyimg.show();
-        });
-    }
-
-    //将图片压缩转成base64 
-    function getBase64Image(img) {
-        var canvas = document.createElement("canvas");
-        var width = img.width;
-        var height = img.height;
-        canvas.width = width; /*设置新的图片的宽度*/
-        canvas.height = height; /*设置新的图片的长度*/
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height); /*绘图*/
-        return canvas.toDataURL("image/jpeg", 1);
     }
 </script>

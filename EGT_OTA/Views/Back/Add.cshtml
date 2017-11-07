@@ -1192,19 +1192,21 @@
             currEditPartID = this.getAttribute("partid");
             var type = this.getAttribute("type");
             if (type == "pic") {
-                //currEditImg = this.getAttribute("src");
-                //base.OpenWindow("editimage", "editimage.html", {
-                //    Url: currEditImg,
-                //    Source: "ArticleAvatar",
-                //    Standard: "Article",
-                //    ArticleNumber: ArticleNumber,
-                //    PartID: currEditPartID
-                //});
+                var Source = "ArticleAvatar";
+                var Standard = "Article";
+                var PartID = currEditPartID;
+                var ArticleNumber = ArticleNumber;
+                currEditImg = this.getAttribute("src");
                 layer.open({
+                    id: "pic",
                     type: 2,
                     area: ['500px', '750px'],
                     content: 'Pic',
-                    title: "图片编辑"
+                    title: "图片编辑",
+                    success: function (layero, index) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.Init(currEditImg, Source, Standard, PartID, ArticleNumber);
+                    }
                 });
             } else if (type == "text") {
                 //编辑文字
@@ -1668,12 +1670,12 @@
                     //加载段落
                     if (ArticleID == 0) {
                         $edit.appendChild(initStr('<div class="edit f12 tl">请填写文章内容</div>', "text", 1, ""));
-                        $edit.appendChild(initStr("http://www.xiaoweipian.com:1010/Upload/Images/Article/20171023/149509293893532/201710232018503304_0.jpg", "pic", 2, ""));
+                        $edit.appendChild(initStr("http://localhost/app/Upload/201710232018503304_1.jpg", "pic", 2, ""));
 
                         //声明对象（编号，内容，状态，排序，类型，是否临时）
                         //初始化段落内容(Status:0-未操作，1-新增，2-编辑，3-删除)
                         InitParts.push(new PartModel(1, '<div class="edit f12 tl">请填写文章内容</div>', "", 1, 0, 2, 1));
-                        InitParts.push(new PartModel(2, "http://www.xiaoweipian.com:1010/Upload/Images/Article/20171023/149509293893532/201710232018503304_0.jpg", "", 1, 1, 1, 1));
+                        InitParts.push(new PartModel(2, "http://localhost/app/Upload/201710232018503304_1.jpg", "", 1, 1, 1, 1));
 
                     } else {
                         var parts = data.ArticlePart;
