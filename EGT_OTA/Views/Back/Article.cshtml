@@ -1,6 +1,6 @@
 ﻿@inherits System.Web.Mvc.WebViewPage
 @using EGT_OTA.Models
-<div class="el-card box-card" >
+<div class="el-card box-card">
     <div class="el-card__header">
         <div class="clearfix">
             <p>文章列表(@(ViewBag.RecordCount))</p>
@@ -110,18 +110,16 @@
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'filter_articletype','不限')" class="ddl_filter_articletype" index="-1">不限</a></li>
-                            <li><a href="#" onclick="change(1,'filter_articletype','旅游')" class="ddl_filter_articletype" index="1">旅游</a></li>
-                            <li><a href="#" onclick="change(2,'filter_articletype','美食')" class="ddl_filter_articletype" index="2">美食</a></li>
-                            <li><a href="#" onclick="change(3,'filter_articletype','亲子')" class="ddl_filter_articletype" index="3">亲子</a></li>
-                            <li><a href="#" onclick="change(4,'filter_articletype','美妆')" class="ddl_filter_articletype" index="4">美妆</a></li>
-                            <li><a href="#" onclick="change(5,'filter_articletype','女神')" class="ddl_filter_articletype" index="5">女神</a></li>
-                            <li><a href="#" onclick="change(6,'filter_articletype','摄影')" class="ddl_filter_articletype" index="6">摄影</a></li>
-                            <li><a href="#" onclick="change(7,'filter_articletype','生活')" class="ddl_filter_articletype" index="7">生活</a></li>
-                            <li><a href="#" onclick="change(8,'filter_articletype','萌宠')" class="ddl_filter_articletype" index="8">萌宠</a></li>
-                            <li><a href="#" onclick="change(9,'filter_articletype','游戏')" class="ddl_filter_articletype" index="9">游戏</a></li>
-                            <li><a href="#" onclick="change(10,'filter_articletype','二次元')" class="ddl_filter_articletype" index="10">二次元</a></li>
-                            <li><a href="#" onclick="change(0,'filter_articletype','其他')" class="ddl_filter_articletype" index="0">其他</a></li>
+                            <li><a href="#" onclick="change(-1,'filter_articletype','请选择分类')" class="ddl_filter_articletype" index="-1">请选择分类</a></li>
+                            <li><a href="#" onclick="change(1,'filter_articletype','旅行')" class="ddl_filter_articletype" index="1">旅游</a></li>
+                            <li><a href="#" onclick="change(3,'filter_articletype','亲子')" class="ddl_filter_articletype" index="3">美食</a></li>
+                            <li><a href="#" onclick="change(5,'filter_articletype','女神')" class="ddl_filter_articletype" index="5">亲子</a></li>
+                            <li><a href="#" onclick="change(2,'filter_articletype','美食')" class="ddl_filter_articletype" index="2">美妆</a></li>
+                            <li><a href="#" onclick="change(8,'filter_articletype','萌宠')" class="ddl_filter_articletype" index="8">女神</a></li>
+                            <li><a href="#" onclick="change(10,'filter_articletype','二次元')" class="ddl_filter_articletype" index="10">摄影</a></li>
+                            <li><a href="#" onclick="change(7,'filter_articletype','影评')" class="ddl_filter_articletype" index="7">生活</a></li>
+                            <li><a href="#" onclick="change(9,'filter_articletype','游戏')" class="ddl_filter_articletype" index="9">萌宠</a></li>
+                            <li><a href="#" onclick="change(10000,'filter_articletype','其他')" class="ddl_filter_articletype" index="10000">其他</a></li>
                         </ul>
                     </div>
                 </div>

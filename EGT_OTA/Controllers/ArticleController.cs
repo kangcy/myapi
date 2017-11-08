@@ -203,7 +203,18 @@ namespace EGT_OTA.Controllers
                 model.UpdateIP = Tools.GetClientIP;
                 model.Status = Enum_Status.Approved;
                 model.Submission = Enum_Submission.TemporaryApproved;//默认临时投稿审核
-
+                model.ArticlePower = ZNRequest.GetInt("ArticlePower", Enum_ArticlePower.Myself);
+                model.ArticlePowerPwd = ZNRequest.GetString("ArticlePowerPwd");
+                var TypeID = ZNRequest.GetInt("ArticleType", 0);
+                if (TypeID > 0)
+                {
+                    var articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
+                    if (articleType != null)
+                    {
+                        model.TypeID = TypeID;
+                        model.TypeIDList = articleType.ParentIDList;
+                    }
+                }
                 var result = false;
                 if (model.ID == 0)
                 {
@@ -215,10 +226,6 @@ namespace EGT_OTA.Controllers
                     var covers = cover.Split(',');
                     model.Cover = covers[0];
                     model.Recommend = Enum_ArticleRecommend.None;
-                    model.TypeID = 0;
-                    model.TypeIDList = "-0-0-";
-                    model.ArticlePower = Enum_ArticlePower.Myself;
-                    model.ArticlePowerPwd = string.Empty;
                     model.CreateUserNumber = user.Number;
                     model.CreateDate = DateTime.Now;
                     model.CreateIP = Tools.GetClientIP;
@@ -271,19 +278,15 @@ namespace EGT_OTA.Controllers
                     {
                         return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
                     }
-
                     if (model.ArticlePower == Enum_ArticlePower.Public)
                     {
                         model.ArticlePower = Enum_ArticlePower.Myself;
                     }
-
                     if (string.IsNullOrWhiteSpace(model.Title))
                     {
                         model.Title = "我的小微篇";
                     }
-
                     result = db.Update<Article>(model) > 0;
-
 
                     //取消自定义模板启用
                     if (model.Template != 1)
