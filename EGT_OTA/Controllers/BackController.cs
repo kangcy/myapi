@@ -1103,6 +1103,7 @@ namespace EGT_OTA.Controllers
             ViewBag.NickName = user.NickName;
             ViewBag.Avatar = user.Avatar;
             ViewBag.UserNumber = user.Number;
+            ViewBag.UserID = user.ID;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             ViewBag.key = ZNRequest.GetString("key");
             ViewBag.xwp = ZNRequest.GetString("xwp");
@@ -1135,7 +1136,6 @@ namespace EGT_OTA.Controllers
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             return View();
         }
-
 
         #endregion
     }

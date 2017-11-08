@@ -15,6 +15,7 @@
     <meta http-equiv="Expires" content="0">
     <meta name="format-detection" content="telephone = no" />
     <title></title>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/mui.min.css")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/animate.min.css")" />
@@ -294,7 +295,7 @@
         #x-bg {
             position: fixed;
             height: 100%;
-            width: 500px;
+            width: 400px;
         }
 
         .root {
@@ -556,18 +557,18 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1">
-                    <div class="el-card box-card" style="width: 500px; display: inline-block;" id="box">
-                        <div class="el-card__header hide">
+                    <div class="el-card box-card" style="width:400px; display: inline-block;" id="box">
+                        <div class="el-card__header">
                             <div class="clearfix">
-                                <div class="fr mt5">
+                                <div class="fr">
                                     <button type="button" class="el-button el-button--primary" id="search"><span>创建</span></button>
                                     <button type="button" class="el-button el-button--default" id="reset"><span>取消</span></button>
                                 </div>
-                                <div class="el-form-item inline fl mt15">
-                                    <div class="el-form-item inline fl" style="width: 50%;">
+                                <div class="el-form-item inline full fl mt5">
+                                    <div class="el-form-item inline fl" style="width:50%;">
                                         <div class="el-form-item__content inline fl">
                                             <div class="btn-group">
-                                                <button id="articlepower" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 228px;">
+                                                <button id="articlepower" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 170px;">
                                                     请选择权限
                                                   <span class="caret"></span>
                                                 </button>
@@ -582,10 +583,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="el-form-item fr" style="width: 50%;">
+                                    <div class="el-form-item fr" style="width:50%;">
                                         <div class="el-form-item__content inline fr">
                                             <div class="btn-group">
-                                                <button id="filter_articletype" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 228px;">
+                                                <button id="filter_articletype" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 170px;">
                                                     请选择分类
                                                   <span class="caret"></span>
                                                 </button>
@@ -603,13 +604,6 @@
                                                     <li><a href="#" onclick="change(10,'filter_articletype','二次元')" class="ddl_filter_articletype" index="10">二次元</a></li>
                                                     <li><a href="#" onclick="change(0,'filter_articletype','其他')" class="ddl_filter_articletype" index="0">其他</a></li>
                                                 </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="el-form-item inline fl mt10">
-                                        <div class="el-form-item__content">
-                                            <div class="el-input el-input--small">
-                                                <input id="btnmusic" placeholder="音乐" size="small" type="text" class="el-input__inner">
                                             </div>
                                         </div>
                                     </div>
@@ -646,9 +640,9 @@
                             <img id="music1" class="hide" src="../Back/Images/btn_music.png" onclick="switchsound()" />
                             <div class="swiper-cover hide" id="icon-cover" onclick="IconTan(1,false)"></div>
                             <!--固定背景-->
-                            <div id="x-bg" class="hide" style="height: 890px;"></div>
+                            <div id="x-bg" class="hide" style="height: 690px;"></div>
                             <!--内容-->
-                            <div id="wrapper0" class="full fl hide" style="height: 890px; overflow: auto;">
+                            <div id="wrapper0" class="full fl hide" style="height: 690px; overflow: auto;">
                                 <!--x-cover:滚动背景-->
                                 <div class="root" id="x-cover">
                                     <!--头-->
@@ -807,6 +801,7 @@
     var rooturl = "@(ViewBag.RootUrl)";
 </script>
 <script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
+<script src="@Url.Content("~/Back/bootstrap.min.js")"></script>
 <script src="@Url.Content("~/Scripts/mui.min.js")"></script>
 <script src="@Url.Content("~/Scripts/base.min.js")"></script>
 <script src="@Url.Content("~/Scripts/group.min.js")"></script>
@@ -1136,8 +1131,8 @@
     };
     window.onresize = function () {
         $editor.style.height = initHeight - 175 - 60 + "px";
-        base.Get("box").style.marginLeft = (window.innerWidth - 500 - 6) / 2 + "px";
-        base.Get("btnIcon").style.left = (window.innerWidth - 500 - 6) / 2 + "px";
+        base.Get("box").style.marginLeft = (window.innerWidth - 400) / 2 + "px";
+        base.Get("btnIcon").style.left = (window.innerWidth - 500) / 2 + "px";
     };
 
     //声明对象（编号，内容，状态，排序，类型，是否临时） 
@@ -1158,8 +1153,8 @@
     var title = base.Get("title");
 
     mui.ready(function () {
-        base.Get("box").style.marginLeft = (window.innerWidth - 500 - 6) / 2 + "px";
-        base.Get("btnIcon").style.left = (window.innerWidth - 500 - 6) / 2 + "px";
+        base.Get("box").style.marginLeft = (window.innerWidth - 400) / 2 + "px";
+        base.Get("btnIcon").style.left = (window.innerWidth - 500) / 2 + "px";
         Load();
         LoadTemplate();
         LoadColorTemplate();
@@ -1626,12 +1621,12 @@
                     //加载段落
                     if (ArticleID == 0) {
                         $edit.appendChild(initStr('<div class="edit f12 tl">请填写文章内容</div>', "text", 1, ""));
-                        //$edit.appendChild(initStr("http://localhost/app/Upload/201710232018503304_1.jpg", "pic", 2, ""));
+                        $edit.appendChild(initStr("http://localhost/app/Upload/Images/Article/20171108/149509293893532/201711081928258208_1.jpg", "pic", 2, ""));
 
                         //声明对象（编号，内容，状态，排序，类型，是否临时）
                         //初始化段落内容(Status:0-未操作，1-新增，2-编辑，3-删除)
                         InitParts.push(new PartModel(1, '<div class="edit f12 tl">请填写文章内容</div>', "", 1, 0, 2, 1));
-                        //InitParts.push(new PartModel(2, "http://localhost/app/Upload/201710232018503304_1.jpg", "", 1, 1, 1, 1));
+                        InitParts.push(new PartModel(2, "http://localhost/app/Upload/Images/Article/20171108/149509293893532/201711081928258208_1.jpg", "", 1, 1, 1, 1));
 
                     } else {
                         var parts = data.ArticlePart;
@@ -2126,7 +2121,7 @@
             });
         })
         var param = {
-            ID: userinfo.ID,
+            ID: "@(ViewBag.UserID)",
             ArticleID: ArticleID,
             Title: escape(Title),
             MusicID: MusicID,

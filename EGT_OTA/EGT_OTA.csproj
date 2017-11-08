@@ -411,12 +411,14 @@
     <Content Include="Back\Images\icon_music.png" />
     <Content Include="Back\Images\icon_pic_n.png" />
     <Content Include="Back\Images\icon_pic_y.png" />
+    <Content Include="Back\Images\know.png" />
     <Content Include="Back\Images\next.png" />
     <Content Include="Back\Images\off.png" />
     <Content Include="Back\Images\on.png" />
     <Content Include="Back\Images\prev.png" />
     <Content Include="Back\Images\start.png" />
     <Content Include="Back\Images\stop.png" />
+    <Content Include="Back\Images\title.png" />
     <Content Include="Back\jquery.myPagination5.0.js" />
     <Content Include="Back\layer\extend\layer.ext.js" />
     <Content Include="Back\layer\layer.js" />
