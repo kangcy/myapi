@@ -660,7 +660,7 @@ namespace EGT_OTA.Controllers.Api
             Graphics g = Graphics.FromImage(bitmap);//新建一个画板  
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;//设置高质量插值法  
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;//设置高质量,低速度呈现平滑程度  
-            g.Clear(Color.Transparent);//清空画布并以透明背景色填充  
+            g.Clear(Color.Transparent);//清空画布并以透明背景色填充 
             g.DrawImage(originalImage, new Rectangle(0, 0, towidth, toheight), new Rectangle(x, y, ow, oh), GraphicsUnit.Pixel);//在指定位置并且按指定大小绘制原图片的指定部分  
             try
             {
@@ -716,6 +716,7 @@ namespace EGT_OTA.Controllers.Api
                         case 9: width = image.Width - copyImage.Width; height = image.Height - copyImage.Height; break;//右下角
                     }
                     Graphics g = Graphics.FromImage(image);
+                    g.Clear(Color.Transparent);//清空画布并以透明背景色填充 
                     g.DrawImage(copyImage, new Rectangle(width, height, Convert.ToInt16(watermarkmodel.Width), Convert.ToInt16(watermarkmodel.Height)), 0, 0, copyImage.Width, copyImage.Height, GraphicsUnit.Pixel);
                     g.Dispose();
                     copyImage.Dispose();
@@ -740,6 +741,7 @@ namespace EGT_OTA.Controllers.Api
                         case 9: width = image.Width - fontwidth; height = image.Height - fontheight; break;
                     }
                     Graphics g = Graphics.FromImage(image);
+                    g.FillRectangle(Brushes.Red, new Rectangle(0, 0, image.Width, image.Height));   //把b1涂成红色
                     g.DrawImage(image, 0, 0, image.Width, image.Height);
                     Font f = new Font("Verdana", float.Parse(watermarkmodel.FontSize.ToString()));
                     Brush b = new SolidBrush(Color.White);

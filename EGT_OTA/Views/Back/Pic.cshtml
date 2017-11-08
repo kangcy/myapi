@@ -24,7 +24,7 @@
             <div class="col-lg-10 col-lg-offset-1">
                 <div id="scroll-view" class="el-card__body">
                     <div id="wrapper" class="mui-iframe-wrapper full tc" style="bottom: 50px;">
-                        <img id="readyimg" style="width: auto; height: auto; display: none; max-width: 100%; max-height: 100%; display: inline-block;" />
+                        <img id="readyimg" style="width: auto; height: auto; max-width: 100%; max-height: 100%; display: inline-block;" />
                     </div>
                     <footer class="mui-bar mui-bar-tab" style="background: #f8f8f8; border-top: 1px solid #ddd;">
                         <a class="mui-icon blue fl mt6 ml10" style="font-size: 16px; cursor: pointer;" onclick="Choose()">更换</a>
@@ -63,22 +63,20 @@
     var Standard = "";
     var PartID = 0;
     var ArticleNumber = "";
+    var UserNumber = "";
     var isLoading = false;
     var $image = $('#readyimg');
     var $inputImage = $('#inputImage');
     var uploadedImageType = 'image/jpeg';
     var uploadedImageURL = "";
     var isCutImging = false;
-    jQuery.support.cors = true;
+    var index = parent.layer.getFrameIndex(window.name);
 
     $(document).ready(function () {
         $("#wrapper").css({
             "top": "0px",
             "height": totalheight + "px"
         });
-
-        $image[0].crossOrigin = "Anonymous";
-
         $inputImage.change(function () {
             var files = this.files;
             if (files && files.length) {
@@ -96,7 +94,6 @@
                         $image.hide();
 
                         var img = new Image();
-                        img.crossOrigin = "Anonymous";
                         img.src = uploadedImageURL;
                         if (img.complete) {
                             InitImg(uploadedImageURL);
@@ -135,12 +132,13 @@
     }
 
     //初始化
-    function Init(src, source, standard, partid, articlenumber) {
+    function Init(src, source, standard, partid, articlenumber, usernumber) {
         Url = src;
         Source = source;
         Standard = standard;
         PartID = partid;
         ArticleNumber = articlenumber;
+        UserNumber = usernumber;
         if (!base.IsNullOrEmpty(Url)) {
             $image.hide().attr("src", Url).load(function () {
                 var imagewidth = $image.width();
@@ -257,30 +255,6 @@
         isCutImging = false;
     }
 
-    //请求上传图片
-    function Upload(imgurl, callback) {
-        layer.load();
-        HttpPost(base.UploadUrl + "Upload/Upload", {
-            str: imgurl,
-            standard: Standard,
-            Number: userinfo.Number
-        }, function (data) {
-            if (data != null) {
-                if (data.result) {
-                    if (callback) {
-                        callback(base.UploadUrl + data.message);
-                    }
-                    base.Get("closepop").style.display = "none";
-                    base.Get("openpop").style.display = "inline-block";
-                    $image.cropper('destroy');
-                    isCutImging = false;
-                } else {
-                    mui.toast(data.message);
-                }
-            }
-        });
-    }
-
     //将图片压缩转成base64 
     function getBase64Image(img) {
         var canvas = document.createElement("canvas");
@@ -298,6 +272,28 @@
         return $inputImage.click();
     }
 
+    //请求上传图片
+    function Upload(imgurl) {
+        console.log(imgurl)
+        layer.load();
+        HttpPost("@(ViewBag.RootUrl)Upload/Upload", {
+            str: imgurl,
+            standard: Standard,
+            Number: UserNumber
+        }, function (data) {
+            if (data != null) {
+                if (data.result) {
+                    var url = "@(ViewBag.RootUrl)" + data.message;
+                    console.log(url);
+                    parent.AddPic((PartID == 0 ? base.GetUid() : PartID), url, PartID);
+                    parent.layer.close(index);
+                } else {
+                    layer.msg(data.message);
+                }
+            }
+        });
+    }
+
     //完成
     function Confirm() {
         var imgurl = $image.attr("src");
@@ -307,21 +303,35 @@
         if (isCutImging) {
             var dataURL = $image.cropper("getCroppedCanvas");
             imgurl = dataURL.toDataURL("image/jpeg", 1);
-            Upload(imgurl, callback);
+            Upload(imgurl);
         } else {
-            if (imgurl.toLowerCase().indexOf("http") > -1) {
-                if ($.isFunction(callback)) {
-                    callback(imgurl);
-                }
+            //原图返回
+            if (imgurl.toLowerCase().startWith("http")) {
+                parent.layer.close(index);
                 return;
             } else {
                 var image = new Image();
                 image.src = imgurl;
-                image.onload = function () {
+                if (image.complete) {
                     var imgData = getBase64Image(image);
-                    Upload(imgData, callback);
+                    Upload(imgData);
+                } else {
+                    image.onload = function () {
+                        var imgData = getBase64Image(image);
+                        Upload(imgData);
+                    };
                 }
             }
         }
+    }
+
+    String.prototype.startWith = function (str) {
+        var reg = new RegExp("^" + str);
+        return reg.test(this);
+    }
+
+    String.prototype.endWith = function (str) {
+        var reg = new RegExp(str + "$");
+        return reg.test(this);
     }
 </script>

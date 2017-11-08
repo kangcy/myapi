@@ -139,6 +139,7 @@ namespace EGT_OTA.Controllers
                             {
                                 Bitmap returnBmp = new Bitmap(Origninal.Width, Origninal.Height);
                                 Graphics g = Graphics.FromImage(returnBmp);
+                                g.Clear(Color.White);//清空画布并以透明背景色填充 
                                 g.DrawImage(Origninal, 0, 0, Origninal.Width, Origninal.Height);
                                 g.Dispose();
                                 MakeThumbnail(user, (Image)returnBmp, mode, savePath + "\\" + filename.Replace(".", "_" + i + "."));
@@ -242,6 +243,7 @@ namespace EGT_OTA.Controllers
                             {
                                 Bitmap returnBmp = new Bitmap(Origninal.Width, Origninal.Height);
                                 Graphics g = Graphics.FromImage(returnBmp);
+                                g.Clear(Color.Transparent);
                                 g.DrawImage(Origninal, 0, 0, Origninal.Width, Origninal.Height);
                                 g.Dispose();
                                 MakeThumbnail(user, (Image)returnBmp, mode, savePath + "\\" + filename.Replace(".", "_" + index + "."));

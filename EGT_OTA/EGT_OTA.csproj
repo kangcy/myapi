@@ -311,6 +311,7 @@
     <Compile Include="Helper\TicketTool.cs" />
     <Compile Include="Helper\UnicodeHelper.cs" />
     <Compile Include="Helper\UnixTimeHelper.cs" />
+    <Compile Include="Helper\UploadImageHelper.cs" />
     <Compile Include="Helper\ValidateCodeHelper.cs" />
     <Compile Include="Helper\WeixinHelper.cs" />
     <Compile Include="Helper\XmlHelper.cs" />

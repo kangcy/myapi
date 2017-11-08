@@ -717,8 +717,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="el-form-item fl" id="editText" style="display: none; padding: 20px; width: 100%; height: 100%; position: relative;">
                             <nav id="color" class="mui-bar mui-bar-tab hide" style="background: #ddd; bottom: 110px;">
                                 <div class="color fr" style="background: #000;" data-type="ForeColor" data="#000"></div>
@@ -1192,10 +1190,6 @@
             currEditPartID = this.getAttribute("partid");
             var type = this.getAttribute("type");
             if (type == "pic") {
-                var Source = "ArticleAvatar";
-                var Standard = "Article";
-                var PartID = currEditPartID;
-                var ArticleNumber = ArticleNumber;
                 currEditImg = this.getAttribute("src");
                 layer.open({
                     id: "pic",
@@ -1205,7 +1199,7 @@
                     title: "图片编辑",
                     success: function (layero, index) {
                         var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.Init(currEditImg, Source, Standard, PartID, ArticleNumber);
+                        iframeWin.Init(currEditImg, "ArticleAvatar", "Article", currEditPartID, ArticleNumber, "@(ViewBag.UserNumber)");
                     }
                 });
             } else if (type == "text") {
@@ -1241,7 +1235,17 @@
         mui('#edit').on('tap', '.edit-add-pic', function () {
             $("#edit").find(".icons").addClass("hide");
             $("#edit").find(".edit-add").removeClass("hide");
-            mui('#upload').popover('show');
+            layer.open({
+                id: "pic",
+                type: 2,
+                area: ['500px', '750px'],
+                content: 'Pic',
+                title: "图片编辑",
+                success: function (layero, index) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    iframeWin.Init("", "ArticleAvatar", "Article", 0, ArticleNumber, "@(ViewBag.UserNumber)");
+                }
+            });
         });
 
         //新增文本
@@ -1418,14 +1422,13 @@
     }
 
     //修改图片
-    window.addEventListener("updatePic", function (e) {
-        var t = e.detail.title;
+    function UpdatePic(src) {
         if (t == "") {
             base.Get(currEditID).innerHTML = "点击添加图片";
         } else {
-            base.Get(currEditID).innerHTML = t;
+            base.Get(currEditID).innerHTML = src;
         }
-    });
+    }
 
     //修改标题
     function UpdateTitle(val) {
@@ -1569,53 +1572,6 @@
         ChangeMusic();
     }
 
-    //保存
-    function Save() {
-        if (isLoading) {
-            return;
-        }
-        isLoading = true;
-        if (base.IsNullOrEmpty(Title)) {
-            Title = "我的小微篇"
-        }
-        //重置排序（按top属性从小到大排）
-        mui.each(mui(".edit-content"), function (i, item) {
-            var partid = item.getAttribute("partid");
-            var sortid = i;
-            //同步原始段落信息			
-            mui.each(InitParts, function (index, item) {
-                if (item.ID == partid) {
-                    InitParts[index].SortID = sortid;
-                }
-            });
-        })
-        var param = {
-            ID: userinfo.ID,
-            ArticleID: ArticleID,
-            Title: escape(Title),
-            MusicID: MusicID,
-            MusicName: MusicName,
-            MusicUrl: MusicUrl,
-            Template: CurrTemplate,
-            ColorTemplate: CurrColorTemplate,
-            ShowyUrl: Showy,
-            Part: escape(JSON.stringify(InitParts))
-        }
-
-        HttpPost(base.RootUrl + "Article/Edit", param,
-            function (data) {
-                if (data != null) {
-                    if (data.result) {
-
-                    } else {
-                        isLoading = false;
-                    }
-                } else {
-                    isLoading = false;
-                }
-            });
-    }
-
     //拼接字符串  
     function initStr(text, type, partid, expand) {
         var div = document.createElement('div');
@@ -1670,12 +1626,12 @@
                     //加载段落
                     if (ArticleID == 0) {
                         $edit.appendChild(initStr('<div class="edit f12 tl">请填写文章内容</div>', "text", 1, ""));
-                        $edit.appendChild(initStr("http://localhost/app/Upload/201710232018503304_1.jpg", "pic", 2, ""));
+                        //$edit.appendChild(initStr("http://localhost/app/Upload/201710232018503304_1.jpg", "pic", 2, ""));
 
                         //声明对象（编号，内容，状态，排序，类型，是否临时）
                         //初始化段落内容(Status:0-未操作，1-新增，2-编辑，3-删除)
                         InitParts.push(new PartModel(1, '<div class="edit f12 tl">请填写文章内容</div>', "", 1, 0, 2, 1));
-                        InitParts.push(new PartModel(2, "http://localhost/app/Upload/201710232018503304_1.jpg", "", 1, 1, 1, 1));
+                        //InitParts.push(new PartModel(2, "http://localhost/app/Upload/201710232018503304_1.jpg", "", 1, 1, 1, 1));
 
                     } else {
                         var parts = data.ArticlePart;
@@ -1750,23 +1706,6 @@
             mask.close();
             base.CloseWaiting();
         });
-
-
-            @*$edit.appendChild(initStr('<div class="edit f12 tl">请填写文章内容</div>', "text", 0, ""));
-            $edit.appendChild(initStr("http://www.xiaoweipian.com:1010/Upload/Images/Article/20171023/149509293893532/201710232018503304_0.jpg", "pic", 1, ""));
-
-            //初始化段落内容(Status:0-未操作，1-新增，2-编辑，3-删除)
-            InitParts.push(new PartModel(0, '<div class="edit f12 tl">请填写文章内容</div>', "", 1, 0, 2, 0));
-            InitParts.push(new PartModel(0, "http://www.xiaoweipian.com:1010/Upload/Images/Article/20171023/149509293893532/201710232018503304_0.jpg", "", 1, 1, 1, 0));
-
-            InitGroup();
-            ChangeBg();
-
-            base.InnerHtml(["nickname", "nickname0", "nickname1"], "@(ViewBag.NickName)");
-            base.Get("useravatar0").setAttribute("src", base.ShowThumb("@(ViewBag.Avatar)", 1));
-
-            base.Get("x-head").classList.remove("hide");
-            $wrapper.classList.remove("hide");*@
     }
 
     //更新布局 
@@ -2155,6 +2094,62 @@
                             base.Get("x-avatar-sub").style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
                         });
                     }
+                }
+            }
+        });
+    }
+
+    //保存
+    function Save() {
+        if (isLoading) {
+            return;
+        }
+        isLoading = true;
+
+        if (base.IsNullOrEmpty(Title) || Title == "我的小微篇") {
+            layer.msg("请输入文章标题");
+            isLoading = false;
+            return;
+        }
+        if (base.IsNullOrEmpty(Title)) {
+            Title = "我的小微篇"
+        }
+        //重置排序（按top属性从小到大排）
+        mui.each(mui(".edit-content"), function (i, item) {
+            var partid = item.getAttribute("partid");
+            var sortid = i;
+            //同步原始段落信息			
+            mui.each(InitParts, function (index, item) {
+                if (item.ID == partid) {
+                    InitParts[index].SortID = sortid;
+                }
+            });
+        })
+        var param = {
+            ID: userinfo.ID,
+            ArticleID: ArticleID,
+            Title: escape(Title),
+            MusicID: MusicID,
+            MusicName: MusicName,
+            MusicUrl: MusicUrl,
+            Template: CurrTemplate,
+            ColorTemplate: CurrColorTemplate,
+            ShowyUrl: Showy,
+            Part: escape(JSON.stringify(InitParts))
+        }
+        $.ajax({
+            url: "@(ViewBag.RootUrl)Article/Edit",
+            dataType: "json",
+            data: $.param(param),
+            success: function (data) {
+                if (data != null) {
+                    if (data.result) {
+
+                    } else {
+                        isLoading = false;
+                    }
+                } else {
+                    isLoading = false;
                 }
             }
         });
