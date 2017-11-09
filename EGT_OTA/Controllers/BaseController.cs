@@ -339,36 +339,6 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
-        /// 音乐
-        /// </summary>
-        protected List<MusicJson> GetMusic()
-        {
-            List<MusicJson> list = new List<MusicJson>();
-
-            list = redis.HashGetAllValues<MusicJson>("Music");
-
-
-            if (CacheHelper.Exists("Music"))
-            {
-                list = (List<MusicJson>)CacheHelper.GetCache("Music");
-            }
-            else
-            {
-                string str = string.Empty;
-                string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/music.config");
-                if (System.IO.File.Exists(filePath))
-                {
-                    StreamReader sr = new StreamReader(filePath, Encoding.Default);
-                    str = sr.ReadToEnd();
-                    sr.Close();
-                }
-                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MusicJson>>(str);
-                CacheHelper.Insert("Music", list);
-            }
-            return list.FindAll(x => x.Status == Enum_Status.Approved);
-        }
-
-        /// <summary>
         /// 文章类型
         /// </summary>
         protected List<ArticleType> GetArticleType()
@@ -509,26 +479,33 @@ namespace EGT_OTA.Controllers
         /// </summary>
         protected List<string> GetDirtyWord()
         {
-            List<string> list = redis.HashGetAllValues<string>("DirtyWord");
-            if (list.Count == 0)
+            try
             {
-                string str = string.Empty;
-                string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/dirtyword.config");
-                if (System.IO.File.Exists(filePath))
+                List<string> list = redis.HashGetAllValues<string>("DirtyWord");
+                if (list.Count == 0)
                 {
-                    StreamReader sr = new StreamReader(filePath, Encoding.Default);
-                    str = sr.ReadToEnd();
-                    sr.Close();
-                }
-                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(str);
+                    string str = string.Empty;
+                    string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/dirtyword.config");
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        StreamReader sr = new StreamReader(filePath, Encoding.Default);
+                        str = sr.ReadToEnd();
+                        sr.Close();
+                    }
+                    list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(str);
 
-                var index = 0;
-                list.ForEach(x =>
-                {
-                    redis.HashSet<string>("DirtyWord", index++.ToString(), x);
-                });
+                    var index = 0;
+                    list.ForEach(x =>
+                    {
+                        redis.HashSet<string>("DirtyWord", index++.ToString(), x);
+                    });
+                }
+                return list;
             }
-            return list;
+            catch (Exception ex)
+            {
+                return new List<string>();
+            }
         }
 
         /// <summary>
@@ -693,13 +670,12 @@ namespace EGT_OTA.Controllers
                 default:
                     break;
             }
-
             Image bitmap = new Bitmap(towidth, toheight);//新建一个bmp图片  
             Graphics g = Graphics.FromImage(bitmap);//新建一个画板  
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;//设置高质量插值法  
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;//设置高质量,低速度呈现平滑程度  
             g.Clear(Color.Transparent);//清空画布并以透明背景色填充  
-            g.DrawImage(originalImage, new Rectangle(0, 0, towidth, towidth), new Rectangle(x, y, ow, oh), GraphicsUnit.Pixel);//在指定位置并且按指定大小绘制原图片的指定部分  
+            g.DrawImage(originalImage, new Rectangle(0, 0, towidth, toheight), new Rectangle(x, y, ow, oh), GraphicsUnit.Pixel);//在指定位置并且按指定大小绘制原图片的指定部分  
             try
             {
                 ///添加水印

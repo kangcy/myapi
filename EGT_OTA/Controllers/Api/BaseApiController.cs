@@ -302,35 +302,6 @@ namespace EGT_OTA.Controllers.Api
         }
 
         /// <summary>
-        /// 音乐
-        /// </summary>
-        protected List<MusicJson> GetMusic()
-        {
-            List<MusicJson> list = redis.HashGetAllValues<MusicJson>("Music");
-            if (list.Count == 0)
-            {
-                string str = string.Empty;
-                string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/music.config");
-                if (System.IO.File.Exists(filePath))
-                {
-                    StreamReader sr = new StreamReader(filePath, Encoding.Default);
-                    str = sr.ReadToEnd();
-                    sr.Close();
-                }
-                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MusicJson>>(str);
-                list.ForEach(x =>
-                {
-                    x.Music.ForEach(y =>
-                    {
-                        y.FileUrl = Base_Url + y.FileUrl;
-                    });
-                    redis.HashSet<MusicJson>("Music", x.ID.ToString(), x);
-                });
-            }
-            return list.FindAll(x => x.Status == Enum_Status.Approved);
-        }
-
-        /// <summary>
         /// 文章类型
         /// </summary>
         protected List<ArticleType> GetArticleType()
@@ -471,26 +442,33 @@ namespace EGT_OTA.Controllers.Api
         /// </summary>
         protected List<string> GetDirtyWord()
         {
-            List<string> list = redis.HashGetAllValues<string>("DirtyWord");
-            if (list.Count == 0)
+            try
             {
-                string str = string.Empty;
-                string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/dirtyword.config");
-                if (System.IO.File.Exists(filePath))
+                List<string> list = redis.HashGetAllValues<string>("DirtyWord");
+                if (list.Count == 0)
                 {
-                    StreamReader sr = new StreamReader(filePath, Encoding.Default);
-                    str = sr.ReadToEnd();
-                    sr.Close();
-                }
-                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(str);
+                    string str = string.Empty;
+                    string filePath = System.Web.HttpContext.Current.Server.MapPath("~/Config/dirtyword.config");
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        StreamReader sr = new StreamReader(filePath, Encoding.Default);
+                        str = sr.ReadToEnd();
+                        sr.Close();
+                    }
+                    list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(str);
 
-                var index = 0;
-                list.ForEach(x =>
-                {
-                    redis.HashSet<string>("DirtyWord", index++.ToString(), x);
-                });
+                    var index = 0;
+                    list.ForEach(x =>
+                    {
+                        redis.HashSet<string>("DirtyWord", index++.ToString(), x);
+                    });
+                }
+                return list;
             }
-            return list;
+            catch (Exception ex)
+            {
+                return new List<string>();
+            }
         }
 
         /// <summary>
@@ -741,7 +719,6 @@ namespace EGT_OTA.Controllers.Api
                         case 9: width = image.Width - fontwidth; height = image.Height - fontheight; break;
                     }
                     Graphics g = Graphics.FromImage(image);
-                    g.FillRectangle(Brushes.Red, new Rectangle(0, 0, image.Width, image.Height));   //把b1涂成红色
                     g.DrawImage(image, 0, 0, image.Width, image.Height);
                     Font f = new Font("Verdana", float.Parse(watermarkmodel.FontSize.ToString()));
                     Brush b = new SolidBrush(Color.White);

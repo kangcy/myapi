@@ -24,41 +24,6 @@ namespace EGT_OTA.Controllers.Api
     public class MusicController : BaseApiController
     {
         /// <summary>
-        /// 音乐列表
-        /// </summary>
-        [DeflateCompression]
-        [HttpGet]
-        [Route("Api/Music/All")]
-        public string All()
-        {
-            ApiResult result = new ApiResult();
-            try
-            {
-                var musicType = GetMusic().OrderBy(x => x.SortID).ToList();
-                musicType.ForEach(x =>
-                {
-                    x.Music.ForEach(l =>
-                    {
-                        l.Cover = GetFullUrl(l.Cover);
-                        l.FileUrl = GetFullUrl(l.FileUrl);
-                    });
-                });
-                result.result = true;
-                result.message = new
-                {
-                    records = musicType.Count,
-                    list = musicType
-                };
-            }
-            catch (Exception ex)
-            {
-                LogHelper.ErrorLoger.Error("Api_Music_All:" + ex.Message);
-                result.message = ex.Message;
-            }
-            return JsonConvert.SerializeObject(result);
-        }
-
-        /// <summary>
         /// 搜搜音乐、阿里云音乐
         /// </summary>
         [DeflateCompression]

@@ -143,28 +143,24 @@
     <div id="wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-lg-10 col-lg-offset-1">
-                    <div class="el-card box-card">
-                        <div class="el-card__header">
-                            <div class="clearfix">
-                                <div class="el-form-item inline fl">
-                                    <div class="el-form-item__content">
-                                        <div class="el-input el-input--small">
-                                            <input id="title" placeholder="音乐标题" size="small" type="text" class="el-input__inner">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="fr">
-                                    <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
-                                    <button type="button" class="el-button el-button--default" id="submit" onclick="Confirm()"><span>确认</span></button>
+                <div class="el-card__header">
+                    <div class="clearfix">
+                        <div class="el-form-item inline fl">
+                            <div class="el-form-item__content">
+                                <div class="el-input el-input--small">
+                                    <input id="title" placeholder="音乐标题" size="small" type="text" class="el-input__inner" style="width:310px;">
                                 </div>
                             </div>
                         </div>
-                        <div id="scroll-view" class="el-card__body mui-table-view" style="height: 470px; overflow-x: hidden;">
+                        <div class="fr">
+                            <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
+                            <button type="button" class="el-button el-button--default" id="submit" onclick="Confirm()"><span>确认</span></button>
                         </div>
                     </div>
-                    <div class="layui-layer-btn" style="padding-top: 10px;"><a class="layui-layer-btn0" onclick="More()">查看更多</a></div>
                 </div>
+                <div id="scroll-view" class="el-card__body mui-table-view" style="height: 470px; overflow-x: hidden;">
+                </div>
+                <div class="layui-layer-btn" style="padding-top:30px;"><a class="layui-layer-btn0" onclick="More()">查看更多</a></div>
             </div>
         </div>
     </div>

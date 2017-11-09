@@ -47,7 +47,7 @@ namespace EGT_OTA.Controllers
                 }
                 if (user.UserRole != Enum_UserRole.Administrator && user.UserRole != Enum_UserRole.SuperAdministrator)
                 {
-                    return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "没有权限", code = Enum_ErrorCode.NoPower }, JsonRequestBehavior.AllowGet);
                 }
                 CookieHelper.SetCookie("Back", user.WeiXin + user.QQ);
                 return Json(new { result = true, message = user.WeiXin + user.QQ, xwp = user.Number }, JsonRequestBehavior.AllowGet);
@@ -111,7 +111,7 @@ namespace EGT_OTA.Controllers
                 }
                 if (user.UserRole != Enum_UserRole.Administrator && user.UserRole != Enum_UserRole.SuperAdministrator)
                 {
-                    return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "没有权限", code = Enum_ErrorCode.NoPower }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("Password").EqualTo(DesEncryptHelper.Encrypt(password)).Where<User>(x => x.ID == user.ID).Execute() > 0;
                 if (result)
@@ -1098,6 +1098,7 @@ namespace EGT_OTA.Controllers
         [BackPower]
         public ActionResult Add()
         {
+            var id = ZNRequest.GetInt("id");
             var number = ZNRequest.GetString("xwp");
             var user = db.Single<User>(x => x.Number == number);
             ViewBag.NickName = user.NickName;
@@ -1107,6 +1108,7 @@ namespace EGT_OTA.Controllers
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             ViewBag.key = ZNRequest.GetString("key");
             ViewBag.xwp = ZNRequest.GetString("xwp");
+            ViewBag.ArticleID = id;
             return View();
         }
 

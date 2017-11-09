@@ -21,5 +21,11 @@ namespace EGT_OTA.Models
         /// </summary>
         [EnumAttribute("未删除")]
         public const int Delete = 2;
+
+        /// <summary>
+        /// 没有权限
+        /// </summary>
+        [EnumAttribute("没有权限")]
+        public const int NoPower = 3;
     }
 }

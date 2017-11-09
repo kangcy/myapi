@@ -139,28 +139,29 @@
         PartID = partid;
         ArticleNumber = articlenumber;
         UserNumber = usernumber;
-        if (!base.IsNullOrEmpty(Url)) {
-            $image.hide().attr("src", Url).load(function () {
-                var imagewidth = $image.width();
-                var imageheight = $image.height();
-                $image.css({
-                    "width": "auto",
-                    "height": "auto",
-                    "margin-top": "0px",
-                    "margin-left": "0px"
-                });
-                if (totalheight > imageheight) {
-                    $image.css("margin-top", (totalheight - imageheight) / 2 + "px");
-                }
-                //用户封面、用户头像
-                if (Standard == "UserCover" || Standard == "UserAvatar") {
-                    openpop();
-                } else {
-                    $image.show();
-                    base.Get("openpop").style.display = "inline-block";
-                }
-            });
+        if (base.IsNullOrEmpty(Url)) {
+            return;
         }
+        $image.hide().attr("src", Url).load(function () {
+            var imagewidth = $image.width();
+            var imageheight = $image.height();
+            $image.css({
+                "width": "auto",
+                "height": "auto",
+                "margin-top": "0px",
+                "margin-left": "0px"
+            });
+            if (totalheight > imageheight) {
+                $image.css("margin-top", (totalheight - imageheight) / 2 + "px");
+            }
+            //用户封面、用户头像
+            if (Standard == "UserCover" || Standard == "UserAvatar") {
+                openpop();
+            } else {
+                $image.show();
+                base.Get("openpop").style.display = "inline-block";
+            }
+        });
     }
 
     //照片裁剪类  
@@ -274,7 +275,6 @@
 
     //请求上传图片
     function Upload(imgurl) {
-        console.log(imgurl)
         layer.load();
         HttpPost("@(ViewBag.RootUrl)Upload/Upload", {
             str: imgurl,
@@ -283,8 +283,8 @@
         }, function (data) {
             if (data != null) {
                 if (data.result) {
-                    var url = "@(ViewBag.RootUrl)" + data.message;
-                    console.log(url);
+                    //var url = "@(ViewBag.RootUrl)" + data.message;
+                    var url = data.message;
                     parent.AddPic((PartID == 0 ? base.GetUid() : PartID), url, PartID);
                     parent.layer.close(index);
                 } else {

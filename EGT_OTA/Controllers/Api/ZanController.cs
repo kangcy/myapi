@@ -50,6 +50,7 @@ namespace EGT_OTA.Controllers.Api
                 var black = db.Exists<Black>(x => x.CreateUserNumber == article.CreateUserNumber && x.ToUserNumber == user.Number);
                 if (black)
                 {
+                    result.code = Enum_ErrorCode.NoPower;
                     result.message = "没有权限";
                     return JsonConvert.SerializeObject(result);
                 }
@@ -153,6 +154,7 @@ namespace EGT_OTA.Controllers.Api
                 var black = db.Exists<Black>(x => x.CreateUserNumber == comment.CreateUserNumber && x.ToUserNumber == user.Number);
                 if (black)
                 {
+                    result.code = Enum_ErrorCode.NoPower;
                     result.message = "没有权限";
                     return JsonConvert.SerializeObject(result);
                 }

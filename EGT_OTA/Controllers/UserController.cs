@@ -457,7 +457,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var avatar = ZNRequest.GetString("Avatar").Trim();
                 if (string.IsNullOrEmpty(avatar))
@@ -487,7 +487,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var cover = ZNRequest.GetString("Cover").Trim();
                 if (string.IsNullOrEmpty(cover))
@@ -517,7 +517,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 user.Province = ZNRequest.GetString("Province");
                 user.City = ZNRequest.GetString("City");
@@ -544,7 +544,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("Sex").EqualTo(ZNRequest.GetInt("Sex")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
@@ -569,7 +569,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("Star").EqualTo(ZNRequest.GetInt("Star")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
@@ -594,7 +594,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("UseDraw").EqualTo(ZNRequest.GetInt("UseDraw")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
@@ -619,7 +619,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("DrawText").EqualTo(ZNRequest.GetString("DrawText")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
@@ -644,7 +644,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("IsPay").EqualTo(ZNRequest.GetInt("IsPay")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
@@ -669,7 +669,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("Birthday").EqualTo(ZNRequest.GetDateTime("Birthday")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
@@ -694,7 +694,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var NickName = SqlFilter(ZNRequest.GetString("NickName").Trim());
                 if (string.IsNullOrEmpty(NickName))
@@ -729,7 +729,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var Signature = SqlFilter(ZNRequest.GetString("Signature").Trim());
                 if (!string.IsNullOrWhiteSpace(Signature))
@@ -768,12 +768,12 @@ namespace EGT_OTA.Controllers
                 var mobile = ZNRequest.GetString("Mobile");
                 if (string.IsNullOrWhiteSpace(mobile))
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var user = db.Single<User>(x => x.Phone == mobile);
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var newpassword = ZNRequest.GetString("NewPassword").Trim();
                 if (string.IsNullOrWhiteSpace(newpassword))
@@ -808,7 +808,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("ShareNick").EqualTo(ZNRequest.GetInt("ShareNick")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
@@ -833,7 +833,7 @@ namespace EGT_OTA.Controllers
                 var id = ZNRequest.GetInt("ID");
                 if (id <= 0)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<User>(provider).Set("AutoMusic").EqualTo(ZNRequest.GetInt("AutoMusic")).Where<User>(x => x.ID == id).Execute() > 0;
                 if (result)
@@ -856,7 +856,7 @@ namespace EGT_OTA.Controllers
             User user = GetUserInfo();
             if (user == null)
             {
-                return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
             }
 
             var result = false;
@@ -913,7 +913,7 @@ namespace EGT_OTA.Controllers
             User user = GetUserInfo();
             if (user == null)
             {
-                return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
             }
 
             var result = false;
@@ -1112,7 +1112,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var phone = ZNRequest.GetString("Phone");
                 if (string.IsNullOrEmpty(phone))
@@ -1161,7 +1161,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var key = ZNRequest.GetString("Key");
                 if (db.Exists<User>(x => x.WeiXin == key && x.ID != user.ID))
@@ -1191,7 +1191,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var key = ZNRequest.GetString("Key");
                 if (db.Exists<User>(x => x.Weibo == key && x.ID != user.ID))
@@ -1221,7 +1221,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var key = ZNRequest.GetString("Key");
                 if (db.Exists<User>(x => x.QQ == key && x.ID != user.ID))
@@ -1251,7 +1251,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var source = ZNRequest.GetInt("Source");
                 if (string.IsNullOrWhiteSpace(user.Phone))
@@ -1389,7 +1389,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var ids = ZNRequest.GetString("PartID");
                 if (string.IsNullOrWhiteSpace(ids))
@@ -1421,7 +1421,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var target = ZNRequest.GetString("Name");
                 var show = ZNRequest.GetInt("Show");
@@ -1542,7 +1542,7 @@ namespace EGT_OTA.Controllers
                 var CityCode = ZNRequest.GetString("CityCode");
                 if (string.IsNullOrWhiteSpace(number))
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 if (string.IsNullOrWhiteSpace(CityCode))
                 {
@@ -1551,7 +1551,7 @@ namespace EGT_OTA.Controllers
                 User user = db.Single<User>(x => x.Number == number);
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var pager = new Pager();
                 var query = new SubSonic.Query.Select(provider).From<User>().Where<User>(x => x.Status == Enum_Status.Approved && x.Latitude > 0 && x.Longitude > 0 && x.CityCode == CityCode && x.ID != user.ID);
@@ -1615,12 +1615,12 @@ namespace EGT_OTA.Controllers
                 var number = ZNRequest.GetString("Number");
                 if (string.IsNullOrWhiteSpace(number))
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 User user = db.Single<User>(x => x.Number == number);
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var pager = new Pager();
                 var query = new SubSonic.Query.Select(provider).From<User>().Where<User>(x => x.Status == Enum_Status.Approved && x.IsRecommend == Enum_Recommend.Approved && x.ID != user.ID);

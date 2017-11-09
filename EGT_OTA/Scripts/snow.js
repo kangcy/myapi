@@ -241,7 +241,7 @@ var snow = new function() {
 			d.style.webkitAnimationTimingFunction = "linear";
 			d.style.animationTimingFunction = "linear";
 			d.style.zIndex = 300;
-			d.style.position = "fixed";
+			d.style.position = "absolute";
 			d.style.animationName = "dandelion_d";
 			d.style.webkitAnimationName = "dandelion_d";
 			c.appendChild(d);

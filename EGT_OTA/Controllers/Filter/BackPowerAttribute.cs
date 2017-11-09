@@ -36,7 +36,7 @@ namespace EGT_OTA.Controllers.Filter
             //if (user.UserRole != Enum_UserRole.Administrator && user.UserRole != Enum_UserRole.SuperAdministrator)
             //{
             //    filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            //    filterContext.Result = new JsonResult() { Data = new { result = false, message = "没有权限" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            //    filterContext.Result = new JsonResult() { Data = new { result = false, message = "没有权限", code = Enum_ErrorCode.NoPower }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             //    return;
             //}
 

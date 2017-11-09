@@ -27,10 +27,11 @@ namespace EGT_OTA.Controllers.Api
             ApiResult result = new ApiResult();
             try
             {
-                string UserNumber = ZNRequest.GetString("Number");
-                if (string.IsNullOrWhiteSpace(UserNumber))
+                User user = GetUserInfo();
+                if (user == null)
                 {
-                    result.message = "参数异常";
+                    result.code = Enum_ErrorCode.UnLogin;
+                    result.message = "用户信息验证失败";
                     return JsonConvert.SerializeObject(result);
                 }
                 int id = ZNRequest.GetInt("ArticleID");
@@ -42,24 +43,15 @@ namespace EGT_OTA.Controllers.Api
                 }
                 else
                 {
-                    if (model.Status == Enum_Status.Audit)
+                    //判断权限
+                    if (user.UserRole == Enum_UserRole.Common)
                     {
-                        result.message = "当前文章未通过审核";
-                        return JsonConvert.SerializeObject(result);
-                    }
-                    //非本人
-                    if ((model.Status == Enum_Status.Delete || model.Status == Enum_Status.DeleteCompletely) && UserNumber != model.CreateUserNumber)
-                    {
-                        result.code = Enum_ErrorCode.Delete;
-                        result.message = "当前文章已删除";
-                        return JsonConvert.SerializeObject(result);
-                    }
-
-                    //判断黑名单
-                    if (db.Exists<Black>(x => x.ToUserNumber == UserNumber && x.CreateUserNumber == model.CreateUserNumber))
-                    {
-                        result.message = "没有访问权限";
-                        return JsonConvert.SerializeObject(result);
+                        if (user.Number != model.CreateUserNumber)
+                        {
+                            result.code = Enum_ErrorCode.NoPower;
+                            result.message = "没有权限";
+                            return JsonConvert.SerializeObject(result);
+                        }
                     }
 
                     //浏览数
@@ -69,13 +61,13 @@ namespace EGT_OTA.Controllers.Api
                     model.Comments = new SubSonic.Query.Select(provider).From<Comment>().Where<Comment>(x => x.ArticleNumber == model.Number).GetRecordCount();
 
                     //是否收藏
-                    model.IsKeep = new SubSonic.Query.Select(provider, "ID").From<Keep>().Where<Keep>(x => x.CreateUserNumber == UserNumber && x.ArticleNumber == model.Number).GetRecordCount() == 0 ? 0 : 1;
+                    model.IsKeep = new SubSonic.Query.Select(provider, "ID").From<Keep>().Where<Keep>(x => x.CreateUserNumber == user.Number && x.ArticleNumber == model.Number).GetRecordCount() == 0 ? 0 : 1;
 
                     //是否关注
-                    model.IsFollow = new SubSonic.Query.Select(provider, "ID").From<Fan>().Where<Fan>(x => x.CreateUserNumber == UserNumber && x.ToUserNumber == model.CreateUserNumber).GetRecordCount() == 0 ? 0 : 1;
+                    model.IsFollow = new SubSonic.Query.Select(provider, "ID").From<Fan>().Where<Fan>(x => x.CreateUserNumber == user.Number && x.ToUserNumber == model.CreateUserNumber).GetRecordCount() == 0 ? 0 : 1;
 
                     //是否点赞
-                    model.IsZan = new SubSonic.Query.Select(provider, "ID").From<ArticleZan>().Where<ArticleZan>(x => x.CreateUserNumber == UserNumber && x.ArticleNumber == model.Number).GetRecordCount() == 0 ? 0 : 1;
+                    model.IsZan = new SubSonic.Query.Select(provider, "ID").From<ArticleZan>().Where<ArticleZan>(x => x.CreateUserNumber == user.Number && x.ArticleNumber == model.Number).GetRecordCount() == 0 ? 0 : 1;
 
                     //类型
                     ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
@@ -100,18 +92,13 @@ namespace EGT_OTA.Controllers.Api
                 }
 
                 //创建人
-                User createUser = db.Single<User>(x => x.Number == UserNumber);
-                if (createUser != null)
-                {
-                    model.UserID = createUser.ID;
-                    model.NickName = createUser.NickName;
-                    model.Avatar = createUser.Avatar;
-                    model.AutoMusic = createUser.AutoMusic;
-                    model.UserCover = createUser.Cover;
-                    model.ShareNick = createUser.ShareNick;
-                    model.IsPay = createUser.IsPay;
-                }
-
+                model.UserID = user.ID;
+                model.NickName = user.NickName;
+                model.Avatar = user.Avatar;
+                model.AutoMusic = user.AutoMusic;
+                model.UserCover = user.Cover;
+                model.ShareNick = user.ShareNick;
+                model.IsPay = user.IsPay;
 
                 model.ShareUrl = System.Configuration.ConfigurationManager.AppSettings["share_url"] + model.Number;
 
@@ -171,6 +158,13 @@ namespace EGT_OTA.Controllers.Api
                 string UserNumber = ZNRequest.GetString("Number");
                 if (string.IsNullOrWhiteSpace(UserNumber))
                 {
+                    result.message = "参数异常";
+                    return JsonConvert.SerializeObject(result);
+                }
+                var user = db.Single<User>(x => x.Number == UserNumber);
+                if (user == null)
+                {
+                    result.code = Enum_ErrorCode.UnLogin;
                     result.message = "参数异常";
                     return JsonConvert.SerializeObject(result);
                 }

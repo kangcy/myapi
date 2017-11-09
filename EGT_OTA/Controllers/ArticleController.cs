@@ -27,7 +27,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var id = ZNRequest.GetInt("ArticleID");
                 Article article = db.Single<Article>(x => x.ID == id);
@@ -128,7 +128,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var id = ZNRequest.GetInt("ArticleID");
                 Article article = db.Single<Article>(x => x.ID == id);
@@ -138,7 +138,7 @@ namespace EGT_OTA.Controllers
                 }
                 if (article.CreateUserNumber != user.Number)
                 {
-                    return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "没有权限", code = Enum_ErrorCode.NoPower }, JsonRequestBehavior.AllowGet);
                 }
                 var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.Delete).Set("Submission").EqualTo(Enum_Submission.TemporaryApproved).Where<Article>(x => x.ID == article.ID).Execute() > 0;
                 if (result)
@@ -157,7 +157,7 @@ namespace EGT_OTA.Controllers
         /// 编辑
         /// </summary>
         [HttpPost]
-        public ActionResult Edit()
+        public ActionResult PcEdit()
         {
             var parts = "";
             try
@@ -165,7 +165,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 Article model = new Article();
                 model.ID = ZNRequest.GetInt("ArticleID");
@@ -175,6 +175,17 @@ namespace EGT_OTA.Controllers
                     if (model == null)
                     {
                         model = new Article();
+                    }
+                    else
+                    {
+                        //判断权限
+                        if (user.UserRole == Enum_UserRole.Common)
+                        {
+                            if (user.Number != model.CreateUserNumber)
+                            {
+                                return Json(new { result = false, message = "没有权限", code = Enum_ErrorCode.NoPower }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
                     }
                 }
                 model.Title = SqlFilter(ZNRequest.GetString("Title"));
@@ -203,8 +214,230 @@ namespace EGT_OTA.Controllers
                 model.UpdateIP = Tools.GetClientIP;
                 model.Status = Enum_Status.Approved;
                 model.Submission = Enum_Submission.TemporaryApproved;//默认临时投稿审核
-                model.ArticlePower = ZNRequest.GetInt("ArticlePower", Enum_ArticlePower.Myself);
-                model.ArticlePowerPwd = ZNRequest.GetString("ArticlePowerPwd");
+                var ArticlePower = ZNRequest.GetInt("ArticlePower", -1);
+                if (ArticlePower > -1)
+                {
+                    model.ArticlePower = ArticlePower;
+                }
+                var ArticlePowerPwd = ZNRequest.GetString("ArticlePowerPwd");
+                if (!string.IsNullOrWhiteSpace(ArticlePowerPwd))
+                {
+                    model.ArticlePowerPwd = ArticlePowerPwd;
+                }
+                var TypeID = ZNRequest.GetInt("ArticleType", 0);
+                if (TypeID > 0)
+                {
+                    var articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
+                    if (articleType != null)
+                    {
+                        model.TypeID = TypeID;
+                        model.TypeIDList = articleType.ParentIDList;
+                    }
+                }
+                var result = false;
+                if (model.ID == 0)
+                {
+                    model.Cover = ZNRequest.GetString("Cover");
+                    model.Recommend = Enum_ArticleRecommend.None;
+                    model.CreateUserNumber = user.Number;
+                    model.CreateDate = DateTime.Now;
+                    model.CreateIP = Tools.GetClientIP;
+                    model.Number = BuildNumber();
+                    model.ID = Tools.SafeInt(db.Add<Article>(model));
+                    result = model.ID > 0;
+                }
+                else
+                {
+                    if (model.ArticlePower == Enum_ArticlePower.Public)
+                    {
+                        model.ArticlePower = Enum_ArticlePower.Myself;
+                    }
+                    result = db.Update<Article>(model) > 0;
+
+                    //取消自定义模板启用
+                    if (model.Template != 1)
+                    {
+                        var list = db.Find<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved).ToList();
+                        if (list.Count > 0)
+                        {
+                            list.ForEach(x =>
+                            {
+                                x.IsUsed = Enum_Used.Audit;
+                            });
+                            db.UpdateMany<Background>(list);
+                        }
+                    }
+                }
+                if (result)
+                {
+                    parts = SqlFilter(ZNRequest.GetString("Part").Trim(), false, false);
+                    if (!string.IsNullOrWhiteSpace(parts))
+                    {
+                        List<PartJson> list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<PartJson>>(parts);
+                        list.ForEach(x =>
+                        {
+                            if (x.Status == 0)
+                            {
+                                //排序
+                                var partid = Tools.SafeInt(x.ID);
+                                var part = db.Single<ArticlePart>(y => y.ID == partid);
+                                if (part != null)
+                                {
+                                    part.SortID = Tools.SafeInt(x.SortID);
+                                    db.Update<ArticlePart>(part);
+                                }
+                            }
+                            else if (x.Status == 1)
+                            {
+                                //新增
+                                ArticlePart part = new ArticlePart();
+                                part.ArticleNumber = model.Number;
+                                part.Types = x.PartType;
+                                part.Introduction = x.Introduction;
+                                part.IntroExpand = x.IntroExpand;
+                                part.SortID = Tools.SafeInt(x.SortID);
+                                part.Status = Enum_Status.Audit;
+                                part.CreateDate = DateTime.Now;
+                                part.CreateUserNumber = user.Number;
+                                part.CreateIP = Tools.GetClientIP;
+                                part.ID = Tools.SafeInt(db.Add<ArticlePart>(part));
+                            }
+                            else if (x.Status == 2)
+                            {
+                                //编辑
+                                var partid = Tools.SafeInt(x.ID);
+                                var part = db.Single<ArticlePart>(y => y.ID == partid);
+                                if (part != null)
+                                {
+                                    part.Introduction = x.Introduction;
+                                    part.IntroExpand = x.IntroExpand;
+                                    part.SortID = Tools.SafeInt(x.SortID);
+                                    db.Update<ArticlePart>(part);
+                                }
+                            }
+                            else if (x.Status == 3)
+                            {
+                                //是否临时删除删除
+                                if (x.Temporary == 0)
+                                {
+                                    db.Delete<ArticlePart>(x.ID);
+                                }
+                            }
+                        });
+                    }
+
+                    //更新自定义漂浮
+                    var ShowyUrl = ZNRequest.GetString("ShowyUrl");
+                    var MusicID = ZNRequest.GetInt("MusicID");
+                    var MusicName = ZNRequest.GetString("MusicName");
+                    var MusicUrl = ZNRequest.GetString("MusicUrl");
+                    ArticleCustom custom = db.Single<ArticleCustom>(x => x.ArticleNumber == model.Number);
+                    if (custom == null)
+                    {
+                        custom = new ArticleCustom();
+                        custom.ArticleNumber = model.Number;
+                    }
+                    custom.ShowyUrl = ShowyUrl;
+                    custom.MusicID = MusicID;
+                    custom.MusicName = MusicName;
+                    custom.MusicUrl = MusicUrl;
+                    if (custom.ID == 0)
+                    {
+                        db.Add<ArticleCustom>(custom);
+                    }
+                    else
+                    {
+                        db.Update<ArticleCustom>(custom);
+                    }
+                    return Json(new
+                    {
+                        result = true,
+                        message = new
+                        {
+                            ID = model.ID,
+                            Number = model.Number
+                        }
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("ArticleController_PcEdit:" + ex.Message + "," + parts);
+            }
+            return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        [HttpPost]
+        public ActionResult Edit()
+        {
+            var parts = "";
+            try
+            {
+                User user = GetUserInfo();
+                if (user == null)
+                {
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
+                }
+                Article model = new Article();
+                model.ID = ZNRequest.GetInt("ArticleID");
+                if (model.ID > 0)
+                {
+                    model = db.Single<Article>(x => x.ID == model.ID);
+                    if (model == null)
+                    {
+                        model = new Article();
+                    }
+                    else
+                    {
+                        //判断权限
+                        if (user.UserRole == Enum_UserRole.Common)
+                        {
+                            if (user.Number != model.CreateUserNumber)
+                            {
+                                return Json(new { result = false, message = "没有权限", code = Enum_ErrorCode.NoPower }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
+                }
+                model.Title = SqlFilter(ZNRequest.GetString("Title"));
+                model.Title = CutString(model.Title, 100);
+                var dirtyword = HasDirtyWord(model.Title);
+                if (!string.IsNullOrWhiteSpace(dirtyword))
+                {
+                    return Json(new { result = false, message = "您输入的标题含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
+                }
+                if (string.IsNullOrWhiteSpace(model.Title))
+                {
+                    model.Title = "我的小微篇";
+                }
+                model.Province = ZNRequest.GetString("Province");
+                model.City = ZNRequest.GetString("City");
+                model.District = ZNRequest.GetString("District");
+                model.Street = ZNRequest.GetString("Street");
+                model.DetailName = ZNRequest.GetString("DetailName");
+                model.CityCode = ZNRequest.GetString("CityCode");
+                model.Latitude = Tools.SafeDouble(ZNRequest.GetString("Latitude"));
+                model.Longitude = Tools.SafeDouble(ZNRequest.GetString("Longitude"));
+                model.Template = ZNRequest.GetInt("Template");
+                model.ColorTemplate = ZNRequest.GetInt("ColorTemplate");
+                model.UpdateUserNumber = user.Number;
+                model.UpdateDate = DateTime.Now;
+                model.UpdateIP = Tools.GetClientIP;
+                model.Status = Enum_Status.Approved;
+                model.Submission = Enum_Submission.TemporaryApproved;//默认临时投稿审核
+                var ArticlePower = ZNRequest.GetInt("ArticlePower", -1);
+                if (ArticlePower > -1)
+                {
+                    model.ArticlePower = ArticlePower;
+                }
+                var ArticlePowerPwd = ZNRequest.GetString("ArticlePowerPwd");
+                if (!string.IsNullOrWhiteSpace(ArticlePowerPwd))
+                {
+                    model.ArticlePowerPwd = ArticlePowerPwd;
+                }
                 var TypeID = ZNRequest.GetInt("ArticleType", 0);
                 if (TypeID > 0)
                 {
@@ -274,10 +507,6 @@ namespace EGT_OTA.Controllers
                 }
                 else
                 {
-                    if (model.CreateUserNumber != user.Number)
-                    {
-                        return Json(new { result = false, message = "没有权限" }, JsonRequestBehavior.AllowGet);
-                    }
                     if (model.ArticlePower == Enum_ArticlePower.Public)
                     {
                         model.ArticlePower = Enum_ArticlePower.Myself;

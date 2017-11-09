@@ -22,14 +22,14 @@ namespace EGT_OTA.Controllers.Filter
             if (id == 0)
             {
                 filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                filterContext.Result = new JsonResult() { Data = new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                filterContext.Result = new JsonResult() { Data = new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 return;
             }
             User user = db.Single<User>(x => x.ID == id);
             if (user == null)
             {
                 filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                filterContext.Result = new JsonResult() { Data = new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                filterContext.Result = new JsonResult() { Data = new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 return;
             }
             var ArticleID = ZNRequest.GetInt("ArticleID");
@@ -49,7 +49,7 @@ namespace EGT_OTA.Controllers.Filter
             if (article.CreateUserNumber != user.Number)
             {
                 filterContext.HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                filterContext.Result = new JsonResult() { Data = new { result = false, message = "没有权限" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                filterContext.Result = new JsonResult() { Data = new { result = false, message = "没有权限", code = Enum_ErrorCode.NoPower }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 return;
             }
             base.OnActionExecuting(filterContext);

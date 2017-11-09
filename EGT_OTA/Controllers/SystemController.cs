@@ -99,7 +99,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 if (db.Exists<ApplyMoney>(x => x.CreateUserNumber == user.Number && x.Status == Enum_Status.Audit))
                 {
@@ -148,7 +148,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 if (db.Exists<ApplyMoney>(x => x.CreateUserNumber == user.Number && x.Status == Enum_Status.Audit))
                 {

@@ -29,7 +29,7 @@ namespace EGT_OTA.Controllers
                 User user = GetUserInfo();
                 if (user == null)
                 {
-                    return Json(new { result = false, message = "用户信息验证失败" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "用户信息验证失败", code = Enum_ErrorCode.UnLogin }, JsonRequestBehavior.AllowGet);
                 }
                 var summary = SqlFilter(ZNRequest.GetString("Summary"));
                 if (string.IsNullOrWhiteSpace(summary))

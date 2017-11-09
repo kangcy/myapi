@@ -11,7 +11,7 @@ namespace EGT_OTA.Models
     public class Enum_UserRole : EnumBase
     {
         /// <summary>
-        /// 待审核
+        /// 普通用户
         /// </summary>
         [EnumAttribute("普通用户")]
         public const int Common = 0;

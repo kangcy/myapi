@@ -152,6 +152,7 @@ namespace EGT_OTA.Controllers.Api
                 }
                 if (model.CreateUserNumber != user.Number)
                 {
+                    result.code = Enum_ErrorCode.NoPower;
                     result.message = "没有权限";
                     return JsonConvert.SerializeObject(result);
                 }

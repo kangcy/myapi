@@ -2,7 +2,6 @@
 var ArticleNumber = ""; //文章编号
 var PartID = 0;
 var SelectAll = false; //是否全选
-var userinfo = base.GetUserInfo();
 var initWidth = 500;
 var initHeight = 500;
 var mask = base.CreateMask(false, function () {
