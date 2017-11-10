@@ -1160,6 +1160,7 @@
     <Content Include="Views\Back\Music.cshtml" />
     <Content Include="Views\Back\Pic.cshtml" />
     <Content Include="Views\Back\Showy.cshtml" />
+    <Content Include="Views\Back\AddBase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

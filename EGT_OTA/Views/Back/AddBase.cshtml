@@ -25,7 +25,7 @@
     <style type="text/css">
         #snowwrapper {
             width: 400px;
-            height: 650px;
+            height: 690px;
             position: absolute;
             overflow: hidden;
             left: 0;
@@ -37,7 +37,7 @@
             pointer-events: none;
             position: absolute;
             width: 400px;
-            height: 650px;
+            height: 690px;
             left: 0;
             top: 0;
         }
@@ -101,7 +101,7 @@
         }
 
         .img_border {
-            width: 200px;
+            width: 250px;
             margin: 10px;
             float: left;
         }
@@ -137,9 +137,9 @@
             }
 
         div.background {
-            width: 5rem;
-            height: 8rem;
-            margin-right: 0.5rem;
+            width: 200px;
+            height: 300px;
+            margin-right: 15px;
             float: left;
             display: inline-block;
             position: relative;
@@ -157,12 +157,12 @@
                 background-position: center center;
                 background-repeat: no-repeat;
                 position: absolute;
-                top: 20%;
-                left: 20%;
+                top: 120px;
+                left: 70px;
             }
 
             div.background:first-child {
-                margin-left: 0.5rem;
+                margin-left: 15px;
             }
 
             div.background div.tip {
@@ -173,8 +173,8 @@
                 width: 100%;
                 background: rgba(0, 0, 0, 0.5);
                 color: #fff;
-                height: 2rem;
-                line-height: 2rem;
+                height: 50px;
+                line-height: 150px;
                 border-radius: 0px 0px 5px 5px;
             }
 
@@ -185,9 +185,9 @@
             }
 
         #mycolor .color {
-            width: 5rem;
-            height: 8rem;
-            margin: 0.5rem;
+            width: 150px;
+            height: 200px;
+            margin: 15px;
             margin-left: 0px;
             display: inline-block;
             float: left;
@@ -203,16 +203,16 @@
 
             #mycolor .color:first-child,
             #mycool .cool:first-child {
-                margin-left: 0.5rem;
+                margin-left: 15px;
             }
 
         .themeIcons {
             display: inline-block;
-            width: 100%;
+            width: 498px;
             text-align: center;
             position: fixed;
-            bottom: 10px;
-            left: 0;
+            bottom: 1rem;
+            left: 10%;
             z-index: 2000;
         }
 
@@ -224,9 +224,8 @@
             }
 
                 .themeIcons .items div {
-                    cursor: pointer;
-                    width: 50px;
-                    height: 50px;
+                    width: 80px;
+                    height: 80px;
                     display: inline-block;
                     border-radius: 100%;
                     color: #fff;
@@ -560,245 +559,253 @@
         .editor {
             border: 1px solid #f5f5f5;
         }
+
+       
     </style>
 </head>
 <body>
-    <div class="el-card box-card" style="width: 400px; display: inline-block;" id="box">
-        <div class="el-card__header">
-            <div class="clearfix">
-                <div class="el-form-item inline full fl mt5">
-                    <div class="el-form-item inline fl" style="width: 50%;">
-                        <div class="el-form-item__content inline fl">
-                            <div class="btn-group">
-                                <button id="filter_articlepower" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 170px;">
-                                    请选择权限
+    <div id="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="el-card box-card" style="width: 400px; display: inline-block;" id="box">
+                    <div class="el-card__header">
+                        <div class="clearfix">
+                            <div class="fr">
+                                <button type="button" class="el-button el-button--primary" onclick="Save()"><span>创建</span></button>
+                                <svg class="spinner hide" width="26px" height="26px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30" style="stroke: #4288ed"></circle>
+                                </svg>
+                            </div>
+                            <div class="el-form-item inline full fl mt5">
+                                <div class="el-form-item inline fl" style="width: 50%;">
+                                    <div class="el-form-item__content inline fl">
+                                        <div class="btn-group">
+                                            <button id="filter_articlepower" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 170px;">
+                                                请选择权限
                                                   <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu tc">
-                                    <li><a href="#" onclick="change(-1,'filter_articlepower','请选择权限')" class="ddl_filter_articlepower" index="-1">请选择权限</a></li>
-                                    <li><a href="#" onclick="change(3,'filter_articlepower','公开')" class="ddl_filter_articlepower" index="3">公开</a></li>
-                                    <li><a href="#" onclick="change(2,'filter_articlepower','限制可见')" class="ddl_filter_articlepower" index="2">限制可见</a></li>
-                                    <li><a href="#" onclick="change(1,'filter_articlepower','密码可见')" class="ddl_filter_articlepower" index="1">密码可见</a></li>
-                                    <li><a href="#" onclick="change(0,'filter_articlepower','私密')" class="ddl_filter_articlepower" index="1">私密</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="el-form-item fr" style="width: 50%;">
-                        <div class="el-form-item__content inline fr">
-                            <div class="btn-group">
-                                <button id="filter_articletype" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 170px;">
-                                    请选择分类
+                                            </button>
+                                            <ul class="dropdown-menu tc">
+                                                <li><a href="#" onclick="change(-1,'filter_articlepower','请选择权限')" class="ddl_filter_articlepower" index="-1">请选择权限</a></li>
+                                                <li><a href="#" onclick="change(3,'filter_articlepower','公开')" class="ddl_filter_articlepower" index="3">公开</a></li>
+                                                <li><a href="#" onclick="change(2,'filter_articlepower','限制可见')" class="ddl_filter_articlepower" index="2">限制可见</a></li>
+                                                <li><a href="#" onclick="change(1,'filter_articlepower','密码可见')" class="ddl_filter_articlepower" index="1">密码可见</a></li>
+                                                <li><a href="#" onclick="change(0,'filter_articlepower','私密')" class="ddl_filter_articlepower" index="1">私密</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="el-form-item fr" style="width: 50%;">
+                                    <div class="el-form-item__content inline fr">
+                                        <div class="btn-group">
+                                            <button id="filter_articletype" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 170px;">
+                                                请选择分类
                                                   <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu tc">
-                                    <li><a href="#" onclick="change(-1,'filter_articletype','请选择分类')" class="ddl_filter_articletype" index="-1">请选择分类</a></li>
-                                    <li><a href="#" onclick="change(1,'filter_articletype','旅行')" class="ddl_filter_articletype" index="1">旅行</a></li>
-                                    <li><a href="#" onclick="change(3,'filter_articletype','亲子')" class="ddl_filter_articletype" index="3">亲子</a></li>
-                                    <li><a href="#" onclick="change(5,'filter_articletype','女神')" class="ddl_filter_articletype" index="5">女神</a></li>
-                                    <li><a href="#" onclick="change(2,'filter_articletype','美食')" class="ddl_filter_articletype" index="2">美食</a></li>
-                                    <li><a href="#" onclick="change(8,'filter_articletype','萌宠')" class="ddl_filter_articletype" index="8">萌宠</a></li>
-                                    <li><a href="#" onclick="change(10,'filter_articletype','二次元')" class="ddl_filter_articletype" index="10">二次元</a></li>
-                                    <li><a href="#" onclick="change(7,'filter_articletype','影评')" class="ddl_filter_articletype" index="7">影评</a></li>
-                                    <li><a href="#" onclick="change(9,'filter_articletype','游戏')" class="ddl_filter_articletype" index="9">游戏</a></li>
-                                    <li><a href="#" onclick="change(10000,'filter_articletype','其他')" class="ddl_filter_articletype" index="10000">其他</a></li>
-                                </ul>
+                                            </button>
+                                            <ul class="dropdown-menu tc">
+                                                <li><a href="#" onclick="change(-1,'filter_articletype','请选择分类')" class="ddl_filter_articletype" index="-1">请选择分类</a></li>
+                                                <li><a href="#" onclick="change(1,'filter_articletype','旅行')" class="ddl_filter_articletype" index="1">旅行</a></li>
+                                                <li><a href="#" onclick="change(3,'filter_articletype','亲子')" class="ddl_filter_articletype" index="3">亲子</a></li>
+                                                <li><a href="#" onclick="change(5,'filter_articletype','女神')" class="ddl_filter_articletype" index="5">女神</a></li>
+                                                <li><a href="#" onclick="change(2,'filter_articletype','美食')" class="ddl_filter_articletype" index="2">美食</a></li>
+                                                <li><a href="#" onclick="change(8,'filter_articletype','萌宠')" class="ddl_filter_articletype" index="8">萌宠</a></li>
+                                                <li><a href="#" onclick="change(10,'filter_articletype','二次元')" class="ddl_filter_articletype" index="10">二次元</a></li>
+                                                <li><a href="#" onclick="change(7,'filter_articletype','影评')" class="ddl_filter_articletype" index="7">影评</a></li>
+                                                <li><a href="#" onclick="change(9,'filter_articletype','游戏')" class="ddl_filter_articletype" index="9">游戏</a></li>
+                                                <li><a href="#" onclick="change(10000,'filter_articletype','其他')" class="ddl_filter_articletype" index="10000">其他</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item full fl mt5 hide" id="div_articlepowerpwd">
+                                <div class="el-form-item__content">
+                                    <div class="el-input el-input--small">
+                                        <input id="articlepowerpwd" placeholder="权限密码" size="small" maxlength="4" type="text" class="el-input__inner" style="margin: 0">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="el-form-item full fl mt5">
-                    <div class="el-form-item__content fl hide" style="margin: 0; width: 280px;" id="div_articlepowerpwd">
-                        <div class="el-input el-input--small">
-                            <input id="articlepowerpwd" placeholder="权限密码" size="small" maxlength="4" type="text" class="el-input__inner">
+                    <div class="el-card__body" style="padding: 0; display: inline-block; position: relative;">
+                        <!--主题色-->
+                        <div class="swiper-container hide" id="mycolor" style="bottom: 0px; background: rgba(0, 0, 0, .5); height: auto; width: auto;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide tc" id="mycolor-slide">
+                                </div>
+                            </div>
+                            <div class="swiper-scrollbar" id="mycolor-scrollbar"></div>
                         </div>
-                    </div>
-                    <div class="fr">
-                        <button type="button" class="el-button el-button--primary" onclick="Save()"><span id="edittitle"></span></button>
-                        <svg class="spinner hide" width="26px" height="26px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30" style="stroke: #4288ed"></circle>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="el-card__body fl" style="padding: 0; display: inline-block; position: relative;">
-            <!--主题色-->
-            <div class="swiper-container hide" id="mycolor" style="bottom: 0px; background: rgba(0, 0, 0, .5); height: auto; width: auto;">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide tc" id="mycolor-slide">
-                    </div>
-                </div>
-                <div class="swiper-scrollbar" id="mycolor-scrollbar"></div>
-            </div>
-            <!--炫标题-->
-            <div class="swiper-container hide" id="mycool" style="bottom: 0px; background: rgba(0, 0, 0, .5); height: auto; width: auto;">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide tc" id="mycool-slide">
-                    </div>
-                </div>
-                <div class="swiper-scrollbar" id="mycool-scrollbar"></div>
-            </div>
-            <!--模板选择-->
-            <div class="swiper-container hide" id="temps" style="bottom: 0px; padding: 0.5rem 0; background: rgba(0, 0, 0, .5);">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide" id="temp-slide"></div>
-                </div>
-                <div class="swiper-scrollbar" id="temp-scrollbar"></div>
-            </div>
-            <div class="swiper-cover hide" id="icon-cover" onclick="IconTan(1,false)"></div>
-            <img id="music1" class="hide" src="../Back/Images/btn_music.png" onclick="switchsound()" />
-            <!--漂浮特效-->
-            <div id="snowwrapper"></div>
-            <canvas id="snowcanvas"></canvas>
-            <!--固定背景-->
-            <div id="x-bg" class="hide" style="height: 650px;"></div>
-            <!--内容-->
-            <div id="wrapper0" class="full fl hide" style="height: 650px; overflow: auto;">
-                <!--x-cover:滚动背景-->
-                <div class="root" id="x-cover">
-                    <!--头-->
-                    <div id="x-top" class="full fl hide"></div>
-                    <!--用户-->
-                    <div class="x-head mb10 full fl hide" id="x-head">
-                        <div class="img-container" id="x-avatar">
-                            <div class="avatar" id="x-avatar-sub">
-                                <img id="useravatar0" src="../images/avatar.png" class="user">
+                        <!--炫标题-->
+                        <div class="swiper-container hide" id="mycool" style="bottom: 0px; background: rgba(0, 0, 0, .5); height: auto; width: auto;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide tc" id="mycool-slide">
+                                </div>
+                            </div>
+                            <div class="swiper-scrollbar" id="mycool-scrollbar"></div>
+                        </div>
+                        <!--模板选择-->
+                        <div class="swiper-container hide" id="temps" style="bottom: 0px; padding: 15px 0; background: rgba(0, 0, 0, .5);">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide" id="temp-slide"></div>
+                            </div>
+                            <div class="swiper-scrollbar" id="temp-scrollbar"></div>
+                        </div>
+                        <div class="swiper-cover hide" id="icon-cover" onclick="IconTan(1,false)"></div>
+                        <img id="music1" class="hide" src="../Back/Images/btn_music.png" onclick="switchsound()" />
+                        <!--漂浮特效-->
+                        <div id="snowwrapper"></div>
+                        <canvas id="snowcanvas"></canvas>
+                        <!--固定背景-->
+                        <div id="x-bg" class="hide" style="height: 690px;"></div>
+                        <!--内容-->
+                        <div id="wrapper0" class="full fl hide" style="height: 690px; overflow: auto;">
+                            <!--x-cover:滚动背景-->
+                            <div class="root" id="x-cover">
+                                <!--头-->
+                                <div id="x-top" class="full fl hide"></div>
+                                <!--用户-->
+                                <div class="x-head mb10 full fl hide" id="x-head">
+                                    <div class="img-container" id="x-avatar">
+                                        <div class="avatar" id="x-avatar-sub">
+                                            <img id="useravatar0" src="../images/avatar.png" class="user">
+                                        </div>
+                                    </div>
+                                    <div class="article-meta well2 mt10 tc" id="x-article">
+                                        <p class="article-title thicker f20" id="title0" contenteditable="true"></p>
+                                        <p class="time-read mt10 f13">
+                                            <span id="createdate0"></span>
+                                            <span id="nickname0" class="user hide"></span>
+                                            <span class="read-count" id="views0"></span>
+                                        </p>
+                                        <p class="nickname mt10 f13 hide" id="nickname1"></p>
+                                        <p id="music0" play="on" class="music mt10 mb0 hide" onclick="switchsound()">
+                                            <span id="musicname0" class="f11"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <!--内容-->
+                                <div class="x-content well2 mt10 mb10 full fl" id="x-content">
+                                    <div class="section full" id="edit">
+                                    </div>
+                                    <!--半透明蒙层-->
+                                    <div class="x-bg-blur" id="x-bg-blur"></div>
+                                </div>
+                                <!--尾-->
+                                <img id="x-bottom" class="full fl hide" />
                             </div>
                         </div>
-                        <div class="article-meta well2 mt10 tc" id="x-article">
-                            <p class="article-title thicker f20" id="title0" contenteditable="true"></p>
-                            <p class="time-read mt10 f13">
-                                <span id="createdate0"></span>
-                                <span id="nickname0" class="user hide"></span>
-                                <span class="read-count" id="views0"></span>
-                            </p>
-                            <p class="nickname mt10 f13 hide" id="nickname1"></p>
-                            <p id="music0" play="on" class="music mt10 mb0 hide" onclick="switchsound()">
-                                <span id="musicname0" class="f11"></span>
-                            </p>
+                        <!--分隔-->
+                        <div class="swiper-container hide" id="myline" style="bottom: 0px; width: 100%; background: rgba(255, 255, 255, 1);">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide" id="line-slide">
+                                </div>
+                            </div>
+                            <div class="swiper-scrollbar" id="myline-scrollbar"></div>
+                        </div>
+                        <div class="swiper-container hide" id="myborder" style="bottom: 0px; background: rgba(255,255,255,.25); height: auto; width: auto;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide tc" id="myborder-slide"></div>
+                            </div>
+                            <div class="swiper-scrollbar" id="myborder-scrollbar"></div>
                         </div>
                     </div>
-                    <!--内容-->
-                    <div class="x-content well2 mt10 mb10 full fl" id="x-content">
-                        <div class="section full" id="edit">
+                    <div id="btnIcon" class="themeIcons f13 hide">
+                        <div class="items">
+                            <div class="div1" onclick="ColorTan(1)" style="background-color: #9BC402;">
+                            </div>
                         </div>
-                        <!--半透明蒙层-->
-                        <div class="x-bg-blur" id="x-bg-blur"></div>
+                        <div class="items">
+                            <div class="div2" onclick="TempTan(1)" style="background-color: #457ED8;">
+                            </div>
+                        </div>
+                        <div class="items">
+                            <div class="div3" onclick="ShowShowy()" style="background-color: #D147EA;">
+                            </div>
+                        </div>
+                        <div class="items">
+                            <div class="div4" onclick="ShowMusic()" style="background-color: #9BC402;">
+                            </div>
+                        </div>
                     </div>
-                    <!--尾-->
-                    <img id="x-bottom" class="full fl hide" />
-                </div>
-            </div>
-            <!--分隔-->
-            <div class="swiper-container hide" id="myline" style="bottom: 0px; width: 100%; background: rgba(255, 255, 255, 1);">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide" id="line-slide">
-                    </div>
-                </div>
-                <div class="swiper-scrollbar" id="myline-scrollbar"></div>
-            </div>
-            <div class="swiper-container hide" id="myborder" style="bottom: 0px; background: rgba(255,255,255,.25); height: auto; width: auto;">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide tc" id="myborder-slide"></div>
-                </div>
-                <div class="swiper-scrollbar" id="myborder-scrollbar"></div>
-            </div>
-        </div>
-        <div id="btnIcon" class="themeIcons f13 hide">
-            <div class="items">
-                <div class="div1" onclick="ColorTan(1)" style="background-color: #9BC402;">
-                </div>
-            </div>
-            <div class="items">
-                <div class="div2" onclick="TempTan(1)" style="background-color: #457ED8;">
-                </div>
-            </div>
-            <div class="items">
-                <div class="div3" onclick="ShowShowy()" style="background-color: #D147EA;">
-                </div>
-            </div>
-            <div class="items">
-                <div class="div4" onclick="ShowMusic()" style="background-color: #9BC402;">
-                </div>
-            </div>
-        </div>
-        <div class="el-form-item fl" id="editText" style="display: none; padding: 20px; width: 100%; height: 100%; position: relative;">
-            <nav id="color" class="mui-bar mui-bar-tab hide" style="background: #ddd; bottom: 110px;">
-                <div class="color fr" style="background: #000;" data-type="ForeColor" data="#000"></div>
-                <div class="color fr" style="background: #808080;" data-type="ForeColor" data="#808080"></div>
-                <div class="color fr" style="background: #ED2308;" data-type="ForeColor" data="#ED2308"></div>
-                <div class="color fr" style="background: #FF8A00;" data-type="ForeColor" data="#FF8A00"></div>
-                <div class="color fr" style="background: #39B54A;" data-type="ForeColor" data="#39B54A"></div>
-                <div class="color fr" style="background: #167EFB;" data-type="ForeColor" data="#167EFB"></div>
-                <div class="color fr" style="background: #B04FBB;" data-type="ForeColor" data="#B04FBB"></div>
-            </nav>
-            <nav id="bgcolor" class="mui-bar mui-bar-tab hide" style="background: #ddd; bottom: 110px;">
-                <div class="color fr" style="background: #fff;" data-type="BackColor" data="transparent"></div>
-                <div class="color fr" style="background: #808080;" data-type="BackColor" data="#808080"></div>
-                <div class="color fr" style="background: #ED2308;" data-type="BackColor" data="#ED2308"></div>
-                <div class="color fr" style="background: #FF8A00;" data-type="BackColor" data="#FF8A00"></div>
-                <div class="color fr" style="background: #39B54A;" data-type="BackColor" data="#39B54A"></div>
-                <div class="color fr" style="background: #167EFB;" data-type="BackColor" data="#167EFB"></div>
-                <div class="color fr" style="background: #B04FBB;" data-type="BackColor" data="#B04FBB"></div>
-            </nav>
-            <nav id="align" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 110px;">
-                <div class="menus" id="align_first">
-                    <div class="menu format" id="btnRight"></div>
-                    <div class="menu format" id="btnCenter"></div>
-                    <div class="menu format" id="btnLeft"></div>
-                </div>
-            </nav>
-            <nav id="bold" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 110px;">
-                <div class="menus" id="bold_first">
-                    <!--下划线-->
-                    <div class="menu" data-type="Underline" id="btnUnderline"></div>
-                    <!--斜体-->
-                    <div class="menu" data-type="Italic" id="btnItalic"></div>
-                    <!--加粗-->
-                    <div class="menu" data-type="Bold" id="btnBold"></div>
-                </div>
-            </nav>
-            <nav id="fs" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 110px;">
-                <div class="menus" id="fs_first">
-                    <div class="menu fs f36" data-type="FontSize" data="7">
-                        A
-                    </div>
-                    <div class="menu fs f24" data-type="FontSize" data="6">
-                        A
-                    </div>
-                    <div class="menu fs f20" data-type="FontSize" data="5">
-                        A
-                    </div>
-                    <div class="menu fs f14" data-type="FontSize" data="4">
-                        A
-                    </div>
-                    <div class="menu fs f12" data-type="FontSize" data="3">
-                        A
+                    <div class="el-form-item fl" id="editText" style="display: none; padding: 20px; width: 100%; height: 100%; position: relative;">
+                        <nav id="color" class="mui-bar mui-bar-tab hide" style="background: #ddd; bottom: 110px;">
+                            <div class="color fr" style="background: #000;" data-type="ForeColor" data="#000"></div>
+                            <div class="color fr" style="background: #808080;" data-type="ForeColor" data="#808080"></div>
+                            <div class="color fr" style="background: #ED2308;" data-type="ForeColor" data="#ED2308"></div>
+                            <div class="color fr" style="background: #FF8A00;" data-type="ForeColor" data="#FF8A00"></div>
+                            <div class="color fr" style="background: #39B54A;" data-type="ForeColor" data="#39B54A"></div>
+                            <div class="color fr" style="background: #167EFB;" data-type="ForeColor" data="#167EFB"></div>
+                            <div class="color fr" style="background: #B04FBB;" data-type="ForeColor" data="#B04FBB"></div>
+                        </nav>
+                        <nav id="bgcolor" class="mui-bar mui-bar-tab hide" style="background: #ddd; bottom: 110px;">
+                            <div class="color fr" style="background: #fff;" data-type="BackColor" data="transparent"></div>
+                            <div class="color fr" style="background: #808080;" data-type="BackColor" data="#808080"></div>
+                            <div class="color fr" style="background: #ED2308;" data-type="BackColor" data="#ED2308"></div>
+                            <div class="color fr" style="background: #FF8A00;" data-type="BackColor" data="#FF8A00"></div>
+                            <div class="color fr" style="background: #39B54A;" data-type="BackColor" data="#39B54A"></div>
+                            <div class="color fr" style="background: #167EFB;" data-type="BackColor" data="#167EFB"></div>
+                            <div class="color fr" style="background: #B04FBB;" data-type="BackColor" data="#B04FBB"></div>
+                        </nav>
+                        <nav id="align" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 110px;">
+                            <div class="menus" id="align_first">
+                                <div class="menu format" id="btnRight"></div>
+                                <div class="menu format" id="btnCenter"></div>
+                                <div class="menu format" id="btnLeft"></div>
+                            </div>
+                        </nav>
+                        <nav id="bold" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 110px;">
+                            <div class="menus" id="bold_first">
+                                <!--下划线-->
+                                <div class="menu" data-type="Underline" id="btnUnderline"></div>
+                                <!--斜体-->
+                                <div class="menu" data-type="Italic" id="btnItalic"></div>
+                                <!--加粗-->
+                                <div class="menu" data-type="Bold" id="btnBold"></div>
+                            </div>
+                        </nav>
+                        <nav id="fs" class="mui-bar mui-bar-tab tc hide" style="background: #fff; bottom: 110px;">
+                            <div class="menus" id="fs_first">
+                                <div class="menu fs f36" data-type="FontSize" data="7">
+                                    A
+                                </div>
+                                <div class="menu fs f24" data-type="FontSize" data="6">
+                                    A
+                                </div>
+                                <div class="menu fs f20" data-type="FontSize" data="5">
+                                    A
+                                </div>
+                                <div class="menu fs f14" data-type="FontSize" data="4">
+                                    A
+                                </div>
+                                <div class="menu fs f12" data-type="FontSize" data="3">
+                                    A
+                                </div>
+                            </div>
+                        </nav>
+                        <nav id="all" class="menu f11 tc">全选</nav>
+                        <nav id="common" class="mui-bar mui-bar-tab tc" style="background: #F4F4F4; display: inline-block; bottom: 60px;">
+                            <!--上一步-->
+                            <div class="menu fl" id="menuPrev"></div>
+                            <!--下一步-->
+                            <div class="menu fl" id="menuNext"></div>
+                            <!--超链接-->
+                            <div class="menu" data-type="CreateLink" id="menuLink"></div>
+                            <!--背景颜色-->
+                            <div class="menu" id="menuBgColor"></div>
+                            <!--字体颜色-->
+                            <div class="menu" id="menuColor"></div>
+                            <!--文字位置-->
+                            <div class="menu btnAlign hide" id="menuAlign"></div>
+                            <!--字体大小-->
+                            <div class="menu" id="menuSize"></div>
+                            <!--加粗-->
+                            <div class="menu" id="menuBold"></div>
+                        </nav>
+                        <div id="muicontent">
+                            <iframe src="@Url.Content("~/Back/paste/iframeblankpage.html")" id="editor" class="editor" frameborder="0" width="100%"></iframe>
+                        </div>
                     </div>
                 </div>
-            </nav>
-            <nav id="all" class="menu f11 tc">全选</nav>
-            <nav id="common" class="mui-bar mui-bar-tab tc" style="background: #F4F4F4; display: inline-block; bottom: 60px;">
-                <!--上一步-->
-                <div class="menu fl" id="menuPrev"></div>
-                <!--下一步-->
-                <div class="menu fl" id="menuNext"></div>
-                <!--超链接-->
-                <div class="menu" data-type="CreateLink" id="menuLink"></div>
-                <!--背景颜色-->
-                <div class="menu" id="menuBgColor"></div>
-                <!--字体颜色-->
-                <div class="menu" id="menuColor"></div>
-                <!--文字位置-->
-                <div class="menu btnAlign hide" id="menuAlign"></div>
-                <!--字体大小-->
-                <div class="menu" id="menuSize"></div>
-                <!--加粗-->
-                <div class="menu" id="menuBold"></div>
-            </nav>
-            <div id="muicontent">
-                <iframe src="@Url.Content("~/Back/paste/iframeblankpage.html")" id="editor" class="editor" frameborder="0" width="100%"></iframe>
             </div>
         </div>
     </div>
@@ -1136,6 +1143,8 @@
     };
     window.onresize = function () {
         $editor.style.height = initHeight - 175 - 60 + "px";
+        base.Get("box").style.marginLeft = (window.innerWidth - 400) / 2 + "px";
+        base.Get("btnIcon").style.left = (window.innerWidth - 500) / 2 + "px";
     };
 
     //声明对象（编号，内容，状态，排序，类型，是否临时） 
@@ -1153,9 +1162,8 @@
     var title = base.Get("title");
 
     $(document).ready(function () {
-        $("#edittitle").html(ArticleID == 0 ? "新增" : "编辑");
-
         base.Get("box").style.marginLeft = (window.innerWidth - 400) / 2 + "px";
+        base.Get("btnIcon").style.left = (window.innerWidth - 500) / 2 + "px";
         Load();
 
         base.Get("myline").style.height = window.innerHeight * 0.6 + "px";
@@ -1195,7 +1203,6 @@
                     area: ['500px', '750px'],
                     content: 'Pic',
                     title: "图片编辑",
-                    scrollbar: false,
                     success: function (layero, index) {
                         var iframeWin = window[layero.find('iframe')[0]['name']];
                         iframeWin.Init(currEditImg, "ArticleAvatar", "Article", currEditPartID, Article.Number, "@(ViewBag.UserNumber)");
@@ -1240,7 +1247,6 @@
                 area: ['500px', '750px'],
                 content: 'Pic',
                 title: "图片编辑",
-                scrollbar: false,
                 success: function (layero, index) {
                     var iframeWin = window[layero.find('iframe')[0]['name']];
                     iframeWin.Init("", "ArticleAvatar", "Article", 0, Article.Number, "@(ViewBag.UserNumber)");
@@ -1338,6 +1344,7 @@
     function ShowLine() {
         IconTan(0, true);
         var myline = base.Get("myline");
+        myline.classList.remove("hide");
         if (lineSwiper == null) {
             var fragment = document.createDocumentFragment();
             $.each(lines, function (index, x) {
@@ -1360,7 +1367,6 @@
                 freeMode: true,
                 roundLengths: true,
                 spaceBetween: 10,
-                shortSwipes: false,
                 onInit: function (swiper) {
                     myline.classList.remove("hide");
                     myline.classList.remove("bounceOutUp");
@@ -1388,6 +1394,7 @@
     function ShowBorder(src) {
         IconTan(0, true);
         var myborder = base.Get("myborder");
+        myborder.classList.remove("hide");
         if (borderSwiper == null) {
             var fragment = document.createDocumentFragment();
             $.each(borders, function (index, x) {
@@ -1407,7 +1414,6 @@
                 freeMode: true,
                 roundLengths: true,
                 spaceBetween: 10,
-                shortSwipes: false,
                 onInit: function (swiper) {
                     myborder.classList.remove("hide");
                     myborder.classList.remove("bounceOutUp");
@@ -1538,8 +1544,7 @@
             type: 2,
             area: ['500px', '650px'],
             content: 'Music',
-            title: "音乐搜索",
-            scrollbar: false
+            title: "音乐搜索"
         });
         IconTan(1, false);
     }
@@ -1550,8 +1555,7 @@
             type: 2,
             area: ['500px', '650px'],
             content: 'Showy',
-            title: "漂浮",
-            scrollbar: false
+            title: "漂浮"
         });
         IconTan(1, false);
     }
@@ -1642,13 +1646,13 @@
                 //加载段落
                 if (ArticleID == 0) {
                     $edit.appendChild(initStr('<div class="edit f12 tl">请填写文章内容</div>', "text", 1, ""));
-                    //$edit.appendChild(initStr("http://localhost/app/Upload/Images/Article/20171109/149509293893532/201711091349536294_1.jpg", "pic", 2, ""));
-                    //Cover = "Upload/Images/Article/20171108/149509293893532/201711081928258208_0.jpg";
+                    $edit.appendChild(initStr("http://localhost/app/Upload/Images/Article/20171109/149509293893532/201711091349536294_1.jpg", "pic", 2, ""));
+                    Cover = "Upload/Images/Article/20171108/149509293893532/201711081928258208_0.jpg";
 
                     //声明对象（编号，内容，状态，排序，类型，是否临时）
                     //初始化段落内容(Status:0-未操作，1-新增，2-编辑，3-删除)
                     InitParts.push(new PartModel(1, '<div class="edit f12 tl">请填写文章内容</div>', "", 1, 0, 2, 1));
-                    //InitParts.push(new PartModel(2, "Upload/Images/Article/20171109/149509293893532/201711091349536294_0.jpg", "", 1, 1, 1, 1));
+                    InitParts.push(new PartModel(2, "Upload/Images/Article/20171109/149509293893532/201711091349536294_0.jpg", "", 1, 1, 1, 1));
 
                 } else {
                     console.log(JSON.stringify(data.ArticlePart))
@@ -1956,7 +1960,6 @@
                     freeMode: true,
                     roundLengths: true,
                     spaceBetween: 10,
-                    shortSwipes: false,
                     onInit: function (swiper) {
                         mycolor.classList.remove("hide");
                         mycolor.classList.remove("bounceOutUp");
@@ -1994,7 +1997,6 @@
                     freeMode: true,
                     roundLengths: true,
                     spaceBetween: 10,
-                    shortSwipes: false,
                     onInit: function (swiper) {
                         temps.classList.remove("hide");
                         temps.classList.remove("bounceOutUp");
@@ -2057,7 +2059,7 @@
                             div.setAttribute("name", x.Cover);
                             div.setAttribute("tid", x.ID);
                             div.setAttribute("model", JSON.stringify(x));
-                            div.innerHTML = '<img src="' + x.ThumbImage + '" /><div class="tip f12">' + x.Name + '</div><div class="hover"></div>';
+                            div.innerHTML = '<img src="' + x.ThumbImage + '" /><div class="tip f15">' + x.Name + '</div><div class="hover"></div>';
                             fragment.appendChild(div);
                         });
                         base.Get("temp-slide").innerHTML = "";
@@ -2232,10 +2234,12 @@
             success: function (data) {
                 if (data != null) {
                     if (data.result) {
-                        layer.msg("编辑成功,请刷新文章列表查看");
-                        parent.Refresh();
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(index);
+                        if (ArticleID == 0) {
+                            layer.msg("编辑成功,请刷新文章列表查看");
+                            window.location.href = window.location.href + "&id=" + data.message.ID;
+                        } else {
+                            window.location.reload();
+                        }
                     } else {
                         isLoading = false;
                     }

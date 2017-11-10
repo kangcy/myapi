@@ -12,8 +12,7 @@
 	width: 1.8rem;
 	height: 1.8rem;
 	position: absolute;
-	right: 10px;
-	top: 80px;
+	right: 20px;
 	z-index: 999;
 }
 
@@ -547,4 +546,8 @@ img {
 .summary img {
 	width: 1rem !important;
 	vertical-align: middle;
+}
+
+#x-bg {
+	max-width: 750px;
 }

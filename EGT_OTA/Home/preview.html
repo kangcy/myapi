@@ -28,7 +28,6 @@
 		<!--漂浮特效-->
 		<div id="snowwrapper"></div>
 		<canvas id="snowcanvas"></canvas>
-		<img id="music1" class="hide" src="img/btn_music.png" onclick="switchsound()" />
 		<div class="bounceIn" id="download-bar">
 			<img src="img/logo_blue.png">
 			<span class="download-bar-text">
@@ -40,7 +39,8 @@
 		<!--固定背景-->
 		<div id="x-bg" class="hide"></div>
 		<!--内容-->
-		<div id="wrapper" class="full fl hide">
+		<div id="wrapper" class="full fl hide" style="position:relative;">
+			<img id="music1" class="hide" src="img/btn_music.png" onclick="switchsound()" />
 			<!--x-cover:滚动背景-->
 			<div class="root" id="x-cover">
 				<!--头-->
@@ -93,11 +93,12 @@
 </html>
 <script src="min/jquery-1.10.2.min.js"></script>
 <script src="min/mui.min.js"></script>
-<script src="min/base.min.js"></script>
+<!--<script src="min/base.min.js"></script>-->
+<script src="basejs/base.local.min.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
 <script type="text/javascript">
-	//var RootUrl = "http://localhost/app/";
-	var RootUrl = "http://www.xiaoweipian.com/";
+	var RootUrl = "http://localhost/app/";
+	//var RootUrl = "http://www.xiaoweipian.com/";
 
 	var MusicID = 0;
 	var MusicUrl = "";
@@ -136,6 +137,7 @@
 
 		$wrapper.style.paddingTop = base.Get("download-bar").clientHeight + "px";
 		$wrapper2.style.top = base.Get("download-bar").clientHeight + "px";
+		base.Get("music1").style.top = base.Get("download-bar").clientHeight + 20 + "px";
 
 		var key = GetParameter("key");
 		var xwp = GetParameter("xwp");
