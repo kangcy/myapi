@@ -1,6 +1,17 @@
 ﻿@inherits System.Web.Mvc.WebViewPage
 @using EGT_OTA.Models
-<div class="el-card box-card" 
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/swiper/swiper.min.css")" />
+    <style type="text/css">
+        .swiper-slide {
+            width: auto;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+    </style>
+}
+<div class="el-card box-card">
     <div class="el-card__header">
         <div class="clearfix">
             <p>打赏列表(@(ViewBag.RecordCount))</p>
@@ -43,121 +54,140 @@
                 </div>
             </div>
 
-            <div class="full fl">
+            <div class="full fl mt5">
                 <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
                 <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
             </div>
         </div>
     </div>
     <div class="el-card__body">
-        <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition full f12 tc" style="overflow: auto;">
-            <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body full">
-                <thead>
-                    <tr>
-                        <th class="cell" style="width: 150px;">打赏用户头像</th>
-                        <th class="cell" style="width: 200px;">打赏用户昵称(编号)</th>
-                        <th class="cell" style="width: 150px;">被打赏用户头像</th>
-                        <th class="cell" style="width: 200px;">被打赏用户昵称(编号)</th>
-                        <th class="cell" style="width: 250px;">文章(编号)</th>
-                        <th class="cell" style="width: 100px;">打赏金额(元)</th>
-                        <th class="cell" style="width: 100px;">支付方式</th>
-                        <th class="cell" style="width: 100px;">是否匿名</th>
-                        <th class="cell" style="width: 80px;">状态</th>
-                        <th class="cell" style="width: 160px;">创建日期</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var list = ViewBag.List;
-                        for (var i = 0; i < list.Count; i++)
-                        {
-                            var url = list[i].FromUserAvatar;
-                            if (string.IsNullOrWhiteSpace(url))
-                            {
-                                url = "http://www.xiaoweipian.com/Images/avatar.png";
-                            }
-                            else
-                            {
-                                if (url.IndexOf("_0") >= 0)
-                                {
-                                    url = url.Replace("_0", "_2");
-                                    if (url.ToLower().IndexOf("http://") < 0)
+        <div class="swiper-container" id="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition f12 tc" style="width: auto;">
+                        <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body">
+                            <thead>
+                                <tr>
+                                    <th class="cell">打赏用户头像</th>
+                                    <th class="cell">打赏用户昵称(编号)</th>
+                                    <th class="cell">被打赏用户头像</th>
+                                    <th class="cell">被打赏用户昵称(编号)</th>
+                                    <th class="cell">文章(编号)</th>
+                                    <th class="cell">打赏金额(元)</th>
+                                    <th class="cell">支付方式</th>
+                                    <th class="cell">是否匿名</th>
+                                    <th class="cell">状态</th>
+                                    <th class="cell">创建日期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var list = ViewBag.List;
+                                    for (var i = 0; i < list.Count; i++)
                                     {
-                                        url = "http://www.xiaoweipian.com/" + url;
-                                    }
-                                }
-                            }
-                            var url2 = list[i].ToUserAvatar;
-                            if (string.IsNullOrWhiteSpace(url2))
-                            {
-                                url2 = "http://www.xiaoweipian.com/Images/avatar.png";
-                            }
-                            else
-                            {
-                                if (url2.IndexOf("_0") >= 0)
-                                {
-                                    url2 = url.Replace("_0", "_2");
-                                    if (url2.ToLower().IndexOf("http://") < 0)
-                                    {
-                                        url2 = "http://www.xiaoweipian.com/" + url2;
-                                    }
-                                }
-                            }
-                        <tr>
-                            <td class="cell">
-                                <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
-                            </td>
-                            <td>
-                                <div class="cell">
-                                    <span class="nickname" nickname="@list[i].FromUserName"></span>
-                                    <p class="mb0">(@list[i].FromUserNumber)</p>
-                                </div>
-                            </td>
-                            <td class="cell">
-                                <img src="@url2" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
-                            </td>
-                            <td>
-                                <div class="cell">
-                                    <span class="nickname" nickname="@list[i].ToUserName"></span>
-                                    <p class="mb0">(@list[i].ToUserNumber)</p>
-                                </div>
-                            </td>
-                            <td>
-                                @if (!string.IsNullOrWhiteSpace(list[i].Title))
-                                {
+                                        var url = list[i].FromUserAvatar;
+                                        if (string.IsNullOrWhiteSpace(url) || url == "undefined")
+                                        {
+                                            url = "http://www.xiaoweipian.com/Images/avatar.png";
+                                        }
+                                        else
+                                        {
+                                            if (url.IndexOf("_0") >= 0)
+                                            {
+                                                url = url.Replace("_0", "_2");
+                                                if (url.ToLower().IndexOf("http://") < 0)
+                                                {
+                                                    url = "http://www.xiaoweipian.com/" + url;
+                                                }
+                                            }
+                                        }
+                                        var url2 = list[i].ToUserAvatar;
+                                        if (string.IsNullOrWhiteSpace(url2) || url2 == "undefined")
+                                        {
+                                            url2 = "http://www.xiaoweipian.com/Images/avatar.png";
+                                        }
+                                        else
+                                        {
+                                            if (url2.IndexOf("_0") >= 0)
+                                            {
+                                                url2 = url.Replace("_0", "_2");
+                                                if (url2.ToLower().IndexOf("http://") < 0)
+                                                {
+                                                    url2 = "http://www.xiaoweipian.com/" + url2;
+                                                }
+                                            }
+                                        }
+                                    <tr>
+                                        <td class="cell">
+                                            <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
+                                        </td>
+                                        <td>
+                                            <div class="cell">
+                                                <span class="nickname" nickname="@list[i].FromUserName"></span>
+                                                <p class="mb0">(@list[i].FromUserNumber)</p>
+                                            </div>
+                                        </td>
+                                        <td class="cell">
+                                            <img src="@url2" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
+                                        </td>
+                                        <td>
+                                            <div class="cell">
+                                                <span class="nickname" nickname="@list[i].ToUserName"></span>
+                                                <p class="mb0">(@list[i].ToUserNumber)</p>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrWhiteSpace(list[i].Title))
+                                            {
 
-                                    var link = ViewBag.RootUrl + "Home/preview.html?key=" + list[i].ArticleNumber + "&xwp=" + ViewBag.xwp;
-                                    <div class="cell">
-                                        <a href="@link" class="underline" target="_blank">@list[i].Title</a>
-                                        <p class="mb0">(@list[i].ArticleNumber)</p>
-                                    </div>
+                                                var link = ViewBag.RootUrl + "Home/preview.html?key=" + list[i].ArticleNumber + "&xwp=" + ViewBag.xwp;
+                                                <div class="cell">
+                                                    <a href="@link" class="underline" target="_blank">@list[i].Title</a>
+                                                    <p class="mb0">(@list[i].ArticleNumber)</p>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td class="cell money" money="@list[i].Price"></td>
+                                        <td class="cell">
+                                            @EnumBase.GetDescription(typeof(Enum_PayType), @list[i].PayType)
+                                        </td>
+                                        <td class="cell">
+                                            @(list[i].Anony == 1 ? "是" : "否")
+                                        </td>
+                                        <td class="cell">
+                                            @EnumBase.GetDescription(typeof(Enum_Order), @list[i].Status)
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].CreateDate
+                                        </td>
+                                    </tr>
+                                    }
                                 }
-                            </td>
-                            <td class="cell money" money="@list[i].Price"></td>
-                            <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_PayType), @list[i].PayType)
-                            </td>
-                            <td class="cell">
-                                @(list[i].Anony == 1 ? "是" : "否")
-                            </td>
-                            <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Order), @list[i].Status)
-                            </td>
-                            <td class="cell">
-                                @list[i].CreateDate
-                            </td>
-                        </tr>
-                        }
-                    }
-                </tbody>
-            </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="divPager" align="center" style="margin-top: 30px;"></div>
     </div>
 </div>
 @section Scripts{
+    <script src="@Url.Content("~/Scripts/swiper/swiper.min.js")"></script>
     <script type="text/javascript">
         var isloading = false;
+
+        window.onload = function () {
+            var swiper = new Swiper('#swiper', {
+                direction: 'horizontal',
+                slidesPerView: 'auto',
+                mousewheelControl: false,
+                freeMode: true,
+                roundLengths: true,
+                shortSwipes: false
+            });
+        };
+
         $(document).ready(function () {
             $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
             var currentIndex = parseInt(@(ViewBag.CurrPage));

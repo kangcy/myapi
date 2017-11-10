@@ -1561,7 +1561,6 @@
         MusicID = musicID;
         MusicName = musicName;
         MusicUrl = musicUrl;
-        console.log(MusicID + "," + MusicName + "," + MusicUrl);
         base.Get("musicname0").innerHTML = musicName;
         ChangeMusic();
     }
@@ -1651,7 +1650,6 @@
                     //InitParts.push(new PartModel(2, "Upload/Images/Article/20171109/149509293893532/201711091349536294_0.jpg", "", 1, 1, 1, 1));
 
                 } else {
-                    console.log(JSON.stringify(data.ArticlePart))
                     var parts = data.ArticlePart;
                     if (parts.length > 0) {
                         $.each(parts, function (i, part) {
@@ -2150,14 +2148,11 @@
 
     //保存
     function Save() {
-        //console.log(CurrColorTemplate)
-        //console.log(JSON.stringify(InitParts))
         if (isLoading) {
             return;
         }
         isLoading = true;
         var title = $("#title0").html().trim();
-        console.log(title);
         if (base.IsNullOrEmpty(title) || title == "我的小微篇" || title == "请输入文章标题") {
             layer.msg("请输入文章标题");
             isLoading = false;

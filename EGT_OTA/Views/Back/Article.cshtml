@@ -1,24 +1,35 @@
 ﻿@inherits System.Web.Mvc.WebViewPage
 @using EGT_OTA.Models
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/swiper/swiper.min.css")" />
+    <style type="text/css">
+        .swiper-slide {
+            width: auto;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+    </style>
+}
 <div class="el-card box-card">
     <div class="el-card__header">
         <div class="clearfix">
             <p>文章列表(@(ViewBag.RecordCount))</p>
-            <div class="el-form-item inline fl">
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
                         <input id="title" placeholder="文章标题" size="small" type="text" class="el-input__inner" value="@(ViewBag.title)">
                     </div>
                 </div>
             </div>
-            <div class="el-form-item inline fl ml15">
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
                         <input id="articlenumber" placeholder="文章编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.articlenumber)">
                     </div>
                 </div>
             </div>
-            <div class="el-form-item inline fl ml15">
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
                         <input id="usernumber" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
@@ -26,16 +37,15 @@
                 </div>
             </div>
 
-            <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">文章状态</label>
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button id="status" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            文章状态
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'status','不限')" class="ddl_status" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(-1,'status','文章状态')" class="ddl_status" index="-1">文章状态</a></li>
                             <li><a href="#" onclick="change(0,'status','待审核')" class="ddl_status" index="0">待审核</a></li>
                             <li><a href="#" onclick="change(1,'status','已审核')" class="ddl_status" index="1">已审核</a></li>
                             <li><a href="#" onclick="change(2,'status','已删除')" class="ddl_status" index="2">已删除</a></li>
@@ -45,16 +55,15 @@
                 </div>
             </div>
 
-            <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">投稿状态</label>
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button type="button" id="submission" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            投稿状态
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'submission','不限')" class="ddl_submission" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(-1,'submission','投稿状态')" class="ddl_submission" index="-1">投稿状态</a></li>
                             <li><a href="#" onclick="change(0,'submission','未提交')" class="ddl_submission" index="0">未提交</a></li>
                             <li><a href="#" onclick="change(1,'submission','待审核')" class="ddl_submission" index="1">待审核</a></li>
                             <li><a href="#" onclick="change(2,'submission','已审核')" class="ddl_submission" index="2">已审核</a></li>
@@ -64,16 +73,15 @@
                 </div>
             </div>
 
-            <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">推荐状态</label>
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button type="button" id="recommend" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            推荐状态
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'recommend','不限')" class="ddl_recommend" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(-1,'recommend','推荐状态')" class="ddl_recommend" index="-1">推荐状态</a></li>
                             <li><a href="#" onclick="change(98,'recommend','推荐')" class="ddl_recommend" index="98">推荐</a></li>
                             <li><a href="#" onclick="change(99,'recommend','置顶')" class="ddl_recommend" index="99">置顶</a></li>
                             <li><a href="#" onclick="change(100,'recommend','系统消息')" class="ddl_recommend" index="100">系统消息</a></li>
@@ -82,16 +90,15 @@
                 </div>
             </div>
 
-            <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">权限</label>
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button id="articlepower" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            权限
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'articlepower','不限')" class="ddl_articlepower" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(-1,'articlepower','权限')" class="ddl_articlepower" index="-1">权限</a></li>
                             <li><a href="#" onclick="change(3,'articlepower','公开')" class="ddl_articlepower" index="3">公开</a></li>
                             <li><a href="#" onclick="change(2,'articlepower','限制可见')" class="ddl_articlepower" index="2">限制可见</a></li>
                             <li><a href="#" onclick="change(1,'articlepower','密码可见')" class="ddl_articlepower" index="1">密码可见</a></li>
@@ -101,16 +108,15 @@
                 </div>
             </div>
 
-            <div class="el-form-item fl ml15">
-                <label class="el-form-item__label">分类</label>
+            <div class="el-form-item fl mr15">
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button id="filter_articletype" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            分类
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'filter_articletype','请选择分类')" class="ddl_filter_articletype" index="-1">请选择分类</a></li>
+                            <li><a href="#" onclick="change(-1,'filter_articletype','分类')" class="ddl_filter_articletype" index="-1">分类</a></li>
                             <li><a href="#" onclick="change(1,'filter_articletype','旅行')" class="ddl_filter_articletype" index="1">旅游</a></li>
                             <li><a href="#" onclick="change(3,'filter_articletype','亲子')" class="ddl_filter_articletype" index="3">美食</a></li>
                             <li><a href="#" onclick="change(5,'filter_articletype','女神')" class="ddl_filter_articletype" index="5">亲子</a></li>
@@ -125,7 +131,7 @@
                 </div>
             </div>
 
-            <div class="full fl">
+            <div class="full mt5 fr">
                 <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
                 <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
                 <button type="button" class="el-button el-button--success fr" onclick="Edit(0)"><span>新建</span></button>
@@ -133,117 +139,123 @@
         </div>
     </div>
     <div class="el-card__body">
-        <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition full f12 tc" style="overflow: auto;">
-            <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body full">
-                <thead>
-                    <tr>
-                        <th class="cell" style="width: 100px;">用户头像</th>
-                        <th class="cell" style="width: 150px;">用户昵称(编号)</th>
-                        <th class="cell" style="width: 250px;">标题(编号)</th>
-                        <th class="cell" style="width: 80px;">分类</th>
-                        <th class="cell" style="width: 80px;">浏览</th>
-                        <th class="cell" style="width: 80px;">权限</th>
-                        <th class="cell" style="width: 80px;">状态</th>
-                        <th class="cell" style="width: 100px;">投稿</th>
-                        <th class="cell" style="width: 250px;">定位</th>
-                        <th class="cell" style="width: 160px;">创建日期</th>
-                        <th class="cell" style="width: 400px;">操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var list = ViewBag.List;
-                        for (var i = 0; i < list.Count; i++)
-                        {
-                            var url = list[i].Avatar;
-                            if (string.IsNullOrWhiteSpace(url))
-                            {
-                                url = "http://www.xiaoweipian.com/Images/avatar.png";
-                            }
-                            else
-                            {
-                                if (url.IndexOf("_0") >= 0)
-                                {
-                                    url = url.Replace("_0", "_2");
-                                    if (url.ToLower().IndexOf("http://") < 0)
-                                    {
-                                        url = "http://www.xiaoweipian.com/" + url;
-                                    }
-                                }
-                            }
-                        <tr>
-                            @{
-                            var userlink = ViewBag.RootUrl + "Home/user.html?key=" + list[i].CreateUserNumber;
-                            }
-                            <td class="cell">
-                                <a href="@userlink" class="underline" target="_blank">
-                                    <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;"></a>
-                            </td>
-                            <td>
-                                <div class="cell">
-                                    <a href="@userlink" class="underline" target="_blank"><span class="nickname" nickname="@list[i].NickName"></span></a>
-                                    <p class="mb0">(@list[i].CreateUserNumber)</p>
-                                </div>
-                            </td>
-                            <td class="cell el-button--text">
+        <div class="swiper-container" id="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition f12 tc" style="width:auto;">
+                        <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body">
+                            <thead>
+                                <tr>
+                                    <th class="cell">用户头像</th>
+                                    <th class="cell">用户昵称(编号)</th>
+                                    <th class="cell">标题(编号)</th>
+                                    <th class="cell">分类</th>
+                                    <th class="cell">浏览</th>
+                                    <th class="cell">权限</th>
+                                    <th class="cell">状态</th>
+                                    <th class="cell">投稿</th>
+                                    <th class="cell">定位</th>
+                                    <th class="cell">创建日期</th>
+                                    <th class="cell">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 @{
-                            var link = ViewBag.RootUrl + "Home/preview.html?key=" + list[i].Number + "&xwp=" + ViewBag.xwp;
-                                }
-                                <a href="@link" class="underline" target="_blank">@(string.IsNullOrWhiteSpace(list[i].Title) ? "我的小微篇" : list[i].Title)</a>
-                                <p class="mb0">(@list[i].Number)</p>
-                            </td>
-                            <td class="cell">
-                                @list[i].TypeName
-                            </td>
-                            <td class="cell">
-                                @list[i].Views
-                            </td>
-                            <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_ArticlePower), @list[i].ArticlePower)
-                            </td>
-                            <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
-                            </td>
-                            <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Submission), @list[i].Submission)
-                            </td>
-                            <td class="cell">
-                                @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
-                            </td>
-                            <td class="cell">
-                                @list[i].CreateDateText
-                            </td>
-                            <td>
-                                <button type="button" class="el-button el-button--primary el-button--small btnRed" index="@list[i].CreateUserNumber" articleid="@list[i].ID"><span>打赏</span></button>
-                                @if (list[i].Status == Enum_Deal.Approved)
-                                {
-                                    <button type="button" class="el-button el-button--warning el-button--small btnAudit" index="@list[i].ID"><span>取消审核</span></button>
-                                }
-                                @if (list[i].Recommend == Enum_ArticleRecommend.None && list[i].ArticlePower == Enum_ArticlePower.Public && list[i].Status == Enum_Status.Approved && (list[i].Submission == Enum_Submission.Approved || list[i].Submission == Enum_Submission.TemporaryApproved))
-                                {
-                                    <button type="button" class="el-button el-button--primary el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.Top"><span>置顶</span></button>
-                                    <button type="button" class="el-button el-button--primary el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.Recommend"><span>推荐</span></button>
-                                    <button type="button" class="el-button el-button--primary el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.System"><span>系统消息</span></button>
-                                }
-                                @if (list[i].Recommend == Enum_ArticleRecommend.Top)
-                                {
-                                    <button type="button" class="el-button el-button--warning el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.None"><span>取消置顶</span></button>
-                                }
-                                @if (list[i].Recommend == Enum_ArticleRecommend.Recommend)
-                                {
-                                    <button type="button" class="el-button el-button--warning el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.None"><span>取消推荐</span></button>
-                                }
-                                @*@if ((list[i].Submission == Enum_Submission.Approved || list[i].Submission == Enum_Submission.TemporaryApproved) && list[i].ArticlePower == Enum_ArticlePower.Public && list[i].Status == Enum_Status.Approved)
+                                    var list = ViewBag.List;
+                                    for (var i = 0; i < list.Count; i++)
+                                    {
+                                        var url = list[i].Avatar;
+                                        if (string.IsNullOrWhiteSpace(url) || url == "undefined")
+                                        {
+                                            url = "http://www.xiaoweipian.com/Images/avatar.png";
+                                        }
+                                        else
+                                        {
+                                            if (url.IndexOf("_0") >= 0)
+                                            {
+                                                url = url.Replace("_0", "_2");
+                                                if (url.ToLower().IndexOf("http://") < 0)
+                                                {
+                                                    url = "http://www.xiaoweipian.com/" + url;
+                                                }
+                                            }
+                                        }
+                                    <tr>
+                                        @{
+                                        var userlink = ViewBag.RootUrl + "Home/user.html?key=" + list[i].CreateUserNumber;
+                                        }
+                                        <td class="cell">
+                                            <a href="@userlink" class="underline" target="_blank">
+                                                <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;"></a>
+                                        </td>
+                                        <td>
+                                            <div class="cell">
+                                                <a href="@userlink" class="underline" target="_blank"><span class="nickname" nickname="@list[i].NickName"></span></a>
+                                                <p class="mb0">(@list[i].CreateUserNumber)</p>
+                                            </div>
+                                        </td>
+                                        <td class="cell el-button--text">
+                                            @{
+                                        var link = ViewBag.RootUrl + "Home/preview.html?key=" + list[i].Number + "&xwp=" + ViewBag.xwp;
+                                            }
+                                            <a href="@link" class="underline" target="_blank">@(string.IsNullOrWhiteSpace(list[i].Title) ? "我的小微篇" : list[i].Title)</a>
+                                            <p class="mb0">(@list[i].Number)</p>
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].TypeName
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].Views
+                                        </td>
+                                        <td class="cell">
+                                            @EnumBase.GetDescription(typeof(Enum_ArticlePower), @list[i].ArticlePower)
+                                        </td>
+                                        <td class="cell">
+                                            @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
+                                        </td>
+                                        <td class="cell">
+                                            @EnumBase.GetDescription(typeof(Enum_Submission), @list[i].Submission)
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].CreateDateText
+                                        </td>
+                                        <td class="cell">
+                                            <button type="button" class="el-button el-button--primary el-button--small btnRed" index="@list[i].CreateUserNumber" articleid="@list[i].ID"><span>打赏</span></button>
+                                            @if (list[i].Status == Enum_Deal.Approved)
+                                            {
+                                                <button type="button" class="el-button el-button--warning el-button--small btnAudit" index="@list[i].ID"><span>取消审核</span></button>
+                                            }
+                                            @if (list[i].Recommend == Enum_ArticleRecommend.None && list[i].ArticlePower == Enum_ArticlePower.Public && list[i].Status == Enum_Status.Approved && (list[i].Submission == Enum_Submission.Approved || list[i].Submission == Enum_Submission.TemporaryApproved))
+                                            {
+                                                <button type="button" class="el-button el-button--primary el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.Top"><span>置顶</span></button>
+                                                <button type="button" class="el-button el-button--primary el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.Recommend"><span>推荐</span></button>
+                                                <button type="button" class="el-button el-button--primary el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.System"><span>系统消息</span></button>
+                                            }
+                                            @if (list[i].Recommend == Enum_ArticleRecommend.Top)
+                                            {
+                                                <button type="button" class="el-button el-button--warning el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.None"><span>取消置顶</span></button>
+                                            }
+                                            @if (list[i].Recommend == Enum_ArticleRecommend.Recommend)
+                                            {
+                                                <button type="button" class="el-button el-button--warning el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.None"><span>取消推荐</span></button>
+                                            }
+@*@if ((list[i].Submission == Enum_Submission.Approved || list[i].Submission == Enum_Submission.TemporaryApproved) && list[i].ArticlePower == Enum_ArticlePower.Public && list[i].Status == Enum_Status.Approved)
                                 {
                                     <button type="button" class="el-button el-button--success el-button--small btnEdit" index="@list[i].ID" typeid="@list[i].TypeID"><span>编辑</span></button>
                                 }*@
-                                <button type="button" class="el-button el-button--success el-button--small" index="@list[i].ID" typeid="@list[i].TypeID" onclick="Edit(@list[i].ID)"><span>编辑</span></button>
-                            </td>
-                        </tr>
-                        }
-                    }
-                </tbody>
-            </table>
+                                            <button type="button" class="el-button el-button--success el-button--small" index="@list[i].ID" typeid="@list[i].TypeID" onclick="Edit(@list[i].ID)"><span>编辑</span></button>
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="divPager" align="center" style="margin-top: 30px;"></div>
     </div>
@@ -285,9 +297,21 @@
     </div>
 </div>
 @section Scripts{
+    <script src="@Url.Content("~/Scripts/swiper/swiper.min.js")"></script>
     <script type="text/javascript">
-
         var isloading = false;
+
+        window.onload = function () {
+            var swiper = new Swiper('#swiper', {
+                direction: 'horizontal',
+                slidesPerView: 'auto',
+                mousewheelControl: false,
+                freeMode: true,
+                roundLengths: true,
+                shortSwipes: false
+            });
+        };
+
         $(document).ready(function () {
             $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
             $(".ddl_submission[index=" + parseInt(@(ViewBag.submission)) + "]").eq(0).trigger("click");

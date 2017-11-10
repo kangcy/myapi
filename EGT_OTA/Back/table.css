@@ -1,5 +1,6 @@
 ﻿::-webkit-scrollbar {
-    width: 8px;
+    width: 3px;
+    height: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -2075,7 +2076,6 @@ img {
 .el-table {
     overflow: hidden;
     width: 100%;
-    max-width: 100%;
     background-color: #fff;
     border: 1px solid #dfe6ec;
     font-size: 14px;
@@ -3560,7 +3560,7 @@ img {
     box-sizing: border-box;
     outline: 0;
     margin: 0;
-    padding: 10px 15px;
+    padding: 8px 15px;
     font-size: 14px;
     border-radius: 4px;
 }
@@ -9623,6 +9623,9 @@ img {
 
 .ml15 {
     margin-left: 15px !important;
+}
+.mr15 {
+    margin-right: 15px !important;
 }
 
 .mb0 {

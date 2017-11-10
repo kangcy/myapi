@@ -1,17 +1,28 @@
 ﻿@inherits System.Web.Mvc.WebViewPage
 @using EGT_OTA.Models
-<div class="el-card box-card" >
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/swiper/swiper.min.css")" />
+    <style type="text/css">
+        .swiper-slide {
+            width: auto;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+    </style>
+}
+<div class="el-card box-card">
     <div class="el-card__header">
         <div class="clearfix">
             <p>用户列表(@(ViewBag.RecordCount))</p>
-            <div class="el-form-item inline fl">
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
                         <input id="nickname" placeholder="用户昵称" size="small" type="text" class="el-input__inner" value="@(ViewBag.nickname)">
                     </div>
                 </div>
             </div>
-            <div class="el-form-item inline fl ml15">
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content">
                     <div class="el-input el-input--small">
                         <input id="usernumber" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
@@ -19,16 +30,15 @@
                 </div>
             </div>
 
-            <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">状态</label>
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button id="status" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            用户状态
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'status','不限')" class="ddl_status" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(-1,'status','用户状态')" class="ddl_status" index="-1">用户状态</a></li>
                             <li><a href="#" onclick="change(0,'status','待审核')" class="ddl_status" index="0">待审核</a></li>
                             <li><a href="#" onclick="change(1,'status','已审核')" class="ddl_status" index="1">已审核</a></li>
                             <li><a href="#" onclick="change(2,'status','已删除')" class="ddl_status" index="2">已删除</a></li>
@@ -38,16 +48,15 @@
                 </div>
             </div>
 
-            <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">是否推荐</label>
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button type="button" id="isrecommend" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            是否推荐
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'isrecommend','不限')" class="ddl_isrecommend" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(-1,'isrecommend','是否推荐')" class="ddl_isrecommend" index="-1">是否推荐</a></li>
                             <li><a href="#" onclick="change(1,'isrecommend','推荐')" class="ddl_isrecommend" index="1">推荐</a></li>
                             <li><a href="#" onclick="change(0,'isrecommend','不推荐')" class="ddl_isrecommend" index="0">不推荐</a></li>
                         </ul>
@@ -55,16 +64,15 @@
                 </div>
             </div>
 
-            <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">启用打赏</label>
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button type="button" id="ispay" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            是否启用打赏
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'ispay','不限')" class="ddl_ispay" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(-1,'ispay','是否启用打赏')" class="ddl_ispay" index="-1">是否启用打赏</a></li>
                             <li><a href="#" onclick="change(1,'ispay','启用')" class="ddl_ispay" index="1">启用</a></li>
                             <li><a href="#" onclick="change(0,'ispay','不启用')" class="ddl_ispay" index="0">不启用</a></li>
                         </ul>
@@ -72,16 +80,15 @@
                 </div>
             </div>
 
-            <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">性别</label>
+            <div class="el-form-item inline fl mr15">
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button type="button" id="sex" index="-1" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            性别不限
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'sex','不限')" class="ddl_sex" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(-1,'sex','性别不限')" class="ddl_sex" index="-1">性别不限</a></li>
                             <li><a href="#" onclick="change(1,'sex','男')" class="ddl_sex" index="1">男</a></li>
                             <li><a href="#" onclick="change(2,'sex','女')" class="ddl_sex" index="2">女</a></li>
                         </ul>
@@ -89,116 +96,123 @@
                 </div>
             </div>
 
-            <div class="full fl">
+            <div class="full fl mt5">
                 <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
                 <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
             </div>
         </div>
     </div>
     <div class="el-card__body">
-        <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition full f12 tc" style="overflow: auto;">
-            <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body full">
-                <thead>
-                    <tr>
-                        <th class="cell" style="width: 100px;">用户头像</th>
-                        <th class="cell" style="width: 150px;">用户昵称(编号)</th>
-                        <th class="cell" style="width: 250px;">个性签名</th>
-                        <th class="cell" style="width: 80px;">性别</th>
-                        <th class="cell" style="width: 80px;">状态</th>
-                        <th class="cell" style="width: 100px;">是否推荐</th>
-                        <th class="cell" style="width: 200px;">机型</th>
-                        <th class="cell" style="width: 250px;">定位</th>
-                        <th class="cell" style="width: 100px;">登录次数</th>
-                        <th class="cell" style="width: 160px;">创建日期</th>
-                        <th class="cell" style="width: 160px;">上次登录</th>
-                        <th class="cell" style="width: 200px;">操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var list = ViewBag.List;
-                        for (var i = 0; i < list.Count; i++)
-                        {
-                            var url = list[i].Avatar;
-                            if (string.IsNullOrWhiteSpace(url))
-                            {
-                                url = "http://www.xiaoweipian.com/Images/avatar.png";
-                            }
-                            else
-                            {
-                                if (url.IndexOf("_0") >= 0)
-                                {
-                                    url = url.Replace("_0", "_2");
-                                    if (url.ToLower().IndexOf("http://") < 0)
+        <div class="swiper-container" id="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition f12 tc" style="width: auto;">
+                        <table cellspacing="0" cellpadding="0" border="0" class="el-table__header el-table__body">
+                            <thead>
+                                <tr>
+                                    <th class="cell">用户头像</th>
+                                    <th class="cell">用户昵称(编号)</th>
+                                    <th class="cell">个性签名</th>
+                                    <th class="cell">性别</th>
+                                    <th class="cell">状态</th>
+                                    <th class="cell">是否推荐</th>
+                                    <th class="cell">机型</th>
+                                    <th class="cell">定位</th>
+                                    <th class="cell">登录次数</th>
+                                    <th class="cell">创建日期</th>
+                                    <th class="cell">上次登录</th>
+                                    <th class="cell">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var list = ViewBag.List;
+                                    for (var i = 0; i < list.Count; i++)
                                     {
-                                        url = "http://www.xiaoweipian.com/" + url;
+                                        var url = list[i].Avatar;
+                                        if (string.IsNullOrWhiteSpace(url) || url == "undefined")
+                                        {
+                                            url = "http://www.xiaoweipian.com/Images/avatar.png";
+                                        }
+                                        else
+                                        {
+                                            if (url.IndexOf("_0") >= 0)
+                                            {
+                                                url = url.Replace("_0", "_2");
+                                                if (url.ToLower().IndexOf("http://") < 0)
+                                                {
+                                                    url = "http://www.xiaoweipian.com/" + url;
+                                                }
+                                            }
+                                        }
+                                    <tr>
+                                        @{
+                                        var link = ViewBag.RootUrl + "Home/user.html?key=" + list[i].Number;
+                                        }
+                                        <td class="cell">
+                                            <a href="@link" class="underline" target="_blank">
+                                                <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;"></a>
+                                        </td>
+                                        <td>
+                                            <div class="cell">
+                                                <a href="@link" class="underline" target="_blank"><span class="nickname" nickname="@list[i].NickName"></span></a>
+                                                <p class="mb0">(@list[i].Number)</p>
+                                            </div>
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].Signature
+                                        </td>
+                                        <td class="cell">
+                                            @EnumBase.GetDescription(typeof(Enum_Sex), @list[i].Sex)
+                                        </td>
+                                        <td class="cell">
+                                            @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
+                                        </td>
+                                        <td class="cell">
+                                            @EnumBase.GetDescription(typeof(Enum_Recommend), @list[i].IsRecommend)
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].PhoneModel
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].LoginTimes
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].CreateDate.ToString("yyyy-MM-dd hh:mm:ss")
+                                        </td>
+                                        <td class="cell">
+                                            @list[i].LastLoginDate.ToString("yyyy-MM-dd hh:mm:ss")
+                                        </td>
+                                        <td class="cell">
+                                            <button type="button" class="el-button el-button--primary el-button--small btnRed" index="@list[i].Number"><span>打赏</span></button>
+                                            @if (list[i].IsRecommend != Enum_Recommend.Approved)
+                                            {
+                                                <button type="button" class="el-button el-button--success el-button--small btnRecommend" index="@list[i].ID"><span>推荐</span></button>
+                                            }
+                                            @if (list[i].IsRecommend == Enum_Recommend.Approved)
+                                            {
+                                                <button type="button" class="el-button el-button--warning el-button--small btnNoRecommend" index="@list[i].ID"><span>取消推荐</span></button>
+                                            }
+                                            @if (list[i].Status == Enum_Deal.Approved)
+                                            {
+                                                <button type="button" class="el-button el-button--danger el-button--small btnDelete" index="@list[i].ID"><span>冻结</span></button>
+                                            }
+                                            @if (list[i].Status != Enum_Status.Approved)
+                                            {
+                                                <button type="button" class="el-button el-button--success el-button--small btnApproved" index="@list[i].ID"><span>激活</span></button>
+                                            }
+                                        </td>
+                                    </tr>
                                     }
                                 }
-                            }
-                        <tr>
-                            @{
-                            var link = ViewBag.RootUrl + "Home/user.html?key=" + list[i].Number;
-                            }
-                            <td class="cell">
-                                <a href="@link" class="underline" target="_blank"><img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;"></a>
-                            </td>
-                            <td>
-                                <div class="cell">
-                                    <a href="@link" class="underline" target="_blank"><span class="nickname" nickname="@list[i].NickName"></span></a>
-                                    <p class="mb0">(@list[i].Number)</p>
-                                </div>
-                            </td>
-                            <td class="cell">
-                                @list[i].Signature
-                            </td>
-                            <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Sex), @list[i].Sex)
-                            </td>
-                            <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)
-                            </td>
-                            <td class="cell">
-                                @EnumBase.GetDescription(typeof(Enum_Recommend), @list[i].IsRecommend)
-                            </td>
-                            <td class="cell">
-                                @list[i].PhoneModel
-                            </td>
-                            <td class="cell">
-                                @list[i].Province @list[i].City @list[i].District @list[i].Street @list[i].DetailName
-                            </td>
-                            <td class="cell">
-                                @list[i].LoginTimes
-                            </td>
-                            <td class="cell">
-                                @list[i].CreateDate.ToString("yyyy-MM-dd hh:mm:ss")
-                            </td>
-                            <td class="cell">
-                                @list[i].LastLoginDate.ToString("yyyy-MM-dd hh:mm:ss")
-                            </td>
-                            <td>
-                                <button type="button" class="el-button el-button--primary el-button--small btnRed" index="@list[i].Number"><span>打赏</span></button>
-                                @if (list[i].IsRecommend != Enum_Recommend.Approved)
-                                {
-                                    <button type="button" class="el-button el-button--success el-button--small btnRecommend" index="@list[i].ID"><span>推荐</span></button>
-                                }
-                                @if (list[i].IsRecommend == Enum_Recommend.Approved)
-                                {
-                                    <button type="button" class="el-button el-button--warning el-button--small btnNoRecommend" index="@list[i].ID"><span>取消推荐</span></button>
-                                }
-                                @if (list[i].Status == Enum_Deal.Approved)
-                                {
-                                    <button type="button" class="el-button el-button--danger el-button--small btnDelete" index="@list[i].ID"><span>冻结</span></button>
-                                }
-                                @if (list[i].Status != Enum_Status.Approved)
-                                {
-                                    <button type="button" class="el-button el-button--success el-button--small btnApproved" index="@list[i].ID"><span>激活</span></button>
-                                }
-                            </td>
-                        </tr>
-                        }
-                    }
-                </tbody>
-            </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="divPager" align="center" style="margin-top: 30px;"></div>
     </div>
@@ -216,9 +230,22 @@
     </div>
 </div>
 @section Scripts{
+    <script src="@Url.Content("~/Scripts/swiper/swiper.min.js")"></script>
     <script type="text/javascript">
+        var isloading = false;
+
+        window.onload = function () {
+            var swiper = new Swiper('#swiper', {
+                direction: 'horizontal',
+                slidesPerView: 'auto',
+                mousewheelControl: false,
+                freeMode: true,
+                roundLengths: true,
+                shortSwipes: false
+            });
+        };
+
         $(document).ready(function () {
-            var isloading = false;
             $(".ddl_status[index=" + parseInt(@(ViewBag.status)) + "]").eq(0).trigger("click");
             $(".ddl_isrecommend[index=" + parseInt(@(ViewBag.isrecommend)) + "]").eq(0).trigger("click");
             $(".ddl_ispay[index=" + parseInt(@(ViewBag.ispay)) + "]").eq(0).trigger("click");
