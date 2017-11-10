@@ -64,7 +64,7 @@
             zoom: 11
         });
 
-        mapObj.plugin(["AMap.ToolBar", "AMap.OverView", "AMap.PlaceSearch", "AMap.CitySearch", "AMap.Geocoder"], function () {
+        mapObj.plugin(["AMap.ToolBar", "AMap.OverView", "AMap.PlaceSearch", "AMap.CitySearch", "AMap.Geocoder", "AMap.Autocomplete"], function () {
             placeSearch = new AMap.PlaceSearch;
             AMap.event.addListener(placeSearch, "complete", PlaceSearchCallback);
             AMap.event.addListener(placeSearch, "error", PlaceSearchCallback);
@@ -75,6 +75,13 @@
                 mapObj.setBounds(result.bounds);
             });
             citySearch.getLocalCity();
+
+            //下拉联想搜索
+            var autoOptions = {
+                city: "", //城市，默认全国
+                input: "title"//使用联想输入的input的id
+            };
+            autocomplete = new AMap.Autocomplete(autoOptions);
         });
 
 
@@ -117,5 +124,27 @@
             return false;
         }
         placeSearch.search($("#title").val().trim(), PlaceSearchCallback)
+    }
+
+    var lnglatXY = [116.40, 39.99]; //已知点坐标
+    function regeocoder() {  //逆地理编码
+        var geocoder = new AMap.Geocoder({
+            radius: 1000,
+            extensions: "all"
+        });
+        geocoder.getAddress(lnglatXY, function (status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                geocoder_CallBack(result);
+            }
+        });
+        var marker = new AMap.Marker({  //加点
+            map: mapObj,
+            position: lnglatXY
+        });
+        mapObj.setFitView();
+    }
+    function geocoder_CallBack(data) {
+        var address = data.regeocode.formattedAddress; //返回地址描述
+        document.getElementById("location").innerHTML = address;
     }
 </script>
