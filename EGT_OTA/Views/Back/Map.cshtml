@@ -1,0 +1,121 @@
+﻿@using EGT_OTA.Models
+@{
+    Layout = null;
+}
+@inherits System.Web.Mvc.WebViewPage
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="format-detection" content="telephone = no" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
+    <style type="text/css">
+       
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="el-card__header">
+                    <div class="clearfix">
+                        <div class="el-form-item inline fl">
+                            <div class="el-form-item__content">
+                                <div class="el-input el-input--small">
+                                    <input id="title" placeholder="请输入地址关键字" size="small" type="text" class="el-input__inner" style="width: 310px;">
+                                    <input id="location" placeholder="当前定位" size="small" type="text" class="el-input__inner" style="width: 310px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fr">
+                            <button type="button" class="el-button el-button--primary" onclick="Search()" id="search"><span>查询</span></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="scroll-view" class="el-card__body mui-table-view" style="height: 470px; overflow-x: hidden;">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
+<script src="@Url.Content("~/Back/bootstrap.min.js")"></script>
+<script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/base.min.js")"></script>
+<script src="http://webapi.amap.com/maps?v=1.4.1&key=09cab96df346ea0b2d7c2ae63b02772d"></script>
+<script src="http://webapi.amap.com/ui/1.0/main.js"></script>
+<script type="text/javascript">
+    var isloading = false;
+    var mapObj = null;
+    var cityObj = {};
+    var placeSearch, marker;
+    var currentCity = cityObj["北京"]
+    $(document).ready(function () {
+        mapObj = new AMap.Map('scroll-view', {
+            resizeEnable: true,
+            zoom: 11
+        });
+
+        mapObj.plugin(["AMap.ToolBar", "AMap.OverView", "AMap.PlaceSearch", "AMap.CitySearch", "AMap.Geocoder"], function () {
+            placeSearch = new AMap.PlaceSearch;
+            AMap.event.addListener(placeSearch, "complete", PlaceSearchCallback);
+            AMap.event.addListener(placeSearch, "error", PlaceSearchCallback);
+
+            var citySearch = new AMap.CitySearch;
+            marker = new AMap.Marker();
+            AMap.event.addListener(citySearch, "complete", function (result) {
+                mapObj.setBounds(result.bounds);
+            });
+            citySearch.getLocalCity();
+        });
+
+
+        //点击获得坐标
+        AMap.event.addListener(mapObj, "click", function (e) {
+            $("#location").val(e.lnglat.toString());
+        });
+
+        //监听软键盘搜索键
+        $("#title").keydown(function (e) {
+            if (13 == e.keyCode) {
+                if ($("#title").val().trim() == "") {
+                    layer.msg("请输入搜索内容！");
+                    return false;
+                }
+                currpage = 1;
+                $("#search").trigger("click");
+            }
+        });
+    });
+
+    function PlaceSearchCallback(result) {
+        if (result == 'complete') {
+            return
+        }
+        if (result.poiList && result.poiList.pois && result.poiList.pois.length) {
+            var poi = result.poiList.pois[0];
+            mapObj.setZoomAndCenter(13, poi.location);
+            //poi:{"id":"B020705RHH","name":"常州武进汽车客运站","type":"交通设施服务;长途汽车站;长途汽车站","location":{"Q":31.671098,"O":119.96162700000002,"lng":119.961627,"lat":31.671098},"address":"常武中路20号","tel":"0519-86554873;0519-86527280","distance":null,"shopinfo":"0"}
+            marker.setTitle([poi.name, poi.address].join(poi.name && poi.address ? "\n" : ""));
+            marker.setPosition(poi.location);
+            marker.setMap(mapObj);
+            $("#location").val(poi.location.toString());
+        }
+    }
+
+    function Search() {
+        if ($("#title").val().trim() == "") {
+            layer.msg("请输入搜索内容！");
+            return false;
+        }
+        placeSearch.search($("#title").val().trim(), PlaceSearchCallback)
+    }
+</script>

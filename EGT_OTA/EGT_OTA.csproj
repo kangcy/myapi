@@ -1161,6 +1161,7 @@
     <Content Include="Views\Back\Pic.cshtml" />
     <Content Include="Views\Back\Showy.cshtml" />
     <Content Include="Views\Back\AddBase.cshtml" />
+    <Content Include="Views\Back\Map.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

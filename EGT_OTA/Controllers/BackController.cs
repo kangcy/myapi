@@ -1139,6 +1139,15 @@ namespace EGT_OTA.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 高德地图
+        /// </summary>
+        public ActionResult Map()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
         #endregion
     }
 }
