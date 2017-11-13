@@ -204,6 +204,8 @@
                                             {
                                                 <button type="button" class="el-button el-button--success el-button--small btnApproved" index="@list[i].ID"><span>激活</span></button>
                                             }
+                                            <button type="button" class="el-button el-button--success el-button--small btnLocation" index="@list[i].Number"><span>更新定位</span></button>
+                                            <button type="button" class="el-button el-button--success el-button--small btnArticle" index="@list[i].Number"><span>查看文章</span></button>
                                         </td>
                                     </tr>
                                     }
@@ -300,6 +302,28 @@
 
             $("#reset").click(function () {
                 window.location.href = "@(ViewBag.RootUrl)" + "Back/User?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
+            })
+
+            //查看文章
+            $(".btnArticle").click(function () {
+                window.open("@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&usernumber=" + $(this).attr("index"));
+            })
+
+            //重新定位
+            $(".btnLocation").click(function () {
+                var $this = $(this);
+                layer.open({
+                    id: "map",
+                    type: 2,
+                    area: ['1000px', '650px'],
+                    content: 'Map',
+                    title: "用户定位",
+                    scrollbar: false,
+                    success: function (layero, index) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.Init($this.attr("index"));
+                    }
+                });
             })
 
             //推荐
@@ -488,5 +512,32 @@
                 isloading = false;
             });
         });
+
+        //更新定位
+        function UpdateLocation(usernumber, province, city, district, street, detailname, citycode, latitude, longitude) {
+            var data = {
+                UserNumber: usernumber,
+                Province: province,
+                City: city,
+                District: district,
+                Street: street,
+                DetailName: detailname,
+                CityCode: citycode,
+                Latitude: parseFloat(latitude).toFixed(2),
+                Longitude: parseFloat(longitude).toFixed(2)
+            }
+            $.ajax({
+                url: "@(ViewBag.RootUrl)Back/UserLocation",
+                data: data,
+                dataType: "json",
+                success: function (data) {
+                    isloading = false;
+                    layer.alert(data.message);
+                    if (data.result) {
+                        window.location.reload();
+                    }
+                }
+            });
+        }
     </script>
 }

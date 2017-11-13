@@ -420,6 +420,51 @@ namespace EGT_OTA.Controllers
             return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 重新定位
+        /// </summary>
+        public ActionResult ArticleLocation()
+        {
+            var message = "";
+            try
+            {
+                var ArticleNumber = ZNRequest.GetString("ArticleNumber");
+                Article model = db.Single<Article>(x => x.Number == ArticleNumber);
+                if (model == null)
+                {
+                    return Json(new { result = false, message = "文章不存在" }, JsonRequestBehavior.AllowGet);
+                }
+                var Province = ZNRequest.GetString("Province");
+                var City = ZNRequest.GetString("City");
+                var District = ZNRequest.GetString("District");
+                var Street = ZNRequest.GetString("Street");
+                var DetailName = ZNRequest.GetString("DetailName");
+                var CityCode = ZNRequest.GetString("CityCode");
+                var Latitude = Tools.SafeDouble(ZNRequest.GetString("Latitude"));
+                var Longitude = Tools.SafeDouble(ZNRequest.GetString("Longitude"));
+                var result = new SubSonic.Query.Update<Article>(provider)
+                    .Set("Province").EqualTo(Province)
+                    .Set("City").EqualTo(City)
+                    .Set("District").EqualTo(District)
+                    .Set("Street").EqualTo(Street)
+                    .Set("DetailName").EqualTo(DetailName)
+                    .Set("CityCode").EqualTo(CityCode)
+                    .Set("Latitude").EqualTo(Latitude)
+                    .Set("Longitude").EqualTo(Longitude)
+                    .Where<Article>(x => x.Number == ArticleNumber).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_ArticleLocation:" + ex.Message);
+                message = ex.Message;
+            }
+            return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region  投稿
@@ -678,7 +723,7 @@ namespace EGT_OTA.Controllers
             var usernumber = ZNRequest.GetString("usernumber");
             if (!string.IsNullOrWhiteSpace(usernumber))
             {
-                query = query.And("Number").IsEqualTo(usernumber);
+                query = query.And("RelatedNumber").IsEqualTo(usernumber);
             }
 
             //状态
@@ -835,6 +880,51 @@ namespace EGT_OTA.Controllers
             catch (Exception ex)
             {
                 LogHelper.ErrorLoger.Error("Back_UserApproved:" + ex.Message);
+                message = ex.Message;
+            }
+            return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 重新定位
+        /// </summary>
+        public ActionResult UserLocation()
+        {
+            var message = "";
+            try
+            {
+                var UserNumber = ZNRequest.GetString("UserNumber");
+                User model = db.Single<User>(x => x.Number == UserNumber);
+                if (model == null)
+                {
+                    return Json(new { result = false, message = "用户不存在" }, JsonRequestBehavior.AllowGet);
+                }
+                var Province = ZNRequest.GetString("Province");
+                var City = ZNRequest.GetString("City");
+                var District = ZNRequest.GetString("District");
+                var Street = ZNRequest.GetString("Street");
+                var DetailName = ZNRequest.GetString("DetailName");
+                var CityCode = ZNRequest.GetString("CityCode");
+                var Latitude = Tools.SafeDouble(ZNRequest.GetString("Latitude"));
+                var Longitude = Tools.SafeDouble(ZNRequest.GetString("Longitude"));
+                var result = new SubSonic.Query.Update<User>(provider)
+                    .Set("Province").EqualTo(Province)
+                    .Set("City").EqualTo(City)
+                    .Set("District").EqualTo(District)
+                    .Set("Street").EqualTo(Street)
+                    .Set("DetailName").EqualTo(DetailName)
+                    .Set("CityCode").EqualTo(CityCode)
+                    .Set("Latitude").EqualTo(Latitude)
+                    .Set("Longitude").EqualTo(Longitude)
+                    .Where<User>(x => x.Number == UserNumber).Execute() > 0;
+                if (result)
+                {
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("Back_UserLocation:" + ex.Message);
                 message = ex.Message;
             }
             return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);

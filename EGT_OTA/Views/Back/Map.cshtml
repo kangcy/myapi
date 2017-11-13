@@ -26,20 +26,19 @@
             <div class="row">
                 <div class="el-card__header">
                     <div class="clearfix">
-                        <div class="el-form-item inline fl">
-                            <div class="el-form-item__content">
+                        <div class="el-form-item full fl">
+                            <div class="el-form-item__content full">
                                 <div class="el-input el-input--small">
-                                    <input id="title" placeholder="请输入地址关键字" size="small" type="text" class="el-input__inner" style="width: 310px;">
-                                    <input id="location" placeholder="当前定位" size="small" type="text" class="el-input__inner" style="width: 310px;">
+                                    <input id="title" placeholder="请输入地址关键字" size="small" type="text" class="el-input__inner fl" style="width: 49%;">
+                                    <input id="location" placeholder="当前定位" size="small" type="text" class="el-input__inner fr" style="width: 49%;">
                                 </div>
                             </div>
                         </div>
-                        <div class="fr">
-                            <button type="button" class="el-button el-button--primary" onclick="Search()" id="search"><span>查询</span></button>
-                        </div>
+                        <button type="button" class="el-button el-button--primary fl" onclick="Search()"><span>查询</span></button>
+                        <button type="button" class="el-button el-button--success fr" onclick="Submit()"><span>确定</span></button>
                     </div>
                 </div>
-                <div id="scroll-view" class="el-card__body mui-table-view" style="height: 470px; overflow-x: hidden;">
+                <div id="scroll-view" class="el-card__body mui-table-view" style="width: 100%; height: 520px; overflow: hidden;">
                 </div>
             </div>
         </div>
@@ -56,8 +55,9 @@
     var isloading = false;
     var mapObj = null;
     var cityObj = {};
-    var placeSearch, marker;
-    var currentCity = cityObj["北京"]
+    var address = null;
+    var placeSearch, marker, geocoder;
+    var usernumber = "";
     $(document).ready(function () {
         mapObj = new AMap.Map('scroll-view', {
             resizeEnable: true,
@@ -82,12 +82,17 @@
                 input: "title"//使用联想输入的input的id
             };
             autocomplete = new AMap.Autocomplete(autoOptions);
+
+            geocoder = new AMap.Geocoder({
+                radius: 1000,
+                extensions: "all"
+            });
         });
 
 
         //点击获得坐标
         AMap.event.addListener(mapObj, "click", function (e) {
-            $("#location").val(e.lnglat.toString());
+            GetLocation(e.lnglat.lng, e.lnglat.lat);
         });
 
         //监听软键盘搜索键
@@ -97,11 +102,35 @@
                     layer.msg("请输入搜索内容！");
                     return false;
                 }
-                currpage = 1;
-                $("#search").trigger("click");
+                Search();
             }
         });
     });
+
+    //初始化
+    function Init(number) {
+        usernumber = number;
+    }
+
+    //获取定位详情
+    function GetLocation(lng, lat) {
+        geocoder.getAddress([lng, lat], function (status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                console.log(JSON.stringify(result))
+                address = {
+                    Province: result.regeocode.addressComponent.province,
+                    City: result.regeocode.addressComponent.city,
+                    District: result.regeocode.addressComponent.district,
+                    Street: result.regeocode.addressComponent.township,
+                    DetailName: result.regeocode.pois[0].name,
+                    CityCode: result.regeocode.addressComponent.citycode,
+                    Latitude: parseFloat(lat).toFixed(2),
+                    Longitude: parseFloat(lng).toFixed(2)
+                }
+                $("#location").val(result.regeocode.formattedAddress);
+            }
+        });
+    }
 
     function PlaceSearchCallback(result) {
         if (result == 'complete') {
@@ -114,7 +143,7 @@
             marker.setTitle([poi.name, poi.address].join(poi.name && poi.address ? "\n" : ""));
             marker.setPosition(poi.location);
             marker.setMap(mapObj);
-            $("#location").val(poi.location.toString());
+            GetLocation(poi.location.lng, poi.location.lat);
         }
     }
 
@@ -126,25 +155,11 @@
         placeSearch.search($("#title").val().trim(), PlaceSearchCallback)
     }
 
-    var lnglatXY = [116.40, 39.99]; //已知点坐标
-    function regeocoder() {  //逆地理编码
-        var geocoder = new AMap.Geocoder({
-            radius: 1000,
-            extensions: "all"
-        });
-        geocoder.getAddress(lnglatXY, function (status, result) {
-            if (status === 'complete' && result.info === 'OK') {
-                geocoder_CallBack(result);
-            }
-        });
-        var marker = new AMap.Marker({  //加点
-            map: mapObj,
-            position: lnglatXY
-        });
-        mapObj.setFitView();
-    }
-    function geocoder_CallBack(data) {
-        var address = data.regeocode.formattedAddress; //返回地址描述
-        document.getElementById("location").innerHTML = address;
+    function Submit() {
+        if (address != null) {
+            parent.UpdateLocation(usernumber, address.Province, address.City, address.District, address.Street, address.DetailName, address.CityCode, address.Latitude, address.Longitude);
+        }
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
     }
 </script>
