@@ -568,7 +568,7 @@
                     type: 2,
                     area: ['1000px', '650px'],
                     content: 'Map',
-                    title: "用户定位",
+                    title: "文章定位",
                     scrollbar: false,
                     success: function (layero, index) {
                         var iframeWin = window[layero.find('iframe')[0]['name']];
@@ -599,9 +599,9 @@
         }
 
         //更新定位
-        function UpdateLocation(usernumber, province, city, district, street, detailname, citycode, latitude, longitude) {
+        function UpdateLocation(articlenumber, province, city, district, street, detailname, citycode, latitude, longitude) {
             var data = {
-                UserNumber: usernumber,
+                ArticleNumber: articlenumber,
                 Province: province,
                 City: city,
                 District: district,
