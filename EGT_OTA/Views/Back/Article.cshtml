@@ -2,6 +2,7 @@
 @using EGT_OTA.Models
 @section Styles{
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/swiper/swiper.min.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/animate.min.css")" />
     <style type="text/css">
         .swiper-slide {
             width: auto;
@@ -126,6 +127,23 @@
                             <li><a href="#" onclick="change(7,'filter_articletype','影评')" class="ddl_filter_articletype" index="7">生活</a></li>
                             <li><a href="#" onclick="change(9,'filter_articletype','游戏')" class="ddl_filter_articletype" index="9">萌宠</a></li>
                             <li><a href="#" onclick="change(10000,'filter_articletype','其他')" class="ddl_filter_articletype" index="10000">其他</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="el-form-item inline fl mr15">
+                <div class="el-form-item__content inline fl">
+                    <div class="btn-group">
+                        <button id="template" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
+                            模板类型
+                                                  <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu tc">
+                            <li><a href="#" onclick="change(-1,'template','模板类型')" class="ddl_template" index="-1">模板类型</a></li>
+                            <li><a href="#" onclick="change(0,'template','默认模板')" class="ddl_template" index="0">默认模板</a></li>
+                            <li><a href="#" onclick="change(1,'template','自定义模板')" class="ddl_template" index="1">自定义模板</a></li>
+                            <li><a href="#" onclick="change(2,'template','系统模板')" class="ddl_template" index="2">系统模板</a></li>
                         </ul>
                     </div>
                 </div>
@@ -319,6 +337,7 @@
             $(".ddl_articlepower[index=" + parseInt(@(ViewBag.articlepower)) + "]").eq(0).trigger("click");
             $(".ddl_recommend[index=" + parseInt(@(ViewBag.recommend)) + "]").eq(0).trigger("click");
             $(".ddl_filter_articletype[index=" + parseInt(@(ViewBag.articletype)) + "]").eq(0).trigger("click");
+            $(".ddl_template[index=" + parseInt(@(ViewBag.template)) + "]").eq(0).trigger("click");
 
             var currentIndex = parseInt(@(ViewBag.CurrPage));
             var recordCount = parseInt(@(ViewBag.RecordCount));
@@ -348,7 +367,8 @@
                             submission: $("#submission").attr("index"),
                             recommend: $("#recommend").attr("index"),
                             articlepower: $("#articlepower").attr("index"),
-                            articletype: $("#filter_articletype").attr("index")
+                            articletype: $("#filter_articletype").attr("index"),
+                            template: $("#template").attr("index")
                         }
                         window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
                     }
@@ -366,7 +386,8 @@
                     submission: $("#submission").attr("index"),
                     recommend: $("#recommend").attr("index"),
                     articlepower: $("#articlepower").attr("index"),
-                    articletype: $("#filter_articletype").attr("index")
+                    articletype: $("#filter_articletype").attr("index"),
+                    template: $("#template").attr("index")
                 }
                 window.location.href = "@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
             })

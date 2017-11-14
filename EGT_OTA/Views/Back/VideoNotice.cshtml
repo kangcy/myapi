@@ -1,0 +1,55 @@
+﻿@using EGT_OTA.Models
+@{
+    Layout = null;
+}
+@inherits System.Web.Mvc.WebViewPage
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="format-detection" content="telephone = no" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/mui.min.css")"  />
+</head>
+<body>
+    <div id="wrapper" style="overflow: hidden;">
+        <div class="container">
+            <div class="row">
+                <div id="scroll-view" style="overflow-x:hidden;">
+                    <div class="full" style="padding:20px;line-height:1.2rem;">
+                        <p class="c333 mt10 mb10">在添加视频的时候，若没有“优酷”账号，可以直接使用视频地址添加视频</p>
+                        <p class="c333 mt10 mb10">1、在“优酷”里打开需要的视频内容，在分享里选择分享到“QQ”。</p>
+                        <div class="full tc">
+                            <img src="@(Url.Content("~/Images/Source/video/1.png"))" />
+                        </div>
+                        <p class="c333 mt10 mb10">2、再从“QQ”里打开视频，在右上角点分享后选择“复制链接”。</p>
+                        <div class="full tc">
+                            <img src="@(Url.Content("~/Images/Source/video/2.png"))" />
+                        </div>
+                        <p class="c333 mt10 mb10">3、把复制的链接贴入“小微篇视频网址输入框”就可以载入优酷视频。</p>
+                        <div class="full tc">
+                            <img src="@(Url.Content("~/Images/Source/video/3.png"))" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-layer-btn" style="padding-bottom:20px;"><a class="layui-layer-btn0" onclick="Confirm()">我知道了</a></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
+<script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    function Confirm() {
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+</script>

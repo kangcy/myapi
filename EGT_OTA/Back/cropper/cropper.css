@@ -291,3 +291,13 @@
 .cropper-disabled .cropper-point {
     cursor: not-allowed;
 }
+
+.cropper-canvas.nofull {
+    left: 0px !important;
+    width: 100% !important;
+}
+
+.cropper-canvas.full {
+    top: 0px !important;
+    height: 100% !important;
+}

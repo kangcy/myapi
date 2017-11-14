@@ -1,0 +1,55 @@
+﻿@using EGT_OTA.Models
+@{
+    Layout = null;
+}
+@inherits System.Web.Mvc.WebViewPage
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="format-detection" content="telephone = no" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/mui.min.css")"  />
+</head>
+<body>
+    <div id="wrapper" style="overflow: hidden;">
+        <div class="container">
+            <div class="row">
+                <div id="scroll-view">
+                </div>
+                <div class="layui-layer-btn" style="padding-top:20px;"><a class="layui-layer-btn0" onclick="Confirm()">关闭</a></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
+<script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/video.js")" type="text/javascript"></script>
+<script src="http://player.youku.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    $(document).ready(function () {
+        layer.iframeAuto(index);//自适应Iframe
+    })
+
+    function Init(url) {
+        //url ="http://v.youku.com/v_show/id_XMzE1Mzg4NjM0OA==.html?spm=a2hww.20027244.m_250036.5~5!2~5~5!3~5~5~A&f=51319297"
+        //url = "XMzE1Mzg4NjM0OA==";
+        $("#scroll-view").html(AppendVideo(url));
+        $.each($(".youku_player"), function (index, item) {
+            ShowVideo(item.getAttribute("id"), item.getAttribute("sid"));
+        });
+    }
+
+    function Confirm() {
+        parent.layer.close(index);
+    }
+</script>

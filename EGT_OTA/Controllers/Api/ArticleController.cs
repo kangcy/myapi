@@ -40,6 +40,10 @@ namespace EGT_OTA.Controllers.Api
                 {
                     model = new Article();
                     model.CreateDateText = DateTime.Now.ToString("yyyy-MM-dd");
+                    model.Number = BuildNumber();
+                    model.Recommend = Enum_ArticleRecommend.None;
+                    model.ArticlePower = Enum_ArticlePower.Myself;
+                    model.Submission = Enum_Submission.TemporaryApproved;
                 }
                 else
                 {

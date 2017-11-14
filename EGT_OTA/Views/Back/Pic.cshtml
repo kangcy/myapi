@@ -283,7 +283,6 @@
         }, function (data) {
             if (data != null) {
                 if (data.result) {
-                    //var url = "@(ViewBag.RootUrl)" + data.message;
                     var url = data.message;
                     parent.AddPic((PartID == 0 ? base.GetUid() : PartID), url, PartID);
                     parent.layer.close(index);
@@ -291,6 +290,7 @@
                     layer.msg(data.message);
                 }
             }
+            layer.closeAll('loading');
         });
     }
 

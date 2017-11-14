@@ -241,10 +241,10 @@ namespace EGT_OTA.Controllers.Api
             try
             {
                 var list = new List<Background>();
-                var number = ZNRequest.GetString("ArticleNumber");
-                if (!string.IsNullOrWhiteSpace(number))
+                var articlenumber = ZNRequest.GetString("ArticleNumber");
+                if (!string.IsNullOrWhiteSpace(articlenumber))
                 {
-                    list = db.Find<Background>(x => x.ArticleNumber == number).OrderByDescending(x => x.IsUsed).ToList();
+                    list = db.Find<Background>(x => x.ArticleNumber == articlenumber).OrderByDescending(x => x.IsUsed).ToList();
                 }
                 result.result = true;
                 result.message = list;

@@ -415,10 +415,12 @@
     <Content Include="Back\Images\next.png" />
     <Content Include="Back\Images\off.png" />
     <Content Include="Back\Images\on.png" />
+    <Content Include="Back\Images\poster.png" />
     <Content Include="Back\Images\prev.png" />
     <Content Include="Back\Images\start.png" />
     <Content Include="Back\Images\stop.png" />
     <Content Include="Back\Images\title.png" />
+    <Content Include="Back\Images\video.png" />
     <Content Include="Back\jquery.myPagination5.0.js" />
     <Content Include="Back\layer\extend\layer.ext.js" />
     <Content Include="Back\layer\layer.js" />
@@ -972,12 +974,12 @@
     <Content Include="Config\dirtyword.config" />
     <Content Include="Config\common.config" />
     <Content Include="Config\PanGu.config" />
+    <Content Include="Config\musicsearch.config" />
     <Content Include="Config\Music\music0.config" />
     <Content Include="Config\Music\music1.config" />
     <Content Include="Config\Music\music2.config" />
     <Content Include="Config\Music\music3.config" />
     <Content Include="Config\Music\music4.config" />
-    <Content Include="Config\musicsearch.config" />
     <None Include="Config\redis.json" />
     <Content Include="Config\upload.config" />
     <Content Include="Log\error\20170117" />
@@ -1115,6 +1117,7 @@
     <Content Include="Scripts\group.min.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\mui.min.js" />
     <Content Include="Scripts\music.js" />
     <Content Include="Scripts\nugetexample.js" />
@@ -1124,6 +1127,15 @@
     <Content Include="Scripts\swiper\swiper.animate1.0.2.min.js" />
     <Content Include="Scripts\swiper\swiper.min.css" />
     <Content Include="Scripts\swiper\swiper.min.js" />
+    <Content Include="Scripts\uploadify\cancel.png" />
+    <Content Include="Scripts\uploadify\jquery.uploadify.js" />
+    <Content Include="Scripts\uploadify\jquery.uploadify.min.js" />
+    <Content Include="Scripts\uploadify\select.jpg" />
+    <Content Include="Scripts\uploadify\upload.png" />
+    <Content Include="Scripts\uploadify\uploadify-cancel.png" />
+    <Content Include="Scripts\uploadify\uploadify.css" />
+    <Content Include="Scripts\uploadify\uploadify.swf" />
+    <Content Include="Scripts\video.js" />
     <Content Include="System\Video\1.png" />
     <Content Include="System\Video\2.png" />
     <Content Include="System\Video\3.png" />
@@ -1162,6 +1174,16 @@
     <Content Include="Views\Back\Showy.cshtml" />
     <Content Include="Views\Back\AddBase.cshtml" />
     <Content Include="Views\Back\Map.cshtml" />
+    <Content Include="Views\Back\CustomSetting.cshtml" />
+    <Content Include="Views\Back\EditVideo.cshtml" />
+    <Content Include="Views\Back\VideoNotice.cshtml" />
+    <Content Include="Views\Back\VideoPreview.cshtml" />
+    <Content Include="Scripts\uploadify\check-exists.php" />
+    <Content Include="Scripts\uploadify\index.php" />
+    <Content Include="Scripts\uploadify\Upload2Handler.ashx" />
+    <Content Include="Scripts\uploadify\UploadHandler.ashx" />
+    <Content Include="Scripts\uploadify\uploadify.php" />
+    <Content Include="Views\Back\Custom.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

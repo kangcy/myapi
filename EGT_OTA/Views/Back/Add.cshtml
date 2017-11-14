@@ -309,6 +309,7 @@
         }
 
         .root {
+            width: 100%;
             height: 100%;
             position: relative;
             z-index: 0;
@@ -579,7 +580,7 @@
                                     <li><a href="#" onclick="change(3,'filter_articlepower','公开')" class="ddl_filter_articlepower" index="3">公开</a></li>
                                     <li><a href="#" onclick="change(2,'filter_articlepower','限制可见')" class="ddl_filter_articlepower" index="2">限制可见</a></li>
                                     <li><a href="#" onclick="change(1,'filter_articlepower','密码可见')" class="ddl_filter_articlepower" index="1">密码可见</a></li>
-                                    <li><a href="#" onclick="change(0,'filter_articlepower','私密')" class="ddl_filter_articlepower" index="1">私密</a></li>
+                                    <li><a href="#" onclick="change(0,'filter_articlepower','私密')" class="ddl_filter_articlepower" index="0">私密</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -666,7 +667,7 @@
                                 <img id="useravatar0" src="../images/avatar.png" class="user">
                             </div>
                         </div>
-                        <div class="article-meta well2 mt10 tc" id="x-article">
+                        <div class="article-meta well2 full mt10 tc" id="x-article">
                             <p class="article-title thicker f20" id="title0" contenteditable="true"></p>
                             <p class="time-read mt10 f13">
                                 <span id="createdate0"></span>
@@ -785,7 +786,7 @@
                 <!--下一步-->
                 <div class="menu fl" id="menuNext"></div>
                 <!--超链接-->
-                <div class="menu" data-type="CreateLink" id="menuLink"></div>
+                <div class="menu hide" data-type="CreateLink" id="menuLink"></div>
                 <!--背景颜色-->
                 <div class="menu" id="menuBgColor"></div>
                 <!--字体颜色-->
@@ -1153,7 +1154,7 @@
     var title = base.Get("title");
 
     $(document).ready(function () {
-        $("#edittitle").html(ArticleID == 0 ? "新增" : "编辑");
+        $("#edittitle").html(ArticleID == 0 ? "新增" : "保存");
 
         base.Get("box").style.marginLeft = (window.innerWidth - 400) / 2 + "px";
         Load();
@@ -1208,9 +1209,18 @@
             } else if (type == "video") {
                 //视频预览
                 var src = this.getAttribute("src");
-                base.OpenWindow("videoreview", "videoreview.html", {
-                    Url: src
+                layer.open({
+                    type: 2,
+                    area: ['500px', '650px'],
+                    content: 'VideoPreview',
+                    title: "视频预览",
+                    scrollbar: false,
+                    success: function (layero, index) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.Init(src);
+                    }
                 });
+
             } else if (type == "line") {
                 ShowLine();
             }
@@ -1260,8 +1270,12 @@
         $('#edit').on('click', '.edit-add-video', function () {
             $("#edit").find(".icons").addClass("hide");
             $("#edit").find(".edit-add").removeClass("hide");
-            base.OpenWindow("editvideo", "editvideo.html", {
-                ArticleNumber: Article.Number
+            layer.open({
+                type: 2,
+                area: ['500px', '650px'],
+                content: 'EditVideo',
+                title: "视频编辑",
+                scrollbar: false
             });
         });
 
@@ -1532,6 +1546,24 @@
         });
     }
 
+    //添加视频
+    function AddVideo(partid, url) {
+        InsertAfter(initStr(url, "video", partid, ""), base.Get(currEditID).parentNode);
+
+        $("#edit").find(".icons").addClass("hide");
+        $("#edit").find(".edit-add").removeClass("hide");
+        InitGroup();
+
+        /*$(".youku_player").each(function() {
+			var $this = $(this);
+			ShowVideo($this.attr("id"), $this.attr("sid"));
+		});*/
+
+        //同步原始段落信息	
+        InitParts.push(new PartModel(base.GetUid(), url, "", 1, 0, 3, 1));
+    }
+
+
     //音乐搜索
     function ShowMusic() {
         layer.open({
@@ -1579,7 +1611,7 @@
         } else if (type == "text") {
             model.push('<div class="edit-content edit-content2 full f11 tl" type="' + type + '" partid="' + partid + '">' + base.UnUnicodeText(text) + '</div>');
         } else if (type == "video") {
-            model.push('<div class="edit-content edit-content2 f11 full tc" type="' + type + '" partid="' + partid + '" src="' + text + '"><img src="../images/article/video.png" /></div>');
+            model.push('<div class="edit-content edit-content2 f11 full tc" type="' + type + '" partid="' + partid + '" src="' + text + '"><img src="../Back/Images/video.png" /></div>');
         } else if (type == "line") {
             model.push('<div class="edit-content edit-content2 full f11" type="' + type + '" partid="' + partid + '">' + text + '</div>');
         }
@@ -1707,6 +1739,9 @@
                     $("#div_articlepowerpwd").removeClass("hide");
                 }
                 $(".ddl_filter_articlepower[index=" + data.ArticlePower + "]").eq(0).trigger("click");
+                if (data.TypeID == 0) {
+                    data.TypeID = 10000;
+                }
                 $(".ddl_filter_articletype[index=" + data.TypeID + "]").eq(0).trigger("click");
                 $("#articlepowerpwd").val(data.ArticlePowerPwd);
                 base.Get("musicname0").innerHTML = data.MusicName;
@@ -2067,8 +2102,16 @@
                             base.RemoveClass([".background"], "hover");
                             this.classList.add("hover");
                             if (parseInt(this.getAttribute("tid")) == 1) {
-                                base.OpenWindow("customsetting", "customsetting.html", {
-                                    ArticleNumber: Article.Number
+                                layer.open({
+                                    type: 2,
+                                    area: ['500px', '750px'],
+                                    content: 'CustomSetting',
+                                    title: "自定义",
+                                    scrollbar: false,
+                                    success: function (layero, index) {
+                                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                                        iframeWin.Init(Article.Number, "@(ViewBag.UserID)", "@(ViewBag.UserNumber)");
+                                    }
                                 });
                                 IconTan(1, false);
                                 return;
@@ -2132,6 +2175,38 @@
                 }
             }
         });
+    }
+
+    //确认模板
+    function ChooseTan(callback) {
+        if (isLoading) {
+            return;
+        }
+        isLoading = true;
+        IconTan(1, false);
+        base.RemoveClass([".background"], "hover");
+        if ($(".background[tid='" + CurrTemplate + "']").length > 0) {
+            $(".background[tid='" + CurrTemplate + "']").addClass("hover");
+        }
+        if (callback) {
+            callback();
+        }
+        isLoading = false;
+    }
+
+    //重新加载数据 
+    function Reload(model) {
+        CurrTemplate = 1;
+        CurrBackground = JSON.parse(model);
+        ChooseTan(function () {
+            ChangeBg();
+        });
+        base.Get("title0").style.color = "#333";
+        base.Get("nickname0").style.color = "#20a0ff";
+        base.Get("nickname1").style.color = "#20a0ff";
+        base.Get("createdate0").style.color = "#8C8C8C";
+        base.Get("views0").style.color = "#8C8C8C";
+        base.Get("x-avatar-sub").style.border = "2px solid #333";
     }
 
     function change(val, id, name) {

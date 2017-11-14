@@ -176,6 +176,19 @@ namespace EGT_OTA.Controllers
             {
                 query = query.And("TypeID").IsEqualTo(articletype);
             }
+            var template = ZNRequest.GetInt("template", -1);
+            if (template > -1)
+            {
+                if (template == 2)
+                {
+                    query = query.And("Template").IsGreaterThanOrEqualTo(template);
+                }
+                else
+                {
+                    query = query.And("Template").IsEqualTo(template);
+                }
+            }
+
             var recordCount = query.GetRecordCount();
             var list = query.Paged(pager.Index, pager.Size).OrderDesc("ID").ExecuteTypedList<Article>();
 
@@ -210,6 +223,7 @@ namespace EGT_OTA.Controllers
             ViewBag.submission = submission;
             ViewBag.recommend = recommend;
             ViewBag.articlepower = articlepower;
+            ViewBag.template = template;
             ViewBag.RecordCount = recordCount;
             ViewBag.CurrPage = pager.Index;
             ViewBag.PageSize = pager.Size;
@@ -1233,6 +1247,51 @@ namespace EGT_OTA.Controllers
         /// 高德地图
         /// </summary>
         public ActionResult Map()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
+        /// <summary>
+        /// 自定义
+        /// </summary>
+        public ActionResult Custom()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
+        /// <summary>
+        /// 自定义
+        /// </summary>
+        public ActionResult CustomSetting()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
+        /// <summary>
+        /// 视频
+        /// </summary>
+        public ActionResult EditVideo()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
+        /// <summary>
+        /// 视频
+        /// </summary>
+        public ActionResult VideoNotice()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
+        /// <summary>
+        /// 视频预览
+        /// </summary>
+        public ActionResult VideoPreview()
         {
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             return View();

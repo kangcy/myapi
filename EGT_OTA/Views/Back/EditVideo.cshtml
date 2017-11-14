@@ -1,0 +1,148 @@
+﻿@using EGT_OTA.Models
+@{
+    Layout = null;
+}
+@inherits System.Web.Mvc.WebViewPage
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8" />
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="format-detection" content="telephone = no" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/mui.min.css")"  />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/animate.min.css")"  />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/uploadify/uploadify.css")"  />
+    <style type="text/css">
+        body {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper" style="overflow: hidden;">
+        <div class="container">
+            <div class="row">
+                <div id="scroll-view" style="overflow-x: hidden;">
+                    <div class="mui-content" id="muicontent">
+                        <ul class="mui-table-view f13 mt0">
+                            <li class="mui-table-view-cell tc">
+                                <p class="f18 c333 mt20">小微篇支持导入(优酷)视频</p>
+                                <p class="f13 blue mt10 mb10" onclick="Notice()" style="cursor: pointer;">如何获取视频网页地址?</p>
+                            </li>
+                            <li class="mui-table-view-cell hide" id="apply">
+                                <p class="f13 c333">有优酷账号</p>
+                                <p class="f11 blue mt5">可以导入账号下收藏和上传的视频</p>
+                            </li>
+                            <li class="mui-table-view-cell" id="addurl" onclick="ActionTan(1)">
+                                <p class="f13 c333">没有优酷账号</p>
+                                <p class="f11 blue mt5">从优酷视频网页地址导入</p>
+                            </li>
+                            <li class="mui-table-view-cell hide">
+                                <p class="f13 c333">本地视频导入</p>
+                                <p class="f11 blue mt5">用户自定义5M短视频</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mytanbg hide" id="mytanbg"></div>
+                    <div class="boxshadow hide" id="notice" style="position: fixed; bottom: 35%; left: 5%; width: 90%; z-index: 99999; background: #fff;">
+                        <div style="padding: 30px; padding-bottom: 15px;">
+                            <textarea id='url' class="mui-input-clear f12 mb0" placeholder="请粘贴优酷视频播放页面地址" maxlength="250" style="min-height: 10rem;"></textarea>
+                        </div>
+                        <div class="full" style="height: 2.5rem; line-height: 2.5rem; position: relative; border-top: 1px solid #eee;">
+                            <div style="width: 50%; cursor: pointer;" class="tc fl f13" onclick="NotAgree(0)">取消</div>
+                            <div style="width: 50%; cursor: pointer;" class="tc fl f13" onclick="Confirm()">确定</div>
+                            <div style="width: 1px; height: 100%; border-left: 1px solid #eee; position: absolute; left: 50%; bottom: 0px;"></div>
+                        </div>
+                    </div>
+                    <!--视频同步进度条-->
+                    <div class="mytanbg hide" id="myprogressbg"></div>
+                    <div class="myprogress hide" id="myprogress">
+                        <div class="tc c000 myaction_body">
+                            <ul class="mui-table-view f13" style="border-radius: 10px;">
+                                <li class="mui-table-view-cell">
+                                    <p class="full tl mb10 c333" id="checkupdate">正在上传视频文件</p>
+                                    <progress class="fl" value="" max="" id="proDownFile" style="width: 80%;"></progress>
+                                    <span class="persent fl ml10 caaa" id="persent" style="line-height: 1rem;">0%</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="@Url.Content("~/Scripts/jquery.js")"></script>
+<script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    var isLoading = false;
+    $(function () {
+        
+    })
+
+    function Confirm() {
+        if (isLoading) {
+            return false;
+        }
+        isLoading = true;
+        var url = $("#url").val().trim();
+        if (url == "") {
+            layer.msg('请粘贴优酷视频播放页面地址');
+            isLoading = false;
+            return;
+        }
+        var urls = url.split("?");
+        if (urls.length == 0) {
+            layer.msg("视频路径不正确");
+            return;
+        }
+        url = urls[0];
+        urls = url.split("/");
+        if (urls.length == 0) {
+            layer.msg("视频路径不正确");
+            return;
+        }
+        url = urls[urls.length - 1];
+        url = url.replace("id_", "");
+        url = url.replace(".html", "");
+        parent.AddVideo(new Date().getTime().toString(), url);
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+    function NotAgree() {
+        ActionTan(0);
+        isLoading = false;
+    }
+
+    function Notice() {
+        layer.open({
+            type: 2,
+            area: ['450px', '450px'],
+            content: 'VideoNotice',
+            title: "如何获取视频网页地址",
+            scrollbar: false,
+            closeBtn: 0
+        });
+    }
+
+    //操作弹窗
+    function ActionTan(index) {
+        var notice = $("#notice");
+        if (index == 0) {
+            $("#mytanbg").addClass("hide");
+            notice.removeClass("bounceIn").addClass("bounceOut");
+        } else {
+            $("#mytanbg").removeClass("hide");
+            notice.removeClass("hide").removeClass("bounceOut").addClass("bounceIn");
+        }
+    }
+</script>
