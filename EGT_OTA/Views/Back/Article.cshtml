@@ -260,11 +260,14 @@
                                             {
                                                 <button type="button" class="el-button el-button--warning el-button--small btnRecommend" index="@list[i].ID" status="@Enum_ArticleRecommend.None"><span>取消推荐</span></button>
                                             }
-@*@if ((list[i].Submission == Enum_Submission.Approved || list[i].Submission == Enum_Submission.TemporaryApproved) && list[i].ArticlePower == Enum_ArticlePower.Public && list[i].Status == Enum_Status.Approved)
-                                {
-                                    <button type="button" class="el-button el-button--success el-button--small btnEdit" index="@list[i].ID" typeid="@list[i].TypeID"><span>编辑</span></button>
-                                }*@
-                                            <button type="button" class="el-button el-button--success el-button--small" index="@list[i].ID" typeid="@list[i].TypeID" onclick="Edit(@list[i].ID)"><span>编辑</span></button>
+                                            @if ((list[i].Submission == Enum_Submission.Approved || list[i].Submission == Enum_Submission.TemporaryApproved) && list[i].ArticlePower == Enum_ArticlePower.Public && list[i].Status == Enum_Status.Approved)
+                                            {
+                                                <button type="button" class="el-button el-button--success el-button--small btnEdit" index="@list[i].ID" typeid="@list[i].TypeID"><span>分类</span></button>
+                                            }
+                                            @if (list[i].CreateUserNumber == ViewBag.xwp)
+                                            {
+                                                <button type="button" class="el-button el-button--success el-button--small" index="@list[i].ID" typeid="@list[i].TypeID" onclick="Edit(@list[i].ID)"><span>编辑</span></button>
+                                            }
                                             <button type="button" class="el-button el-button--success el-button--small btnLocation" index="@list[i].Number"><span>更新定位</span></button>
                                         </td>
                                     </tr>
@@ -287,16 +290,15 @@
                                                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu tc">
-                    <li><a href="#" onclick="change(1,'articletype','旅游')" class="ddl_articletype" index="1">旅游</a></li>
-                    <li><a href="#" onclick="change(2,'articletype','美食')" class="ddl_articletype" index="2">美食</a></li>
+                    <li><a href="#" onclick="change(1,'articletype','旅行')" class="ddl_articletype" index="1">旅行</a></li>
                     <li><a href="#" onclick="change(3,'articletype','亲子')" class="ddl_articletype" index="3">亲子</a></li>
-                    <li><a href="#" onclick="change(4,'articletype','美妆')" class="ddl_articletype" index="4">美妆</a></li>
                     <li><a href="#" onclick="change(5,'articletype','女神')" class="ddl_articletype" index="5">女神</a></li>
-                    <li><a href="#" onclick="change(6,'articletype','摄影')" class="ddl_articletype" index="6">摄影</a></li>
-                    <li><a href="#" onclick="change(7,'articletype','生活')" class="ddl_articletype" index="7">生活</a></li>
+                    <li><a href="#" onclick="change(2,'articletype','美食')" class="ddl_articletype" index="2">美食</a></li>
                     <li><a href="#" onclick="change(8,'articletype','萌宠')" class="ddl_articletype" index="8">萌宠</a></li>
-                    <li><a href="#" onclick="change(9,'articletype','游戏')" class="ddl_articletype" index="9">游戏</a></li>
                     <li><a href="#" onclick="change(10,'articletype','二次元')" class="ddl_articletype" index="10">二次元</a></li>
+                    <li><a href="#" onclick="change(7,'articletype','影评')" class="ddl_articletype" index="7">影评</a></li>
+                    <li><a href="#" onclick="change(9,'articletype','游戏')" class="ddl_articletype" index="9">游戏</a></li>
+                    <li><a href="#" onclick="change(10000,'articletype','其他')" class="ddl_articletype" index="10000">其他</a></li>
                 </ul>
             </div>
         </div>
