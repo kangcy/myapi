@@ -551,6 +551,7 @@
 		if(!base.IsNullOrEmpty(MusicUrl)) {
 			if(Article.AutoMusic == 1) {
 				document.addEventListener('touchstart', startsound);
+				document.addEventListener('click', startsound);
 			}
 			base.Get("music" + (CurrTemplate == 0 ? 0 : 1)).classList.remove("hide");
 		}
