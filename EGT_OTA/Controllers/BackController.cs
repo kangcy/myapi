@@ -1208,6 +1208,15 @@ namespace EGT_OTA.Controllers
             var id = ZNRequest.GetInt("id");
             var number = ZNRequest.GetString("xwp");
             var user = db.Single<User>(x => x.Number == number);
+
+            //我的关联账号
+            var users = db.Find<User>(x => x.RelatedNumber == number).ToList();
+            users.ForEach(x =>
+            {
+                x.NickName = BaseHelper.FilterEmoji(x.NickName);
+            });
+            ViewBag.Users = users;
+
             ViewBag.NickName = user.NickName;
             ViewBag.Avatar = user.Avatar;
             ViewBag.UserNumber = user.Number;
@@ -1306,7 +1315,6 @@ namespace EGT_OTA.Controllers
         [BackPower]
         public ActionResult AddComment()
         {
-            //我的关联账号
             var number = ZNRequest.GetString("xwp");
             var users = db.Find<User>(x => x.RelatedNumber == number).ToList();
             users.ForEach(x =>
@@ -1315,6 +1323,18 @@ namespace EGT_OTA.Controllers
             });
             ViewBag.Users = users;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
+        /// <summary>
+        /// 关联账号注册
+        /// </summary>
+        [BackPower]
+        public ActionResult TemporaryReg()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
             return View();
         }
 

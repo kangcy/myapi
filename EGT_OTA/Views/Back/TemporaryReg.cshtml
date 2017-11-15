@@ -1,0 +1,178 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<head>
+    <title>小微篇管理后台</title>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/bootstrap.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/login.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")"  />
+</head>
+<body>
+    <div id="wrapper">
+        <div id="page-content-wrapper" style="margin-top: 200px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-lg-offset-4">
+                        <div class="el-card box-card">
+                            <div class="el-card__header">
+                                <div class="clearfix">
+                                    <div class="el-form-item inline fl full">
+                                        <div class="el-form-item__content">
+                                            <div class="el-input el-input--small">
+                                                <input id="name" placeholder="昵称" size="small" type="text" class="el-input__inner" maxlength="20">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="el-form-item inline fl full">
+                                        <div class="el-form-item__content">
+                                            <div class="el-input el-input--small">
+                                                <input id="phonemodel" placeholder="机型" size="small" type="text" class="el-input__inner" maxlength="20">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="el-form-item inline fl full">
+                                        <div class="el-form-item__content">
+                                            <div class="el-input el-input--small">
+                                                <input id="address" placeholder="定位" size="small" type="text" class="el-input__inner" style="width: 80%; display: inline-block;" maxlength="100" disabled="disabled">
+                                                <span class="f13 fr" style="text-decoration: underline; cursor: pointer; color: #0080ff;" id="position">获取定位</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="el-form-item inline fl full">
+                                        <div class="el-form-item__content">
+                                            <div class="el-input el-input--small" style="position: relative;">
+                                                <input id="code" placeholder="验证码" size="small" type="text" class="el-input__inner" style="width: 80%; display: inline-block;" maxlength="4">
+                                                <div style="height: 2rem; display: inline-block;" class="fr mt20 tr">
+                                                    <img id="btnCode" src="../images/loading.gif" style="height: 2rem; position: absolute; right: -1rem; top: 0px; width: 4rem; margin-top: 0.2rem;" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="el-form-item inline fl">
+                                        <button type="button" class="el-button el-button--primary" id="btnLogin">
+                                            <span>注册</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
+<script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/base.min.js")"></script>
+<script type="text/javascript">
+    var isloading = false;
+    var $btnCode = $("#btnCode");
+    var Province = "";
+    var City = "";
+    var District = "";
+    var Street = "";
+    var DetailName = "";
+    var CityCode = "";
+    var Latitude = "";
+    var Longitude = "";
+    $(document).ready(function () {
+        $btnCode.attr("src", "@(ViewBag.RootUrl)System/Validate?rn=" + base.GetUid());
+        $btnCode.click(function (event) {
+            base.Get('code').value = "";
+            $btnCode.attr("src", "@(ViewBag.RootUrl)System/Validate?rn=" + base.GetUid());
+        });
+
+        //重新定位
+        $("#position").click(function () {
+            var $this = $(this);
+            layer.open({
+                id: "map",
+                type: 2,
+                area: ['1000px', '650px'],
+                content: 'Map',
+                title: "用户定位",
+                scrollbar: false,
+                success: function (layero, index) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    iframeWin.Init("");
+                }
+            });
+        })
+
+        $("#btnLogin").click(function () {
+            if (isloading) {
+                return;
+            }
+            isloading = true;
+
+            var name = $("#name").val().trim();
+            if (base.IsNullOrEmpty(name)) {
+                layer.msg("请输入昵称");
+                isloading = false;
+                return;
+            }
+            var phonemodel = $("#phonemodel").val().trim();
+            if (base.IsNullOrEmpty(phonemodel)) {
+                layer.msg("请输入手机机型");
+                isloading = false;
+                return;
+            }
+            var address = $("#address").val().trim();
+            if (base.IsNullOrEmpty(address)) {
+                layer.msg("请设置用户定位");
+                isloading = false;
+                return;
+            }
+            var code = $("#code").val().trim();
+            if (base.IsNullOrEmpty(code)) {
+                layer.msg("请输入验证码");
+                isloading = false;
+                return;
+            }
+            $.ajax({
+                url: "@(ViewBag.RootUrl)User/TemporaryRegister",
+                data: {
+                    NickName: name,
+                    Number: "@(ViewBag.xwp)",
+                    Code: code,
+                    PhoneModel: phonemodel,
+                    Province: Province,
+                    City: City,
+                    District: District,
+                    Street: Street,
+                    DetailName: DetailName,
+                    CityCode: CityCode,
+                    Latitude: Latitude,
+                    Longitude: Longitude
+                },
+                dataType: "json",
+                success: function (data) {
+                    isloading = false;
+                    layer.msg(data.result ? "注册成功，刷新用户列表查看" : data.message);
+                    if (data.result) {
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                }
+            });
+        })
+    });
+
+    //更新定位
+    function UpdateLocation(articlenumber, province, city, district, street, detailname, citycode, latitude, longitude) {
+        Province = province;
+        City = city;
+        District = district;
+        Street = street;
+        DetailName = detailname;
+        CityCode = citycode;
+        Latitude = parseFloat(latitude).toFixed(2);
+        Longitude = parseFloat(longitude).toFixed(2);
+        $("#address").val(Province + City + District + Street + DetailName)
+    }
+</script>

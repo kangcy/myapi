@@ -114,6 +114,7 @@
                                     <th class="cell">用户昵称(编号)</th>
                                     <th class="cell">个性签名</th>
                                     <th class="cell">性别</th>
+                                    <th class="cell">星座</th>
                                     <th class="cell">状态</th>
                                     <th class="cell">是否推荐</th>
                                     <th class="cell">机型</th>
@@ -164,6 +165,9 @@
                                         </td>
                                         <td class="cell">
                                             @EnumBase.GetDescription(typeof(Enum_Sex), @list[i].Sex)
+                                        </td>
+                                        <td class="cell">
+                                            @EnumBase.GetDescription(typeof(Enum_Star), @list[i].Star)
                                         </td>
                                         <td class="cell">
                                             @EnumBase.GetDescription(typeof(Enum_Status), @list[i].Status)

@@ -264,10 +264,11 @@
                                             {
                                                 <button type="button" class="el-button el-button--success el-button--small btnEdit" index="@list[i].ID" typeid="@list[i].TypeID"><span>分类</span></button>
                                             }
-                                            @if (list[i].CreateUserNumber == ViewBag.xwp)
+                                            @*@if (list[i].CreateUserNumber == ViewBag.xwp)
                                             {
                                                 <button type="button" class="el-button el-button--success el-button--small" index="@list[i].ID" typeid="@list[i].TypeID" onclick="Edit(@list[i].ID)"><span>编辑</span></button>
-                                            }
+                                            }*@
+                                            <button type="button" class="el-button el-button--success el-button--small" index="@list[i].ID" typeid="@list[i].TypeID" onclick="Edit(@list[i].ID)"><span>编辑</span></button>
                                             <button type="button" class="el-button el-button--primary el-button--small btnLocation" index="@list[i].Number"><span>更新定位</span></button>
                                             <button type="button" class="el-button el-button--success el-button--small btnAddComment" index="@list[i].Number"><span>添加评论</span></button>
                                             <button type="button" class="el-button el-button--success el-button--small btnComment" index="@list[i].Number"><span>查看评论</span></button>

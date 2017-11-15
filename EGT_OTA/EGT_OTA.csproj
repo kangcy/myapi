@@ -1189,6 +1189,7 @@
     <Content Include="Scripts\uploadify\uploadify.php" />
     <Content Include="Views\Back\Custom.cshtml" />
     <Content Include="Views\Back\AddComment.cshtml" />
+    <Content Include="Views\Back\TemporaryReg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

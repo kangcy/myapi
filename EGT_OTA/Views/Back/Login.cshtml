@@ -35,7 +35,7 @@
                                                 <input id="password" placeholder="用户密码" size="small" type="password" class="el-input__inner">
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="el-form-item inline fl ml15 mt15">
                                         <button type="button" class="el-button el-button--primary" id="btnLogin">
                                             <i class="el-icon-search"></i><span>登录</span></button>
@@ -52,26 +52,41 @@
 <script src="@Url.Content("~/Scripts/jquery-2.1.1.min.js")"></script>
 <script src="@Url.Content("~/Back/layer/layer.js")" type="text/javascript"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        var isloading = false;
+    var isloading = false;
 
-        //校验字符串是否为空
-        function IsNullOrEmpty(str) {
-            if (!str) {
-                return true;
-            }
-            if (str == "") {
-                return true;
-            }
-            if (str.toString().toLowerCase() == "null") {
-                return true;
-            }
-            if (str.toString().toLowerCase() == "undefined") {
-                return true;
-            }
-            return false;
+    //校验字符串是否为空
+    function IsNullOrEmpty(str) {
+        if (!str) {
+            return true;
         }
+        if (str == "") {
+            return true;
+        }
+        if (str.toString().toLowerCase() == "null") {
+            return true;
+        }
+        if (str.toString().toLowerCase() == "undefined") {
+            return true;
+        }
+        return false;
+    }
 
+    $(document).ready(function () {
+
+        //监听软键盘搜索键
+        $("#usernumber,#password").keydown(function (e) {
+            if (13 == e.keyCode) {
+                if ($("#usernumber").val().trim() == "") {
+                    layer.msg("请填写用户账号");
+                    return false;
+                }
+                if ($("#password").val().trim() == "") {
+                    layer.msg("请填写用户密码");
+                    return false;
+                }
+                $("#btnLogin").trigger("click");
+            }
+        });
 
         $("#btnLogin").click(function () {
             if (isloading) {

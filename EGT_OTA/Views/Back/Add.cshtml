@@ -568,14 +568,34 @@
         <div class="el-card__header">
             <div class="clearfix">
                 <div class="el-form-item inline full fl mt5">
-                    <div class="el-form-item inline fl" style="width: 50%;">
+                    <div class="el-form-item inline fl" style="width: 33.3%;">
                         <div class="el-form-item__content inline fl">
                             <div class="btn-group">
-                                <button id="filter_articlepower" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 170px;">
+                                <button id="ddl_user" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 110px;">
+                                    选择创建人
+                                                  <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu tc full">
+                                    <li><a href="#" onclick="change(-1,'template','选择创建人')" class="ddl_user" index="-1">选择创建人</a></li>
+                                    @{
+                                        var list = (List<User>)ViewBag.Users;
+                                        foreach (var x in list)
+                                        {
+                                        <li><a href="#" onclick="change(@(x.ID),'ddl_user','@(x.NickName)')" class="ddl_user" index="@(x.ID)" number="@(x.Number)">@(x.NickName)</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="el-form-item inline fl" style="width: 33.3%;">
+                        <div class="el-form-item__content inline fl">
+                            <div class="btn-group">
+                                <button id="filter_articlepower" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 120px;">
                                     请选择权限
                                                   <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu tc">
+                                <ul class="dropdown-menu tc full">
                                     <li><a href="#" onclick="change(-1,'filter_articlepower','请选择权限')" class="ddl_filter_articlepower" index="-1">请选择权限</a></li>
                                     <li><a href="#" onclick="change(3,'filter_articlepower','公开')" class="ddl_filter_articlepower" index="3">公开</a></li>
                                     <li><a href="#" onclick="change(2,'filter_articlepower','限制可见')" class="ddl_filter_articlepower" index="2">限制可见</a></li>
@@ -585,14 +605,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="el-form-item fr" style="width: 50%;">
+                    <div class="el-form-item fr" style="width: 33.3%;">
                         <div class="el-form-item__content inline fr">
                             <div class="btn-group">
-                                <button id="filter_articletype" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 170px;">
+                                <button id="filter_articletype" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 110px;">
                                     请选择分类
                                                   <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu tc">
+                                <ul class="dropdown-menu tc full">
                                     <li><a href="#" onclick="change(-1,'filter_articletype','请选择分类')" class="ddl_filter_articletype" index="-1">请选择分类</a></li>
                                     <li><a href="#" onclick="change(1,'filter_articletype','旅行')" class="ddl_filter_articletype" index="1">旅行</a></li>
                                     <li><a href="#" onclick="change(3,'filter_articletype','亲子')" class="ddl_filter_articletype" index="3">亲子</a></li>
@@ -1735,6 +1755,13 @@
                 CurrBackground = data.BackgroundJson;
 
                 ChangeBg();
+
+                $(".ddl_user[number=" + Article.CreateUserNumber + "]").eq(0).trigger("click");
+                if (ArticleID > 0) {
+
+                    $("#ddl_user").attr("disabled", "disabled")
+                }
+
                 if (Article.ArticlePower == 1) {
                     $("#div_articlepowerpwd").removeClass("hide");
                 }
@@ -2237,6 +2264,13 @@
             title = "我的小微篇"
         }
 
+        var userid = $("#ddl_user").attr("index");
+        if (userid < 0 && ArticleID == 0) {
+            layer.msg("请选择创建人");
+            isLoading = false;
+            return;
+        }
+
         var articlepower = $("#filter_articlepower").attr("index");
         var articletype = $("#filter_articletype").attr("index");
         if (articlepower < 0) {
@@ -2279,7 +2313,7 @@
         layer.load();
 
         var param = {
-            ID: "@(ViewBag.UserID)",
+            ID: userid,
             ArticleID: ArticleID,
             Title: escape(title),
             MusicID: MusicID,
