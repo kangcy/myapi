@@ -764,7 +764,7 @@ namespace EGT_OTA.Controllers
                         case 9: width = image.Width - copyImage.Width; height = image.Height - copyImage.Height; break;//右下
                     }
                     Graphics g = Graphics.FromImage(image);
-                    g.Clear(Color.Transparent);//清空画布并以透明背景色填充 
+                    //g.Clear(Color.Transparent);//清空画布并以透明背景色填充 
                     g.DrawImage(copyImage, new Rectangle(width, height, Convert.ToInt16(watermarkmodel.Width), Convert.ToInt16(watermarkmodel.Height)), 0, 0, copyImage.Width, copyImage.Height, GraphicsUnit.Pixel);
                     using (Font f = new Font("Verdana", 10))
                     {

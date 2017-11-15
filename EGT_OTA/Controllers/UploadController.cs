@@ -137,8 +137,6 @@ namespace EGT_OTA.Controllers
                             i++;
                             using (Bitmap Origninal = new Bitmap(ms))
                             {
-                                LogHelper.ErrorLoger.Error("111:" + Origninal.Width + "," + Origninal.Height + "," + mode.Width + "," + mode.Height + "," + mode.Mode);
-
                                 Bitmap returnBmp = new Bitmap(Origninal.Width, Origninal.Height);
                                 Graphics g = Graphics.FromImage(returnBmp);
                                 g.Clear(Color.Transparent);//清空画布并以透明背景色填充 
@@ -146,7 +144,6 @@ namespace EGT_OTA.Controllers
                                 g.Dispose();
                                 MakeThumbnail(user, (Image)returnBmp, mode, savePath + "\\" + filename.Replace(".", "_" + i + "."));
                             }
-
                         }
                     }
                 }
