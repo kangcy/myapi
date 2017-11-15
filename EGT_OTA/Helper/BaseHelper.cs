@@ -186,5 +186,35 @@ namespace EGT_OTA.Helper
             Htmlstring = HttpContext.Current.Server.HtmlEncode(Htmlstring).Trim();
             return Htmlstring;
         }
+
+        /// <summary>
+        /// 汉字转换为Unicode编码
+        /// </summary>
+        /// <param name="str">要编码的汉字字符串</param>
+        /// <returns>Unicode编码的的字符串</returns>
+        public static string ToUnicode(string str)
+        {
+            byte[] bts = Encoding.Unicode.GetBytes(str);
+            string r = "";
+            for (int i = 0; i < bts.Length; i += 2) r += "\\u" + bts[i + 1].ToString("x").PadLeft(2, '0') + bts[i].ToString("x").PadLeft(2, '0');
+            return r;
+        }
+
+        /// <summary>
+        /// 过滤文字中的表情
+        /// </summary>
+        public static string FilterEmoji(string str)
+        {
+            //MatchCollection mc = Regex.Matches(str, @"\\u([\w]{2})([\w]{2})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            //foreach (Match m in mc)
+            //{
+            //    str = str.Replace(m.Value, "");
+            //}
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return "";
+            }
+            return Regex.Replace(str, @"\\u([\w]{2})([\w]{2})", "");
+        }
     }
 }

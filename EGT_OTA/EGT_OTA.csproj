@@ -404,6 +404,8 @@
     <Content Include="Back\Images\btn_pic.png" />
     <Content Include="Back\Images\btn_up.png" />
     <Content Include="Back\Images\btn_x.png" />
+    <Content Include="Back\Images\dingwei.png" />
+    <Content Include="Back\Images\dingwei2.png" />
     <Content Include="Back\Images\e1.png" />
     <Content Include="Back\Images\e2.png" />
     <Content Include="Back\Images\e3.png" />
@@ -417,6 +419,7 @@
     <Content Include="Back\Images\on.png" />
     <Content Include="Back\Images\poster.png" />
     <Content Include="Back\Images\prev.png" />
+    <Content Include="Back\Images\smile.png" />
     <Content Include="Back\Images\start.png" />
     <Content Include="Back\Images\stop.png" />
     <Content Include="Back\Images\title.png" />
@@ -1185,6 +1188,7 @@
     <Content Include="Scripts\uploadify\UploadHandler.ashx" />
     <Content Include="Scripts\uploadify\uploadify.php" />
     <Content Include="Views\Back\Custom.cshtml" />
+    <Content Include="Views\Back\AddComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

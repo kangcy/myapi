@@ -149,10 +149,10 @@
                 </div>
             </div>
 
-            <div class="full mt5 fr">
+            <div class="fr mt5">
                 <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
                 <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
-                <button type="button" class="el-button el-button--success fr" onclick="Edit(0)"><span>新建</span></button>
+                <button type="button" class="el-button el-button--success fr" onclick="Edit(0)"><span>新建文章</span></button>
             </div>
         </div>
     </div>
@@ -268,7 +268,9 @@
                                             {
                                                 <button type="button" class="el-button el-button--success el-button--small" index="@list[i].ID" typeid="@list[i].TypeID" onclick="Edit(@list[i].ID)"><span>编辑</span></button>
                                             }
-                                            <button type="button" class="el-button el-button--success el-button--small btnLocation" index="@list[i].Number"><span>更新定位</span></button>
+                                            <button type="button" class="el-button el-button--primary el-button--small btnLocation" index="@list[i].Number"><span>更新定位</span></button>
+                                            <button type="button" class="el-button el-button--success el-button--small btnAddComment" index="@list[i].Number"><span>添加评论</span></button>
+                                            <button type="button" class="el-button el-button--success el-button--small btnComment" index="@list[i].Number"><span>查看评论</span></button>
                                         </td>
                                     </tr>
                                     }
@@ -599,6 +601,28 @@
                     }
                 });
             })
+
+            //添加评论
+            $(".btnAddComment").click(function () {
+                var $this = $(this);
+                layer.open({
+                    id: "map",
+                    type: 2,
+                    area: ['800px', '550px'],
+                    content: 'AddComment?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)',
+                    title: "添加评论",
+                    scrollbar: false,
+                    success: function (layero, index) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.Init($this.attr("index"), "", "");
+                    }
+                });
+            })
+
+            //查看评论
+            $(".btnComment").click(function () {
+                window.open("@(ViewBag.RootUrl)" + "Back/Comment?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&articlenumber=" + $(this).attr("index"));
+            })
         });
 
         //编辑
@@ -609,16 +633,14 @@
                 area: ['550px', '900px'],
                 content: "Add?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&id=" + id,
                 title: "文章编辑",
-                scrollbar: false,
-                success: function (layero, index) {
-                    var iframeWin = window[layero.find('iframe')[0]['name']];
-                    //iframeWin.Init(currEditImg, "ArticleAvatar", "Article", currEditPartID, Article.Number, "@(ViewBag.UserNumber)");
-                }
+                scrollbar: false
             });
         }
 
-        function Refresh() {
-            window.location.reload();
+        function Refresh(reload) {
+            if (reload) {
+                window.location.reload();
+            }
         }
 
         //更新定位

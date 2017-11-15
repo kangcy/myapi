@@ -31,15 +31,14 @@
             </div>
 
             <div class="el-form-item inline fl ml15">
-                <label class="el-form-item__label">审核状态</label>
                 <div class="el-form-item__content inline fl">
                     <div class="btn-group">
                         <button id="status" index="-1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width: 160px;">
-                            不限
+                            审核状态
                                                   <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu tc">
-                            <li><a href="#" onclick="change(-1,'status','不限')" class="ddl_status" index="-1">不限</a></li>
+                            <li><a href="#" onclick="change(-1,'status','审核状态')" class="ddl_status" index="-1">审核状态</a></li>
                             <li><a href="#" onclick="change(0,'status','待审核')" class="ddl_status" index="0">待审核</a></li>
                             <li><a href="#" onclick="change(1,'status','已审核')" class="ddl_status" index="1">已审核</a></li>
                             <li><a href="#" onclick="change(2,'status','已删除')" class="ddl_status" index="2">已删除</a></li>
@@ -49,7 +48,7 @@
                 </div>
             </div>
 
-            <div class="full fl mt5">
+            <div class="fr">
                 <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
                 <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
             </div>

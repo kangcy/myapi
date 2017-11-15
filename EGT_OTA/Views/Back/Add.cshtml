@@ -1609,7 +1609,7 @@
         if (type == "pic") {
             model.push('<div class="edit-content full f11 ' + expand + '" type="' + type + '" partid="' + partid + '" src="' + base.ShowThumb(text, 0) + '"><img src="' + base.ShowThumb(text, 1) + '" class="full" /></div>');
         } else if (type == "text") {
-            model.push('<div class="edit-content edit-content2 full f11 tl" type="' + type + '" partid="' + partid + '">' + base.UnUnicodeText(text) + '</div>');
+            model.push('<div class="edit-content edit-content2 full f11 tl" type="' + type + '" partid="' + partid + '" style="padding:0 0.5rem;">' + base.UnUnicodeText(text) + '</div>');
         } else if (type == "video") {
             model.push('<div class="edit-content edit-content2 f11 full tc" type="' + type + '" partid="' + partid + '" src="' + text + '"><img src="../Back/Images/video.png" /></div>');
         } else if (type == "line") {
@@ -2303,7 +2303,7 @@
                 if (data != null) {
                     if (data.result) {
                         layer.msg("编辑成功,请刷新文章列表查看");
-                        parent.Refresh();
+                        parent.Refresh(true);
                         var index = parent.layer.getFrameIndex(window.name);
                         parent.layer.close(index);
                     } else {

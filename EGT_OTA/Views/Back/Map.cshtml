@@ -24,7 +24,7 @@
     <div id="wrapper">
         <div class="container">
             <div class="row">
-                <div class="el-card__header">
+                <div class="el-card__header" id="header">
                     <div class="clearfix">
                         <div class="el-form-item full fl">
                             <div class="el-form-item__content full">
@@ -38,7 +38,7 @@
                         <button type="button" class="el-button el-button--success fr" onclick="Submit()"><span>确定</span></button>
                     </div>
                 </div>
-                <div id="scroll-view" class="el-card__body mui-table-view" style="width: 100%; height: 520px; overflow: hidden;">
+                <div id="scroll-view" class="mui-table-view" style="width:100%;overflow:hidden;">
                 </div>
             </div>
         </div>
@@ -57,8 +57,10 @@
     var cityObj = {};
     var address = null;
     var placeSearch, marker, geocoder;
-    var usernumber = "";
+    var articlenumber = "";
     $(document).ready(function () {
+        $("#scroll-view").height(window.innerHeight - $("#header")[0].clientHeight-5);
+
         mapObj = new AMap.Map('scroll-view', {
             resizeEnable: true,
             zoom: 11
@@ -109,14 +111,13 @@
 
     //初始化
     function Init(number) {
-        usernumber = number;
+        articlenumber = number;
     }
 
     //获取定位详情
     function GetLocation(lng, lat) {
         geocoder.getAddress([lng, lat], function (status, result) {
             if (status === 'complete' && result.info === 'OK') {
-                console.log(JSON.stringify(result))
                 address = {
                     Province: result.regeocode.addressComponent.province,
                     City: result.regeocode.addressComponent.city,
@@ -157,7 +158,7 @@
 
     function Submit() {
         if (address != null) {
-            parent.UpdateLocation(usernumber, address.Province, address.City, address.District, address.Street, address.DetailName, address.CityCode, address.Latitude, address.Longitude);
+            parent.UpdateLocation(articlenumber, address.Province, address.City, address.District, address.Street, address.DetailName, address.CityCode, address.Latitude, address.Longitude);
         }
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);

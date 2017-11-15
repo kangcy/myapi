@@ -204,8 +204,9 @@
                                             {
                                                 <button type="button" class="el-button el-button--success el-button--small btnApproved" index="@list[i].ID"><span>激活</span></button>
                                             }
-                                            <button type="button" class="el-button el-button--success el-button--small btnLocation" index="@list[i].Number"><span>更新定位</span></button>
+                                            <button type="button" class="el-button el-button--primary el-button--small btnLocation" index="@list[i].Number"><span>更新定位</span></button>
                                             <button type="button" class="el-button el-button--success el-button--small btnArticle" index="@list[i].Number"><span>查看文章</span></button>
+                                            <button type="button" class="el-button el-button--success el-button--small btnComment" index="@list[i].Number"><span>查看评论</span></button>
                                         </td>
                                     </tr>
                                     }
@@ -307,6 +308,11 @@
             //查看文章
             $(".btnArticle").click(function () {
                 window.open("@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&usernumber=" + $(this).attr("index"));
+            })
+
+            //查看评论
+            $(".btnComment").click(function () {
+                window.open("@(ViewBag.RootUrl)" + "Back/Comment?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&usernumber=" + $(this).attr("index"));
             })
 
             //重新定位

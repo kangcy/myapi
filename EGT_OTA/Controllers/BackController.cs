@@ -7,6 +7,9 @@ using CommonTools;
 using EGT_OTA.Models;
 using EGT_OTA.Helper;
 using EGT_OTA.Controllers.Filter;
+using System.Text.RegularExpressions;
+using System.Text;
+using System.Globalization;
 
 namespace EGT_OTA.Controllers
 {
@@ -1293,6 +1296,24 @@ namespace EGT_OTA.Controllers
         /// </summary>
         public ActionResult VideoPreview()
         {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            return View();
+        }
+
+        /// <summary>
+        /// 添加评论
+        /// </summary>
+        [BackPower]
+        public ActionResult AddComment()
+        {
+            //我的关联账号
+            var number = ZNRequest.GetString("xwp");
+            var users = db.Find<User>(x => x.RelatedNumber == number).ToList();
+            users.ForEach(x =>
+            {
+                x.NickName = BaseHelper.FilterEmoji(x.NickName);
+            });
+            ViewBag.Users = users;
             ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
             return View();
         }
