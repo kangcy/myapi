@@ -97,8 +97,9 @@
 <script src="basejs/base.local.min.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
 <script type="text/javascript">
-	var RootUrl = "http://localhost/app/";
+	//var RootUrl = "http://localhost/app/";
 	//var RootUrl = "http://www.xiaoweipian.com/";
+	var RootUrl = "http://localhost:3000/api";
 
 	var MusicID = 0;
 	var MusicUrl = "";
@@ -121,12 +122,7 @@
 	var $cover = base.Get("x-bg-blur");
 	var isLoading = false;
 
-	mui.init({
-		gestureConfig: {
-			doubletap: true
-		},
-		swipeBack: false
-	});
+	mui.init();
 
 	mui.ready(function() {
 
@@ -149,133 +145,139 @@
 		}
 
 		LoadArticle(key, xwp);
+
+		mui("#wrapper").on('tap', '.user', function(event) {
+			var userNumber = this.getAttribute("userid");
+			window.location.href = GetRootUrl() + "/u/" + userNumber;
+		});
 	});
 
-	/**
-	 * 加载文章
-	 */
 	function LoadArticle(key, xwp) {
-		mui.getJSON(RootUrl + "Back/ArticleInfo", {
-			key: key,
-			xwp: xwp
-		}, function(data) {
-			if(!data) {
-				return mui.toast("信息异常");
-			}
-			if(!data.result) {
-				document.getElementById("errormsg").innerText = data.message;
-				document.getElementById("error").classList.remove("hide");
-				document.getElementById("loader").classList.add("hide");
-				return;
-			}
-			data = data.message;
-			Article = data;
-			ArticleID = data.ID;
-			data.Title = UnUnicodeText(data.Title);
-			data.NickName = UnUnicodeText(data.NickName);
-			document.title = data.Title;
-
-			var html = [];
-			var parts = data.ArticlePart;
-			if(parts != null) {
-				for(var i = 0; i < parts.length; i++) {
-					var part = parts[i];
-					if(part.Types == 1) {
-						html.push('<div class="full f13 fl mt10 ' + part.IntroExpand + '"><img onload="LazyImg(this)" src="img/default.png" data-lazyload="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
-					} else if(part.Types == 2) {
-						html.push('<div class="full f13 fl mt10">' + UnUnicodeText(part.Introduction) + '</div>');
-					} else if(part.Types == 3) {
-						html.push('<div class="full f13 fl mt10 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
-					} else if(part.Types == 4) {
-						html.push('<div class="full f13 fl mt10" style="display:inline-block;">' + part.Introduction + '</div>');
-					}
+		$.ajax({
+			type: "GET",
+			url: RootUrl,
+			data: {
+				key: key,
+				xwp: xwp,
+				action: "preview"
+			},
+			dataType: "json",
+			success: function(data) {
+				if(!data) {
+					return mui.toast("信息异常");
 				}
-			}
-			MusicUrl = data.MusicUrl;
-			CurrBackground = data.BackgroundJson;
-			CurrTemplate = data.Template;
-			if(data.TemplateJson != null) {
-				if(data.TemplateJson.ID != 1) {
-					CurrTemplateJson = data.TemplateJson;
-					if(data.ColorTemplateJson == null) {
-						TitleColor = CurrTemplateJson.TitleColor;
-						SubTitleColor = CurrTemplateJson.ViewColor;
-						UserColor = CurrTemplateJson.UserColor;
-						BackgroundColor = CurrTemplateJson.Transparency;
-						base.Get("title0").style.color = CurrTemplateJson.TitleColor;
-						base.Get("nickname0").style.color = CurrTemplateJson.UserColor;
-						base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
-						base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
-						base.Get("views0").style.color = CurrTemplateJson.ViewColor;
-						base.Get("x-avatar-sub").style.border = "2px solid " + CurrTemplateJson.TitleColor;
-					}
-				}
-			}
-			if(data.ColorTemplateJson != null) {
-				TitleColor = data.ColorTemplateJson.TitleColor;
-				SubTitleColor = data.ColorTemplateJson.ViewColor;
-				UserColor = data.ColorTemplateJson.UserColor;
-				base.Get("title0").style.color = data.ColorTemplateJson.TitleColor;
-				base.Get("nickname0").style.color = data.ColorTemplateJson.UserColor;
-				base.Get("nickname1").style.color = data.ColorTemplateJson.UserColor;
-				base.Get("createdate0").style.color = data.ColorTemplateJson.TimeColor;
-				base.Get("views0").style.color = data.ColorTemplateJson.ViewColor;
-				base.Get("x-avatar-sub").style.border = "2px solid " + data.ColorTemplateJson.TitleColor;
-			}
-			base.Get("musicname0").innerHTML = data.MusicName;
-			base.Get("useravatar0").setAttribute("src", base.ShowThumb(data.Avatar, 1));
-			base.InnerHtml(["title", "title0"], data.Title);
-			base.InnerHtml(["nickname", "nickname0", "nickname1"], data.NickName);
-			base.InnerHtml(["createdate0"], data.CreateDateText);
-			base.InnerHtml(["views0"], "阅读  " + data.Views);
-			base.Get("x-head").classList.remove("hide");
-			base.Get("desc").innerHTML = UnUnicodeText(html.join(""));
-
-			ChangeBg();
-
-			$(".youku_player").each(function() {
-				var $this = $(this);
-				ShowVideo($this.attr("id"), $this.attr("sid"));
-			});
-			mui.each(document.querySelectorAll(".video"), function() {
-				var $this = this;
-				$this.addEventListener('canplay', function() {
-					$this.parentNode.classList.remove("hide");
-				});
-			});
-
-			document.getElementById("loader").classList.add("hide");
-			$("#wrapper").removeClass("hide");
-
-			base.Get("color-lump").style.background = TitleColor;
-			base.Get("color-lump-text").style.color = TitleColor;
-			LoadComment(key);
-
-			if(!base.IsNullOrEmpty(data.Showy)) {
-				LoadScript("min/snow.min.js", function() {
-					var srcs = data.Showy.split("|");
-					if(srcs.length > 2) {
-						snow.init(srcs[0], srcs[1], srcs[2])
-					} else {
-						snow.init(data.Showy, 1, 0)
-					}
-				});
-			}
-
-			//打开外链
-			mui('#desc').on('tap', 'a.link', function() {
-				var link = this.getAttribute("link");
-				if(base.IsNullOrEmpty(link)) {
+				if(!data.result) {
+					document.getElementById("errormsg").innerText = data.message;
+					document.getElementById("error").classList.remove("hide");
+					document.getElementById("loader").classList.add("hide");
 					return;
 				}
-				window.location.href = link;
-			});
+				data = data.message;
+				Article = data;
+				ArticleID = data.ID;
+				data.Title = UnUnicodeText(data.Title);
+				data.NickName = UnUnicodeText(data.NickName);
+				document.title = data.Title;
+				var html = [];
+				var parts = data.ArticlePart;
+				if(parts != null) {
+					for(var i = 0; i < parts.length; i++) {
+						var part = parts[i];
+						if(part.Types == 1) {
+							html.push('<div class="full f13 fl mt10 ' + part.IntroExpand + '"><img onload="LazyImg(this)" src="img/default.png" data-lazyload="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
+						} else if(part.Types == 2) {
+							html.push('<div class="full f13 fl mt10">' + UnUnicodeText(part.Introduction) + '</div>');
+						} else if(part.Types == 3) {
+							html.push('<div class="full f13 fl mt10 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
+						} else if(part.Types == 4) {
+							html.push('<div class="full f13 fl mt10" style="display:inline-block;">' + part.Introduction + '</div>');
+						}
+					}
+				}
+				MusicUrl = data.MusicUrl;
+				CurrBackground = data.BackgroundJson;
+				CurrTemplate = data.Template;
+				if(data.TemplateJson != null) {
+					if(data.TemplateJson.ID != 1) {
+						CurrTemplateJson = data.TemplateJson;
+						if(data.ColorTemplateJson == null) {
+							TitleColor = CurrTemplateJson.TitleColor;
+							SubTitleColor = CurrTemplateJson.ViewColor;
+							UserColor = CurrTemplateJson.UserColor;
+							BackgroundColor = CurrTemplateJson.Transparency;
+							base.Get("title0").style.color = CurrTemplateJson.TitleColor;
+							base.Get("nickname0").style.color = CurrTemplateJson.UserColor;
+							base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
+							base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
+							base.Get("views0").style.color = CurrTemplateJson.ViewColor;
+							base.Get("x-avatar-sub").style.border = "2px solid " + CurrTemplateJson.TitleColor;
+						}
+					}
+				}
+				if(data.ColorTemplateJson != null) {
+					TitleColor = data.ColorTemplateJson.TitleColor;
+					SubTitleColor = data.ColorTemplateJson.ViewColor;
+					UserColor = data.ColorTemplateJson.UserColor;
+					base.Get("title0").style.color = data.ColorTemplateJson.TitleColor;
+					base.Get("nickname0").style.color = data.ColorTemplateJson.UserColor;
+					base.Get("nickname1").style.color = data.ColorTemplateJson.UserColor;
+					base.Get("createdate0").style.color = data.ColorTemplateJson.TimeColor;
+					base.Get("views0").style.color = data.ColorTemplateJson.ViewColor;
+					base.Get("x-avatar-sub").style.border = "2px solid " + data.ColorTemplateJson.TitleColor;
+				}
+				base.Get("musicname0").innerHTML = data.MusicName;
+				base.Get("useravatar0").setAttribute("src", base.ShowThumb(data.Avatar, 1));
+				base.InnerHtml(["title", "title0"], data.Title);
+				base.InnerHtml(["nickname", "nickname0", "nickname1"], data.NickName);
+				base.InnerHtml(["createdate0"], data.CreateDateText);
+				base.InnerHtml(["views0"], "阅读  " + data.Views);
+				base.Get("x-head").classList.remove("hide");
+				base.Get("desc").innerHTML = UnUnicodeText(html.join(""));
 
-			isLoading = false;
-		});
+				ChangeBg();
+
+				$(".youku_player").each(function() {
+					var $this = $(this);
+					ShowVideo($this.attr("id"), $this.attr("sid"));
+				});
+				mui.each(document.querySelectorAll(".video"), function() {
+					var $this = this;
+					$this.addEventListener('canplay', function() {
+						$this.parentNode.classList.remove("hide");
+					});
+				});
+
+				document.getElementById("loader").classList.add("hide");
+				$("#wrapper").removeClass("hide");
+
+				base.Get("color-lump").style.background = TitleColor;
+				base.Get("color-lump-text").style.color = TitleColor;
+				LoadComment(key);
+
+				if(!base.IsNullOrEmpty(data.Showy)) {
+					LoadScript("min/snow.min.js", function() {
+						var srcs = data.Showy.split("|");
+						if(srcs.length > 2) {
+							snow.init(srcs[0], srcs[1], srcs[2])
+						} else {
+							snow.init(data.Showy, 1, 0)
+						}
+					});
+				}
+
+				mui('#desc').on('tap', 'a.link', function() {
+					var link = this.getAttribute("link");
+					if(base.IsNullOrEmpty(link)) {
+						return;
+					}
+					window.location.href = link;
+				});
+
+				isLoading = false;
+			}
+		})
 	}
 
-	//背景状态切换
 	function ChangeBg() {
 		if(CurrTemplate == 0) {
 			base.Get("x-avatar").classList.add("hide");
@@ -295,7 +297,6 @@
 
 		ChangeMusic();
 
-		//纯白背景
 		if(CurrTemplate == 0) {
 			$wrapper.style.backgroundColor = "";
 			$wrapper1.style.background = "";
@@ -304,7 +305,6 @@
 			$top.classList.add("hide");
 			$bottom.classList.add("hide");
 		} else if(CurrTemplate > 1) {
-			//模板 
 			base.Get("x-avatar").style.marginTop = CurrTemplateJson.MarginTop + "rem";
 			$cover.style.backgroundColor = CurrTemplateJson.Transparency;
 
@@ -379,7 +379,6 @@
 				}
 			}
 		} else {
-			//自定义
 			$wrapper.style.backgroundColor = "transparent";
 			$wrapper1.style.background = "";
 			if(CurrBackground == null) {
@@ -414,7 +413,6 @@
 		}
 	}
 
-	//切换音乐
 	function ChangeMusic(index) {
 		$("#music0,#music1").addClass("hide");
 		MusicID = "music" + (CurrTemplate == 0 ? 0 : 1);
@@ -427,40 +425,37 @@
 		}
 	}
 
-	/**
-	 * 加载评论
-	 */
 	function LoadComment(ArticleNumber) {
-		data = {
-			page: 1,
-			rows: 10,
-			ArticleNumber: ArticleNumber,
-			New: 1
-		}
-		mui.getJSON(RootUrl + "Api/Comment/ArticleComment", data, function(data) {
-			data = JSON.parse(data);
-			if(data != null) {
-				if(data.result) {
-					data = data.message;
-					var length = data.records;
-					if(length > 0) {
-						document.getElementById('commentlist').classList.remove("hide");
-						var table = document.getElementById('commentlist');
-						for(var i = 0, len = data.list.length; i < len; i++) {
-							var div = appendStr(data.list[i]);
-							table.appendChild(div);
+		$.ajax({
+			type: "GET",
+			url: RootUrl,
+			data: {
+				number: ArticleNumber,
+				action: "comment"
+			},
+			dataType: "json",
+			success: function(data) {
+				if(data != null) {
+					data = JSON.parse(data);
+					if(data.result) {
+						data = data.message;
+						var length = data.records;
+						if(length > 0) {
+							document.getElementById('commentlist').classList.remove("hide");
+							var table = document.getElementById('commentlist');
+							for(var i = 0, len = data.list.length; i < len; i++) {
+								var div = AppendStr(data.list[i]);
+								table.appendChild(div);
+							}
+							$("#comment").removeClass("hide");
 						}
-						$("#comment").removeClass("hide");
 					}
 				}
 			}
 		});
 	}
 
-	/**
-	 * 评论视频HTML
-	 */
-	function appendStr(item) {
+	function AppendStr(item) {
 		var div = document.createElement('div');
 		div.className = 'mui-table-view-cell';
 		var model = [];
@@ -475,47 +470,5 @@
 		model.push('</div></div>');
 		div.innerHTML = model.join('');
 		return div;
-	}
-
-	/**
-	 * 显示播放器
-	 */
-	function ShowVideo(domid, vid) {
-		player = new YKU.Player(domid, {
-			client_id: "59bec9b0be1fc34b",
-			styleid: '0',
-			vid: vid,
-			autoplay: false,
-			show_related: false,
-			newPlayer: true
-		});
-	}
-
-	function AppendVideo(sourceurl) {
-		var html = [];
-		var height = window.innerHeight * 0.5;
-		//优酷
-		if(sourceurl.indexOf(".") < 0) {
-			return '<div class="media-cont audio-cont" style="width:100%;"><div id="youku_player_' + sourceurl + '" sid="' + sourceurl + '" class="youku_player" style="width:100%;height:' + height + 'px;"></div></div>';
-		}
-		//SWF
-		if(sourceurl.toLowerCase().indexOf(".swf") > 0) {
-			return '<div class="media-cont audio-cont" style="width:100%;"><embed src="' + sourceurl + '" allowfullscreen="true" quality="high" width="100%"  height="' + height + 'px" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash"></embed></div>';
-		}
-		//本地视频 
-		if(sourceurl.toLowerCase().indexOf(".") > 0) {
-			return '<video class="video" style="width:100%;height:' + height + 'px;" autoplay="autoplay" controls="controls"><source src="' + sourceurl + '" type="video/mp4" /></video>';
-		}
-		return "";
-	}
-
-	String.prototype.startWith = function(str) {
-		var reg = new RegExp("^" + str);
-		return reg.test(this);
-	}
-
-	String.prototype.endWith = function(str) {
-		var reg = new RegExp(str + "$");
-		return reg.test(this);
 	}
 </script>

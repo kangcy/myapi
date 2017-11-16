@@ -121,8 +121,9 @@
 <script src="min/WeixinApi.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
 <script type="text/javascript">
-	var RootUrl = "http://localhost/app/";
+	//var RootUrl = "http://localhost/app/";
 	//var RootUrl = "http://www.xiaoweipian.com/";
+	var RootUrl = "http://localhost:3000/api";
 
 	var MusicID = 0;
 	var MusicUrl = "";
@@ -173,7 +174,7 @@
 
 		mui("#wrapper").on('tap', '.user', function(event) {
 			var userNumber = this.getAttribute("userid");
-			window.location.href = RootUrl + "u/" + userNumber;
+			window.location.href = GetRootUrl() + "/u/" + userNumber;
 		});
 
 		//解锁
@@ -187,226 +188,222 @@
 				isLoading = false;
 				return mui.toast("请填写解锁密码");
 			}
-			mui.getJSON(RootUrl + "Article/CheckPowerPwd", {
-				ArticleID: ArticleID,
-				ArticlePowerPwd: pwd
-			}, function(data) {
-				if(data != null) {
-					if(data.result) {
-						LoadArticle(key, xwp, pwd);
-						return;
-					}
-				}
-				mui.toast("解锁失败");
+			CheckPowerPwd(ArticleID, pwd, function() {
 				isLoading = false;
-			});
+				LoadArticle(key, xwp, pwd);
+			}, function() {
+				isLoading = false;
+			})
 		});
 	});
 
-	/**
-	 * 加载文章
-	 */
 	function LoadArticle(key, xwp, pwd) {
-		mui.getJSON(RootUrl + "Home/Info", {
-			key: key,
-			ArticlePassword: pwd,
-			xwp: xwp,
-			url: window.location.href
-		}, function(data) {
-			if(!data) {
-				return mui.toast("信息异常");
-			}
-			if(!data.result) {
-				return mui.toast(data.message);
-			}
-			data = data.message;
-			Article = data;
-			ArticleID = data.ID;
-			data.Title = UnUnicodeText(data.Title);
-			data.NickName = UnUnicodeText(data.NickName);
-			document.title = data.Title;
+		$.ajax({
+			type: "GET",
+			url: RootUrl,
+			data: {
+				key: key,
+				xwp: xwp,
+				pwd: pwd,
+				action: "article",
+				url: window.location.href
+			},
+			dataType: "json",
+			success: function(data) {
+				if(!data) {
+					return mui.toast("信息异常");
+				}
+				if(!data.result) {
+					return mui.toast(data.message);
+				}
+				data = data.message;
+				Article = data;
+				ArticleID = data.ID;
+				data.Title = UnUnicodeText(data.Title);
+				data.NickName = UnUnicodeText(data.NickName);
+				document.title = data.Title;
 
-			//是否删除
-			if(data.Status == 2) {
-				document.getElementById("loader").classList.add("hide");
-				base.Get("delete").style.paddingTop = base.Get("download-bar").clientHeight + "px";
-				$("#delete").removeClass("hide");
-				return;
-			}
-			//私密 
-			if(data.ArticlePower == 0) {
-				document.getElementById("loader").classList.add("hide");
-				base.Get("self").style.paddingTop = base.Get("download-bar").clientHeight + "px";
-				$("#self").removeClass("hide");
-				return;
-			}
-			//密码可见
-			else if(data.ArticlePower == 1) {
-				if(pwd != data.ArticlePowerPwd) {
+				//是否删除
+				if(data.Status == 2) {
 					document.getElementById("loader").classList.add("hide");
-					base.Get("password").style.paddingTop = base.Get("download-bar").clientHeight + "px";
-					$("#password").removeClass("hide");
+					base.Get("delete").style.paddingTop = base.Get("download-bar").clientHeight + "px";
+					$("#delete").removeClass("hide");
 					return;
-				} else {
-					$("#password").addClass("hide");
-					$("#wrapper").removeClass("hide");
 				}
-			}
-
-			var wx_url = window.location.href;
-			var wx_title = data.Title;
-			var wx_desc = "分享自「小微篇」";
-			var wx_icon = base.ShowThumb(data.Cover, 2);
-
-			var wx_appId = data.Share.AppID; // 必填，公众号的唯一标识
-			var wx_timestamp = data.Share.TimeStr; // 必填，生成签名的时间戳
-			var wx_nonceStr = data.Share.NonceStr; // 必填，生成签名的随机串
-			var wx_signature = data.Share.Signature; // 必填，签名，见附录1
-			if(!base.IsNullOrEmpty(wx_signature)) {
-				wx.config({
-					debug: false, //开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-					appId: wx_appId, //必填，公众号的唯一标识
-					timestamp: wx_timestamp, //必填，生成签名的时间戳
-					nonceStr: wx_nonceStr, //必填，生成签名的随机串
-					signature: wx_signature, //必填，签名，见附录1
-					jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-				});
-				wx.ready(function() {
-					wx.onMenuShareTimeline({
-						title: wx_title, //分享标题
-						link: wx_url, //分享链
-						imgUrl: wx_icon, //分享图标
-						success: function() {},
-						cancel: function() {
-							//用户取消分享后执行的回调函数
-						}
-					});
-					wx.onMenuShareAppMessage({
-						title: wx_title, // 分享标题
-						desc: wx_desc, // 分享描述
-						link: wx_url, // 分享链接
-						imgUrl: wx_icon, // 分享图标
-						type: '', // 分享类型,music、video或link，不填默认为link
-						dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-						success: function() {},
-						cancel: function() {
-							//用户取消分享后执行的回调函数
-						}
-					});
-				});
-				wx.error(function(res) {
-					// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-				});
-			}
-
-			mui.each(mui(".user"), function(i, item) {
-				item.setAttribute("userid", data.CreateUserNumber);
-				item.setAttribute("nickname", data.NickName);
-				item.setAttribute("avatar", data.Avatar);
-				item.setAttribute("cover", data.Cover);
-			})
-
-			var html = [];
-			var parts = data.ArticlePart;
-			if(parts != null) {
-				for(var i = 0; i < parts.length; i++) {
-					var part = parts[i];
-					if(part.Types == 1) {
-						html.push('<div class="full f13 fl mt10 ' + part.IntroExpand + '"><img onload="LazyImg(this)" src="img/default.png" data-lazyload="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
-					} else if(part.Types == 2) {
-						html.push('<div class="full f13 fl mt10">' + UnUnicodeText(part.Introduction) + '</div>');
-					} else if(part.Types == 3) {
-						html.push('<div class="full f13 fl mt10 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
-					} else if(part.Types == 4) {
-						html.push('<div class="full f13 fl mt10" style="display:inline-block;">' + part.Introduction + '</div>');
-					}
+				//私密 
+				if(data.ArticlePower == 0) {
+					document.getElementById("loader").classList.add("hide");
+					base.Get("self").style.paddingTop = base.Get("download-bar").clientHeight + "px";
+					$("#self").removeClass("hide");
+					return;
 				}
-			}
-			MusicUrl = data.MusicUrl;
-			CurrBackground = data.BackgroundJson;
-			CurrTemplate = data.Template;
-			if(data.TemplateJson != null) {
-				if(data.TemplateJson.ID != 1) {
-					CurrTemplateJson = data.TemplateJson;
-					if(data.ColorTemplateJson == null) {
-						TitleColor = CurrTemplateJson.TitleColor;
-						SubTitleColor = CurrTemplateJson.ViewColor;
-						UserColor = CurrTemplateJson.UserColor;
-						BackgroundColor = CurrTemplateJson.Transparency;
-						base.Get("title0").style.color = CurrTemplateJson.TitleColor;
-						base.Get("nickname0").style.color = CurrTemplateJson.UserColor;
-						base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
-						base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
-						base.Get("views0").style.color = CurrTemplateJson.ViewColor;
-						base.Get("x-avatar-sub").style.border = "2px solid " + CurrTemplateJson.TitleColor;
-					}
-				}
-			}
-			if(data.ColorTemplateJson != null) {
-				TitleColor = data.ColorTemplateJson.TitleColor;
-				SubTitleColor = data.ColorTemplateJson.ViewColor;
-				UserColor = data.ColorTemplateJson.UserColor;
-				base.Get("title0").style.color = data.ColorTemplateJson.TitleColor;
-				base.Get("nickname0").style.color = data.ColorTemplateJson.UserColor;
-				base.Get("nickname1").style.color = data.ColorTemplateJson.UserColor;
-				base.Get("createdate0").style.color = data.ColorTemplateJson.TimeColor;
-				base.Get("views0").style.color = data.ColorTemplateJson.ViewColor;
-				base.Get("x-avatar-sub").style.border = "2px solid " + data.ColorTemplateJson.TitleColor;
-			}
-			base.Get("musicname0").innerHTML = data.MusicName;
-			base.Get("useravatar0").setAttribute("src", base.ShowThumb(data.Avatar, 1));
-			base.InnerHtml(["title", "title0"], data.Title);
-			base.InnerHtml(["nickname", "nickname0", "nickname1"], data.NickName);
-			base.InnerHtml(["createdate0"], data.CreateDateText);
-			base.InnerHtml(["views0"], "阅读  " + data.Views);
-			base.Get("x-head").classList.remove("hide");
-			base.Get("desc").innerHTML = UnUnicodeText(html.join(""));
-
-			ChangeBg();
-
-			$(".youku_player").each(function() {
-				var $this = $(this);
-				ShowVideo($this.attr("id"), $this.attr("sid"));
-			});
-			mui.each(document.querySelectorAll(".video"), function() {
-				var $this = this;
-				$this.addEventListener('canplay', function() {
-					$this.parentNode.classList.remove("hide");
-				});
-			});
-
-			document.getElementById("loader").classList.add("hide");
-			$("#wrapper").removeClass("hide");
-
-			base.Get("color-lump").style.background = TitleColor;
-			base.Get("color-lump-text").style.color = TitleColor;
-			LoadComment(key);
-
-			if(!base.IsNullOrEmpty(data.Showy)) {
-				LoadScript("min/snow.min.js", function() {
-					var srcs = data.Showy.split("|");
-					if(srcs.length > 2) {
-						snow.init(srcs[0], srcs[1], srcs[2])
+				//密码可见
+				else if(data.ArticlePower == 1) {
+					if(pwd != data.ArticlePowerPwd) {
+						document.getElementById("loader").classList.add("hide");
+						base.Get("password").style.paddingTop = base.Get("download-bar").clientHeight + "px";
+						$("#password").removeClass("hide");
+						return;
 					} else {
-						snow.init(data.Showy, 1, 0)
+						$("#password").addClass("hide");
+						$("#wrapper").removeClass("hide");
 					}
-				});
-			}
-
-			//打开外链
-			mui('#desc').on('tap', 'a.link', function() {
-				var link = this.getAttribute("link");
-				if(base.IsNullOrEmpty(link)) {
-					return;
 				}
-				window.location.href = link;
-			});
 
-			isLoading = false;
+				var wx_url = window.location.href;
+				var wx_title = data.Title;
+				var wx_desc = "分享自「小微篇」";
+				var wx_icon = base.ShowThumb(data.Cover, 2);
+
+				var wx_appId = data.Share.AppID; // 必填，公众号的唯一标识
+				var wx_timestamp = data.Share.TimeStr; // 必填，生成签名的时间戳
+				var wx_nonceStr = data.Share.NonceStr; // 必填，生成签名的随机串
+				var wx_signature = data.Share.Signature; // 必填，签名，见附录1
+				if(!base.IsNullOrEmpty(wx_signature)) {
+					wx.config({
+						debug: false, //开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+						appId: wx_appId, //必填，公众号的唯一标识
+						timestamp: wx_timestamp, //必填，生成签名的时间戳
+						nonceStr: wx_nonceStr, //必填，生成签名的随机串
+						signature: wx_signature, //必填，签名，见附录1
+						jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+					});
+					wx.ready(function() {
+						wx.onMenuShareTimeline({
+							title: wx_title, //分享标题
+							link: wx_url, //分享链
+							imgUrl: wx_icon, //分享图标
+							success: function() {},
+							cancel: function() {
+								//用户取消分享后执行的回调函数
+							}
+						});
+						wx.onMenuShareAppMessage({
+							title: wx_title, // 分享标题
+							desc: wx_desc, // 分享描述
+							link: wx_url, // 分享链接
+							imgUrl: wx_icon, // 分享图标
+							type: '', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function() {},
+							cancel: function() {
+								//用户取消分享后执行的回调函数
+							}
+						});
+					});
+					wx.error(function(res) {
+						// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+					});
+				}
+
+				mui.each(mui(".user"), function(i, item) {
+					item.setAttribute("userid", data.CreateUserNumber);
+					item.setAttribute("nickname", data.NickName);
+					item.setAttribute("avatar", data.Avatar);
+					item.setAttribute("cover", data.Cover);
+				})
+
+				var html = [];
+				var parts = data.ArticlePart;
+				if(parts != null) {
+					for(var i = 0; i < parts.length; i++) {
+						var part = parts[i];
+						if(part.Types == 1) {
+							html.push('<div class="full f13 fl mt10 ' + part.IntroExpand + '"><img onload="LazyImg(this)" src="img/default.png" data-lazyload="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
+						} else if(part.Types == 2) {
+							html.push('<div class="full f13 fl mt10">' + UnUnicodeText(part.Introduction) + '</div>');
+						} else if(part.Types == 3) {
+							html.push('<div class="full f13 fl mt10 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
+						} else if(part.Types == 4) {
+							html.push('<div class="full f13 fl mt10" style="display:inline-block;">' + part.Introduction + '</div>');
+						}
+					}
+				}
+				MusicUrl = data.MusicUrl;
+				CurrBackground = data.BackgroundJson;
+				CurrTemplate = data.Template;
+				if(data.TemplateJson != null) {
+					if(data.TemplateJson.ID != 1) {
+						CurrTemplateJson = data.TemplateJson;
+						if(data.ColorTemplateJson == null) {
+							TitleColor = CurrTemplateJson.TitleColor;
+							SubTitleColor = CurrTemplateJson.ViewColor;
+							UserColor = CurrTemplateJson.UserColor;
+							BackgroundColor = CurrTemplateJson.Transparency;
+							base.Get("title0").style.color = CurrTemplateJson.TitleColor;
+							base.Get("nickname0").style.color = CurrTemplateJson.UserColor;
+							base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
+							base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
+							base.Get("views0").style.color = CurrTemplateJson.ViewColor;
+							base.Get("x-avatar-sub").style.border = "2px solid " + CurrTemplateJson.TitleColor;
+						}
+					}
+				}
+				if(data.ColorTemplateJson != null) {
+					TitleColor = data.ColorTemplateJson.TitleColor;
+					SubTitleColor = data.ColorTemplateJson.ViewColor;
+					UserColor = data.ColorTemplateJson.UserColor;
+					base.Get("title0").style.color = data.ColorTemplateJson.TitleColor;
+					base.Get("nickname0").style.color = data.ColorTemplateJson.UserColor;
+					base.Get("nickname1").style.color = data.ColorTemplateJson.UserColor;
+					base.Get("createdate0").style.color = data.ColorTemplateJson.TimeColor;
+					base.Get("views0").style.color = data.ColorTemplateJson.ViewColor;
+					base.Get("x-avatar-sub").style.border = "2px solid " + data.ColorTemplateJson.TitleColor;
+				}
+				base.Get("musicname0").innerHTML = data.MusicName;
+				base.Get("useravatar0").setAttribute("src", base.ShowThumb(data.Avatar, 1));
+				base.InnerHtml(["title", "title0"], data.Title);
+				base.InnerHtml(["nickname", "nickname0", "nickname1"], data.NickName);
+				base.InnerHtml(["createdate0"], data.CreateDateText);
+				base.InnerHtml(["views0"], "阅读  " + data.Views);
+				base.Get("x-head").classList.remove("hide");
+				base.Get("desc").innerHTML = UnUnicodeText(html.join(""));
+
+				ChangeBg();
+
+				$(".youku_player").each(function() {
+					var $this = $(this);
+					ShowVideo($this.attr("id"), $this.attr("sid"));
+				});
+				mui.each(document.querySelectorAll(".video"), function() {
+					var $this = this;
+					$this.addEventListener('canplay', function() {
+						$this.parentNode.classList.remove("hide");
+					});
+				});
+
+				document.getElementById("loader").classList.add("hide");
+				$("#wrapper").removeClass("hide");
+
+				base.Get("color-lump").style.background = TitleColor;
+				base.Get("color-lump-text").style.color = TitleColor;
+				LoadComment(key);
+
+				if(!base.IsNullOrEmpty(data.Showy)) {
+					LoadScript("min/snow.min.js", function() {
+						var srcs = data.Showy.split("|");
+						if(srcs.length > 2) {
+							snow.init(srcs[0], srcs[1], srcs[2])
+						} else {
+							snow.init(data.Showy, 1, 0)
+						}
+					});
+				}
+
+				//打开外链
+				mui('#desc').on('tap', 'a.link', function() {
+					var link = this.getAttribute("link");
+					if(base.IsNullOrEmpty(link)) {
+						return;
+					}
+					window.location.href = link;
+				});
+
+				isLoading = false;
+			}
 		});
 	}
 
-	//背景状态切换
 	function ChangeBg() {
 		if(CurrTemplate == 0) {
 			base.Get("x-avatar").classList.add("hide");
@@ -426,14 +423,12 @@
 
 		ChangeMusic();
 
-		//纯白背景
 		if(CurrTemplate == 0) {
 			$wrapper.style.backgroundColor = "";
 			$wrapper1.style.background = "";
 			$cover.style.backgroundColor = "";
 			$wrapper2.style.background = "";
 		} else if(CurrTemplate > 1) {
-			//模板 
 			base.Get("x-avatar").style.paddingTop = CurrTemplateJson.MarginTop + "rem";
 			$cover.style.backgroundColor = CurrTemplateJson.Transparency;
 
@@ -508,15 +503,12 @@
 				}
 			}
 		} else {
-			//自定义
 			$wrapper.style.backgroundColor = "transparent";
 			$wrapper1.style.background = "";
 			if(CurrBackground == null) {
-				//全屏
 				$wrapper2.style.background = "";
 				$wrapper2.className = "";
 			} else {
-				//背景透明度
 				$cover.style.backgroundColor = "RGBA(255, 255, 255, " + (100 - CurrBackground.Transparency) / 100 + ")";
 				var url = CurrBackground.Url;
 				if(CurrBackground.High == 0) {
@@ -527,12 +519,10 @@
 				$wrapper2.className = "";
 				switch(CurrBackground.Full) {
 					case 0:
-						//居顶 
 						$wrapper2.style.background = "url(" + url + ") no-repeat top center";
 						$wrapper2.style.backgroundSize = "100% 15.5rem";
 						break;
 					case 1:
-						//全屏
 						$wrapper2.style.background = "url(" + url + ") center center no-repeat";
 						$wrapper2.style.backgroundSize = "cover";
 						//$wrapper2.style.backgroundSize = "100% auto";
@@ -544,7 +534,6 @@
 		}
 	}
 
-	//切换音乐
 	function ChangeMusic(index) {
 		$("#music0,#music1").addClass("hide");
 		MusicID = "music" + (CurrTemplate == 0 ? 0 : 1);
@@ -557,40 +546,37 @@
 		}
 	}
 
-	/**
-	 * 加载评论
-	 */
 	function LoadComment(ArticleNumber) {
-		data = {
-			page: 1,
-			rows: 10,
-			ArticleNumber: ArticleNumber,
-			New: 1
-		}
-		mui.getJSON(RootUrl + "Api/Comment/ArticleComment", data, function(data) {
-			data = JSON.parse(data);
-			if(data != null) {
-				if(data.result) {
-					data = data.message;
-					var length = data.records;
-					if(length > 0) {
-						document.getElementById('commentlist').classList.remove("hide");
-						var table = document.getElementById('commentlist');
-						for(var i = 0, len = data.list.length; i < len; i++) {
-							var div = appendStr(data.list[i]);
-							table.appendChild(div);
+		$.ajax({
+			type: "GET",
+			url: RootUrl,
+			data: {
+				number: ArticleNumber,
+				action: "comment"
+			},
+			dataType: "json",
+			success: function(data) {
+				data = JSON.parse(data);
+				if(data != null) {
+					if(data.result) {
+						data = data.message;
+						var length = data.records;
+						if(length > 0) {
+							document.getElementById('commentlist').classList.remove("hide");
+							var table = document.getElementById('commentlist');
+							for(var i = 0, len = data.list.length; i < len; i++) {
+								var div = AppendStr(data.list[i]);
+								table.appendChild(div);
+							}
+							$("#comment").removeClass("hide");
 						}
-						$("#comment").removeClass("hide");
 					}
 				}
 			}
 		});
 	}
 
-	/**
-	 * 评论视频HTML
-	 */
-	function appendStr(item) {
+	function AppendStr(item) {
 		var div = document.createElement('div');
 		div.className = 'mui-table-view-cell';
 		var model = [];
@@ -605,47 +591,5 @@
 		model.push('</div></div>');
 		div.innerHTML = model.join('');
 		return div;
-	}
-
-	/**
-	 * 显示播放器
-	 */
-	function ShowVideo(domid, vid) {
-		player = new YKU.Player(domid, {
-			client_id: "59bec9b0be1fc34b",
-			styleid: '0',
-			vid: vid,
-			autoplay: false,
-			show_related: false,
-			newPlayer: true
-		});
-	}
-
-	function AppendVideo(sourceurl) {
-		var html = [];
-		var height = window.innerWidth * 0.5;
-		//优酷
-		if(sourceurl.indexOf(".") < 0) {
-			return '<div class="media-cont audio-cont" style="width:100%;"><div id="youku_player_' + sourceurl + '" sid="' + sourceurl + '" class="youku_player" style="width:100%;height:' + height + 'px;"></div></div>';
-		}
-		//SWF
-		if(sourceurl.toLowerCase().indexOf(".swf") > 0) {
-			return '<div class="media-cont audio-cont" style="width:100%;"><embed src="' + sourceurl + '" allowfullscreen="true" quality="high" width="100%"  height="' + height + 'px" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash"></embed></div>';
-		}
-		//本地视频 
-		if(sourceurl.toLowerCase().indexOf(".") > 0) {
-			return '<video class="video" style="width:100%;height:' + height + 'px;" autoplay="autoplay" controls="controls"><source src="' + sourceurl + '" type="video/mp4" /></video>';
-		}
-		return "";
-	}
-
-	String.prototype.startWith = function(str) {
-		var reg = new RegExp("^" + str);
-		return reg.test(this);
-	}
-
-	String.prototype.endWith = function(str) {
-		var reg = new RegExp(str + "$");
-		return reg.test(this);
 	}
 </script>

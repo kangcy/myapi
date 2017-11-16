@@ -291,20 +291,17 @@
 
 </html>
 <script src="min/mui.min.js"></script>
-<script src="min/base.min.js"></script>
+<!--<script src="min/base.min.js"></script>-->
+<script src="basejs/base.local.min.js"></script>
 <script src="min/jweixin-1.0.0.js"></script>
 <script src="min/WeixinApi.js"></script>
 <script type="text/javascript">
 	//var RootUrl = "http://localhost/app/";
-	var RootUrl = "http://www.xiaoweipian.com/";
+	//var RootUrl = "http://www.xiaoweipian.com/";
+	var RootUrl = "http://localhost:3000/api";
 
 	var $bg = base.Get("bg");
-	mui.init({
-		gestureConfig: {
-			doubletap: true
-		},
-		swipeBack: false
-	});
+	mui.init();
 
 	mui.ready(function() {
 		$bg.style.minHeight = (window.innerWidth > 750 ? 750 : window.innerWidth) * 3 / 4 + "px";
@@ -312,8 +309,11 @@
 		$bg.style.backgroundSize = "cover";
 
 		var key = GetParameter("key");
-		if(base.IsNullOrEmpty("key")) {
-			mui.alert("参数异常");
+		if(base.IsNullOrEmpty(key)) {
+			mui.toast("参数异常");
+			mui.later(function() {
+				window.close();
+			}, 1500);
 			return false;
 		}
 
@@ -333,22 +333,22 @@
 				mui.prompt('确认密码', '输入4位数字密码', '权限验证', btnArray, function(e) {
 					if(e.index == 0) {
 						CheckPowerPwd(articleId, e.value, function() {
-							window.location.href = RootUrl + articleNumber;
+							window.location.href = GetRootUrl() + articleNumber;
 						});
 					}
 				})
 			} else {
-				window.location.href = RootUrl + articleNumber;
+				window.location.href = GetRootUrl() + "/" + articleNumber;
 			}
 		});
 	});
 
 	//文章
 	function LoadArticle(key) {
-		var data = {
-			UserNumber: key
-		}
-		mui.getJSON(RootUrl + "User/Article", data, function(data) {
+		mui.getJSON(RootUrl, {
+			number: key,
+			action: "userarticle"
+		}, function(data) {
 			var table = base.Get('a_list');
 			if(data != null) {
 				var length = data.records;
@@ -381,128 +381,131 @@
 
 	//获取用户信息
 	function LoadUserInfo(key) {
-		mui.getJSON(RootUrl + "User/Info", {
-			Number: key,
-			url: window.location.href
-		}, function(data) {
-
-			base.Get("loader").classList.add("hide");
-
-			if(data.result) {
-				data = data.message;
-				document.title = data.NickName + "的专栏";
-				LazyCover(base.ShowThumb(data.Cover, 1), function() {
-					$bg.style.background = "url(" + this.src + ") center center no-repeat";
-					$bg.style.backgroundSize = "cover";
-				});
-				LazyCover(base.ShowThumb(data.Avatar, 2), function() {
-					base.Get("avatar").setAttribute("src", this.src);
-					base.Get("avatar").classList.remove("hide");
-				});
-
-				base.Get("nickname").innerHTML = UnUnicodeText(data.NickName);
-				base.Get("signature").innerHTML = UnUnicodeText(data.Signature);
-
-				var showcount = 0;
-				if(data.ShowZan == 1) {
-					base.Get("showZanNum").innerHTML = data.Zans;
-					base.Get("showZan").classList.remove("hide");
-					showcount++;
+		mui.getJSON(RootUrl, {
+				number: key,
+				action: "user",
+				url: window.location.href
+			},
+			function(data) {
+				base.Get("loader").classList.add("hide");
+				if(data == null) {
+					return;
 				}
-
-				if(data.ShowKeep == 1) {
-					base.Get("showKeepNum").innerHTML = data.Keeps;
-					base.Get("showKeep").classList.remove("hide");
-					showcount++;
-				}
-				if(data.ShowFollow == 1) {
-					base.Get("showFollowNum").innerHTML = data.Follows;
-					base.Get("showFollow").classList.remove("hide");
-					showcount++;
-				}
-				if(data.ShowFan == 1) {
-					base.Get("showFanNum").innerHTML = data.Fans;
-					base.Get("showFan").classList.remove("hide");
-					showcount++;
-				}
-				switch(showcount) {
-					case 1:
-						base.Get("showZan").style.flex = "0 0 100%";
-						base.Get("showKeep").style.flex = "0 0 100%";
-						base.Get("showFollow").style.flex = "0 0 100%";
-						base.Get("showFan").style.flex = "0 0 100%";
-						break;
-					case 2:
-						base.Get("showZan").style.flex = "0 0 50%";
-						base.Get("showKeep").style.flex = "0 0 50%";
-						base.Get("showFollow").style.flex = "0 0 50%";
-						base.Get("showFan").style.flex = "0 0 50%";
-						break;
-					case 3:
-						base.Get("showZan").style.flex = "0 0 33.3%";
-						base.Get("showKeep").style.flex = "0 0 33.3%";
-						base.Get("showFollow").style.flex = "0 0 33.3%";
-						base.Get("showFan").style.flex = "0 0 33.3%";
-						break;
-					case 4:
-						base.Get("showZan").style.flex = "0 0 25%";
-						base.Get("showKeep").style.flex = "0 0 25%";
-						base.Get("showFollow").style.flex = "0 0 25%";
-						base.Get("showFan").style.flex = "0 0 25%";
-						break;
-				}
-
-				var wx_url = window.location.href;
-				var wx_title = UnUnicodeText(data.NickName) + "的专栏";
-				var wx_desc = "分享自「小微篇」";
-				var wx_icon = base.ShowThumb(data.Avatar, 2);
-
-				var wx_appId = data.Share.AppID; // 必填，公众号的唯一标识
-				var wx_timestamp = data.Share.TimeStr; // 必填，生成签名的时间戳
-				var wx_nonceStr = data.Share.NonceStr; // 必填，生成签名的随机串
-				var wx_signature = data.Share.Signature; // 必填，签名，见附录1
-				if(!base.IsNullOrEmpty(wx_signature)) {
-					wx.config({
-						debug: false, //开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-						appId: wx_appId, //必填，公众号的唯一标识
-						timestamp: wx_timestamp, //必填，生成签名的时间戳
-						nonceStr: wx_nonceStr, //必填，生成签名的随机串
-						signature: wx_signature, //必填，签名，见附录1
-						jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+				if(data.result) {
+					data = data.message;
+					document.title = data.NickName + "的专栏";
+					LazyCover(base.ShowThumb(data.Cover, 1), function() {
+						$bg.style.background = "url(" + this.src + ") center center no-repeat";
+						$bg.style.backgroundSize = "cover";
 					});
-					wx.ready(function() {
-						wx.onMenuShareTimeline({
-							title: wx_title, //分享标题
-							link: wx_url, //分享链
-							imgUrl: wx_icon, //分享图标
-							success: function() {},
-							cancel: function() {
-								//用户取消分享后执行的回调函数
-							}
+					LazyCover(base.ShowThumb(data.Avatar, 2), function() {
+						base.Get("avatar").setAttribute("src", this.src);
+						base.Get("avatar").classList.remove("hide");
+					});
+
+					base.Get("nickname").innerHTML = UnUnicodeText(data.NickName);
+					base.Get("signature").innerHTML = UnUnicodeText(data.Signature);
+
+					var showcount = 0;
+					if(data.ShowZan == 1) {
+						base.Get("showZanNum").innerHTML = data.Zans;
+						base.Get("showZan").classList.remove("hide");
+						showcount++;
+					}
+
+					if(data.ShowKeep == 1) {
+						base.Get("showKeepNum").innerHTML = data.Keeps;
+						base.Get("showKeep").classList.remove("hide");
+						showcount++;
+					}
+					if(data.ShowFollow == 1) {
+						base.Get("showFollowNum").innerHTML = data.Follows;
+						base.Get("showFollow").classList.remove("hide");
+						showcount++;
+					}
+					if(data.ShowFan == 1) {
+						base.Get("showFanNum").innerHTML = data.Fans;
+						base.Get("showFan").classList.remove("hide");
+						showcount++;
+					}
+					switch(showcount) {
+						case 1:
+							base.Get("showZan").style.flex = "0 0 100%";
+							base.Get("showKeep").style.flex = "0 0 100%";
+							base.Get("showFollow").style.flex = "0 0 100%";
+							base.Get("showFan").style.flex = "0 0 100%";
+							break;
+						case 2:
+							base.Get("showZan").style.flex = "0 0 50%";
+							base.Get("showKeep").style.flex = "0 0 50%";
+							base.Get("showFollow").style.flex = "0 0 50%";
+							base.Get("showFan").style.flex = "0 0 50%";
+							break;
+						case 3:
+							base.Get("showZan").style.flex = "0 0 33.3%";
+							base.Get("showKeep").style.flex = "0 0 33.3%";
+							base.Get("showFollow").style.flex = "0 0 33.3%";
+							base.Get("showFan").style.flex = "0 0 33.3%";
+							break;
+						case 4:
+							base.Get("showZan").style.flex = "0 0 25%";
+							base.Get("showKeep").style.flex = "0 0 25%";
+							base.Get("showFollow").style.flex = "0 0 25%";
+							base.Get("showFan").style.flex = "0 0 25%";
+							break;
+					}
+
+					var wx_url = window.location.href;
+					var wx_title = UnUnicodeText(data.NickName) + "的专栏";
+					var wx_desc = "分享自「小微篇」";
+					var wx_icon = base.ShowThumb(data.Avatar, 2);
+
+					var wx_appId = data.Share.AppID; // 必填，公众号的唯一标识
+					var wx_timestamp = data.Share.TimeStr; // 必填，生成签名的时间戳
+					var wx_nonceStr = data.Share.NonceStr; // 必填，生成签名的随机串
+					var wx_signature = data.Share.Signature; // 必填，签名，见附录1
+					if(!base.IsNullOrEmpty(wx_signature)) {
+						wx.config({
+							debug: false, //开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: wx_appId, //必填，公众号的唯一标识
+							timestamp: wx_timestamp, //必填，生成签名的时间戳
+							nonceStr: wx_nonceStr, //必填，生成签名的随机串
+							signature: wx_signature, //必填，签名，见附录1
+							jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 						});
-						wx.onMenuShareAppMessage({
-							title: wx_title, // 分享标题
-							desc: wx_desc, // 分享描述
-							link: wx_url, // 分享链接
-							imgUrl: wx_icon, // 分享图标
-							type: '', // 分享类型,music、video或link，不填默认为link
-							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-							success: function() {},
-							cancel: function() {
-								//用户取消分享后执行的回调函数
-							}
+						wx.ready(function() {
+							wx.onMenuShareTimeline({
+								title: wx_title, //分享标题
+								link: wx_url, //分享链
+								imgUrl: wx_icon, //分享图标
+								success: function() {},
+								cancel: function() {
+									//用户取消分享后执行的回调函数
+								}
+							});
+							wx.onMenuShareAppMessage({
+								title: wx_title, // 分享标题
+								desc: wx_desc, // 分享描述
+								link: wx_url, // 分享链接
+								imgUrl: wx_icon, // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function() {},
+								cancel: function() {
+									//用户取消分享后执行的回调函数
+								}
+							});
 						});
-					});
-					wx.error(function(res) {
-						// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-					});
-				}
+						wx.error(function(res) {
+							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+						});
+					}
 
-			} else {
-				mui.toast(data.message);
-			}
-			base.Get("article").classList.remove("hide");
-			base.Get("download").classList.remove("hide");
-		});
+				} else {
+					mui.toast(data.message);
+				}
+				base.Get("article").classList.remove("hide");
+				base.Get("download").classList.remove("hide");
+			});
 	}
 </script>
