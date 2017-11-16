@@ -1,0 +1,28 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {},
+  "devDependencies": {
+	  "fs": "^0.0.2",
+	  "express": "^4.13.3",
+	  "express-urlrewrite": "^1.2.0",
+	  "node-fetch": "^1.5.2",
+	  "qiniu": "^6.1.11",
+	  "multiparty": "^4.1.2",
+	  "http-proxy-middleware": "^0.17.4"
+  },
+  "scripts": {
+	"start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:watch": "npm test -- --watch"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+
+
+
+

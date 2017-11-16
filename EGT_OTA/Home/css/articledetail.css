@@ -185,6 +185,7 @@ video {
 
 #download-bar {
 	width: 100%;
+	max-width: 750px;
 	height: auto;
 	padding: 2%;
 	text-align: left;
@@ -192,7 +193,6 @@ video {
 	color: #fff;
 	position: fixed;
 	top: 0;
-	left: 0;
 	z-index: 99999;
 	display: block;
 	font-size: 12px;
