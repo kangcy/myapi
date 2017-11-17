@@ -66,8 +66,7 @@
 
 </html>
 <script src="min/mui.min.js"></script>
-<!--<script src="min/base.min.js"></script>-->
-<script src="basejs/base.local.min.js"></script>
+<script src="basejs/base.min.js"></script>
 <script src="min/jweixin-1.0.0.js"></script>
 <script src="min/WeixinApi.js"></script>
 <script type="text/javascript">
@@ -108,7 +107,7 @@
 				mui.prompt('确认密码', '输入4位数字密码', '权限验证', btnArray, function(e) {
 					if(e.index == 0) {
 						CheckPowerPwd(articleId, e.value, function() {
-							window.location.href = GetRootUrl() + articleNumber;
+							window.location.href = GetRootUrl() + "/" + articleNumber;
 						});
 					}
 				})
