@@ -33,14 +33,13 @@ app.use('/commentapi', proxy({
 }));*/
 
 app.post("/upload", uploadApi2)
-app.get("/getApi", commonGetApi)
 app.get("/api", getApi)
+app.get("/picApi", picApi)
 app.get("/postApi", commonPostApi)
 app.get("/registerApi", registerApi)
 app.get("/loginApi", loginApi)
 app.get("/refreshApi", refreshApi)
 app.get("/addressEditApi", addressEditApi)
-app.get("/deleteApi", deleteApi)
 app.get("/deleteApi", deleteApi)
 
 app.get("*", function(req, res) {

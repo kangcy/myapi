@@ -2,8 +2,11 @@ var fetch = require("node-fetch");
 var multiparty = require('multiparty');
 var fs = require('fs');
 var qiniu = require("qiniu");
+var fileType = require('file-type'); //判断文件类型
+var http = require('http');
 var baseurl = "http://localhost/app/";
 //var baseurl = "http://www.xiaoweipian.com:1010/"
+
 /**
  * GET请求
  */
@@ -54,31 +57,37 @@ getApi = function(req, res) {
 	})
 }
 
-/**
- * GET请求
- */
-commonGetApi = function(req, res) {
+//图片跨域处理
+picApi = function(req, res) {
 	var url = req.query.url;
-	if(url.toLowerCase().indexOf("checkcode") > -1) {
-		var ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
-		url = url + "&ipaddr=" + ipaddr;
-		//console.log(url);
-	}
 	fetch(url, {
-		method: 'GET',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-			'Authorization': 'Bearer ' + req.query.access_token
-		}
+		method: 'GET'
 	}).then(function(response) {
-		return response.text();
+		return response.buffer();
 	}).then(function(body) {
-		res.send(body);
+		var file = fileType(body); //file:{"ext":"jpg","mime":"image/jpeg"}
+		file.sourceurl = url;
+		file.url = "data:" + file.mime + ";base64," + body.toString('base64');
+		res.send(file);
 		res.end();
 	}).catch(function(ex) {
 		res.end();
 	})
+
+	/*http.get("http://www.xiaoweipian.com/Upload/Images/Article/20171010/150762494532169/201710101643237384_1.jpg", function(response) {　　
+		var chunks = [];
+		var size = 0;　
+		response.on('data', function(chunk) {　　　　
+			chunks.push(chunk);
+			size += chunk.length;
+		});
+		response.on('end', function(err) {
+			var data = Buffer.concat(chunks, size);　
+			var base64Img = data.toString('base64');
+			res.send(base64Img);
+			res.end();
+		});
+	});*/
 }
 
 /**
