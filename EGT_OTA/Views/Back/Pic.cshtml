@@ -58,6 +58,8 @@
 <script type="text/javascript">
     var totalheight = window.innerHeight - 50;
     var totalwidth = window.innerWidth;
+    var SourceUrl = "";
+    var ApiSourceUrl = "";
     var Url = "";
     var Source = "";
     var Standard = "";
@@ -110,6 +112,7 @@
     });
 
     function InitImg(src) {
+        SourceUrl = src;
         $image.attr("src", src);
         var imagewidth = $image.width();
         var imageheight = $image.height();
@@ -133,33 +136,43 @@
 
     //初始化
     function Init(src, source, standard, partid, articlenumber, usernumber) {
-        Url = src;
-        Source = source;
-        Standard = standard;
-        PartID = partid;
-        ArticleNumber = articlenumber;
-        UserNumber = usernumber;
-        if (base.IsNullOrEmpty(Url)) {
-            return;
-        }
-        $image.hide().attr("src", Url).load(function () {
-            var imagewidth = $image.width();
-            var imageheight = $image.height();
-            $image.css({
-                "width": "auto",
-                "height": "auto",
-                "margin-top": "0px",
-                "margin-left": "0px"
-            });
-            if (totalheight > imageheight) {
-                $image.css("margin-top", (totalheight - imageheight) / 2 + "px");
-            }
-            //用户封面、用户头像
-            if (Standard == "UserCover" || Standard == "UserAvatar") {
-                openpop();
-            } else {
-                $image.show();
-                base.Get("openpop").style.display = "inline-block";
+        SourceUrl = src;
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            data: { url: src },
+            url: "http://localhost:3000/picApi",
+            success: function (data) {
+                Url = data.url;
+                ApiSourceUrl = data.sourceurl;
+                Source = source;
+                Standard = standard;
+                PartID = partid;
+                ArticleNumber = articlenumber;
+                UserNumber = usernumber;
+                if (base.IsNullOrEmpty(Url)) {
+                    return;
+                }
+                $image.hide().attr("src", Url).load(function () {
+                    var imagewidth = $image.width();
+                    var imageheight = $image.height();
+                    $image.css({
+                        "width": "auto",
+                        "height": "auto",
+                        "margin-top": "0px",
+                        "margin-left": "0px"
+                    });
+                    if (totalheight > imageheight) {
+                        $image.css("margin-top", (totalheight - imageheight) / 2 + "px");
+                    }
+                    //用户封面、用户头像
+                    if (Standard == "UserCover" || Standard == "UserAvatar") {
+                        openpop();
+                    } else {
+                        $image.show();
+                        base.Get("openpop").style.display = "inline-block";
+                    }
+                });
             }
         });
     }
@@ -306,7 +319,7 @@
             Upload(imgurl);
         } else {
             //原图返回
-            if (imgurl.toLowerCase().startWith("http")) {
+            if (SourceUrl == ApiSourceUrl) {
                 parent.layer.close(index);
                 return;
             } else {
