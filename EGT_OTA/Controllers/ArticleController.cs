@@ -932,7 +932,7 @@ namespace EGT_OTA.Controllers
             try
             {
                 var ArticleNumber = ZNRequest.GetString("ArticleNumber");
-                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DeleteCompletely).Where<Article>(x => x.Number == ArticleNumber).Execute() > 0;
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.DeleteCompletely).Set("UpdateDate").EqualTo(DateTime.Now).Where<Article>(x => x.Number == ArticleNumber).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
@@ -953,7 +953,7 @@ namespace EGT_OTA.Controllers
             try
             {
                 var ArticleNumber = ZNRequest.GetString("ArticleNumber");
-                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.Approved).Where<Article>(x => x.Number == ArticleNumber).Execute() > 0;
+                var result = new SubSonic.Query.Update<Article>(provider).Set("Status").EqualTo(Enum_Status.Approved).Set("UpdateDate").EqualTo(DateTime.Now).Where<Article>(x => x.Number == ArticleNumber).Execute() > 0;
                 if (result)
                 {
                     return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);

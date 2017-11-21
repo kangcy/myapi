@@ -22,3 +22,15 @@
     </div>
 </body>
 </html>
+<script src="@Url.Content("~/Scripts/mui.min.js")"></script>
+<script type="text/ecmascript">
+    mui.init();
+
+    mui.ready(function () {
+        console.log("aa");
+    })
+
+    mui.plusReady(function () {
+        console.log("bb");
+    })
+</script>

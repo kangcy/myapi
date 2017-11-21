@@ -417,7 +417,7 @@ namespace EGT_OTA.Controllers.Api
                     return JsonConvert.SerializeObject(result);
                 }
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
-                var list = query.Paged(pager.Index, pager.Size).OrderDesc(new string[] { "ID" }).ExecuteTypedList<Article>();
+                var list = query.Paged(pager.Index, pager.Size).OrderDesc(new string[] { "UpdateDate" }).ExecuteTypedList<Article>();
                 List<ArticleJson> newlist = ArticleListInfo(list, UserNumber);
                 result.result = true;
                 result.message = new
