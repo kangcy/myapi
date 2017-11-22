@@ -789,6 +789,49 @@ namespace EGT_OTA.Controllers
         }
 
         /// <summary>
+        /// 编辑分类
+        /// </summary>
+        [ArticlePower]
+        public ActionResult EditShare()
+        {
+            try
+            {
+                var ArticleID = ZNRequest.GetInt("ArticleID");
+                var ArticleNumber = ZNRequest.GetString("ArticleNumber");
+                var TypeID = ZNRequest.GetInt("ArticleType");
+                var ArticlePower = ZNRequest.GetInt("ArticlePower", Enum_ArticlePower.Myself);
+                var ArticlePowerPwd = ZNRequest.GetString("ArticlePowerPwd");
+                if (TypeID <= 0 || ArticlePower < 0)
+                {
+                    return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
+                }
+                var articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
+                if (articleType == null)
+                {
+                    return Json(new { result = false, message = "不存在当前类型" }, JsonRequestBehavior.AllowGet);
+                }
+                var result = new SubSonic.Query.Update<Article>(provider)
+                    .Set("TypeID").EqualTo(TypeID)
+                    .Set("TypeIDList").EqualTo(articleType.ParentIDList)
+                    .Set("ArticlePower").EqualTo(ArticlePower)
+                    .Set("ArticlePowerPwd").EqualTo(ArticlePowerPwd)
+                    .Where<Article>(x => x.ID == ArticleID).Execute() > 0;
+                if (result)
+                {
+                    //用户相册是否展示
+                    var status = ArticlePower == Enum_ArticlePower.Public ? Enum_Status.Approved : Enum_Status.Audit;
+                    new SubSonic.Query.Update<ArticlePart>(provider).Set("Status").EqualTo(status).Where<ArticlePart>(x => x.ArticleNumber == ArticleNumber).Execute();
+                    return Json(new { result = true, message = "成功" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ErrorLoger.Error("ArticleController_EditShare:" + ex.Message);
+            }
+            return Json(new { result = false, message = "失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
         /// 校验权限
         /// </summary>
         public ActionResult CheckPowerPwd()

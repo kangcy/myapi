@@ -118,9 +118,17 @@ namespace EGT_OTA.Controllers.Api
                 var newlist = new List<PicJson>();
 
                 //组织输出
+
+                string[] Month = new string[] { "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" };
+                string[] Day = new string[] { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+                Console.WriteLine();
+
                 newdatelist.ForEach(x =>
                 {
                     PicJson pic = new PicJson();
+                    pic.Month = Month[x.Month - 1];
+                    pic.Day = x.Day;
+                    pic.Week = Day[Convert.ToInt16(x.DayOfWeek)];
                     pic.CreateDate = x.ToString("yyyy年MM月dd日");
                     pic.List = list.FindAll(y => y.CreateDate.Year == x.Year && y.CreateDate.Month == x.Month && y.CreateDate.Day == x.Day);
                     newlist.Add(pic);

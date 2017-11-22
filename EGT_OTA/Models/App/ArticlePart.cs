@@ -126,6 +126,12 @@ namespace EGT_OTA.Models
 
     public class PicJson
     {
+        public string Month { get; set; }
+
+        public int Day { get; set; }
+
+        public string Week { get; set; }
+
         public string CreateDate { get; set; }
 
         public List<ArticlePart> List { get; set; }
