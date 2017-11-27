@@ -1242,7 +1242,7 @@ namespace EGT_OTA.Controllers
         /// </summary>
         public ActionResult Pic()
         {
-            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["upload_url"];
             return View();
         }
 

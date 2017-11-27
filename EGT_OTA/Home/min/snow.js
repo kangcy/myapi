@@ -71,7 +71,7 @@ var snow = new function() {
 	//通用
 	this.snow0 = function() {
 		var c = null,
-			d = null,
+			d = null, 
 			img = null,
 			e = window.innerWidth,
 			f = window.innerHeight,

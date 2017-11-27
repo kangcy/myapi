@@ -83,8 +83,12 @@
                                             }
                                         }
                                     <tr>
+                                        @{
+                                        var link = ViewBag.RootUrl + "Home/user.html?key=" + list[i].CreateUserNumber;
+                                        }
                                         <td class="cell">
-                                            <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;">
+                                            <a href="@link" class="underline" target="_blank">
+                                                <img src="@url" style="width: 60px; height: 60px; border-radius:50px;margin:10px 0px;display: inline-block;"></a>
                                         </td>
                                         <td>
                                             <div class="cell">
@@ -122,6 +126,7 @@
                                             {
                                                 <button type="button" class="el-button el-button--success el-button--small btnDeal" index="@list[i].ID"><span>处理</span></button>
                                             }
+                                            <button type="button" class="el-button el-button--success el-button--small btnArticle" index="@list[i].CreateUserNumber"><span>查看文章</span></button>
                                         </td>
                                     </tr>
                                     }
@@ -195,6 +200,11 @@
 
             $("#reset").click(function () {
                 window.location.href = "@(ViewBag.RootUrl)" + "Back/FeedBack?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
+            })
+
+            //查看文章
+            $(".btnArticle").click(function () {
+                window.open("@(ViewBag.RootUrl)" + "Back/Article?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&usernumber=" + $(this).attr("index"));
             })
 
             //处理

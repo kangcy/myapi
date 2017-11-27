@@ -4,8 +4,8 @@ var fs = require('fs');
 var qiniu = require("qiniu");
 var fileType = require('file-type'); //判断文件类型
 var http = require('http');
-var baseurl = "http://localhost/app/";
-//var baseurl = "http://www.xiaoweipian.com:1010/"
+//var baseurl = "http://localhost/app/";
+var baseurl = "http://www.xiaoweipian.com/"
 
 /**
  * GET请求
