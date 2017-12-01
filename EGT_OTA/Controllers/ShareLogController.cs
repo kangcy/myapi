@@ -21,7 +21,7 @@ namespace EGT_OTA.Controllers
     {
         /// <summary>
         /// 编辑
-        /// ShareType（0：文章,1：用户,2：新手红包）
+        /// ShareType（0：文章,1：用户,2：新手红包,3：banner）
         /// </summary>
         public ActionResult Edit()
         {

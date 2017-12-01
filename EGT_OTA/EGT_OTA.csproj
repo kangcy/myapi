@@ -345,6 +345,7 @@
     <Compile Include="Models\App\Red.cs" />
     <Compile Include="Models\App\Showy.cs" />
     <Compile Include="Models\App\ArticleCustom.cs" />
+    <Compile Include="Models\App\HotSearch.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Base\BasicRepository.cs" />
     <Compile Include="Models\Base\WebApplication.cs" />
