@@ -385,15 +385,24 @@ namespace EGT_OTA.Controllers.Api
                 {
                     if (!string.IsNullOrWhiteSpace(x.BackgroundImage))
                     {
-                        x.BackgroundImage = baseurl + x.BackgroundImage;
+                        if (!x.BackgroundImage.ToLower().StartsWith("http"))
+                        {
+                            x.BackgroundImage = baseurl + x.BackgroundImage;
+                        }
                     }
                     if (!string.IsNullOrWhiteSpace(x.ThumbImage))
                     {
-                        x.ThumbImage = baseurl + x.ThumbImage;
+                        if (!x.ThumbImage.ToLower().StartsWith("http"))
+                        {
+                            x.ThumbImage = baseurl + x.ThumbImage;
+                        }
                     }
                     if (!string.IsNullOrWhiteSpace(x.BottomImage))
                     {
-                        x.BottomImage = baseurl + x.BottomImage;
+                        if (!x.BottomImage.ToLower().StartsWith("http"))
+                        {
+                            x.BottomImage = baseurl + x.BottomImage;
+                        }
                     }
                     if (x.TopImage != null)
                     {
@@ -401,7 +410,10 @@ namespace EGT_OTA.Controllers.Api
                         {
                             x.TopImage.ForEach(y =>
                             {
-                                y.Url = baseurl + y.Url;
+                                if (!y.Url.ToLower().StartsWith("http"))
+                                {
+                                    y.Url = baseurl + y.Url;
+                                }
                             });
                         }
                     }

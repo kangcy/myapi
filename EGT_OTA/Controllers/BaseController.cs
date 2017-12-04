@@ -255,6 +255,13 @@ namespace EGT_OTA.Controllers
                     sr.Close();
                 }
                 list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Showy>>(str);
+                list.ForEach(x =>
+                {
+                    x.ShowyCover.ForEach(y =>
+                    {
+                        y.Cover = Base_Url + y.Cover;
+                    });
+                });
                 CacheHelper.Insert("Showy", list);
             }
             return list;

@@ -59,12 +59,13 @@ namespace EGT_OTA.Models
     {
         public ShowyCover() { }
 
-        public ShowyCover(string cover, int count, int showtype = 0, int status = 1)
+        public ShowyCover(string cover, int count, int showtype = 0, int status = 1, string name = "")
         {
             this.Cover = cover;
             this.Count = Count;
             this.ShowType = showtype;
             this.Status = status;
+            this.Name = name;
         }
 
         public string Cover { get; set; }
@@ -95,5 +96,10 @@ namespace EGT_OTA.Models
         /// 状态
         /// </summary>
         public int Status { get; set; }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Name { get; set; }
     }
 }

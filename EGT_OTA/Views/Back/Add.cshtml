@@ -326,29 +326,41 @@
                 background-color: #426a76;
             }
 
-        .x-head {
-            position: relative;
+        #x-top {
+            position: absolute;
+            z-index: -1;
         }
 
-            .x-head .img-container {
-                padding-top: 2rem;
+        .x-head {
+            position: relative;
+            margin-top: 8rem;
+        }
+
+            .x-head .img-container .avatar {
+                width: 5rem;
+                height: 5rem;
+                margin: 0 auto;
+                background-size: 100% 100%;
+                overflow: hidden;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                border: 2px solid #fff;
+                /**新增***/
+                position: relative;
+                background-size: 100% 100%;
+                border: 0 !important;
+                margin-bottom: 1rem;
             }
 
-                .x-head .img-container .avatar {
-                    width: 5rem;
-                    height: 5rem;
-                    margin: 0 auto;
-                    background-size: 100% 100%;
-                    overflow: hidden;
+                .x-head .img-container .avatar img {
+                    width: 100%;
+                    /**新增***/
                     border-radius: 50%;
-                    -webkit-box-sizing: border-box;
-                    box-sizing: border-box;
-                    border: 2px solid #fff;
+                    z-index: -1;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
                 }
-
-                    .x-head .img-container .avatar img {
-                        width: 100%;
-                    }
 
         .root .article-meta {
             overflow: hidden;
@@ -687,7 +699,7 @@
                                 <img id="useravatar0" src="../images/avatar.png" class="user">
                             </div>
                         </div>
-                        <div class="article-meta well2 full mt10 tc" id="x-article">
+                        <div class="article-meta well2 full tc" id="x-article">
                             <p class="article-title thicker f20" id="title0" contenteditable="true"></p>
                             <p class="time-read mt10 f13">
                                 <span id="createdate0"></span>
@@ -862,6 +874,8 @@
     var $cover = base.Get("x-bg-blur"); //非纯色内容透明度底
     var $top = base.Get("x-top");
     var $bottom = base.Get("x-bottom");
+    var $avatarbg = base.Get("x-avatar-sub");
+    var $avatar = base.Get("useravatar0");
     var Showy = "";
     var $header = base.Get("header");
     var $edit = base.Get("edit");
@@ -1739,7 +1753,7 @@
                             base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
                             base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
                             base.Get("views0").style.color = CurrTemplateJson.ViewColor;
-                            base.Get("x-avatar-sub").style.border = "2px solid " + CurrTemplateJson.TitleColor;
+                            $avatarbg.style.border = "2px solid " + CurrTemplateJson.TitleColor;
                         }
                     }
                 }
@@ -1750,7 +1764,7 @@
                     base.Get("nickname1").style.color = CurrColorTemplateJson.UserColor;
                     base.Get("createdate0").style.color = CurrColorTemplateJson.TimeColor;
                     base.Get("views0").style.color = CurrColorTemplateJson.ViewColor;
-                    base.Get("x-avatar-sub").style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
+                    $avatarbg.style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
                 }
                 CurrTemplate = data.Template;
                 CurrColorTemplate = data.ColorTemplate;
@@ -1838,17 +1852,59 @@
         $wrapper1.style.background = "";
         $cover.style.backgroundColor = "";
         $wrapper2.style.background = "";
+        $avatarbg.style.backgroundImage = "";
+        $avatarbg.style.width = "5rem";
+        $avatarbg.style.height = "5rem";
+        $avatar.style.width = "100%";
+        $avatar.style.left = "0";
+        $avatar.style.top = "0";
+        base.Get("x-head").style.marginTop = "8rem";
+        $avatarbg.style.marginBottom = "1rem";
+        if (CurrTemplateJson.ShowAvatar <= 0) {
+            base.Get("x-avatar").classList.add("hide");
+        }
         if (CurrTemplate > 1) {
-            //模板 
-            base.Get("x-avatar").style.marginTop = CurrTemplateJson.MarginTop + "rem";
+            //头像
+            if (CurrTemplateJson.Avatar != null) {
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.BackgroundImage)) {
+                    $avatarbg.style.backgroundImage = "url(" + CurrTemplateJson.Avatar.BackgroundImage + ")";
+                }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.Width)) {
+                    $avatarbg.style.width = CurrTemplateJson.Avatar.Width;
+                    $avatarbg.style.height = CurrTemplateJson.Avatar.Width;
+                }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.MarginBottom)) {
+                    $avatarbg.style.marginBottom = CurrTemplateJson.Avatar.MarginBottom;
+                }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.MarginTop)) {
+                    base.Get("x-head").style.marginTop = CurrTemplateJson.Avatar.MarginTop;
+                }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.SubWidth)) {
+                    $avatar.style.width = CurrTemplateJson.Avatar.SubWidth;
+                }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.Top)) {
+                    $avatar.style.top = CurrTemplateJson.Avatar.Top;
+                }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.Left)) {
+                    $avatar.style.left = CurrTemplateJson.Avatar.Left;
+                }
+            }
+
             $cover.style.backgroundColor = CurrTemplateJson.Transparency;
             if (CurrTemplateJson.CoverFixed == 0) {
                 if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
-                    $wrapper1.style.backgroundImage = "url(" + CurrTemplateJson.BackgroundImage + ")";
+                    var imglist = [];
+                    var imgs = CurrTemplateJson.BackgroundImage.split('?');
+                    for (var i = 0; i < imgs.length; i++) {
+                        imglist.push("url(" + imgs[i] + ")");
+                    }
+                    $wrapper1.style.backgroundImage = imglist.join(',');
+                    if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundPosition)) {
+                        $wrapper1.style.backgroundPosition = CurrTemplateJson.BackgroundPosition;
+                    }
                     if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
                         $wrapper1.style.backgroundRepeat = CurrTemplateJson.BackgroundRepeat;
                     }
-
                     if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundSize)) {
                         $wrapper1.style.backgroundSize = CurrTemplateJson.BackgroundSize;
                     }
@@ -1861,7 +1917,15 @@
                 }
             } else if (CurrTemplateJson.CoverFixed == 1) {
                 if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
-                    $wrapper2.style.backgroundImage = "url(" + CurrTemplateJson.BackgroundImage + ")";
+                    var imglist = [];
+                    var imgs = CurrTemplateJson.BackgroundImage.split('?');
+                    for (var i = 0; i < imgs.length; i++) {
+                        imglist.push("url(" + imgs[i] + ")");
+                    }
+                    $wrapper2.style.backgroundImage = imglist.join(',');
+                    if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundPosition)) {
+                        $wrapper2.style.backgroundPosition = CurrTemplateJson.BackgroundPosition;
+                    }
                     if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
                         $wrapper2.style.backgroundRepeat = CurrTemplateJson.BackgroundRepeat;
                     }
@@ -1893,7 +1957,15 @@
                     $bottom.classList.remove("hide");
                 }
                 if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
-                    $wrapper2.style.backgroundImage = "url(" + CurrTemplateJson.BackgroundImage + ")";
+                    var imglist = [];
+                    var imgs = CurrTemplateJson.BackgroundImage.split('?');
+                    for (var i = 0; i < imgs.length; i++) {
+                        imglist.push("url(" + imgs[i] + ")");
+                    }
+                    $wrapper2.style.backgroundImage = imglist.join(',');
+                    if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundPosition)) {
+                        $wrapper2.style.backgroundPosition = CurrTemplateJson.BackgroundPosition;
+                    }
                     if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
                         $wrapper2.style.backgroundRepeat = CurrTemplateJson.BackgroundRepeat;
                     }
@@ -2156,7 +2228,7 @@
                             base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
                             base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
                             base.Get("views0").style.color = CurrTemplateJson.ViewColor;
-                            base.Get("x-avatar-sub").style.border = "2px solid " + CurrTemplateJson.TitleColor;
+                            $avatarbg.style.border = "2px solid " + CurrTemplateJson.TitleColor;
                             ChangeBg();
                         });
                     }
@@ -2198,7 +2270,7 @@
                             base.Get("nickname1").style.color = CurrColorTemplateJson.UserColor;
                             base.Get("createdate0").style.color = CurrColorTemplateJson.TimeColor;
                             base.Get("views0").style.color = CurrColorTemplateJson.ViewColor;
-                            base.Get("x-avatar-sub").style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
+                            $avatarbg.style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
                         });
                     }
                 }
@@ -2235,7 +2307,7 @@
         base.Get("nickname1").style.color = "#20a0ff";
         base.Get("createdate0").style.color = "#8C8C8C";
         base.Get("views0").style.color = "#8C8C8C";
-        base.Get("x-avatar-sub").style.border = "2px solid #333";
+        $avatarbg.style.border = "2px solid #333";
     }
 
     function change(val, id, name) {

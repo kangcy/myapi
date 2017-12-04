@@ -132,6 +132,11 @@ namespace EGT_OTA.Models
         public string BackgroundSize { get; set; }
 
         /// <summary>
+        /// 背景定位
+        /// </summary>
+        public string BackgroundPosition { get; set; }
+
+        /// <summary>
         /// 样式名称
         /// </summary>
         public string Cover { get; set; }
@@ -147,14 +152,57 @@ namespace EGT_OTA.Models
         public int ShowAvatar { get; set; }
 
         /// <summary>
-        /// 图片边框
+        /// 头像
         /// </summary>
-        public string ImgBorder { get; set; }
+        public AvatarImage Avatar { get; set; }
 
         /// <summary>
         /// 文字边框
         /// </summary>
         public string TextBorder { get; set; }
+    }
+
+    /// <summary>
+    /// 头像配置
+    /// </summary>
+    public class AvatarImage
+    {
+        public AvatarImage() { }
+
+        /// <summary>
+        /// 背景图片
+        /// </summary>
+        public string BackgroundImage { get; set; }
+
+        /// <summary>
+        /// 背景宽高
+        /// </summary>
+        public string Width { get; set; }
+
+        /// <summary>
+        /// 头像宽
+        /// </summary>
+        public string SubWidth { get; set; }
+
+        /// <summary>
+        /// 头像位置
+        /// </summary>
+        public string Top { get; set; }
+
+        /// <summary>
+        /// 头像位置
+        /// </summary>
+        public string Left { get; set; }
+
+        /// <summary>
+        /// 头像间距
+        /// </summary>
+        public string MarginTop { get; set; }
+
+        /// <summary>
+        /// 头像间距
+        /// </summary>
+        public string MarginBottom { get; set; }
     }
 
     public class TopImage
