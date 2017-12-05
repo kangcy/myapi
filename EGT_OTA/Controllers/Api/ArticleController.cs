@@ -74,7 +74,7 @@ namespace EGT_OTA.Controllers.Api
                     model.IsZan = new SubSonic.Query.Select(provider, "ID").From<ArticleZan>().Where<ArticleZan>(x => x.CreateUserNumber == user.Number && x.ArticleNumber == model.Number).GetRecordCount() == 0 ? 0 : 1;
 
                     //类型
-                    ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
+                    ArticleType articleType = AppHelper.GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
                     model.TypeName = articleType == null ? string.Empty : articleType.Name;
 
                     //文章部分
@@ -113,13 +113,13 @@ namespace EGT_OTA.Controllers.Api
                 var previewTemp = ZNRequest.GetInt("Template", -1);
                 if (previewTemp >= 0)
                 {
-                    model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == previewTemp);
+                    model.TemplateJson = AppHelper.GetArticleTemplate().FirstOrDefault(x => x.ID == previewTemp);
                 }
                 else
                 {
                     if (model.Template >= 0)
                     {
-                        model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
+                        model.TemplateJson = AppHelper.GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
                     }
                 }
 
@@ -127,13 +127,13 @@ namespace EGT_OTA.Controllers.Api
                 var previewColorTemp = ZNRequest.GetInt("ColorTemplate", 0);
                 if (previewColorTemp > 0)
                 {
-                    model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == previewColorTemp);
+                    model.ColorTemplateJson = AppHelper.GetColorTemplate().FirstOrDefault(x => x.ID == previewColorTemp);
                 }
                 else
                 {
                     if (model.ColorTemplate > 0)
                     {
-                        model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
+                        model.ColorTemplateJson = AppHelper.GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
                     }
                 }
 
@@ -237,7 +237,7 @@ namespace EGT_OTA.Controllers.Api
                 model.IsZan = new SubSonic.Query.Select(provider, "ID").From<ArticleZan>().Where<ArticleZan>(x => x.CreateUserNumber == UserNumber && x.ArticleNumber == model.Number).GetRecordCount() == 0 ? 0 : 1;
 
                 //类型
-                ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
+                ArticleType articleType = AppHelper.GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
                 model.TypeName = articleType == null ? string.Empty : articleType.Name;
 
                 //文章部分
@@ -253,13 +253,13 @@ namespace EGT_OTA.Controllers.Api
                 var previewTemp = ZNRequest.GetInt("Template", -1);
                 if (previewTemp >= 0)
                 {
-                    model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == previewTemp);
+                    model.TemplateJson = AppHelper.GetArticleTemplate().FirstOrDefault(x => x.ID == previewTemp);
                 }
                 else
                 {
                     if (model.Template >= 0)
                     {
-                        model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
+                        model.TemplateJson = AppHelper.GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
                     }
                 }
 
@@ -267,13 +267,13 @@ namespace EGT_OTA.Controllers.Api
                 var previewColorTemp = ZNRequest.GetInt("ColorTemplate", 0);
                 if (previewColorTemp > 0)
                 {
-                    model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == previewColorTemp);
+                    model.ColorTemplateJson = AppHelper.GetColorTemplate().FirstOrDefault(x => x.ID == previewColorTemp);
                 }
                 else
                 {
                     if (model.ColorTemplate > 0)
                     {
-                        model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
+                        model.ColorTemplateJson = AppHelper.GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
                     }
                 }
 

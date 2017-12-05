@@ -87,7 +87,7 @@ namespace EGT_OTA.Controllers.Api
                     return JsonConvert.SerializeObject(result);
                 }
                 summary = CutString(summary, 2000);
-                var dirtyword = HasDirtyWord(summary);
+                var dirtyword = AppHelper.HasDirtyWord(summary);
                 if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
                     result.message = "您的输入内容含有敏感内容[" + dirtyword + "]，请检查后重试哦";

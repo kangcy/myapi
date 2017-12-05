@@ -532,6 +532,7 @@
     <Content Include="Images\Border\border_blur.png" />
     <Content Include="Images\Border\border_diamond.png" />
     <Content Include="Images\Border\border_flower.jpg" />
+    <Content Include="Images\Border\border_flower1.png" />
     <Content Include="Images\Border\border_gold1.png" />
     <Content Include="Images\Border\border_gold2.png" />
     <Content Include="Images\Border\border_layer01.png" />

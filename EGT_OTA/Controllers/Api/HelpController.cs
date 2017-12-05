@@ -27,7 +27,7 @@ namespace EGT_OTA.Controllers.Api
             try
             {
                 result.result = true;
-                result.message = InitHelpType();
+                result.message = AppHelper.InitHelpType();
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace EGT_OTA.Controllers.Api
             {
                 var type = ZNRequest.GetInt("type");
                 result.result = true;
-                result.message = GetHelp().FindAll(x => x.HelpType == type);
+                result.message = AppHelper.GetHelp().FindAll(x => x.HelpType == type);
             }
             catch (Exception ex)
             {

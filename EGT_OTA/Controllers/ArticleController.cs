@@ -190,7 +190,7 @@ namespace EGT_OTA.Controllers
                 }
                 model.Title = SqlFilter(ZNRequest.GetString("Title"));
                 model.Title = CutString(model.Title, 100);
-                var dirtyword = HasDirtyWord(model.Title);
+                var dirtyword = AppHelper.HasDirtyWord(model.Title);
                 if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
                     return Json(new { result = false, message = "您输入的标题含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
@@ -227,7 +227,7 @@ namespace EGT_OTA.Controllers
                 var TypeID = ZNRequest.GetInt("ArticleType", 0);
                 if (TypeID > 0)
                 {
-                    var articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
+                    var articleType = AppHelper.GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
                     if (articleType != null)
                     {
                         model.TypeID = TypeID;
@@ -404,7 +404,7 @@ namespace EGT_OTA.Controllers
                 }
                 model.Title = SqlFilter(ZNRequest.GetString("Title"));
                 model.Title = CutString(model.Title, 100);
-                var dirtyword = HasDirtyWord(model.Title);
+                var dirtyword = AppHelper.HasDirtyWord(model.Title);
                 if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
                     return Json(new { result = false, message = "您输入的标题含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);
@@ -441,7 +441,7 @@ namespace EGT_OTA.Controllers
                 var TypeID = ZNRequest.GetInt("ArticleType", 0);
                 if (TypeID > 0)
                 {
-                    var articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
+                    var articleType = AppHelper.GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
                     if (articleType != null)
                     {
                         model.TypeID = TypeID;
@@ -487,7 +487,7 @@ namespace EGT_OTA.Controllers
                     }
                     if (result)
                     {
-                        ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
+                        ArticleType articleType = AppHelper.GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
                         model.TypeName = articleType == null ? string.Empty : articleType.Name;
 
                         return Json(new
@@ -532,7 +532,7 @@ namespace EGT_OTA.Controllers
                     }
 
 
-                    ArticleType articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
+                    ArticleType articleType = AppHelper.GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == model.TypeID);
                     model.TypeName = articleType == null ? string.Empty : articleType.Name;
 
                     parts = SqlFilter(ZNRequest.GetString("Part").Trim(), false, false);
@@ -747,7 +747,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
                 }
-                var articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
+                var articleType = AppHelper.GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
                 if (articleType == null)
                 {
                     return Json(new { result = false, message = "不存在当前类型" }, JsonRequestBehavior.AllowGet);
@@ -805,7 +805,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
                 }
-                var articleType = GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
+                var articleType = AppHelper.GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
                 if (articleType == null)
                 {
                     return Json(new { result = false, message = "不存在当前类型" }, JsonRequestBehavior.AllowGet);
@@ -864,7 +864,7 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var list = GetArticleTemplate().ToList();
+                var list = AppHelper.GetArticleTemplate().ToList();
                 var result = new
                 {
                     currpage = 1,
@@ -888,7 +888,7 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var list = GetColorTemplate().ToList();
+                var list = AppHelper.GetColorTemplate().ToList();
                 var result = new
                 {
                     currpage = 1,

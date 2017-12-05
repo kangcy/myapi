@@ -36,7 +36,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "请填写反馈信息" }, JsonRequestBehavior.AllowGet);
                 }
-                var dirtyword = HasDirtyWord(summary);
+                var dirtyword = AppHelper.HasDirtyWord(summary);
                 if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
                     return Json(new { result = false, message = "您输入的标题含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);

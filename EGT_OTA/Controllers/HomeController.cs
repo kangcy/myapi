@@ -165,12 +165,12 @@ namespace EGT_OTA.Controllers
                 model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);
                 if (model.Template >= 0)
                 {
-                    model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
+                    model.TemplateJson = AppHelper.GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
                 }
 
                 if (model.ColorTemplate > 0)
                 {
-                    model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
+                    model.ColorTemplateJson = AppHelper.GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
                 }
 
 

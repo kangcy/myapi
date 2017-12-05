@@ -22,7 +22,7 @@ namespace EGT_OTA.Controllers.Api
             ApiResult result = new ApiResult();
             try
             {
-                var list = GetArticleType().Where(x => x.ID > 0).OrderBy(x => x.SortID).ToList();
+                var list = AppHelper.GetArticleType().Where(x => x.ID > 0).OrderBy(x => x.SortID).ToList();
                 list.ForEach(x =>
                 {
                     x.Cover = GetFullUrl(x.Cover);
@@ -45,7 +45,7 @@ namespace EGT_OTA.Controllers.Api
             ApiResult result = new ApiResult();
             try
             {
-                var list = GetArticleType();
+                var list = AppHelper.GetArticleType();
                 var first = list.FindAll(x => x.ParentID == 0 && x.ID > 0).OrderBy(x => x.ID).ToList();
 
                 first.ForEach(x =>

@@ -29,7 +29,7 @@ namespace EGT_OTA.Controllers.Api
             ApiResult result = new ApiResult();
             try
             {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(GetDirtyWord());
+                return Newtonsoft.Json.JsonConvert.SerializeObject(AppHelper.GetDirtyWord());
             }
             catch (Exception ex)
             {

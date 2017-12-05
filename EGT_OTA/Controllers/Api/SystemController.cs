@@ -32,7 +32,7 @@ namespace EGT_OTA.Controllers.Api
                     result.message = "存在违禁词";
                     return JsonConvert.SerializeObject(result);
                 }
-                var dirtyword = HasDirtyWord(title);
+                var dirtyword = AppHelper.HasDirtyWord(title);
                 if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
                     result.message = "您输入的内容含有敏感内容[" + dirtyword + "]，请检查后重试哦";
@@ -66,7 +66,7 @@ namespace EGT_OTA.Controllers.Api
                     result.message = "存在违禁词";
                     return Json<ApiResult>(result);
                 }
-                var dirtyword = HasDirtyWord(title);
+                var dirtyword = AppHelper.HasDirtyWord(title);
                 if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
                     result.message = "您输入的内容含有敏感内容[" + dirtyword + "]，请检查后重试哦";

@@ -210,7 +210,7 @@ var snow = new function () {
             d.style.animationName = "ballon_d";
             d.style.webkitAnimationName = "ballon_d";
             c.appendChild(d);
-            if (c.children.length > 10) {
+            if (c.children.length >= 10) {
                 clearInterval(snowinterval)
             }
         }, 200)
@@ -267,7 +267,7 @@ var snow = new function () {
             d.style.animationName = "dandelion_d";
             d.style.webkitAnimationName = "dandelion_d";
             c.appendChild(d);
-            c.children.length > 15 && clearInterval(snowinterval)
+            c.children.length >= 15 && clearInterval(snowinterval)
         }, 200)
     }
     //泡泡
@@ -318,7 +318,7 @@ var snow = new function () {
             e.style.position = "fixed", e.style.animationName = "dandelion_d";
             e.style.webkitAnimationName = "dandelion_d";
             c.appendChild(e);
-            c.children.length > 10 && clearInterval(snowinterval)
+            c.children.length >= 10 && clearInterval(snowinterval)
         }, 200)
     }
     //黑泡泡
@@ -371,7 +371,7 @@ var snow = new function () {
             e.style.animationName = "dandelion_d";
             e.style.webkitAnimationName = "dandelion_d";
             c.appendChild(e);
-            c.children.length > 15 && clearInterval(snowinterval)
+            c.children.length >= 15 && clearInterval(snowinterval)
         }, 200)
     }
     //小雪
@@ -605,7 +605,7 @@ var snow = new function () {
             b.style.animationTimingFunction = "linear", b.style.zIndex = 300;
             b.style.position = "fixed";
             b.classList.add("particles_class"), c.appendChild(b);
-            c.children.length > 15 && clearInterval(snowinterval)
+            c.children.length >= 15 && clearInterval(snowinterval)
         }, 200);
     }
     //爆竹
@@ -635,7 +635,7 @@ var snow = new function () {
             b.style.position = "fixed";
             b.classList.add("particles_class");
             c.appendChild(b);
-            c.children.length > 30 && clearInterval(snowinterval)
+            c.children.length >= 30 && clearInterval(snowinterval)
         }, 200);
     }
     //元宝1
@@ -665,7 +665,7 @@ var snow = new function () {
             b.style.position = "fixed";
             b.classList.add("particles_class");
             c.appendChild(b);
-            c.children.length > 15 && clearInterval(snowinterval)
+            c.children.length >= 15 && clearInterval(snowinterval)
         }, 200);
     };
     //元宝2
@@ -698,7 +698,7 @@ var snow = new function () {
             b.style.webkitAnimationTimingFunction = "linear";
             b.style.animationTimingFunction = "linear";
             c.appendChild(b);
-            if (c.children.length > 10) {
+            if (c.children.length >= 10) {
                 clearInterval(snowinterval)
             }
         }, 200);
@@ -752,7 +752,7 @@ var snow = new function () {
             b.style.animationDuration = "10s";
             b.style.zIndex = 10;
             c.appendChild(b);
-            c.children.length > 10 && clearInterval(snowinterval)
+            c.children.length >= 10 && clearInterval(snowinterval)
         }, 1000);
     };
     //心形(向下)
@@ -804,23 +804,23 @@ var snow = new function () {
             b.style.animationDuration = "10s";
             b.style.zIndex = 10;
             c.appendChild(b);
-            c.children.length > 10 && clearInterval(snowinterval)
+            c.children.length >= 10 && clearInterval(snowinterval)
         }, 1000);
     };
 
     //雪花
     this.snow15 = function () {
         var snowimg = this.snowimg;
+        var snowcount = this.snowcount;
         var c = document.getElementById("snowwrapper");
         var d = window.innerWidth;
 
         function a() {
-            var snowpic = "https://ss2.meipian.me/theme/v2/img/springFestival/snowG.png";
             var size = Math.random() * 6 + 10;
             var exam = (size - 10) / 6;
             var snow = document.createElement("div");
             var pic = document.createElement("img");
-            pic.src = snowpic;
+            pic.src = snowimg;
             if (Math.random() > 0.5) {
                 imganimation = "rotate";
             } else {
@@ -864,7 +864,8 @@ var snow = new function () {
             snow.style.webkitAnimationTimingFunction = "linear";
             snow.style.animationTimingFunction = "linear";
             c.appendChild(snow);
-            if (c.children.length > this.snowcount) {
+            console.log(c.children.length + "," + snowcount)
+            if (c.children.length >= snowcount) {
                 clearInterval(snowinterval);
             }
 
@@ -873,6 +874,7 @@ var snow = new function () {
     //雪花
     this.snow16 = function () {
         var snowimg = this.snowimg;
+        var snowcount = this.snowcount;
         var c = document.getElementById("snowwrapper");
         var d = window.innerWidth;
         function a() {
@@ -923,7 +925,7 @@ var snow = new function () {
             snow.style.webkitAnimationTimingFunction = "linear";
             snow.style.animationTimingFunction = "linear";
             c.appendChild(snow);
-            if (c.children.length > this.snowcount) {
+            if (c.children.length >= snowcount) {
                 clearInterval(snowinterval);
             }
         }, 200);

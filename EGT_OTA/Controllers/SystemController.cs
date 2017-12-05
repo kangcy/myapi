@@ -337,7 +337,7 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var list = GetBanner();
+                var list = AppHelper.GetBanner();
                 var result = new
                 {
                     records = list.Count(),
@@ -359,7 +359,7 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var list = GetSearch();
+                var list = AppHelper.GetSearch();
                 var result = new
                 {
                     records = list.Count(),
@@ -381,7 +381,7 @@ namespace EGT_OTA.Controllers
         {
             try
             {
-                var list = GetMusicSearch();
+                var list = AppHelper.GetMusicSearch();
                 var result = new
                 {
                     records = list.Count(),
@@ -404,7 +404,7 @@ namespace EGT_OTA.Controllers
             try
             {
                 var pager = new Pager();
-                var list = GetShowy().FindAll(x => x.Status == 1);
+                var list = AppHelper.GetShowy().FindAll(x => x.Status == 1);
                 var recordCount = list.Count();
                 var totalPage = recordCount % pager.Size == 0 ? recordCount / pager.Size : recordCount / pager.Size + 1;
                 list = list.Skip((pager.Index - 1) * pager.Size).Take(pager.Size).ToList();
@@ -478,7 +478,7 @@ namespace EGT_OTA.Controllers
                 {
                     return Json(new { result = false, message = "存在违禁词" }, JsonRequestBehavior.AllowGet);
                 }
-                var dirtyword = HasDirtyWord(title);
+                var dirtyword = AppHelper.HasDirtyWord(title);
                 if (!string.IsNullOrWhiteSpace(dirtyword))
                 {
                     return Json(new { result = false, message = "您输入的内容含有敏感内容[" + dirtyword + "]，请检查后重试哦" }, JsonRequestBehavior.AllowGet);

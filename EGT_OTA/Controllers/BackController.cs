@@ -203,7 +203,7 @@ namespace EGT_OTA.Controllers
                     userids.Add(x.CreateUserNumber);
                 });
                 var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Cover", "Number").From<User>().Where("Number").In(userids.ToArray()).ExecuteTypedList<User>();
-                var articletypes = GetArticleType();
+                var articletypes = AppHelper.GetArticleType();
 
                 list.ForEach(x =>
                 {
@@ -371,12 +371,12 @@ namespace EGT_OTA.Controllers
                 model.BackgroundJson = db.Single<Background>(x => x.ArticleNumber == model.Number && x.IsUsed == Enum_Used.Approved);
                 if (model.Template >= 0)
                 {
-                    model.TemplateJson = GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
+                    model.TemplateJson = AppHelper.GetArticleTemplate().FirstOrDefault(x => x.ID == model.Template);
                 }
 
                 if (model.ColorTemplate > 0)
                 {
-                    model.ColorTemplateJson = GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
+                    model.ColorTemplateJson = AppHelper.GetColorTemplate().FirstOrDefault(x => x.ID == model.ColorTemplate);
                 }
 
                 //漂浮装扮
@@ -416,7 +416,7 @@ namespace EGT_OTA.Controllers
                     return Json(new { result = false, message = "文章不存在" }, JsonRequestBehavior.AllowGet);
                 }
 
-                var articletypes = GetArticleType();
+                var articletypes = AppHelper.GetArticleType();
                 var type = articletypes.FirstOrDefault(y => y.ID == articletype);
                 if (type == null)
                 {
@@ -525,7 +525,7 @@ namespace EGT_OTA.Controllers
                 });
                 var articles = new SubSonic.Query.Select(provider, "ID", "Number", "Title", "TypeID", "City", "Province", "District", "Street", "DetailName", "Submission").From<Article>().Where("Number").In(articleids.ToArray()).ExecuteTypedList<Article>();
                 var users = new SubSonic.Query.Select(provider, "ID", "NickName", "Avatar", "Number", "Sex").From<User>().Where("Number").In(userids.ToArray()).ExecuteTypedList<User>();
-                var articletypes = GetArticleType();
+                var articletypes = AppHelper.GetArticleType();
 
                 list.ForEach(x =>
                 {

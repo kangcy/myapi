@@ -147,7 +147,7 @@ namespace EGT_OTA.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// 是否显示头像
+        /// 是否显示头像(-1不显示)
         /// </summary>
         public int ShowAvatar { get; set; }
 
@@ -157,9 +157,9 @@ namespace EGT_OTA.Models
         public AvatarImage Avatar { get; set; }
 
         /// <summary>
-        /// 文字边框
+        /// 漂浮
         /// </summary>
-        public string TextBorder { get; set; }
+        public string Showy { get; set; }
     }
 
     /// <summary>
@@ -175,9 +175,14 @@ namespace EGT_OTA.Models
         public string BackgroundImage { get; set; }
 
         /// <summary>
-        /// 背景宽高
+        /// 背景宽
         /// </summary>
         public string Width { get; set; }
+
+        /// <summary>
+        /// 背景高
+        /// </summary>
+        public string Height { get; set; }
 
         /// <summary>
         /// 头像宽
@@ -203,6 +208,21 @@ namespace EGT_OTA.Models
         /// 头像间距
         /// </summary>
         public string MarginBottom { get; set; }
+
+        /// <summary>
+        /// 圆角
+        /// </summary>
+        public string BorderRadius { get; set; }
+
+        /// <summary>
+        /// 层级
+        /// </summary>
+        public string Index { get; set; }
+
+        /// <summary>
+        /// 边框
+        /// </summary>
+        public string Border { get; set; }
     }
 
     public class TopImage

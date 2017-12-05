@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/mui.min.css")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/animate.min.css")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/addarticle.min.css")" />
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/demo.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/demo.css?rand=" + DateTime.Now)" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/swiper/swiper.min.css")" />
     <style type="text/css">
         #snowwrapper {
@@ -31,6 +31,7 @@
             left: 0;
             top: 0;
             pointer-events: none;
+            z-index: 2;
         }
 
         #snowcanvas {
@@ -40,6 +41,7 @@
             height: 650px;
             left: 0;
             top: 0;
+            z-index: 2;
         }
 
         #btnTemp,
@@ -305,7 +307,7 @@
         #x-bg {
             position: fixed;
             height: 100%;
-            width: 400px;
+            width: 398px;
         }
 
         .root {
@@ -319,11 +321,14 @@
                 width: 100%;
                 position: relative;
                 z-index: 1;
-                background-image: url(https://ss2.meipian.me/theme/v2/img/059/bg.jpg?1);
+                /*background-image: url(https://ss2.meipian.me/theme/v2/img/059/bg.jpg?1);
                 background-size: 100% auto;
                 background-repeat: no-repeat;
+                background-color: #426a76;*/
                 min-height: 100%;
-                background-color: #426a76;
+                display: inline-block;
+                height: auto !important;
+                float: left;
             }
 
         #x-top {
@@ -333,7 +338,7 @@
 
         .x-head {
             position: relative;
-            margin-top: 8rem;
+            margin-top: 6rem;
         }
 
             .x-head .img-container .avatar {
@@ -344,11 +349,9 @@
                 overflow: hidden;
                 -webkit-box-sizing: border-box;
                 box-sizing: border-box;
-                border: 2px solid #fff;
                 /**新增***/
                 position: relative;
                 background-size: 100% 100%;
-                border: 0 !important;
                 margin-bottom: 1rem;
             }
 
@@ -655,7 +658,7 @@
                 </div>
             </div>
         </div>
-        <div class="el-card__body fl" style="padding: 0; display: inline-block; position: relative;">
+        <div class="el-card__body fl" style="padding: 0; display: inline-block; position: relative; overflow: hidden;">
             <!--主题色-->
             <div class="swiper-container hide" id="mycolor" style="bottom: 0px; background: rgba(0, 0, 0, .5); height: auto; width: auto;">
                 <div class="swiper-wrapper">
@@ -731,7 +734,7 @@
                 </div>
                 <div class="swiper-scrollbar" id="myline-scrollbar"></div>
             </div>
-            <div class="swiper-container hide" id="myborder" style="bottom: 0px; background: rgba(255,255,255,.25); height: auto; width: auto;">
+            <div class="swiper-container hide" id="myborder" style="bottom: 0px; background: rgba(255,255,255,.25);">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide tc" id="myborder-slide"></div>
                 </div>
@@ -1108,8 +1111,11 @@
         tip: "粉色邮票",
         name: "border_stamp_pink"
     }, {
-        tip: "花边",
+        tip: "花边1",
         name: "border_flower"
+    }, {
+        tip: "花边2",
+        name: "border_flower1"
     }, {
         tip: "浮光掠影",
         name: "border_layer01"
@@ -1400,6 +1406,7 @@
             });
             base.Get("line-slide").innerHTML = "";
             base.Get("line-slide").appendChild(fragment);
+            myline.classList.remove("hide");
             lineSwiper = new Swiper('#myline', {
                 scrollbar: '#myline-scrollbar',
                 direction: 'vertical',
@@ -1442,16 +1449,17 @@
                 var div = document.createElement('div');
                 div.className = "img_border";
                 div.setAttribute("name", x.name);
-                div.innerHTML = '<p class="cfff">' + x.tip + '</p><div class="' + x.name + '"><img src="' + src + '" /></div>';
+                div.innerHTML = '<p class="cfff mb30">' + x.tip + '</p><div class="' + x.name + '"><img src="' + src + '" /></div>';
                 fragment.appendChild(div);
             });
             base.Get("myborder-slide").innerHTML = "";
             base.Get("myborder-slide").appendChild(fragment);
+            myborder.classList.remove("hide");
             borderSwiper = new Swiper('#myborder', {
                 scrollbar: '#myborder-scrollbar',
                 direction: 'horizontal',
                 slidesPerView: 'auto',
-                mousewheelControl: true,
+                mousewheelControl: false,
                 freeMode: true,
                 roundLengths: true,
                 spaceBetween: 10,
@@ -1596,7 +1604,6 @@
         //同步原始段落信息	
         InitParts.push(new PartModel(base.GetUid(), url, "", 1, 0, 3, 1));
     }
-
 
     //音乐搜索
     function ShowMusic() {
@@ -1753,7 +1760,7 @@
                             base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
                             base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
                             base.Get("views0").style.color = CurrTemplateJson.ViewColor;
-                            $avatarbg.style.border = "2px solid " + CurrTemplateJson.TitleColor;
+                            //$avatarbg.style.border = "2px solid " + CurrTemplateJson.TitleColor;
                         }
                     }
                 }
@@ -1764,7 +1771,7 @@
                     base.Get("nickname1").style.color = CurrColorTemplateJson.UserColor;
                     base.Get("createdate0").style.color = CurrColorTemplateJson.TimeColor;
                     base.Get("views0").style.color = CurrColorTemplateJson.ViewColor;
-                    $avatarbg.style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
+                    //$avatarbg.style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
                 }
                 CurrTemplate = data.Template;
                 CurrColorTemplate = data.ColorTemplate;
@@ -1788,7 +1795,7 @@
                 $(".ddl_filter_articletype[index=" + data.TypeID + "]").eq(0).trigger("click");
                 $("#articlepowerpwd").val(data.ArticlePowerPwd);
                 base.Get("musicname0").innerHTML = data.MusicName;
-                base.Get("useravatar0").setAttribute("src", base.ShowThumb(data.Avatar, 1));
+                base.Get("useravatar0").setAttribute("src", base.ShowThumb(data.Avatar, 0));
                 base.InnerHtml(["title0"], base.IsNullOrEmpty(Article.Title) ? "请输入文章标题" : Article.Title);
                 base.InnerHtml(["nickname", "nickname0", "nickname1"], Article.NickName);
                 base.InnerHtml(["createdate0"], data.CreateDateText);
@@ -1846,6 +1853,9 @@
 
         ChangeMusic();
 
+        UpdateShowy(CurrTemplateJson.Showy);
+
+        base.Get("x-cover").classList.remove("x-cover");
         $top.classList.add("hide");
         $bottom.classList.add("hide");
         $wrapper.style.backgroundColor = "";
@@ -1858,12 +1868,30 @@
         $avatar.style.width = "100%";
         $avatar.style.left = "0";
         $avatar.style.top = "0";
-        base.Get("x-head").style.marginTop = "8rem";
+        $avatar.style.borderRadius = "50%";
+        $avatar.style.border = "";
+        $avatar.style.zIndex = "-1";
+        base.Get("x-head").style.marginTop = "6rem";
         $avatarbg.style.marginBottom = "1rem";
-        if (CurrTemplateJson.ShowAvatar <= 0) {
+        if (CurrTemplateJson.ShowAvatar < 0) {
             base.Get("x-avatar").classList.add("hide");
         }
         if (CurrTemplate > 1) {
+            //头尾
+            if (!base.IsNullOrEmpty(CurrTemplateJson.TopImage)) {
+                var tophtml = [];
+                for (var i = 0; i < CurrTemplateJson.TopImage.length; i++) {
+                    var top = CurrTemplateJson.TopImage[i];
+                    tophtml.push('<img src="' + top.Url + '" class="' + top.Align + '" style="width:' + top.Width + '" />');
+                }
+                $top.innerHTML = tophtml.join('');
+                $top.classList.remove("hide");
+            }
+            if (!base.IsNullOrEmpty(CurrTemplateJson.BottomImage)) {
+                $bottom.setAttribute("src", CurrTemplateJson.BottomImage);
+                $bottom.classList.remove("hide");
+            }
+
             //头像
             if (CurrTemplateJson.Avatar != null) {
                 if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.BackgroundImage)) {
@@ -1871,7 +1899,9 @@
                 }
                 if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.Width)) {
                     $avatarbg.style.width = CurrTemplateJson.Avatar.Width;
-                    $avatarbg.style.height = CurrTemplateJson.Avatar.Width;
+                }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.Height)) {
+                    $avatarbg.style.height = CurrTemplateJson.Avatar.Height;
                 }
                 if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.MarginBottom)) {
                     $avatarbg.style.marginBottom = CurrTemplateJson.Avatar.MarginBottom;
@@ -1888,10 +1918,20 @@
                 if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.Left)) {
                     $avatar.style.left = CurrTemplateJson.Avatar.Left;
                 }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.BorderRadius)) {
+                    $avatar.style.borderRadius = CurrTemplateJson.Avatar.BorderRadius;
+                }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.Index)) {
+                    $avatar.style.zIndex = CurrTemplateJson.Avatar.Index;
+                }
+                if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.Border)) {
+                    $avatar.style.border = CurrTemplateJson.Avatar.Border;
+                }
             }
 
             $cover.style.backgroundColor = CurrTemplateJson.Transparency;
             if (CurrTemplateJson.CoverFixed == 0) {
+                base.Get("x-cover").classList.add("x-cover");
                 if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
                     var imglist = [];
                     var imgs = CurrTemplateJson.BackgroundImage.split('?');
@@ -1915,7 +1955,7 @@
                         $wrapper.style.background = base.BrowserName() + CurrTemplateJson.Background;
                     }
                 }
-            } else if (CurrTemplateJson.CoverFixed == 1) {
+            } else {
                 if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
                     var imglist = [];
                     var imgs = CurrTemplateJson.BackgroundImage.split('?');
@@ -1942,47 +1982,6 @@
                     }
                 }
                 $wrapper2.classList.remove("hide");
-            } else if (CurrTemplateJson.CoverFixed == 2) {
-                if (!base.IsNullOrEmpty(CurrTemplateJson.TopImage)) {
-                    var tophtml = [];
-                    for (var i = 0; i < CurrTemplateJson.TopImage.length; i++) {
-                        var top = CurrTemplateJson.TopImage[i];
-                        tophtml.push('<img src="' + top.Url + '" class="' + top.Align + '" style="width:' + top.Width + '" />');
-                    }
-                    $top.innerHTML = tophtml.join('');
-                    $top.classList.remove("hide");
-                }
-                if (!base.IsNullOrEmpty(CurrTemplateJson.BottomImage)) {
-                    $bottom.setAttribute("src", CurrTemplateJson.BottomImage);
-                    $bottom.classList.remove("hide");
-                }
-                if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
-                    var imglist = [];
-                    var imgs = CurrTemplateJson.BackgroundImage.split('?');
-                    for (var i = 0; i < imgs.length; i++) {
-                        imglist.push("url(" + imgs[i] + ")");
-                    }
-                    $wrapper2.style.backgroundImage = imglist.join(',');
-                    if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundPosition)) {
-                        $wrapper2.style.backgroundPosition = CurrTemplateJson.BackgroundPosition;
-                    }
-                    if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
-                        $wrapper2.style.backgroundRepeat = CurrTemplateJson.BackgroundRepeat;
-                    }
-                    if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundSize)) {
-                        $wrapper2.style.backgroundSize = CurrTemplateJson.BackgroundSize;
-                    }
-                    $wrapper2.classList.remove("hide");
-                }
-                if (!base.IsNullOrEmpty(CurrTemplateJson.Background)) {
-                    if (CurrTemplateJson.Background.startWith("#") || CurrTemplateJson.Background.startWith("rgba")) {
-                        $wrapper2.style.backgroundColor = CurrTemplateJson.Background;
-                    } else {
-                        $wrapper2.style.background = CurrTemplateJson.Background;
-                        $wrapper2.style.background = base.BrowserName() + CurrTemplateJson.Background;
-                    }
-                    $wrapper2.classList.remove("hide");
-                }
             }
         } else if (CurrTemplate == 1) {
             //自定义
@@ -2038,7 +2037,7 @@
         if (base.IsNullOrEmpty(src)) {
             return
         }
-        LoadScript("@(ViewBag.RootUrl)Scripts/snow.js", function () {
+        LoadScript("@(ViewBag.RootUrl)Scripts/snow.js?rand=" + new Date().getTime(), function () {
             var srcs = src.split("|");
             if (srcs.length > 2) {
                 snow.init(srcs[0], srcs[1], srcs[2])
@@ -2228,7 +2227,7 @@
                             base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
                             base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
                             base.Get("views0").style.color = CurrTemplateJson.ViewColor;
-                            $avatarbg.style.border = "2px solid " + CurrTemplateJson.TitleColor;
+                            //$avatarbg.style.border = "2px solid " + CurrTemplateJson.TitleColor;
                             ChangeBg();
                         });
                     }
@@ -2270,7 +2269,7 @@
                             base.Get("nickname1").style.color = CurrColorTemplateJson.UserColor;
                             base.Get("createdate0").style.color = CurrColorTemplateJson.TimeColor;
                             base.Get("views0").style.color = CurrColorTemplateJson.ViewColor;
-                            $avatarbg.style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
+                            //$avatarbg.style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
                         });
                     }
                 }
@@ -2307,7 +2306,7 @@
         base.Get("nickname1").style.color = "#20a0ff";
         base.Get("createdate0").style.color = "#8C8C8C";
         base.Get("views0").style.color = "#8C8C8C";
-        $avatarbg.style.border = "2px solid #333";
+        //$avatarbg.style.border = "2px solid #333";
     }
 
     function change(val, id, name) {
