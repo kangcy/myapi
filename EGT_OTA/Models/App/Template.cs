@@ -160,6 +160,11 @@ namespace EGT_OTA.Models
         /// 漂浮
         /// </summary>
         public string Showy { get; set; }
+
+        /// <summary>
+        /// 全局文字颜色（默认：#333）
+        /// </summary>
+        public string FontColor { get; set; }
     }
 
     /// <summary>

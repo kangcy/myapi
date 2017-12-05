@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/table.css")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/mui.min.css")" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/animate.min.css")" />
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/addarticle.min.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/addarticle.min.css?rand=" + DateTime.Now)" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Back/demo.css?rand=" + DateTime.Now)" />
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/swiper/swiper.min.css")" />
     <style type="text/css">
@@ -690,7 +690,7 @@
             <!--固定背景-->
             <div id="x-bg" class="hide" style="height: 650px;"></div>
             <!--内容-->
-            <div id="wrapper0" class="full fl hide" style="height: 650px; overflow: auto;">
+            <div id="wrapper0" class="full fl hide" style="height: 650px; overflow: auto; color: #333;">
                 <!--x-cover:滚动背景-->
                 <div class="root" id="x-cover">
                     <!--头-->
@@ -1858,6 +1858,8 @@
         base.Get("x-cover").classList.remove("x-cover");
         $top.classList.add("hide");
         $bottom.classList.add("hide");
+
+        $wrapper.style.color = "#333";
         $wrapper.style.backgroundColor = "";
         $wrapper1.style.background = "";
         $cover.style.backgroundColor = "";
@@ -1875,6 +1877,9 @@
         $avatarbg.style.marginBottom = "1rem";
         if (CurrTemplateJson.ShowAvatar < 0) {
             base.Get("x-avatar").classList.add("hide");
+        }
+        if (!base.IsNullOrEmpty(CurrTemplateJson.FontColor)) {
+            $wrapper.style.color = CurrTemplateJson.FontColor;
         }
         if (CurrTemplate > 1) {
             //头尾
