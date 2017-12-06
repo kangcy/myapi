@@ -97,7 +97,7 @@ namespace EGT_OTA.Models
         public string Background { get; set; }
 
         /// <summary>
-        /// 背景图片是否固定(0：随内容滚动、1：固定头部背景、2：头尾背景)
+        /// 背景图片是否固定(0：随内容滚动、1：固定头部背景、2：背景滚动视差)
         /// </summary>
         public int CoverFixed { get; set; }
 

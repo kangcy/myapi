@@ -304,11 +304,31 @@
             }
         /**新版**/
 
-        #x-bg {
+        #x-bg, #x-bg-base {
             position: fixed;
             height: 100%;
             width: 100%;
         }
+
+            #x-bg:before {
+                content: '';
+                position: fixed;
+                background: url(https://ss2.meipian.me/theme/v2/img/75/75bg_750_2.jpg) center 0 no-repeat;
+                background-size: cover;
+                width: 100%;
+                max-width: 750px;
+                height: 100%;
+            }
+
+            #x-bg-base:before {
+                content: '';
+                position: fixed;
+                background: url(https://ss2.meipian.me/theme/v2/img/75/75bg_750_1.jpg) center 0 no-repeat;
+                background-size: cover;
+                width: 100%;
+                max-width: 750px;
+                height: 100%;
+            }
 
         .root {
             width: 100%;
@@ -687,39 +707,42 @@
             <div id="snowwrapper"></div>
             <canvas id="snowcanvas"></canvas>
             <!--固定背景-->
-            <div id="x-bg" class="hide" style="height: 715px;"></div>
+            <div id="x-bg" class="hide" style="height: 715px; opacity: 1;"></div>
+            <div id="x-bg-base" class="hide" style="height: 715px; opacity: 0;"></div>
             <!--内容-->
             <div id="wrapper0" class="full fl hide" style="height: 715px; overflow: auto; color: #333;">
                 <!--x-cover:滚动背景-->
                 <div class="root" id="x-cover">
                     <!--头-->
                     <div id="x-top" class="full fl hide"></div>
-                    <!--用户-->
-                    <div class="x-head mb10 full fl hide" id="x-head">
-                        <div class="img-container" id="x-avatar">
-                            <div class="avatar" id="x-avatar-sub">
-                                <img id="useravatar0" src="../images/avatar.png" class="user">
+                    <div class="full fl">
+                        <!--用户-->
+                        <div class="x-head mb10 full fl hide" id="x-head">
+                            <div class="img-container" id="x-avatar">
+                                <div class="avatar" id="x-avatar-sub">
+                                    <img id="useravatar0" src="../images/avatar.png" class="user">
+                                </div>
+                            </div>
+                            <div class="article-meta well2 full tc" id="x-article">
+                                <p class="article-title thicker f20" id="title0" contenteditable="true"></p>
+                                <p class="time-read mt10 f13">
+                                    <span id="createdate0"></span>
+                                    <span id="nickname0" class="user hide"></span>
+                                    <span class="read-count" id="views0"></span>
+                                </p>
+                                <p class="nickname mt10 f13 hide" id="nickname1"></p>
+                                <p id="music0" play="on" class="music mt10 mb0 hide" onclick="switchsound()">
+                                    <span id="musicname0" class="f11"></span>
+                                </p>
                             </div>
                         </div>
-                        <div class="article-meta well2 full tc" id="x-article">
-                            <p class="article-title thicker f20" id="title0" contenteditable="true"></p>
-                            <p class="time-read mt10 f13">
-                                <span id="createdate0"></span>
-                                <span id="nickname0" class="user hide"></span>
-                                <span class="read-count" id="views0"></span>
-                            </p>
-                            <p class="nickname mt10 f13 hide" id="nickname1"></p>
-                            <p id="music0" play="on" class="music mt10 mb0 hide" onclick="switchsound()">
-                                <span id="musicname0" class="f11"></span>
-                            </p>
+                        <!--内容-->
+                        <div class="x-content well2 mt10 mb10 full fl" id="x-content">
+                            <div class="section full" id="edit">
+                            </div>
+                            <!--半透明蒙层-->
+                            <div class="x-bg-blur" id="x-bg-blur"></div>
                         </div>
-                    </div>
-                    <!--内容-->
-                    <div class="x-content well2 mt10 mb10 full fl" id="x-content">
-                        <div class="section full" id="edit">
-                        </div>
-                        <!--半透明蒙层-->
-                        <div class="x-bg-blur" id="x-bg-blur"></div>
                     </div>
                     <!--尾-->
                     <img id="x-bottom" class="full fl hide" />
@@ -873,6 +896,7 @@
     var $wrapper = base.Get("wrapper0"); //内容父背景（放图片背景色）
     var $wrapper1 = base.Get("x-cover"); //内容子背景（放背景图片）
     var $wrapper2 = base.Get("x-bg"); //纯色背景
+    var $wrapper21 = base.Get("x-bg-base"); //纯色背景
     var $cover = base.Get("x-bg-blur"); //非纯色内容透明度底
     var $top = base.Get("x-top");
     var $bottom = base.Get("x-bottom");
@@ -1201,25 +1225,25 @@
         base.Get("myline").style.height = window.innerHeight * 0.6 + "px";
 
         //滚动监听
-        window.addEventListener('scroll', function (e) {
-            if (IsIconShow && !IsIconScroll) {
-                IsIconScroll = true;
-                if (num > window.pageYOffset) {
-                    btnIcon.classList.remove("hide");
-                    btnIcon.classList.remove("bounceOutUp");
-                    btnIcon.classList.add("bounceInUp");
-                } else {
-                    btnIcon.classList.remove("bounceInUp");
-                    btnIcon.classList.add("bounceOutUp");
-                    setTimeout(function () {
-                        btnIcon.classList.add("hide");
-                    }, 250);
-                }
-                num = window.pageYOffset;
-                IsIconShow = true;
-                IsIconScroll = false;
-            }
-        });
+        //window.addEventListener('scroll', function (e) {
+        //    if (IsIconShow && !IsIconScroll) {
+        //        IsIconScroll = true;
+        //        if (num > window.pageYOffset) {
+        //            btnIcon.classList.remove("hide");
+        //            btnIcon.classList.remove("bounceOutUp");
+        //            btnIcon.classList.add("bounceInUp");
+        //        } else {
+        //            btnIcon.classList.remove("bounceInUp");
+        //            btnIcon.classList.add("bounceOutUp");
+        //            setTimeout(function () {
+        //                btnIcon.classList.add("hide");
+        //            }, 250);
+        //        }
+        //        num = window.pageYOffset;
+        //        IsIconShow = true;
+        //        IsIconScroll = false;
+        //    }
+        //});
 
         //点击编辑
         $('#edit').on("click", ".edit-content", function () {
@@ -1863,6 +1887,8 @@
         $wrapper1.style.background = "";
         $cover.style.backgroundColor = "";
         $wrapper2.style.background = "";
+        $wrapper2.style.opacity = "1";
+        $wrapper21.style.opacity = "0";
         $avatarbg.style.backgroundImage = "";
         $avatarbg.style.width = "5rem";
         $avatarbg.style.height = "5rem";
@@ -1880,6 +1906,24 @@
         if (!base.IsNullOrEmpty(CurrTemplateJson.FontColor)) {
             $wrapper.style.color = CurrTemplateJson.FontColor;
         }
+
+        var temptype = -1;
+        window.addEventListener("scroll", function (e) {
+            if (temptype > -1) {
+                //背景滚动视差
+                if (temptype == 1) {
+                    var top = document.documentElement.scrollTop || document.body.scrollTop;
+                    if (top >= 150) {
+                        $wrapper2.style.opacity = 0;
+                        $wrapper21.style.opacity = 1;
+                    } else {
+                        $wrapper2.style.opacity = 1 - top / 150;
+                        $wrapper21.style.opacity = top / 150;
+                    }
+                }
+            }
+        });
+
         if (CurrTemplate > 1) {
             //头尾
             if (!base.IsNullOrEmpty(CurrTemplateJson.TopImage)) {

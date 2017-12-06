@@ -801,9 +801,13 @@ namespace EGT_OTA.Controllers
                 var TypeID = ZNRequest.GetInt("ArticleType");
                 var ArticlePower = ZNRequest.GetInt("ArticlePower", Enum_ArticlePower.Myself);
                 var ArticlePowerPwd = ZNRequest.GetString("ArticlePowerPwd");
-                if (TypeID <= 0 || ArticlePower < 0)
+                if (ArticlePower < 0)
                 {
-                    return Json(new { result = false, message = "参数异常" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, message = "请选择文章权限" }, JsonRequestBehavior.AllowGet);
+                }
+                if (TypeID <= 0)
+                {
+                    return Json(new { result = false, message = "请选择文章类别" }, JsonRequestBehavior.AllowGet);
                 }
                 var articleType = AppHelper.GetArticleType().FirstOrDefault<ArticleType>(x => x.ID == TypeID);
                 if (articleType == null)
