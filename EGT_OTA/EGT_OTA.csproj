@@ -758,6 +758,8 @@
     <Content Include="Images\Showy\00\10.png" />
     <Content Include="Images\Showy\00\11.png" />
     <Content Include="Images\Showy\00\12.png" />
+    <Content Include="Images\Showy\00\13.png" />
+    <Content Include="Images\Showy\00\14.png" />
     <Content Include="Images\Showy\00\ballon.png" />
     <Content Include="Images\Showy\00\ballon1.png" />
     <Content Include="Images\Showy\00\ballon2.png" />
@@ -771,6 +773,16 @@
     <Content Include="Images\Showy\00\heart2.png" />
     <Content Include="Images\Showy\00\heart3.png" />
     <Content Include="Images\Showy\00\heart4.png" />
+    <Content Include="Images\Showy\00\meigui_01.png" />
+    <Content Include="Images\Showy\00\meigui_02.png" />
+    <Content Include="Images\Showy\00\meigui_03.png" />
+    <Content Include="Images\Showy\00\snow_1.png" />
+    <Content Include="Images\Showy\00\snow_2.png" />
+    <Content Include="Images\Showy\00\snow_3.png" />
+    <Content Include="Images\Showy\00\snow_4.png" />
+    <Content Include="Images\Showy\00\snow_5.png" />
+    <Content Include="Images\Showy\00\snow_6.png" />
+    <Content Include="Images\Showy\00\snow_7.png" />
     <Content Include="Images\Showy\13\01.png" />
     <Content Include="Images\Showy\13\02.png" />
     <Content Include="Images\Showy\13\03.png" />

@@ -1731,25 +1731,25 @@ body.mask21_style .wemedia_background {
 
 @keyframes toBottom {
     0% {
-        top: -50px;
-        opacity: 0;
+        top: -100px;
+        opacity: 1;
     }
 
     100% {
-        top: 110%;
-        opacity: 1;
+        top: 90%;
+        opacity: 0;
     }
 }
 
 @-webkit-keyframes toBottom {
     0% {
-        top: -50px;
-        opacity: 0;
+        top: -100px;
+        opacity: 1;
     }
 
     100% {
-        top: 110%;
-        opacity: 1;
+        top: 90%;
+        opacity: 0;
     }
 }
 
@@ -1932,5 +1932,39 @@ body.mask21_style .wemedia_background {
 
     to {
         -webkit-transform: rotate(50deg);
+    }
+}
+
+@keyframes yanhua {
+    0% {
+        transform: scale(0.3);
+        opacity: 1;
+    }
+
+    60% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes yanhua {
+    0% {
+        -webkit-transform: scale(0.3);
+        opacity: 1;
+    }
+
+    60% {
+        -webkit-transform: scale(0.5);
+        opacity: 1;
+    }
+
+    100% {
+        -webkit-transform: scale(0.5);
+        opacity: 0;
     }
 }

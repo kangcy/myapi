@@ -74,6 +74,10 @@ var snow = new function () {
             case 16:
                 this.snow16();
                 break;
+                //烟花
+            case 17:
+                this.snow17();
+                break;
             default:
                 break;
         }
@@ -672,7 +676,6 @@ var snow = new function () {
     this.snow12 = function () {
         var snowimg = this.snowimg;
         var c = document.getElementById("snowwrapper");
-
         function a() {
             var money = document.createElement("div");
             var width = (Math.random() * 0.5 + 0.5) * 40;
@@ -706,11 +709,16 @@ var snow = new function () {
     //心形(向上)
     this.snow13 = function () {
         var snowimg = this.snowimg;
+        var snowcount = this.snowcount;
         var c = document.getElementById("snowwrapper");
         var d = window.innerWidth;
+        var num = 1;
 
         function a() {
             var snowpic = snowimg;
+            if (snowcount > 1) {
+                snowpic = snowpic.replace(".png", (num > snowcount ? num = 1 : num++) + ".png");
+            }
             var size = Math.random() * 15 + 20;
             var exam = (size - 10) / 6;
             var snow = document.createElement("div");
@@ -758,11 +766,16 @@ var snow = new function () {
     //心形(向下)
     this.snow14 = function () {
         var snowimg = this.snowimg;
+        var snowcount = this.snowcount;
         var c = document.getElementById("snowwrapper");
         var d = window.innerWidth;
+        var num = 1;
 
         function a() {
             var snowpic = snowimg;
+            if (snowcount > 1) {
+                snowpic = snowpic.replace(".png", (num > snowcount ? num = 1 : num++) + ".png");
+            }
             var size = Math.random() * 15 + 20;
             var exam = (size - 10) / 6;
             var snow = document.createElement("div");
@@ -864,7 +877,6 @@ var snow = new function () {
             snow.style.webkitAnimationTimingFunction = "linear";
             snow.style.animationTimingFunction = "linear";
             c.appendChild(snow);
-            console.log(c.children.length + "," + snowcount)
             if (c.children.length >= snowcount) {
                 clearInterval(snowinterval);
             }
@@ -929,6 +941,48 @@ var snow = new function () {
                 clearInterval(snowinterval);
             }
         }, 200);
+    };
+    //烟花
+    this.snow17 = function () {
+        var snowimg = this.snowimg; //https://ss2.meipian.me/theme/v2/img/springFestival/02_yanhua.png
+        var snowcount = this.snowcount;
+        var yanhua = document.getElementById("yanhua");
+        if (!yanhua) {
+            yanhua = document.createElement("div");
+            yanhua.setAttribute("id", "yanhua");
+            yanhua.style.width = "100%";
+            yanhua.style.height = "100%";
+            yanhua.style.position = "fixed";
+            yanhua.style.zIndex = "2";
+            yanhua.style.left = "0";
+            yanhua.style.top = "0";
+            yanhua.style.pointerEvents = "none";
+            yanhua.style.overflow = "hidden";
+        }
+        document.body.appendChild(yanhua);
+        snowinterval = setInterval(function () {
+            yanhua.innerHTML = "";
+            var pic = snowimg;
+            if (snowcount > 1) {
+                pic = pic.replace(".png", (num > snowcount ? num = 1 : num++) + ".png");
+            }
+            var item = document.createElement("img");
+            item.setAttribute("src", pic);
+            item.style.top = (Math.random() * 40) + "%";
+            item.style.left = (Math.random() * 100) + "%";
+            item.style.width = "auto";
+            item.style.position = "absolute";
+            item.style.transform = "scale(0)";
+            item.style.webkitTransform = "scale(0)";
+            item.style.animationName = "yanhua";
+            item.style.webkitAnimationName = "yanhua";
+            item.style.animationDuration = "2s";
+            item.style.webkitAnimationDuration = "2s";
+            item.style.animationFillMode = "none";
+            item.style.webkitAnimationIterationCount = "1";
+            item.style.animationIterationCount = "1";
+            yanhua.appendChild(item);
+        }, 3000)
     };
 }
 
