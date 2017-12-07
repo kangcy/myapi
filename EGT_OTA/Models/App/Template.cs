@@ -92,6 +92,11 @@ namespace EGT_OTA.Models
         public string Transparency { get; set; }
 
         /// <summary>
+        /// 自定义半透明蒙层位置(0：不包含头部信息,1：包含用户头部信息)
+        /// </summary>
+        public int TransparencyFixed { get; set; }
+
+        /// <summary>
         /// 页面背景颜色
         /// </summary>
         public string Background { get; set; }

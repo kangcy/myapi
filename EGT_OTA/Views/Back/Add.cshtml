@@ -356,7 +356,7 @@
                 height: 5rem;
                 margin: 0 auto;
                 background-size: 100% 100%;
-                overflow: hidden;
+                /*overflow: hidden;*/
                 -webkit-box-sizing: border-box;
                 box-sizing: border-box;
                 /**新增***/
@@ -406,19 +406,22 @@
                 .x-content .section.temp {
                     padding: 0px 3% 3% 3%;
                 }
-            /*.x-content .section .text {
+        /*.x-content .section .text {
 				line-height: 1.8 !important;
 				word-wrap: break-word;
 				font-weight: normal;
 				white-space: pre-wrap;
 				font-family: PingFangSC-Light;
 			}*/
-            /*.x-content .section img {
+        /*.x-content .section img {
 				width: 100%;
 				vertical-align: bottom;
 			}*/
+        #x-body {
+            position: relative;
+        }
 
-            .x-content .x-bg-blur {
+            #x-body .x-bg-blur {
                 /*background: rgba(27, 62, 85, 0.6);*/
                 width: 94%;
                 height: 100%;
@@ -705,15 +708,15 @@
                 <div class="root" id="x-cover">
                     <!--头-->
                     <div id="x-top" class="full fl hide"></div>
-                    <div class="full fl">
+                    <div class="full fl well2 mb10" id="x-body">
                         <!--用户-->
-                        <div class="x-head mb10 full fl hide" id="x-head">
+                        <div class="x-head full fl hide" id="x-head">
                             <div class="img-container" id="x-avatar">
                                 <div class="avatar" id="x-avatar-sub">
                                     <img id="useravatar0" src="../images/avatar.png" class="user">
                                 </div>
                             </div>
-                            <div class="article-meta well2 full tc" id="x-article">
+                            <div class="article-meta full tc" id="x-article">
                                 <p class="article-title thicker f20" id="title0" contenteditable="true"></p>
                                 <p class="time-read mt10 f13">
                                     <span id="createdate0"></span>
@@ -727,12 +730,14 @@
                             </div>
                         </div>
                         <!--内容-->
-                        <div class="x-content well2 mt10 mb10 full fl" id="x-content">
+                        <div class="x-content mt10 full fl" id="x-content">
                             <div class="section full" id="edit">
                             </div>
                             <!--半透明蒙层-->
-                            <div class="x-bg-blur" id="x-bg-blur"></div>
+                            <div class="x-bg-blur full" id="x-bg-blur"></div>
                         </div>
+                        <!--半透明蒙层-->
+                        <div class="x-bg-blur" id="x-bg-blur1"></div>
                     </div>
                     <!--尾-->
                     <img id="x-bottom" class="full fl hide" />
@@ -888,12 +893,14 @@
     var $wrapper2 = base.Get("x-bg"); //纯色背景
     var $wrapper21 = base.Get("x-bg-base"); //纯色背景
     var $cover = base.Get("x-bg-blur"); //非纯色内容透明度底
+    var $cover1 = base.Get("x-bg-blur1"); //非纯色内容透明度底
+    var $head = base.Get("x-head");
+    var $body = base.Get("x-body");
     var $top = base.Get("x-top");
     var $bottom = base.Get("x-bottom");
     var $avatarbg = base.Get("x-avatar-sub");
     var $avatar = base.Get("useravatar0");
     var Showy = "";
-    var $header = base.Get("header");
     var $edit = base.Get("edit");
     var InitParts = []; //段落
     var lineSwiper, borderSwiper, colorSwiper, tempSwiper, coolSwiper = null;
@@ -1209,31 +1216,9 @@
     $(document).ready(function () {
         $("#edittitle").html(ArticleID == 0 ? "新增" : "保存");
 
-        //base.Get("box").style.marginLeft = (window.innerWidth - 400) / 2 + "px";
         Load();
 
         base.Get("myline").style.height = window.innerHeight * 0.6 + "px";
-
-        //滚动监听
-        //window.addEventListener('scroll', function (e) {
-        //    if (IsIconShow && !IsIconScroll) {
-        //        IsIconScroll = true;
-        //        if (num > window.pageYOffset) {
-        //            btnIcon.classList.remove("hide");
-        //            btnIcon.classList.remove("bounceOutUp");
-        //            btnIcon.classList.add("bounceInUp");
-        //        } else {
-        //            btnIcon.classList.remove("bounceInUp");
-        //            btnIcon.classList.add("bounceOutUp");
-        //            setTimeout(function () {
-        //                btnIcon.classList.add("hide");
-        //            }, 250);
-        //        }
-        //        num = window.pageYOffset;
-        //        IsIconShow = true;
-        //        IsIconScroll = false;
-        //    }
-        //});
 
         $wrapper.addEventListener("scroll", function (e) {
             if (!CurrTemplateJson) {
@@ -1675,7 +1660,7 @@
         div.className = 'edit-body fl mt10';
         var model = [];
         if (type == "pic") {
-            model.push('<img src="../Back/Images/btn_pic.png" class="edit-add-border" style="position:absolute;top:0;left:8rem;width:2rem;z-index:1;" />');
+            model.push('<img src="../Back/Images/btn_pic.png" class="edit-add-border" style="position:absolute;top:0;left:11.5rem;width:2rem;z-index:1;" />');
         }
         model.push('<img src="../Back/Images/btn_up.png" class="edit-up hide" /><img src="../Back/Images/btn_down.png" class="edit-down hide" /><img src="../Back/Images/btn_x.png" class="edit-del" partid="' + partid + '" />')
         if (type == "pic") {
@@ -1829,7 +1814,7 @@
                 base.InnerHtml(["nickname", "nickname0", "nickname1"], Article.NickName);
                 base.InnerHtml(["createdate0"], data.CreateDateText);
                 base.InnerHtml(["views0"], "阅读  " + data.Views);
-                base.Get("x-head").classList.remove("hide");
+                $head.classList.remove("hide");
                 $wrapper.classList.remove("hide");
                 if (base.IsNullOrEmpty(Showy)) {
                     Showy = data.Showy;
@@ -1889,10 +1874,12 @@
         base.Get("x-cover").classList.remove("x-cover");
         $top.classList.add("hide");
         $bottom.classList.add("hide");
+        $body.style.margin = "0";
         $wrapper.style.color = "#333";
         $wrapper.style.backgroundColor = "";
         $wrapper1.style.background = "";
         $cover.style.backgroundColor = "";
+        $cover1.style.backgroundColor = "";
         $wrapper2.classList.add("hide");
         $wrapper21.classList.add("hide");
         $wrapper2.style.background = "";
@@ -1908,7 +1895,7 @@
         $avatar.style.borderRadius = "50%";
         $avatar.style.border = "";
         $avatar.style.zIndex = "-1";
-        base.Get("x-head").style.marginTop = "6rem";
+        $head.style.marginTop = "6rem";
         $avatarbg.style.marginBottom = "1rem";
         if (CurrTemplateJson.ShowAvatar < 0) {
             base.Get("x-avatar").classList.add("hide");
@@ -1948,7 +1935,12 @@
                     $avatarbg.style.marginBottom = CurrTemplateJson.Avatar.MarginBottom;
                 }
                 if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.MarginTop)) {
-                    base.Get("x-head").style.marginTop = CurrTemplateJson.Avatar.MarginTop;
+                    if (CurrTemplateJson.Avatar.TransparencyFixed == 0) {
+                        $head.style.marginTop = CurrTemplateJson.Avatar.MarginTop;
+                    } else {
+                        $body.style.marginTop = CurrTemplateJson.Avatar.MarginTop;
+                        $head.style.marginTop = "1rem";
+                    }
                 }
                 if (!base.IsNullOrEmpty(CurrTemplateJson.Avatar.SubWidth)) {
                     $avatar.style.width = CurrTemplateJson.Avatar.SubWidth;
@@ -1970,7 +1962,12 @@
                 }
             }
 
-            $cover.style.backgroundColor = CurrTemplateJson.Transparency;
+            if (CurrTemplateJson.TransparencyFixed == 0) {
+                $cover.style.backgroundColor = CurrTemplateJson.Transparency;
+            } else {
+                $cover1.style.backgroundColor = CurrTemplateJson.Transparency;
+            }
+
             if (CurrTemplateJson.CoverFixed == 0) {
                 base.Get("x-cover").classList.add("x-cover");
                 if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
