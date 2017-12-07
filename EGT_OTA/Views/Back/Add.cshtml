@@ -310,25 +310,15 @@
             width: 100%;
         }
 
-            #x-bg:before {
-                content: '';
-                position: fixed;
-                background: url(https://ss2.meipian.me/theme/v2/img/75/75bg_750_2.jpg) center 0 no-repeat;
-                background-size: cover;
-                width: 100%;
-                max-width: 750px;
-                height: 100%;
-            }
+        /*#x-bg {
+            background: url(https://ss2.meipian.me/theme/v2/img/75/75bg_750_1.jpg) center 0 no-repeat;
+            background-size: cover;
+        }
 
-            #x-bg-base:before {
-                content: '';
-                position: fixed;
-                background: url(https://ss2.meipian.me/theme/v2/img/75/75bg_750_1.jpg) center 0 no-repeat;
-                background-size: cover;
-                width: 100%;
-                max-width: 750px;
-                height: 100%;
-            }
+        #x-bg-base {
+            background: url(https://ss2.meipian.me/theme/v2/img/75/75bg_750_2.jpg) center 0 no-repeat;
+            background-size: cover;
+        }*/
 
         .root {
             width: 100%;
@@ -1245,6 +1235,24 @@
         //    }
         //});
 
+        $wrapper.addEventListener("scroll", function (e) {
+            if (!CurrTemplateJson) {
+                return;
+            }
+            if (CurrTemplateJson.CoverFixed == 2) {
+                //背景滚动视差
+                //var top = document.documentElement.scrollTop || document.body.scrollTop;
+                var top = $wrapper.scrollTop;
+                if (top >= 150) {
+                    $wrapper2.style.opacity = 0;
+                    $wrapper21.style.opacity = 1;
+                } else {
+                    $wrapper2.style.opacity = 1 - top / 150;
+                    $wrapper21.style.opacity = top / 150;
+                }
+            }
+        });
+
         //点击编辑
         $('#edit').on("click", ".edit-content", function () {
             var $this = $(this);
@@ -1881,13 +1889,15 @@
         base.Get("x-cover").classList.remove("x-cover");
         $top.classList.add("hide");
         $bottom.classList.add("hide");
-
         $wrapper.style.color = "#333";
         $wrapper.style.backgroundColor = "";
         $wrapper1.style.background = "";
         $cover.style.backgroundColor = "";
+        $wrapper2.classList.add("hide");
+        $wrapper21.classList.add("hide");
         $wrapper2.style.background = "";
         $wrapper2.style.opacity = "1";
+        $wrapper21.style.background = "";
         $wrapper21.style.opacity = "0";
         $avatarbg.style.backgroundImage = "";
         $avatarbg.style.width = "5rem";
@@ -1906,23 +1916,6 @@
         if (!base.IsNullOrEmpty(CurrTemplateJson.FontColor)) {
             $wrapper.style.color = CurrTemplateJson.FontColor;
         }
-
-        var temptype = -1;
-        window.addEventListener("scroll", function (e) {
-            if (temptype > -1) {
-                //背景滚动视差
-                if (temptype == 1) {
-                    var top = document.documentElement.scrollTop || document.body.scrollTop;
-                    if (top >= 150) {
-                        $wrapper2.style.opacity = 0;
-                        $wrapper21.style.opacity = 1;
-                    } else {
-                        $wrapper2.style.opacity = 1 - top / 150;
-                        $wrapper21.style.opacity = top / 150;
-                    }
-                }
-            }
-        });
 
         if (CurrTemplate > 1) {
             //头尾
@@ -2020,6 +2013,27 @@
                     if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundSize)) {
                         $wrapper2.style.backgroundSize = CurrTemplateJson.BackgroundSize;
                     }
+                    $wrapper2.classList.remove("hide");
+                }
+                if (CurrTemplateJson.CoverFixed == 2) {
+                    if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundBlurImage)) {
+                        var imglist = [];
+                        var imgs = CurrTemplateJson.BackgroundBlurImage.split('?');
+                        for (var i = 0; i < imgs.length; i++) {
+                            imglist.push("url(" + imgs[i] + ")");
+                        }
+                        $wrapper21.style.backgroundImage = imglist.join(',');
+                        if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundPosition)) {
+                            $wrapper21.style.backgroundPosition = CurrTemplateJson.BackgroundPosition;
+                        }
+                        if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundRepeat)) {
+                            $wrapper21.style.backgroundRepeat = CurrTemplateJson.BackgroundRepeat;
+                        }
+                        if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundSize)) {
+                            $wrapper21.style.backgroundSize = CurrTemplateJson.BackgroundSize;
+                        }
+                        $wrapper21.classList.remove("hide");
+                    }
                 }
                 if (!base.IsNullOrEmpty(CurrTemplateJson.Background)) {
                     if (CurrTemplateJson.Background.startWith("#") || CurrTemplateJson.Background.startWith("rgba")) {
@@ -2028,8 +2042,8 @@
                         $wrapper2.style.background = CurrTemplateJson.Background;
                         $wrapper2.style.background = base.BrowserName() + CurrTemplateJson.Background;
                     }
+                    $wrapper2.classList.remove("hide");
                 }
-                $wrapper2.classList.remove("hide");
             }
         } else if (CurrTemplate == 1) {
             //自定义

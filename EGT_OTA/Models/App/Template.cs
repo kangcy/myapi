@@ -102,9 +102,14 @@ namespace EGT_OTA.Models
         public int CoverFixed { get; set; }
 
         /// <summary>
-        /// 背景图片
+        /// 背景基础图片
         /// </summary>
         public string BackgroundImage { get; set; }
+
+        /// <summary>
+        /// 背景滚动模糊图片
+        /// </summary>
+        public string BackgroundBlurImage { get; set; }
 
         /// <summary>
         /// 头部图片
