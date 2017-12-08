@@ -1238,6 +1238,13 @@
             }
         });
 
+        $("#title0").blur(function () {
+            var val = $("#title0").text();
+            if (base.IsNullOrEmpty(val)) {
+                $("#title0").text("请输入文章标题");
+            }
+        })
+
         //点击编辑
         $('#edit').on("click", ".edit-content", function () {
             var $this = $(this);
