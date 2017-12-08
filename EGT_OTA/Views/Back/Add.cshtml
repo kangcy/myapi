@@ -730,7 +730,7 @@
                             </div>
                         </div>
                         <!--内容-->
-                        <div class="x-content mt10 full fl" id="x-content">
+                        <div class="x-content mt20 full fl" id="x-content">
                             <div class="section full" id="edit">
                             </div>
                             <!--半透明蒙层-->
@@ -1834,7 +1834,7 @@
 
     //更新布局 
     function InitGroup() {
-        Group(base.Get("edit"), 0);
+        Group($edit, 0);
     }
 
     //新增内容
@@ -1855,7 +1855,6 @@
             base.Get("x-article").classList.add("tl");
             base.Get("nickname1").classList.add("hide");
             base.Get("nickname0").classList.remove("hide");
-            base.Get("edit").classList.remove("temp");
             base.Get("x-content").classList.remove("mt10");
         } else {
             base.Get("x-avatar").classList.remove("hide");
@@ -1863,8 +1862,31 @@
             base.Get("x-article").classList.add("tc");
             base.Get("nickname0").classList.add("hide");
             base.Get("nickname1").classList.remove("hide");
-            base.Get("edit").classList.add("temp");
             base.Get("x-content").classList.add("mt10");
+        }
+
+        //容器间距
+        switch (CurrTemplateJson.PaddingFixed) {
+            case 0:
+                $body.classList.add("well2");
+                $edit.classList.add("temp");
+                break;
+            case 1:
+                $edit.classList.remove("temp");
+                $body.classList.add("well2");
+                break;
+            case 2:
+                $body.classList.remove("well2");
+                $edit.classList.add("temp");
+                break;
+            case 2:
+                $body.classList.remove("well2");
+                $edit.classList.remove("temp");
+                break;
+            default:
+                $body.classList.add("well2");
+                $edit.classList.add("temp");
+                break;
         }
 
         ChangeMusic();

@@ -175,6 +175,11 @@ namespace EGT_OTA.Models
         /// 全局文字颜色（默认：#333）
         /// </summary>
         public string FontColor { get; set; }
+
+        /// <summary>
+        /// 容器内间距（0：内外间距,1：外间距,2：内间距,3：无间距）
+        /// </summary>
+        public int PaddingFixed { get; set; }
     }
 
     /// <summary>
