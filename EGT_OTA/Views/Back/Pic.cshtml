@@ -58,7 +58,6 @@
 <script type="text/javascript">
     var totalheight = window.innerHeight - 50;
     var totalwidth = window.innerWidth;
-    var SourceUrl = "";
     var ApiSourceUrl = "";
     var Url = "";
     var Source = "";
@@ -88,23 +87,15 @@
                     if (uploadedImageURL) {
                         URL.revokeObjectURL(uploadedImageURL);
                     }
-                    uploadedImageURL = URL.createObjectURL(file);
-                    if (!base.IsNullOrEmpty(uploadedImageURL)) {
-                        if (isCutImging) {
-                            closepop();
+                    //本地预览
+                    var r = new FileReader();
+                    r.onload = function () {
+                        if (base.IsNullOrEmpty(r.result)) {
+                            return;
                         }
-                        $image.hide();
-
-                        var img = new Image();
-                        img.src = uploadedImageURL;
-                        if (img.complete) {
-                            InitImg(uploadedImageURL);
-                        } else {
-                            img.onload = function () {
-                                InitImg(uploadedImageURL);
-                            };
-                        }
+                        InitImg(r.result);
                     }
+                    r.readAsDataURL(file);//Base64
                     $inputImage.val('');
                 }
             }
@@ -112,31 +103,43 @@
     });
 
     function InitImg(src) {
-        SourceUrl = src;
+        if (isCutImging) {
+            closepop();
+        }
+        uploadedImageURL = src;
+        $image.hide();
         $image.attr("src", src);
-        var imagewidth = $image.width();
-        var imageheight = $image.height();
-        $image.css({
-            "width": "auto",
-            "height": "auto",
-            "margin-top": "0px",
-            "margin-left": "0px"
-        });
-        if (totalheight >= imageheight) {
-            $image.css("margin-top", (totalheight - imageheight) / 2 + "px");
-        }
-        //用户封面、用户头像
-        if (Standard == "UserCover" || Standard == "UserAvatar") {
-            openpop();
-        } else {
-            $image.show();
-            base.Get("openpop").style.display = "inline-block";
-        }
+        $image.load(function () {
+            var imagewidth = $image.width();
+            var imageheight = $image.height();
+            $image.css({
+                "width": "auto",
+                "height": "auto",
+                "margin-top": "0px",
+                "margin-left": "0px"
+            });
+            console
+            if (totalheight >= imageheight) {
+                $image.css("margin-top", (totalheight - imageheight) / 2 + "px");
+            }
+            //用户封面、用户头像
+            if (Standard == "UserCover" || Standard == "UserAvatar") {
+                openpop();
+            } else {
+                $image.show();
+                base.Get("openpop").style.display = "inline-block";
+            }
+        })
     }
 
     //初始化
     function Init(src, source, standard, partid, articlenumber, usernumber) {
-        SourceUrl = src;
+        Source = source;
+        PartID = partid;
+        Standard = standard;
+        ArticleNumber = articlenumber;
+        UserNumber = usernumber;
+        uploadedImageURL = src;
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -145,34 +148,10 @@
             success: function (data) {
                 Url = data.url;
                 ApiSourceUrl = data.sourceurl;
-                Source = source;
-                Standard = standard;
-                PartID = partid;
-                ArticleNumber = articlenumber;
-                UserNumber = usernumber;
                 if (base.IsNullOrEmpty(Url)) {
                     return;
                 }
-                $image.hide().attr("src", Url).load(function () {
-                    var imagewidth = $image.width();
-                    var imageheight = $image.height();
-                    $image.css({
-                        "width": "auto",
-                        "height": "auto",
-                        "margin-top": "0px",
-                        "margin-left": "0px"
-                    });
-                    if (totalheight > imageheight) {
-                        $image.css("margin-top", (totalheight - imageheight) / 2 + "px");
-                    }
-                    //用户封面、用户头像
-                    if (Standard == "UserCover" || Standard == "UserAvatar") {
-                        openpop();
-                    } else {
-                        $image.show();
-                        base.Get("openpop").style.display = "inline-block";
-                    }
-                });
+                InitImg(Url);
             }
         });
     }
@@ -278,7 +257,7 @@
         canvas.height = height; /*设置新的图片的长度*/
         var ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, width, height); /*绘图*/
-        return canvas.toDataURL("image/jpeg", 1);
+        return canvas.toDataURL(uploadedImageType, 1);
     }
 
     //更换
@@ -319,21 +298,11 @@
             Upload(imgurl);
         } else {
             //原图返回
-            if (SourceUrl == ApiSourceUrl) {
+            if (uploadedImageURL == ApiSourceUrl) {
                 parent.layer.close(index);
                 return;
             } else {
-                var image = new Image();
-                image.src = imgurl;
-                if (image.complete) {
-                    var imgData = getBase64Image(image);
-                    Upload(imgData);
-                } else {
-                    image.onload = function () {
-                        var imgData = getBase64Image(image);
-                        Upload(imgData);
-                    };
-                }
+                Upload(uploadedImageURL);
             }
         }
     }

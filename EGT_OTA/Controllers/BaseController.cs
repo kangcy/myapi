@@ -263,34 +263,42 @@ namespace EGT_OTA.Controllers
             int y = 0;
             int ow = originalImage.Width;//原图宽度
             int oh = originalImage.Height;//原图高度
-            switch (mode.Mode)
+            if (ow < mode.Width || oh < mode.Height)
             {
-                case "HW"://指定高宽缩放（可能变形）                  
-                    break;
-                case "W"://指定宽，高按比例                      
-                    toheight = originalImage.Height * mode.Width / originalImage.Width;
-                    break;
-                case "H"://指定高，宽按比例  
-                    towidth = originalImage.Width * mode.Height / originalImage.Height;
-                    break;
-                case "Cut"://指定高宽裁减（不变形）                  
-                    if ((double)originalImage.Width / (double)originalImage.Height > (double)towidth / (double)toheight)
-                    {
-                        oh = originalImage.Height;
-                        ow = originalImage.Height * towidth / toheight;
-                        y = 0;
-                        x = (originalImage.Width - ow) / 2;
-                    }
-                    else
-                    {
-                        ow = originalImage.Width;
-                        oh = originalImage.Width * mode.Height / towidth;
-                        x = 0;
-                        y = (originalImage.Height - oh) / 2;
-                    }
-                    break;
-                default:
-                    break;
+                towidth = ow;
+                toheight = oh;
+            }
+            else
+            {
+                switch (mode.Mode)
+                {
+                    case "HW"://指定高宽缩放（可能变形）                  
+                        break;
+                    case "W"://指定宽，高按比例                      
+                        toheight = originalImage.Height * mode.Width / originalImage.Width;
+                        break;
+                    case "H"://指定高，宽按比例  
+                        towidth = originalImage.Width * mode.Height / originalImage.Height;
+                        break;
+                    case "Cut"://指定高宽裁减（不变形）                  
+                        if ((double)originalImage.Width / (double)originalImage.Height > (double)towidth / (double)toheight)
+                        {
+                            oh = originalImage.Height;
+                            ow = originalImage.Height * towidth / toheight;
+                            y = 0;
+                            x = (originalImage.Width - ow) / 2;
+                        }
+                        else
+                        {
+                            ow = originalImage.Width;
+                            oh = originalImage.Width * mode.Height / towidth;
+                            x = 0;
+                            y = (originalImage.Height - oh) / 2;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
             Image bitmap = new Bitmap(towidth, toheight);//新建一个bmp图片  
             Graphics g = Graphics.FromImage(bitmap);//新建一个画板  
@@ -311,8 +319,13 @@ namespace EGT_OTA.Controllers
                 ps = new EncoderParameters(1);
                 p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 80L);
                 ps.Param[0] = p;
-                ImageCodecInfo ii = GetCodecInfo("image/jpeg");
 
+                var mineType = "image/jpeg";
+                if (originalImage.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Gif))
+                {
+                    mineType = "image/gif";
+                }
+                ImageCodecInfo ii = GetCodecInfo(mineType);
                 bitmap.Save(thumbnailPath, ii, ps);
 
                 //bitmap.Save(thumbnailPath, System.Drawing.Imaging.ImageFormat.Jpeg);

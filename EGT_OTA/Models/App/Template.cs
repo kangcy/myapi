@@ -180,6 +180,11 @@ namespace EGT_OTA.Models
         /// 容器内间距（0：内外间距,1：外间距,2：内间距,3：无间距）
         /// </summary>
         public int PaddingFixed { get; set; }
+
+        /// <summary>
+        /// 显示标题（-1：不显示,其他显示）
+        /// </summary>
+        public int ShowTitle { get; set; }
     }
 
     /// <summary>

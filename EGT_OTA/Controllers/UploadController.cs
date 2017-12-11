@@ -11,6 +11,7 @@ using EGT_OTA.Helper.Config;
 using System.Drawing;
 using EGT_OTA.Models;
 using System.Drawing.Imaging;
+using System.Threading;
 
 namespace EGT_OTA.Controllers
 {
@@ -105,13 +106,47 @@ namespace EGT_OTA.Controllers
             var error = string.Empty;
             try
             {
+                var mimeType = "";
                 string stream = ZNRequest.GetString("str");
-                stream = stream.IndexOf("data:image/jpeg;base64,") > -1 ? stream.Replace("data:image/jpeg;base64,", "") : stream;
+                if (string.IsNullOrWhiteSpace(mimeType))
+                {
+                    if (stream.IndexOf("data:image/gif;base64,") > -1)
+                    {
+                        stream = stream.Replace("data:image/gif;base64,", "");
+                        mimeType = "image/gif";
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(mimeType))
+                {
+                    if (stream.IndexOf("data:image/jpeg;base64,") > -1)
+                    {
+                        stream = stream.Replace("data:image/jpeg;base64,", "");
+                    }
+                    if (stream.IndexOf("data:image/png;base64,") > -1)
+                    {
+                        stream = stream.Replace("data:image/png;base64,", "");
+                    }
+                    if (stream.IndexOf("data:image/bmp;base64,") > -1)
+                    {
+                        stream = stream.Replace("data:image/bmp;base64,", "");
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(mimeType))
+                {
+                    mimeType = "image/jpeg";
+                }
+
                 System.IO.MemoryStream ms = new System.IO.MemoryStream(Convert.FromBase64String(stream));
                 string random = DateTime.Now.ToString("yyyyMMddHHmmss") + new Random().Next(10000);
 
                 string standards = ZNRequest.GetString("standard");///缩略图规格名称
                 string number = ZNRequest.GetString("Number");
+
+                if (string.IsNullOrWhiteSpace(standards))
+                {
+                    standards = "Article";
+                }
 
                 var filename = random + ".jpg";
 
@@ -161,11 +196,10 @@ namespace EGT_OTA.Controllers
                 ps = new EncoderParameters(1);
                 p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 80L);
                 ps.Param[0] = p;
-                ImageCodecInfo ii = GetCodecInfo("image/jpeg");
+                ImageCodecInfo ii = GetCodecInfo(mimeType);
                 image2.Save(savePath + "\\" + filename.Replace(".", "_0."), ii, ps);
                 image2.Dispose();
                 ms.Close();
-
                 return Json(new
                 {
                     result = true,
@@ -183,7 +217,6 @@ namespace EGT_OTA.Controllers
                 message = ""
             }, JsonRequestBehavior.AllowGet);
         }
-
 
         /// <summary>
         /// 带缩略图上传

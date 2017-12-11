@@ -1667,7 +1667,7 @@
         div.className = 'edit-body fl mt10';
         var model = [];
         if (type == "pic") {
-            model.push('<img src="../Back/Images/btn_pic.png" class="edit-add-border" style="position:absolute;top:0;left:11.5rem;width:2rem;z-index:1;" />');
+            model.push('<img src="../Back/Images/btn_pic.png" class="edit-add-border" style="position:absolute;top:0;left:47%;width:2rem;z-index:1;" />');
         }
         model.push('<img src="../Back/Images/btn_up.png" class="edit-up hide" /><img src="../Back/Images/btn_down.png" class="edit-down hide" /><img src="../Back/Images/btn_x.png" class="edit-del" partid="' + partid + '" />')
         if (type == "pic") {
@@ -1886,7 +1886,7 @@
                 $body.classList.remove("well2");
                 $edit.classList.add("temp");
                 break;
-            case 2:
+            case 3:
                 $body.classList.remove("well2");
                 $edit.classList.remove("temp");
                 break;
@@ -2104,6 +2104,8 @@
                     default:
                         break;
                 }
+                $body.classList.add("well2");
+                $edit.classList.add("temp");
             }
         }
     }
@@ -2278,7 +2280,7 @@
                             div.setAttribute("name", x.Cover);
                             div.setAttribute("tid", x.ID);
                             div.setAttribute("model", JSON.stringify(x));
-                            div.innerHTML = '<img src="' + x.ThumbImage + '" /><div class="tip f12">' + x.Name + '</div><div class="hover"></div>';
+                            div.innerHTML = '<img src="' + x.ThumbImage + '" /><div class="tip f12 ' + (x.ShowTitle < 0 ? "hide" : "") + '">' + x.Name + '</div><div class="hover"></div>';
                             fragment.appendChild(div);
                         });
                         base.Get("temp-slide").innerHTML = "";
@@ -2315,7 +2317,6 @@
                             base.Get("nickname1").style.color = CurrTemplateJson.UserColor;
                             base.Get("createdate0").style.color = CurrTemplateJson.TimeColor;
                             base.Get("views0").style.color = CurrTemplateJson.ViewColor;
-                            //$avatarbg.style.border = "2px solid " + CurrTemplateJson.TitleColor;
                             ChangeBg();
                         });
                     }
@@ -2357,7 +2358,6 @@
                             base.Get("nickname1").style.color = CurrColorTemplateJson.UserColor;
                             base.Get("createdate0").style.color = CurrColorTemplateJson.TimeColor;
                             base.Get("views0").style.color = CurrColorTemplateJson.ViewColor;
-                            //$avatarbg.style.border = "2px solid " + CurrColorTemplateJson.TitleColor;
                         });
                     }
                 }
