@@ -683,6 +683,11 @@
     <Content Include="Images\Cover\background_wildoliva_img.png" />
     <Content Include="Images\Cover\background_wooddesk_img.jpg" />
     <Content Include="Images\Cover\background_woven_img.png" />
+    <Content Include="Images\Cover\bg_pic_border.png" />
+    <Content Include="Images\Cover\bg_text_border.png" />
+    <Content Include="Images\Cover\bg_title_border.png" />
+    <Content Include="Images\Cover\pic_mp_head.png" />
+    <Content Include="Images\Cover\pic_mt_foot.png" />
     <Content Include="Images\draw.png" />
     <Content Include="Images\Line\hrgif001.gif" />
     <Content Include="Images\Line\hrgif002.gif" />
@@ -1041,6 +1046,7 @@
     <Content Include="Images\Source\Template\07-2.jpg" />
     <Content Include="Images\Source\Template\背景色色值.txt" />
     <Content Include="Images\Source\temp\000000000000000000002.jpg" />
+    <Content Include="Images\template-selected.png" />
     <Content Include="Images\User\cover01.png" />
     <Content Include="Images\User\avatar01.png" />
     <Content Include="Images\User\sysavatar1.jpg" />
