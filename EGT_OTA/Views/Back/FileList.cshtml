@@ -1,0 +1,145 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@using EGT_OTA.Models
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/zTree/zTreeStyle/zTreeStyle.css")" />
+    <style type="text/css">
+        .swiper-slide {
+            width: auto;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+    </style>
+}
+<div class="el-card box-card">
+    <div class="el-card__header">
+        <div class="clearfix">
+            <p>文件列表(@(ViewBag.RecordCount))</p>
+            <div class="el-form-item inline fl mr15">
+                <div class="el-form-item__content">
+                    <div class="el-input el-input--small">
+                        <input id="nickname" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.nickname)">
+                    </div>
+                </div>
+            </div>
+            <div class="el-form-item inline fl mr15">
+                <div class="el-form-item__content">
+                    <div class="el-input el-input--small">
+                        <input id="usernumber" placeholder="创建日期" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
+                    </div>
+                </div>
+            </div>
+            <div class="full fl mt5">
+                <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
+                <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="el-card__body">
+        <div class="swiper-container" id="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition f12 tc">
+                        <div style="width: 30%; display: inline-block; float: left;">
+                            <div class="ztree" id="ItemsTree"></div>
+                        </div>
+                        <div style="width: 70%; display: inline-block; float: left;" id="list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="divPager" align="center" style="margin-top: 30px;"></div>
+    </div>
+</div>
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/jquery.js")"></script>
+    <script src="@Url.Content("~/Scripts/zTree/jquery.ztree.core.js")"></script>
+    <script type="text/javascript">
+        var isloading = false;
+
+        $(document).ready(function () {
+            var currentIndex = parseInt(@(ViewBag.CurrPage));
+            var recordCount = parseInt(@(ViewBag.RecordCount));
+            var pageSize = parseInt(@(ViewBag.PageSize));
+
+            @*$("#divPager").myPagination({
+                currPage: currentIndex,
+                pageCount: Math.ceil(recordCount / pageSize),
+                pageSize: pageSize,
+                links: 'javascript:void(0);',
+                cssStyle: 'jogger',
+                ajax: {
+                    on: false,
+                    onClick: function (page) {
+                        ZENG.msgbox.show(" 正在加载" + page + "页，请稍后...", 6, 1000);
+                        var param = {
+                            page: page,
+                            rows: pageSize,
+                            nickname: $("#nickname").val().trim(),
+                            usernumber: $("#usernumber").val().trim(),
+                            status: $("#status").attr("index"),
+                            isrecommend: $("#isrecommend").attr("index"),
+                            ispay: $("#ispay").attr("index"),
+                            sex: $("#sex").attr("index")
+                        }
+                        window.location.href = "@(ViewBag.RootUrl)" + "Back/FileList?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
+                    }
+                }
+            });*@
+
+            $("#search").click(function () {
+                var param = {
+                    page: 1,
+                    rows: pageSize,
+                    nickname: $("#nickname").val().trim(),
+                    usernumber: $("#usernumber").val().trim()
+                }
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/FileList?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)&" + $.param(param)
+            })
+
+            $("#reset").click(function () {
+                window.location.href = "@(ViewBag.RootUrl)" + "Back/FileList?key=@(ViewBag.key)&xwp=@(ViewBag.xwp)"
+            })
+
+            GetTree();
+        });
+
+        //加载左边树
+        var divTree;
+        function GetTree() {
+            $.ajax({
+                url: "@(ViewBag.RootUrl)Back/FileTree",
+                dataType: "json",
+                success: function (data) {
+                    var setting = {
+                        view: {
+                            expandSpeed: "",
+                            titleClickOpenChildren: true,
+                            selectedMulti: false
+                        },
+                        callback: {
+                            onClick: zTreeOnClick
+                        }
+                    };
+                    divTree = $.fn.zTree.init($("#ItemsTree"), setting, data.treeNodes);
+                }
+            });
+        }
+
+        function zTreeOnClick(event, treeId, treeNode) {
+            console.log(treeNode.fullName);
+            var $list = $("#list");
+            $list.empty();
+            $.ajax({
+                url: "@(ViewBag.RootUrl)Back/SubFileTree",
+                data: { url: treeNode.fullName },
+                dataType: "json",
+                success: function (data) {
+                    $.each(data.rows, function (i, item) {
+                        $list.append("<img src=" + item.FullName + " />");
+                    })
+                }
+            });
+        };
+    </script>
+}

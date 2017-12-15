@@ -259,7 +259,8 @@ namespace EGT_OTA.Controllers
                     //    image = WaterMark(image, user);
                     //}
 
-                    image.Save(savePath + "\\" + filename.Replace(".", "_0."));
+                    ThumbImage(image, savePath + "\\" + filename.Replace(".", "_0."), 720);
+                    //image.Save(savePath + "\\" + filename.Replace(".", "_0."));
 
                     #region  生成缩略图
 
@@ -300,6 +301,121 @@ namespace EGT_OTA.Controllers
                 result = true,
                 message = url.Count == 0 ? "" : string.Join(",", url)
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 重置图片大小
+        /// </summary>
+        public ActionResult ResizeImage()
+        {
+            var date = ZNRequest.GetString("date");
+            var standard = ZNRequest.GetString("standard");
+            if (string.IsNullOrWhiteSpace(standard))
+            {
+                standard = "Article";
+            }
+            string folderPath = "";
+            if (string.IsNullOrWhiteSpace(date))
+            {
+                folderPath = Server.MapPath("~/Upload/Images/" + standard);
+            }
+            else
+            {
+                folderPath = Server.MapPath("~/Upload/Images/" + standard + "/" + date);
+            }
+            ThumbDirectory(folderPath);
+            return Content("成功");
+        }
+
+        public void ThumbDirectory(string folderPath)
+        {
+            DirectoryInfo folder = new DirectoryInfo(folderPath);
+            //子目录
+            foreach (DirectoryInfo d in folder.GetDirectories())
+            {
+                ThumbDirectory(folderPath + "/" + d.Name);
+            }
+            //子文件
+            foreach (FileInfo f in folder.GetFiles())
+            {
+                Image img = Image.FromFile(f.FullName, true);
+                if (f.Name.IndexOf("_0") > 0)
+                {
+                    ThumbImage(img, f.FullName, 720);
+                }
+                if (f.Name.IndexOf("_1") > 0)
+                {
+                    ThumbImage(img, f.FullName, 500);
+                }
+                if (f.Name.IndexOf("_2") > 0)
+                {
+                    ThumbImage(img, f.FullName, 350);
+                }
+                Thread.Sleep(500);
+            }
+        }
+
+        public void ThumbImage(Image originalImage, string thumbnailPath, int modewidth)
+        {
+            if (originalImage == null)
+            {
+                return;
+            }
+            int towidth = modewidth;
+            int toheight = 0;
+            int x = 0;
+            int y = 0;
+            int ow = originalImage.Width;//原图宽度
+            int oh = originalImage.Height;//原图高度
+            if (ow < modewidth)
+            {
+                towidth = ow;
+                toheight = oh;
+                originalImage.Dispose();
+                return;
+            }
+            else
+            {
+                //指定宽，高按比例                      
+                toheight = originalImage.Height * modewidth / originalImage.Width;
+            }
+
+            //新建一个bmp图片 
+            using (Bitmap bitmap = new Bitmap(towidth, toheight))
+            {
+                //新建一个画板 
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;//设置高质量插值法  
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;//设置高质量,低速度呈现平滑程度  
+                    g.Clear(Color.Transparent);//清空画布并以透明背景色填充  
+                    g.DrawImage(originalImage, new Rectangle(0, 0, towidth, toheight), new Rectangle(x, y, ow, oh), GraphicsUnit.Pixel);//在指定位置并且按指定大小绘制原图片的指定部分  
+                }
+                var mineType = "image/jpeg";
+                if (originalImage.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Gif))
+                {
+                    mineType = "image/gif";
+                }
+                if (originalImage.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Png))
+                {
+                    mineType = "image/png";
+                }
+                originalImage.Dispose();
+                try
+                {
+                    EncoderParameter p;
+                    EncoderParameters ps;
+                    ps = new EncoderParameters(1);
+                    p = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 90L);
+                    ps.Param[0] = p;
+                    ImageCodecInfo ii = GetCodecInfo(mineType);
+                    bitmap.Save(thumbnailPath, ii, ps);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
         }
     }
 }

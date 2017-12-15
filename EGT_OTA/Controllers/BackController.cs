@@ -10,6 +10,8 @@ using EGT_OTA.Controllers.Filter;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Globalization;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace EGT_OTA.Controllers
 {
@@ -1336,6 +1338,139 @@ namespace EGT_OTA.Controllers
             ViewBag.key = ZNRequest.GetString("key");
             ViewBag.xwp = ZNRequest.GetString("xwp");
             return View();
+        }
+
+        /// <summary>
+        /// 文件管理
+        /// </summary>
+        [BackPower]
+        public ActionResult FileList()
+        {
+            ViewBag.RootUrl = System.Configuration.ConfigurationManager.AppSettings["base_url"];
+            ViewBag.key = ZNRequest.GetString("key");
+            ViewBag.xwp = ZNRequest.GetString("xwp");
+
+            JsonObject message = new JsonObject();
+            StringWriter sw = new StringWriter();
+            JsonWriter writer = new JsonTextWriter(sw);
+            writer.WriteStartObject();
+            writer.WritePropertyName("treeNodes");
+            writer.WriteStartArray();
+            DirectoryInfo folder = new DirectoryInfo(System.Web.HttpContext.Current.Server.MapPath("~/Upload/"));
+
+            DirectoryInfo[] chldFolders = folder.GetDirectories();
+            foreach (DirectoryInfo chldFolder in chldFolders)
+            {
+                BuildFileChildNodes(chldFolder, writer, "~/Upload/");
+            }
+            writer.WriteEndArray();
+            writer.WriteEndObject();
+            writer.Flush();
+            writer.Close();
+            ViewBag.Tree = sw.GetStringBuilder().ToString();
+            return View();
+        }
+
+        #endregion
+
+        #region
+
+        /// <summary>
+        /// 文件树
+        /// </summary>
+        public void FileTree()
+        {
+            JsonObject message = new JsonObject();
+            StringWriter sw = new StringWriter();
+            JsonWriter writer = new JsonTextWriter(sw);
+            writer.WriteStartObject();
+            writer.WritePropertyName("treeNodes");
+            writer.WriteStartArray();
+            DirectoryInfo folder = new DirectoryInfo(System.Web.HttpContext.Current.Server.MapPath("~/Upload/"));
+            var baseurl = "~/Upload";
+            DirectoryInfo[] chldFolders = folder.GetDirectories();
+            foreach (DirectoryInfo chldFolder in chldFolders)
+            {
+                BuildFileChildNodes(chldFolder, writer, baseurl);
+            }
+            writer.WriteEndArray();
+            writer.WriteEndObject();
+            writer.Flush();
+            writer.Close();
+            ZNResponse.ResponseJson(sw.GetStringBuilder().ToString());
+        }
+
+        /// <summary>
+        /// 文件列表
+        /// </summary>
+        public void SubFileTree()
+        {
+            var fileUrl = ZNRequest.GetString("url");
+            FileInfo[] fileInfo = new FileInfo[] { };
+            if (!string.IsNullOrEmpty(fileUrl))
+            {
+                DirectoryInfo theFolder = new DirectoryInfo(System.Web.HttpContext.Current.Server.MapPath(fileUrl));
+                fileInfo = theFolder.GetFiles();
+            }
+            StringWriter sw = new StringWriter();
+            JsonWriter writer = new JsonTextWriter(sw);
+            writer.WriteStartObject();
+            writer.WritePropertyName("page");
+            writer.WriteValue(1);
+            writer.WritePropertyName("records");
+            writer.WriteValue(fileInfo.Count());
+            writer.WritePropertyName("total");
+            writer.WriteValue(1);
+            writer.WritePropertyName("rows");
+            writer.WriteStartArray();
+
+            fileInfo = fileInfo.Reverse().ToArray();
+            foreach (FileInfo file in fileInfo)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("ID");
+                writer.WriteValue(file.Name);
+                writer.WritePropertyName("FullName");
+                writer.WriteValue(fileUrl + "/" + file.Name);
+                //writer.WriteValue(file.FullName);
+                writer.WriteEndObject();
+            }
+            writer.WriteEndArray();
+            writer.WriteEndObject();
+            writer.Flush();
+            writer.Close();
+            ZNResponse.ResponseJson(sw.GetStringBuilder().ToString());
+        }
+
+        /// <summary>
+        /// 递归属性类型的json对象
+        /// </summary>
+        protected void BuildFileChildNodes(DirectoryInfo o, JsonWriter writer, string baseurl)
+        {
+            writer.WriteStartObject();
+            writer.WritePropertyName("id");
+            writer.WriteValue(o.Name);
+            writer.WritePropertyName("name");
+            writer.WriteValue(o.Name);
+            writer.WritePropertyName("parentID");
+            writer.WriteValue(o.Name);
+            writer.WritePropertyName("fullName");
+            //writer.WriteValue(o.FullName);
+            writer.WriteValue(baseurl + "/" + o.Name);
+            writer.WritePropertyName("open");
+            writer.WriteValue(true);
+            DirectoryInfo[] chldFolders = o.GetDirectories();
+            if (chldFolders.Length > 0)
+            {
+                writer.WritePropertyName("childs");
+                writer.WriteStartArray();
+                foreach (DirectoryInfo chldFolder in chldFolders)
+                {
+                    BuildFileChildNodes(chldFolder, writer, baseurl + "/" + o.Name);
+                }
+                writer.WriteEndArray();
+            }
+            writer.WriteEndObject();
         }
 
         #endregion
