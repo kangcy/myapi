@@ -1373,7 +1373,7 @@ namespace EGT_OTA.Controllers
 
         #endregion
 
-        #region
+        #region  文件
 
         /// <summary>
         /// 文件树
@@ -1386,8 +1386,8 @@ namespace EGT_OTA.Controllers
             writer.WriteStartObject();
             writer.WritePropertyName("treeNodes");
             writer.WriteStartArray();
-            DirectoryInfo folder = new DirectoryInfo(System.Web.HttpContext.Current.Server.MapPath("~/Upload/"));
-            var baseurl = "~/Upload";
+            DirectoryInfo folder = new DirectoryInfo(System.Web.HttpContext.Current.Server.MapPath("~/Upload/Images/"));
+            var baseurl = "Upload/Images";
             DirectoryInfo[] chldFolders = folder.GetDirectories();
             foreach (DirectoryInfo chldFolder in chldFolders)
             {
@@ -1409,7 +1409,7 @@ namespace EGT_OTA.Controllers
             FileInfo[] fileInfo = new FileInfo[] { };
             if (!string.IsNullOrEmpty(fileUrl))
             {
-                DirectoryInfo theFolder = new DirectoryInfo(System.Web.HttpContext.Current.Server.MapPath(fileUrl));
+                DirectoryInfo theFolder = new DirectoryInfo(System.Web.HttpContext.Current.Server.MapPath("~/" + fileUrl));
                 fileInfo = theFolder.GetFiles();
             }
             StringWriter sw = new StringWriter();
@@ -1427,13 +1427,15 @@ namespace EGT_OTA.Controllers
             fileInfo = fileInfo.Reverse().ToArray();
             foreach (FileInfo file in fileInfo)
             {
-                writer.WriteStartObject();
-                writer.WritePropertyName("ID");
-                writer.WriteValue(file.Name);
-                writer.WritePropertyName("FullName");
-                writer.WriteValue(fileUrl + "/" + file.Name);
-                //writer.WriteValue(file.FullName);
-                writer.WriteEndObject();
+                if (file.Name.IndexOf("_2") > 0)
+                {
+                    writer.WriteStartObject();
+                    writer.WritePropertyName("ID");
+                    writer.WriteValue(file.Name);
+                    writer.WritePropertyName("FullName");
+                    writer.WriteValue(Base_Url + fileUrl + "/" + file.Name);
+                    writer.WriteEndObject();
+                }
             }
             writer.WriteEndArray();
             writer.WriteEndObject();
@@ -1455,7 +1457,6 @@ namespace EGT_OTA.Controllers
             writer.WritePropertyName("parentID");
             writer.WriteValue(o.Name);
             writer.WritePropertyName("fullName");
-            //writer.WriteValue(o.FullName);
             writer.WriteValue(baseurl + "/" + o.Name);
             writer.WritePropertyName("open");
             writer.WriteValue(true);

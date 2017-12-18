@@ -14,41 +14,16 @@
 <div class="el-card box-card">
     <div class="el-card__header">
         <div class="clearfix">
-            <p>文件列表(@(ViewBag.RecordCount))</p>
-            <div class="el-form-item inline fl mr15">
-                <div class="el-form-item__content">
-                    <div class="el-input el-input--small">
-                        <input id="nickname" placeholder="用户编号" size="small" type="text" class="el-input__inner" value="@(ViewBag.nickname)">
-                    </div>
-                </div>
-            </div>
-            <div class="el-form-item inline fl mr15">
-                <div class="el-form-item__content">
-                    <div class="el-input el-input--small">
-                        <input id="usernumber" placeholder="创建日期" size="small" type="text" class="el-input__inner" value="@(ViewBag.usernumber)">
-                    </div>
-                </div>
-            </div>
-            <div class="full fl mt5">
-                <button type="button" class="el-button el-button--primary" id="search"><span>查询</span></button>
-                <button type="button" class="el-button el-button--default" id="reset"><span>重置</span></button>
-            </div>
+            <p id="name">文件列表</p>
         </div>
     </div>
     <div class="el-card__body">
-        <div class="swiper-container" id="swiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition f12 tc">
-                        <div style="width: 30%; display: inline-block; float: left;">
-                            <div class="ztree" id="ItemsTree"></div>
-                        </div>
-                        <div style="width: 70%; display: inline-block; float: left;" id="list"></div>
-                    </div>
-                </div>
+        <div class="el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition f12 tc">
+            <div style="width: 30%; display: inline-block; float: left;">
+                <div class="ztree" id="ItemsTree"></div>
             </div>
+            <div style="width: 70%; display: inline-block; float: left;" id="list"></div>
         </div>
-        <div id="divPager" align="center" style="margin-top: 30px;"></div>
     </div>
 </div>
 @section Scripts{
@@ -102,6 +77,10 @@
             })
 
             GetTree();
+
+            $(".cover").live("click", function () {
+                window.open(this.getAttribute("src").replace("_2", "_0"));
+            })
         });
 
         //加载左边树
@@ -127,7 +106,6 @@
         }
 
         function zTreeOnClick(event, treeId, treeNode) {
-            console.log(treeNode.fullName);
             var $list = $("#list");
             $list.empty();
             $.ajax({
@@ -135,8 +113,10 @@
                 data: { url: treeNode.fullName },
                 dataType: "json",
                 success: function (data) {
+                    document.body.scrollTop = document.documentElement.scrollTop = 0;
+                    $("#name").html("文件列表(" + data.rows.length + ")");
                     $.each(data.rows, function (i, item) {
-                        $list.append("<img src=" + item.FullName + " />");
+                        $list.append("<img src=" + item.FullName + " style='width:30%;margin:10px;float:left;' class='cover' />");
                     })
                 }
             });
