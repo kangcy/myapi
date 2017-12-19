@@ -716,7 +716,7 @@
                                 </div>
                             </div>
                             <div class="article-meta full tc" id="x-article">
-                                <p class="article-title thicker f20" id="title0" contenteditable="true"></p>
+                                <p class="article-title thicker f20 well2" id="title0" contenteditable="true"></p>
                                 <p class="time-read mt10 f13">
                                     <span id="createdate0"></span>
                                     <span id="nickname0" class="user hide"></span>
@@ -1906,12 +1906,12 @@
 
         UpdateShowy(CurrTemplateJson.Showy);
 
-        base.Get("x-cover").classList.remove("x-cover");
         $top.classList.add("hide");
         $bottom.classList.add("hide");
         $body.style.margin = "0";
         $wrapper.style.color = "#333";
         $wrapper.style.backgroundColor = "";
+        $wrapper1.classList.remove("x-cover");
         $wrapper1.style.background = "";
         $cover.style.backgroundColor = "";
         $cover1.style.backgroundColor = "";
@@ -2003,7 +2003,7 @@
             }
 
             if (CurrTemplateJson.CoverFixed == 0) {
-                base.Get("x-cover").classList.add("x-cover");
+                $wrapper1.classList.add("x-cover");
                 if (!base.IsNullOrEmpty(CurrTemplateJson.BackgroundImage)) {
                     var imglist = [];
                     var imgs = CurrTemplateJson.BackgroundImage.split('?');

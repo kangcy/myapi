@@ -106,6 +106,11 @@
         }
 
         function zTreeOnClick(event, treeId, treeNode) {
+            if (isloading) {
+                return;
+            }
+            isloading = true;
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
             var $list = $("#list");
             $list.empty();
             $.ajax({
@@ -113,7 +118,7 @@
                 data: { url: treeNode.fullName },
                 dataType: "json",
                 success: function (data) {
-                    document.body.scrollTop = document.documentElement.scrollTop = 0;
+                    isloading = false;
                     $("#name").html("文件列表(" + data.rows.length + ")");
                     $.each(data.rows, function (i, item) {
                         $list.append("<img src=" + item.FullName + " style='width:30%;margin:10px;float:left;' class='cover' />");
