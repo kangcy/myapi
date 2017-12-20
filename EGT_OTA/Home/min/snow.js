@@ -5,7 +5,6 @@ var snow = new function() {
 	this.init = function(src, count, type) {
 		this.snowimg = src;
 		this.snowcount = parseInt(count);
-
 		switch(parseInt(type)) {
 			//通用
 			case 0:
@@ -55,23 +54,49 @@ var snow = new function() {
 			case 11:
 				this.snow11();
 				break;
+				//元宝
+			case 12:
+				this.snow12();
+				break;
+				//心形(向上)
+			case 13:
+				this.snow13();
+				break;
+				//心形(向上)
+			case 14:
+				this.snow14();
+				break;
+				//下雪
+			case 15:
+				this.snow15();
+				break;
+				//下雪
+			case 16:
+				this.snow16();
+				break;
+				//烟花
+			case 17:
+				this.snow17();
+				break;
 			default:
 				break;
 		}
-	};
+	}
 
 	//清除
 	this.clear = function() {
 		clearInterval(snowinterval);
-		document.getElementById("snowwrapper").innerHTML = "";
-		var canvas = document.getElementById("snowcanvas");
-		var cxt = canvas.getContext("2d");
-		cxt.clearRect(0, 0, canvas.width, canvas.height);
-	};
+		setTimeout(function() {
+			document.getElementById("snowwrapper").innerHTML = "";
+			var canvas = document.getElementById("snowcanvas");
+			var cxt = canvas.getContext("2d");
+			cxt.clearRect(0, 0, canvas.width, canvas.height);
+		}, 500);
+	}
 	//通用
 	this.snow0 = function() {
 		var c = null,
-			d = null, 
+			d = null,
 			img = null,
 			e = window.innerWidth,
 			f = window.innerHeight,
@@ -87,8 +112,8 @@ var snow = new function() {
 					img.style.top = c.y + "px";
 				}
 			}
-			b();
-		};
+			b()
+		}
 
 		function b() {
 			j += .01;
@@ -111,18 +136,18 @@ var snow = new function() {
 					d: b.d
 				})
 			}
-		};
+		}
 		img = new Image();
 		img.src = this.snowimg;
 		img.style.position = "fixed";
-		img.classList.add("flowimg");
+		img.classList.add("flowimg")
 		img.style.zIndex = 300;
 		img.onload = function() {
 			c = document.getElementById("snowwrapper");
 			if(c) {
 				c.width = e, c.height = f;
 				for(g = 8, h = [], i = 0; g > i; i++) {
-					var imgclone = img.cloneNode();
+					var imgclone = img.cloneNode()
 					imgclone.style.width = (Math.random() * 5 + 20) + "px";
 					c.appendChild(imgclone);
 					h.push({
@@ -133,10 +158,10 @@ var snow = new function() {
 						img: imgclone
 					});
 				}
-				snowinterval = setInterval(a, 25);
+				snowinterval = setInterval(a, 25)
 			}
-		};
-	};
+		}
+	}
 	//气球
 	this.snow1 = function() {
 		var snowimg = this.snowimg;
@@ -159,7 +184,7 @@ var snow = new function() {
 			k.style.webkitAnimationDuration = a + "s";
 			k.style.animationDuration = a + "s";
 			k.style.webkitAnimationIterationCount = "infinite";
-			k.style.animationIterationCount = "infinite";
+			k.style.animationIterationCount = "infinite"
 			k.style.webkitAnimationTimingFunction = "ease-in-out";
 			k.style.animationTimingFunction = "ease-in-out";
 			k.style.animationName = "ballon_i";
@@ -170,11 +195,11 @@ var snow = new function() {
 			j.style.left = -0 + "vw";
 			j.appendChild(k);
 			return j;
-		};
+		}
 		var d = 1;
 		var c = document.getElementById("snowwrapper");
 		snowinterval = setInterval(function() {
-			var b = 15 + 25 * Math.random();
+			var b = 15 + 25 * Math.random()
 			var d = a(b);
 			d.style.left = 90 * Math.random() - 10 + "px";
 			d.style.top = -40 * Math.random() + 140 + "vh";
@@ -189,9 +214,11 @@ var snow = new function() {
 			d.style.animationName = "ballon_d";
 			d.style.webkitAnimationName = "ballon_d";
 			c.appendChild(d);
-			c.children.length > 10 && clearInterval(snowinterval);
-		}, 200);
-	};
+			if(c.children.length >= 10) {
+				clearInterval(snowinterval)
+			}
+		}, 200)
+	}
 	//心形
 	this.snow2 = function() {
 		var snowimg = this.snowimg;
@@ -223,13 +250,13 @@ var snow = new function() {
 			j.style.height = 1 * g + "px";
 			j.style.position = "absolute";
 			j.style.left = "-20vw";
-			j.appendChild(k);
+			j.appendChild(k)
 			return j;
-		};
+		}
 		var d = 1;
 		var c = document.getElementById("snowwrapper");
 		snowinterval = setInterval(function() {
-			var b = 5 + 15 * Math.random();
+			var b = 5 + 15 * Math.random()
 			var d = a(b);
 			d.style.left = "-50px";
 			d.style.top = 700 * Math.random() + 100 + "px";
@@ -244,9 +271,9 @@ var snow = new function() {
 			d.style.animationName = "dandelion_d";
 			d.style.webkitAnimationName = "dandelion_d";
 			c.appendChild(d);
-			c.children.length > 15 && clearInterval(snowinterval);
-		}, 200);
-	};
+			c.children.length >= 15 && clearInterval(snowinterval)
+		}, 200)
+	}
 	//泡泡
 	this.snow3 = function() {
 		var snowimg = this.snowimg;
@@ -277,9 +304,9 @@ var snow = new function() {
 			h.style.height = 1 * f + "px";
 			h.style.position = "absolute";
 			h.style.left = "-20vw";
-			h.appendChild(j);
+			h.appendChild(j)
 			return h;
-		};
+		}
 		var c = document.getElementById("snowwrapper");
 		snowinterval = setInterval(function() {
 			var b = 5 + 15 * Math.random();
@@ -295,9 +322,9 @@ var snow = new function() {
 			e.style.position = "fixed", e.style.animationName = "dandelion_d";
 			e.style.webkitAnimationName = "dandelion_d";
 			c.appendChild(e);
-			c.children.length > 10 && clearInterval(snowinterval);
-		}, 200);
-	};
+			c.children.length >= 10 && clearInterval(snowinterval)
+		}, 200)
+	}
 	//黑泡泡
 	this.snow4 = function() {
 		var snowimg = this.snowimg;
@@ -331,7 +358,7 @@ var snow = new function() {
 			h.style.left = 0;
 			h.appendChild(j);
 			return h;
-		};
+		}
 		var c = document.getElementById("snowwrapper");
 		snowinterval = setInterval(function() {
 			var b = 5 + 15 * Math.random(),
@@ -348,18 +375,18 @@ var snow = new function() {
 			e.style.animationName = "dandelion_d";
 			e.style.webkitAnimationName = "dandelion_d";
 			c.appendChild(e);
-			c.children.length > 15 && clearInterval(snowinterval);
-		}, 200);
-	};
+			c.children.length >= 15 && clearInterval(snowinterval)
+		}, 200)
+	}
 	//小雪
 	this.snow5 = function() {
 		function a() {
 			d.clearRect(0, 0, e, f), d.fillStyle = "rgba(255, 255, 255, .7)", d.beginPath();
 			for(var a = 0; g > a; a++) {
 				var c = h[a];
-				d.moveTo(c.x, c.y), d.arc(c.x, c.y, c.r, 0, 2 * Math.PI, !0), d.shadowOffsetX = e, d.shadowOffsetY = 0, d.shadowColor = "#000", d.shadowBlur = 100;
+				d.moveTo(c.x, c.y), d.arc(c.x, c.y, c.r, 0, 2 * Math.PI, !0), d.shadowOffsetX = e, d.shadowOffsetY = 0, d.shadowColor = "#000", d.shadowBlur = 100
 			}
-			d.fill(), b();
+			d.fill(), b()
 		}
 
 		function b() {
@@ -397,18 +424,18 @@ var snow = new function() {
 				d: Math.random() * g
 			});
 			var j = 0;
-			snowinterval = setInterval(a, 33);
+			snowinterval = setInterval(a, 33)
 		}
-	};
+	}
 	//小雨
 	this.snow6 = function() {
 		function a() {
 			d.clearRect(0, 0, e, f), d.fillStyle = "rgba(255, 255, 255, .5)", d.beginPath();
 			for(var a = 0; g > a; a++) {
 				var c = h[a];
-				d.moveTo(c.x, c.y), d.rect(c.x, c.y, .5, c.r);
+				d.moveTo(c.x, c.y), d.rect(c.x, c.y, .5, c.r)
 			}
-			d.fill(), b();
+			d.fill(), b()
 		}
 
 		function b() {
@@ -432,34 +459,32 @@ var snow = new function() {
 					d: b.d
 				})
 			}
-		};
+		}
 		var c = document.getElementById("snowcanvas");
 		if(c) {
 			var d = c.getContext("2d"),
 				e = window.innerWidth,
 				f = window.innerHeight;
 			c.width = e, c.height = f;
-			for(var g = 50, h = [], i = 0; g > i; i++) {
-				h.push({
-					x: Math.random() * e,
-					y: Math.random() * f,
-					r: 25 * Math.random() + 10,
-					d: Math.random() * g
-				});
-			}
+			for(var g = 25, h = [], i = 0; g > i; i++) h.push({
+				x: Math.random() * e,
+				y: Math.random() * f,
+				r: 25 * Math.random() + 10,
+				d: Math.random() * g
+			});
 			var j = 0;
-			snowinterval = setInterval(a, 33);
+			snowinterval = setInterval(a, 33)
 		}
-	};
+	}
 	//暴雨
 	this.snow7 = function() {
 		function a() {
 			d.clearRect(0, 0, e, f), d.fillStyle = "rgba(255, 255, 255, .6)", d.beginPath();
 			for(var a = 0; g > a; a++) {
 				var c = h[a];
-				d.moveTo(c.x, c.y), d.rect(c.x, c.y, .5, c.r);
+				d.moveTo(c.x, c.y), d.rect(c.x, c.y, .5, c.r)
 			}
-			d.fill(), b();
+			d.fill(), b()
 		}
 
 		function b() {
@@ -483,34 +508,32 @@ var snow = new function() {
 					d: b.d
 				})
 			}
-		};
+		}
 		var c = document.getElementById("snowcanvas");
 		if(c) {
 			var d = c.getContext("2d"),
 				e = window.innerWidth,
 				f = window.innerHeight;
 			c.width = e, c.height = f;
-			for(var g = 50, h = [], i = 0; g > i; i++) {
-				h.push({
-					x: Math.random() * e,
-					y: Math.random() * f,
-					r: 20 * Math.random() + 30,
-					d: Math.random() * g
-				});
-			}
+			for(var g = 50, h = [], i = 0; g > i; i++) h.push({
+				x: Math.random() * e,
+				y: Math.random() * f,
+				r: 20 * Math.random() + 30,
+				d: Math.random() * g
+			});
 			var j = 0;
-			snowinterval = setInterval(a, 20);
+			snowinterval = setInterval(a, 20)
 		}
-	};
+	}
 	//暴雪
 	this.snow8 = function() {
 		function a() {
 			d.clearRect(0, 0, e, f), d.fillStyle = "rgba(255, 255, 255, .8)", d.beginPath();
 			for(var a = 0; g > a; a++) {
 				var c = h[a];
-				d.moveTo(c.x, c.y), d.arc(c.x, c.y, c.r, 0, 2 * Math.PI, !0), d.shadowOffsetX = e, d.shadowOffsetY = 0, d.shadowColor = "#000", d.shadowBlur = 100;
+				d.moveTo(c.x, c.y), d.arc(c.x, c.y, c.r, 0, 2 * Math.PI, !0), d.shadowOffsetX = e, d.shadowOffsetY = 0, d.shadowColor = "#000", d.shadowBlur = 100
 			}
-			d.fill(), b();
+			d.fill(), b()
 		}
 
 		function b() {
@@ -534,25 +557,23 @@ var snow = new function() {
 					d: b.d
 				})
 			}
-		};
+		}
 		var c = document.getElementById("snowcanvas");
 		if(c) {
 			var d = c.getContext("2d"),
 				e = window.innerWidth,
 				f = window.innerHeight;
 			c.width = e, c.height = f;
-			for(var g = 65, h = [], i = 0; g > i; i++) {
-				h.push({
-					x: Math.random() * e,
-					y: Math.random() * f,
-					r: 6 * Math.random() + 1,
-					d: Math.random() * g
-				});
-			}
+			for(var g = 50, h = [], i = 0; g > i; i++) h.push({
+				x: Math.random() * e,
+				y: Math.random() * f,
+				r: 6 * Math.random() + 1,
+				d: Math.random() * g
+			});
 			var j = 0;
-			snowinterval = setInterval(a, 6);
+			snowinterval = setInterval(a, 20)
 		}
-	};
+	}
 	//红包
 	this.snow9 = function() {
 		var snowimg = this.snowimg;
@@ -574,7 +595,7 @@ var snow = new function() {
 			h.style.left = Math.random() * (d - f) + "px";
 			h.appendChild(j);
 			return h;
-		};
+		}
 		var d = window.innerWidth;
 		var c = document.getElementById("snowwrapper");
 		snowinterval = setInterval(function() {
@@ -588,9 +609,9 @@ var snow = new function() {
 			b.style.animationTimingFunction = "linear", b.style.zIndex = 300;
 			b.style.position = "fixed";
 			b.classList.add("particles_class"), c.appendChild(b);
-			c.children.length > 15 && clearInterval(snowinterval);
+			c.children.length >= 15 && clearInterval(snowinterval)
 		}, 200);
-	};
+	}
 	//爆竹
 	this.snow10 = function() {
 		var snowimg = this.snowimg;
@@ -601,8 +622,8 @@ var snow = new function() {
 				g = 120 * Math.random() + -60,
 				h = document.createElement("div"),
 				j = document.createElement("img");
-			return j.src = a, j.style.width = "100%", j.style.height = "100%", j.style.transform = "rotate(" + g + "deg)", j.style.opacity = 1, h.style.width = f + "px", h.style.height = 2.46 * f + "px", h.style.position = "absolute", h.style.left = Math.random() * (d - f) + "px", h.appendChild(j), h;
-		};
+			return j.src = a, j.style.width = "100%", j.style.height = "100%", j.style.transform = "rotate(" + g + "deg)", j.style.opacity = 1, h.style.width = f + "px", h.style.height = 2.46 * f + "px", h.style.position = "absolute", h.style.left = Math.random() * (d - f) + "px", h.appendChild(j), h
+		}
 		var d = window.innerWidth;
 		var c = document.getElementById("snowwrapper");
 		snowinterval = setInterval(function() {
@@ -618,10 +639,10 @@ var snow = new function() {
 			b.style.position = "fixed";
 			b.classList.add("particles_class");
 			c.appendChild(b);
-			c.children.length > 30 && clearInterval(snowinterval);
+			c.children.length >= 30 && clearInterval(snowinterval)
 		}, 200);
-	};
-	//元宝
+	}
+	//元宝1
 	this.snow11 = function() {
 		var snowimg = this.snowimg;
 
@@ -631,8 +652,8 @@ var snow = new function() {
 				g = Math.random(),
 				h = document.createElement("div"),
 				j = document.createElement("img");
-			return j.src = a, j.style.width = "100%", j.style.height = "100%", j.style.transform = "rotate(" + g + "deg)", j.style.opacity = 1, h.style.width = f + "px", h.style.height = .77 * f + "px", h.style.position = "absolute", h.style.left = Math.random() * (d - f) + "px", h.appendChild(j), h;
-		};
+			return j.src = a, j.style.width = "100%", j.style.height = "100%", j.style.transform = "rotate(" + g + "deg)", j.style.opacity = 1, h.style.width = f + "px", h.style.height = .77 * f + "px", h.style.position = "absolute", h.style.left = Math.random() * (d - f) + "px", h.appendChild(j), h
+		}
 		var c = document.getElementById("snowwrapper");
 		var d = window.innerWidth;
 		snowinterval = setInterval(function() {
@@ -648,7 +669,327 @@ var snow = new function() {
 			b.style.position = "fixed";
 			b.classList.add("particles_class");
 			c.appendChild(b);
-			c.children.length > 15 && clearInterval(snowinterval);
+			c.children.length >= 15 && clearInterval(snowinterval)
 		}, 200);
 	};
+	//元宝2
+	this.snow12 = function() {
+		var snowimg = this.snowimg;
+		var c = document.getElementById("snowwrapper");
+
+		function a() {
+			var money = document.createElement("div");
+			var width = (Math.random() * 0.5 + 0.5) * 40;
+			var height = width * 0.62;
+			money.style.backgroundImage = "url(" + snowimg + ")";
+			money.style.backgroundSize = "100% 100%";
+			money.style.width = width + "px";
+			money.style.height = height + "px";
+			money.style.transform = "rotate(" + Math.random() * 360 + "deg)";
+			money.style.webkitTransform = "rotate(" + Math.random() * 360 + "deg)";
+			money.style.right = Math.random() * 100 + "%";
+			money.style.position = "absolute";
+			return money;
+		};
+		snowinterval = setInterval(function() {
+			var b = a();
+			b.style.webkitAnimationName = Math.random() > 0.5 ? "toleft" : "toright";
+			b.style.animationName = Math.random() > 0.5 ? "toleft" : "toright";
+			b.style.webkitAnimationDuration = 2 + Math.random() * 4 + "s";
+			b.style.animationDuration = 2 + Math.random() * 4 + "s";
+			b.style.webkitAnimationIterationCount = "infinite";
+			b.style.animationIterationCount = "infinite";
+			b.style.webkitAnimationTimingFunction = "linear";
+			b.style.animationTimingFunction = "linear";
+			c.appendChild(b);
+			if(c.children.length >= 10) {
+				clearInterval(snowinterval)
+			}
+		}, 200);
+	};
+	//心形(向上)
+	this.snow13 = function() {
+		var snowimg = this.snowimg;
+		var snowcount = this.snowcount;
+		var c = document.getElementById("snowwrapper");
+		var d = window.innerWidth;
+		var num = 1;
+
+		function a() {
+			var snowpic = snowimg;
+			if(snowcount > 1) {
+				snowpic = snowpic.replace(".png", (num > snowcount ? num = 1 : num++) + ".png");
+			}
+			var size = Math.random() * 15 + 20;
+			var exam = (size - 10) / 6;
+			var snow = document.createElement("div");
+			var pic = document.createElement("img");
+			pic.src = snowpic;
+			if(Math.random() > 0.5) {
+				imganimation = "swing";
+			} else {
+				imganimation = "scale";
+			};
+			pic.style.webkitAnimationName = imganimation;
+			pic.style.animationName = imganimation;
+			pic.style.webkitAnimationDuration = 6 + Math.random() * 4 + "s";
+			pic.style.animationDuration = 6 + Math.random() * 4 + "s";
+			pic.style.webkitAnimationIterationCount = "infinite";
+			pic.style.animationIterationCount = "infinite";
+			pic.style.webkitAnimationTimingFunction = "linear";
+			pic.style.animationTimingFunction = "linear";
+			pic.style.webkitAnimationDirection = "reverse";
+			pic.style.animationDirection = "reverse";
+			pic.style.width = "100%";
+			pic.style.opacity = ((exam * 6) + 4) / 10;
+			snow.style.width = size + "px";
+			snow.style.height = size + "px";
+			snow.style.position = "absolute";
+			snow.style.left = Math.random() * d + "px";
+			snow.style.webkitAnimationName = "toTop";
+			snow.style.animationName = "toTop";
+			snow.style.position = "fixed";
+			snow.classList.add("heart");
+			snow.appendChild(pic);
+			return snow;
+		}
+		snowinterval = setInterval(function() {
+			var b = a();
+			b.style.animationDelay = 0;
+			b.style.animationIterationCount = "infinite";
+			b.style.animationTimingFunction = "linear";
+			b.style.animationDuration = "10s";
+			b.style.zIndex = 10;
+			c.appendChild(b);
+			c.children.length >= 10 && clearInterval(snowinterval)
+		}, 1000);
+	};
+	//心形(向下)
+	this.snow14 = function() {
+		var snowimg = this.snowimg;
+		var snowcount = this.snowcount;
+		var c = document.getElementById("snowwrapper");
+		var d = window.innerWidth;
+		var num = 1;
+
+		function a() {
+			var snowpic = snowimg;
+			if(snowcount > 1) {
+				snowpic = snowpic.replace(".png", (num > snowcount ? num = 1 : num++) + ".png");
+			}
+			var size = Math.random() * 15 + 20;
+			var exam = (size - 10) / 6;
+			var snow = document.createElement("div");
+			var pic = document.createElement("img");
+			pic.src = snowpic;
+			if(Math.random() > 0.5) {
+				imganimation = "swing";
+			} else {
+				imganimation = "scale";
+			};
+			pic.style.webkitAnimationName = imganimation;
+			pic.style.animationName = imganimation;
+			pic.style.webkitAnimationDuration = 6 + Math.random() * 4 + "s";
+			pic.style.animationDuration = 6 + Math.random() * 4 + "s";
+			pic.style.webkitAnimationIterationCount = "infinite";
+			pic.style.animationIterationCount = "infinite";
+			pic.style.webkitAnimationTimingFunction = "linear";
+			pic.style.animationTimingFunction = "linear";
+			pic.style.webkitAnimationDirection = "reverse";
+			pic.style.animationDirection = "reverse";
+			pic.style.width = "100%";
+			pic.style.opacity = ((exam * 6) + 4) / 10;
+			snow.style.width = size + "px";
+			snow.style.height = size + "px";
+			snow.style.position = "absolute";
+			snow.style.left = Math.random() * d + "px";
+			snow.style.webkitAnimationName = "toBottom";
+			snow.style.animationName = "toBottom";
+			snow.style.position = "fixed";
+			snow.classList.add("heart");
+			snow.appendChild(pic);
+			return snow;
+		}
+		snowinterval = setInterval(function() {
+			var b = a();
+			b.style.animationDelay = 0;
+			b.style.animationIterationCount = "infinite";
+			b.style.animationTimingFunction = "linear";
+			b.style.animationDuration = "10s";
+			b.style.zIndex = 10;
+			c.appendChild(b);
+			c.children.length >= 10 && clearInterval(snowinterval)
+		}, 1000);
+	};
+
+	//雪花
+	this.snow15 = function() {
+		var snowimg = this.snowimg;
+		var snowcount = this.snowcount;
+		var c = document.getElementById("snowwrapper");
+		var d = window.innerWidth;
+
+		function a() {
+			var size = Math.random() * 6 + 10;
+			var exam = (size - 10) / 6;
+			var snow = document.createElement("div");
+			var pic = document.createElement("img");
+			pic.src = snowimg;
+			if(Math.random() > 0.5) {
+				imganimation = "rotate";
+			} else {
+				imganimation = "clock";
+			};
+			pic.style.webkitAnimationName = imganimation;
+			pic.style.animationName = imganimation;
+			pic.style.webkitAnimationDuration = 2 + Math.random() * 4 + "s";
+			pic.style.animationDuration = 2 + Math.random() * 4 + "s";
+			pic.style.webkitAnimationIterationCount = "infinite";
+			pic.style.animationIterationCount = "infinite";
+			pic.style.webkitAnimationTimingFunction = "ease-in-out";
+			pic.style.animationTimingFunction = "ease-in-out";
+			pic.style.webkitAnimationDirection = "alternate";
+			pic.style.animationDirection = "alternate";
+			pic.style.width = "100%";
+			pic.style.height = "100%";
+			pic.style.opacity = ((exam * 6) + 4) / 10;
+			snow.style.width = size + "px";
+			snow.style.height = size + "px";
+			snow.style.position = "absolute";
+			snow.style.left = Math.random() * d + "px";
+			if(Math.random() > 0.5) {
+				divanimation = "toleft";
+			} else {
+				divanimation = "toright";
+			};
+			snow.style.webkitAnimationName = divanimation;
+			snow.style.animationName = divanimation;
+			snow.appendChild(pic);
+			return snow;
+		}
+
+		snowinterval = setInterval(function() {
+			var snow = a();
+			snow.style.top = "-20px";
+			snow.style.webkitAnimationDuration = 12 + Math.random() * 4 + "s";
+			snow.style.animationDuration = 12 + Math.random() * 4 + "s";
+			snow.style.webkitAnimationIterationCount = "infinite";
+			snow.style.animationIterationCount = "infinite";
+			snow.style.webkitAnimationTimingFunction = "linear";
+			snow.style.animationTimingFunction = "linear";
+			c.appendChild(snow);
+			if(c.children.length >= snowcount) {
+				clearInterval(snowinterval);
+			}
+
+		}, 300);
+	};
+	//雪花
+	this.snow16 = function() {
+		var snowimg = this.snowimg;
+		var snowcount = this.snowcount;
+		var c = document.getElementById("snowwrapper");
+		var d = window.innerWidth;
+
+		function a() {
+			var size = Math.random() * 6 + 10;
+			var exam = (size - 10) / 6;
+			var snow = document.createElement("div");
+			var pic = document.createElement("img");
+			pic.src = snowimg;
+			if(Math.random() > 0.5) {
+				imganimation = "rotate";
+			} else {
+				imganimation = "clock";
+			};
+			pic.style.webkitAnimationName = imganimation;
+			pic.style.animationName = imganimation;
+			pic.style.webkitAnimationDuration = 2 + Math.random() * 4 + "s";
+			pic.style.animationDuration = 2 + Math.random() * 4 + "s";
+			pic.style.webkitAnimationIterationCount = "infinite";
+			pic.style.animationIterationCount = "infinite";
+			pic.style.webkitAnimationTimingFunction = "ease-in-out";
+			pic.style.animationTimingFunction = "ease-in-out";
+			pic.style.webkitAnimationDirection = "alternate";
+			pic.style.animationDirection = "alternate";
+			pic.style.width = "100%";
+			pic.style.height = "100%";
+			pic.style.opacity = ((exam * 6) + 4) / 10;
+			snow.style.width = size + "px";
+			snow.style.height = size + "px";
+			snow.style.position = "absolute";
+			snow.style.left = Math.random() * d + "px";
+			if(Math.random() > 0.5) {
+				divanimation = "toleft";
+			} else {
+				divanimation = "toright";
+			};
+			snow.style.webkitAnimationName = divanimation;
+			snow.style.animationName = divanimation;
+			snow.appendChild(pic);
+			return snow;
+		}
+		snowinterval = setInterval(function() {
+			var snow = a();
+			snow.style.top = "-20px";
+			snow.style.webkitAnimationDuration = 12 + Math.random() * 4 + "s";
+			snow.style.animationDuration = 12 + Math.random() * 4 + "s";
+			snow.style.webkitAnimationIterationCount = "infinite";
+			snow.style.animationIterationCount = "infinite";
+			snow.style.webkitAnimationTimingFunction = "linear";
+			snow.style.animationTimingFunction = "linear";
+			c.appendChild(snow);
+			if(c.children.length >= snowcount) {
+				clearInterval(snowinterval);
+			}
+		}, 200);
+	};
+	//烟花
+	this.snow17 = function() {
+		var snowimg = this.snowimg; //https://ss2.meipian.me/theme/v2/img/springFestival/02_yanhua.png
+		var snowcount = this.snowcount;
+		var yanhua = document.getElementById("yanhua");
+		if(!yanhua) {
+			yanhua = document.createElement("div");
+			yanhua.setAttribute("id", "yanhua");
+			yanhua.style.width = "100%";
+			yanhua.style.height = "100%";
+			yanhua.style.position = "fixed";
+			yanhua.style.zIndex = "2";
+			yanhua.style.left = "0";
+			yanhua.style.top = "0";
+			yanhua.style.pointerEvents = "none";
+			yanhua.style.overflow = "hidden";
+		}
+		document.body.appendChild(yanhua);
+		snowinterval = setInterval(function() {
+			yanhua.innerHTML = "";
+			var pic = snowimg;
+			if(snowcount > 1) {
+				pic = pic.replace(".png", (num > snowcount ? num = 1 : num++) + ".png");
+			}
+			var item = document.createElement("img");
+			item.setAttribute("src", pic);
+			item.style.top = (Math.random() * 40) + "%";
+			item.style.left = (Math.random() * 100) + "%";
+			item.style.width = "auto";
+			item.style.position = "absolute";
+			item.style.transform = "scale(0)";
+			item.style.webkitTransform = "scale(0)";
+			item.style.animationName = "yanhua";
+			item.style.webkitAnimationName = "yanhua";
+			item.style.animationDuration = "2s";
+			item.style.webkitAnimationDuration = "2s";
+			item.style.animationFillMode = "none";
+			item.style.webkitAnimationIterationCount = "1";
+			item.style.animationIterationCount = "1";
+			yanhua.appendChild(item);
+		}, 3000)
+	};
 }
+
+/*snow.snow0("http://www.xiaoweipian.com/Images/Showy/04/07.png")
+		snow.snow9();
+		mui.later(function() {
+			snow.clear();
+		}, 5000)*/

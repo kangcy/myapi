@@ -885,6 +885,7 @@
     var CurrColorTemplate = 0; //当前主题色模板
     var CurrTemplateJson = null; // 当前模板设置
     var CurrColorTemplateJson = null; // 当前模板设置
+    var CurrTxtBorder = 0;
 
     var $header = base.Get("header");
     var $wrapper = base.Get("wrapper0"); //内容父背景（放图片背景色）
@@ -1063,6 +1064,7 @@
         }
     ]
 
+    //图片边框
     var borders = [{
         tip: "拍立得(一)",
         name: "border_bottomshadow"
@@ -1177,19 +1179,72 @@
     }, {
         tip: "简约黑木",
         name: "border_blackwood"
-    }, {
-        tip: "线条边框1",
-        name: "border_mess"
-    }, {
-        tip: "线条边框2",
-        name: "border_inner"
-    }, {
-        tip: "线条边框3",
-        name: "border_inner1"
-    }, {
-        tip: "线条边框4",
-        name: "border_inner2"
     }];
+    //文字边框
+    var txtborders = [
+        {
+            id: -1,
+            name: ""
+        }, {
+            id: 0,
+            name: "txtbordergold1"
+        }, {
+            id: 1,
+            name: "txtbordergold2"
+        }, {
+            name: "txtbordergold3"
+        }, {
+            id: 2,
+            name: "txtbordergreen1"
+        }, {
+            id: 3,
+            name: "txtbordergold1"
+        }, {
+            id: 4,
+            name: "txtbordergold2"
+        }, {
+            id: 5,
+            name: "txtbordergold3"
+        }, {
+            id: 6,
+            name: "txtborderlinear1"
+        }, {
+            id: 7,
+            name: "txtborderlinear2"
+        }, {
+            id: 8,
+            name: "txtborderbrackets"
+        }, {
+            id: 9,
+            name: "txtborderdotted"
+        }, {
+            id: 10,
+            name: "border_whitesharp"
+        }, {
+            id: 11,
+            name: "txtbordergainsboromt"
+        }, {
+            id: 12,
+            name: "txtborderblue8"
+        }, {
+            id: 13,
+            name: "txtbordergreen7"
+        }, {
+            id: 14,
+            name: "txtbordergreen9"
+        }, {
+            id: 15,
+            name: "txtborder_mess"
+        }, {
+            id: 16,
+            name: "txtborder_inner"
+        }, {
+            id: 17,
+            name: "txtborder_inner1"
+        }, {
+            id: 18,
+            name: "txtborder_inner2"
+        }];
 
     window.onload = function () {
         $editor.style.height = initHeight - 175 - 60 + "px";
@@ -1351,7 +1406,7 @@
             ShowLine();
         });
 
-        //新增边框
+        //新增图片边框
         $('#edit').on('click', '.edit-add-border', function () {
             $("#edit").find(".icons").addClass("hide");
             $("#edit").find(".edit-add").removeClass("hide");
@@ -1360,6 +1415,27 @@
             currEditPartID = $this.parents(".edit-body").find(".edit-content").attr("partid");
             var src = $this.parents(".edit-body").find(".edit-content").find("img").attr("src");
             ShowBorder(src);
+        });
+
+        //新增文本边框
+        $('#edit').on('click', '.edit-add-txtborder', function () {
+            var $this = $(this);
+            currEditID = $this.parents(".edit-body").find(".edit-content").attr("id");
+            currEditPartID = $this.parents(".edit-body").find(".edit-content").attr("partid");
+            //var src = $this.parents(".edit-body").find(".edit-content").find(".edit").attr("src");
+            CurrTxtBorder = CurrTxtBorder >= txtborders.length - 1 ? 0 : CurrTxtBorder + 1;
+            console.log(CurrTxtBorder);
+            var name = txtborders[CurrTxtBorder].name;
+            base.Get(currEditID).setAttribute("txtborder", name);
+            $("#" + currEditID).find(".edit")[0].className = "edit f12 tl " + name;
+            $.each(InitParts, function (index, item) {
+                if (item.ID == currEditPartID) {
+                    InitParts[index].IntroExpand = name;
+                    if (InitParts[index].Status != 1) {
+                        InitParts[index].Status = 2;
+                    }
+                }
+            });
         });
 
         //选中分隔
@@ -1599,7 +1675,7 @@
     function AddBorder(item) {
         var name = item.getAttribute("name");
         base.Get(currEditID).setAttribute("border", name);
-        base.Get(currEditID).className = "edit-content f11 " + name;
+        base.Get(currEditID).className = "edit-content full f11 " + name;
         $.each(InitParts, function (index, item) {
             if (item.ID == currEditPartID) {
                 InitParts[index].IntroExpand = name;
@@ -1666,7 +1742,10 @@
         div.className = 'edit-body fl mt10';
         var model = [];
         if (type == "pic") {
-            model.push('<img src="../Back/Images/btn_pic.png" class="edit-add-border" style="position:absolute;top:0;left:47%;width:2rem;z-index:1;" />');
+            model.push('<img src="../Back/Images/btn_pic.png" class="edit-add-border" style="position:absolute;top:0;left:47%;width:2rem;z-index:2;" />');
+        }
+        if (type == "text") {
+            model.push('<img src="../Back/Images/btn_pic.png" class="edit-add-txtborder" style="position:absolute;top:0;left:47%;width:2rem;z-index:2;" />');
         }
         model.push('<img src="../Back/Images/btn_up.png" class="edit-up hide" /><img src="../Back/Images/btn_down.png" class="edit-down hide" /><img src="../Back/Images/btn_x.png" class="edit-del" partid="' + partid + '" />')
         if (type == "pic") {
@@ -1928,7 +2007,7 @@
         $avatar.style.left = "0";
         $avatar.style.top = "0";
         $avatar.style.borderRadius = "50%";
-        $avatar.style.border = "";
+        //$avatar.style.border = "";
         $avatar.style.zIndex = "-1";
         $avatarbg.style.marginBottom = "1rem";
         if (CurrTemplateJson.ShowAvatar < 0) {
@@ -2367,6 +2446,7 @@
         base.Get("nickname1").style.color = temp.UserColor;
         base.Get("createdate0").style.color = temp.TimeColor;
         base.Get("views0").style.color = temp.ViewColor;
+        $avatar.style.border = "2px solid " + temp.TitleColor;
     }
 
     //确认模板

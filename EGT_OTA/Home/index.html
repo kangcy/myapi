@@ -15,7 +15,7 @@
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link href="css/animate.css" rel="stylesheet" />
 		<link href="css/loading.css" rel="stylesheet" />
-		<link href="css/articledetail.css" rel="stylesheet" />
+		<link href="css/articledetail.min.css" rel="stylesheet" />
 		<link href="css/input.css" rel="stylesheet" />
 		<link href="css/demo.css" rel="stylesheet" />
 	</head>
@@ -240,34 +240,34 @@
 				var wx_desc = "分享自「小微篇」";
 				var wx_icon = base.ShowThumb(data.Cover, 2);
 
-				var wx_appId = data.Share.AppID; 
-				var wx_timestamp = data.Share.TimeStr; 
-				var wx_nonceStr = data.Share.NonceStr; 
-				var wx_signature = data.Share.Signature; 
+				var wx_appId = data.Share.AppID;
+				var wx_timestamp = data.Share.TimeStr;
+				var wx_nonceStr = data.Share.NonceStr;
+				var wx_signature = data.Share.Signature;
 				if(!base.IsNullOrEmpty(wx_signature)) {
 					wx.config({
-						debug: false, 
-						appId: wx_appId, 
-						timestamp: wx_timestamp, 
-						nonceStr: wx_nonceStr, 
-						signature: wx_signature, 
-						jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] 
+						debug: false,
+						appId: wx_appId,
+						timestamp: wx_timestamp,
+						nonceStr: wx_nonceStr,
+						signature: wx_signature,
+						jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage']
 					});
 					wx.ready(function() {
 						wx.onMenuShareTimeline({
-							title: wx_title, 
-							link: wx_url, 
-							imgUrl: wx_icon, 
+							title: wx_title,
+							link: wx_url,
+							imgUrl: wx_icon,
 							success: function() {},
 							cancel: function() {
 								//用户取消分享后执行的回调函数
 							}
 						});
 						wx.onMenuShareAppMessage({
-							title: wx_title, 
+							title: wx_title,
 							desc: wx_desc,
-							link: wx_url, 
-							imgUrl: wx_icon, 
+							link: wx_url,
+							imgUrl: wx_icon,
 							type: '', // 分享类型,music、video或link，不填默认为link
 							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
 							success: function() {},
@@ -277,7 +277,7 @@
 						});
 					});
 					wx.error(function(res) {
-						
+
 					});
 				}
 
