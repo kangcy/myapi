@@ -200,6 +200,9 @@ video {
   left: 0;
   top: 0;
 }
+.edit-content {
+  position: relative;
+}
 #download-bar {
   width: 100%;
   max-width: 750px;

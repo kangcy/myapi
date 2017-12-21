@@ -1152,7 +1152,8 @@ div.wemedia_content.background_pink_rice_img .header-small-text .username a {
 	border-image-slice: 16 16 16 16;
 	border-image-repeat: repeat;
 	display: inline-block;
-	padding: 1.5rem 0.25rem 0.25rem 0.25rem;
+	padding: 2rem 0.25rem 0.25rem 0.25rem;
+	margin-top: 2rem;
 }
 
 .txtborder_inner:before {
@@ -1164,7 +1165,7 @@ div.wemedia_content.background_pink_rice_img .header-small-text .username a {
 	background-position: top right;
 	background-repeat: no-repeat;
 	position: absolute;
-	top: -2rem;
+	top: 0;
 	left: 0;
 	z-index: 1;
 }

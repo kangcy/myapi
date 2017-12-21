@@ -1749,10 +1749,10 @@
         if (type == "pic") {
             model.push('<div class="edit-content full f11 ' + expand + '" type="' + type + '" partid="' + partid + '" src="' + base.ShowThumb(text, 0) + '"><img src="' + base.ShowThumb(text, 1) + '" class="full" /></div>');
         } else if (type == "text") {
-            var html = document.createElement("div");
-            html.innerHTML = base.UnUnicodeText(text);
-            $(html).find(".edit").addClass(expand);
-            model.push('<div class="edit-content edit-content2 full f11 tl" type="' + type + '" partid="' + partid + '">' + html.innerHTML + '</div>');
+            var txtdiv = document.createElement("div");
+            txtdiv.innerHTML = base.UnUnicodeText(text);
+            $(txtdiv).find(".edit").addClass(expand);
+            model.push('<div class="edit-content edit-content2 full f11 tl" type="' + type + '" partid="' + partid + '">' + txtdiv.innerHTML + '</div>');
             //model.push('<div class="edit-content edit-content2 full f11 tl ' + expand + '" type="' + type + '" partid="' + partid + '">' + base.UnUnicodeText(text) + '</div>');
         } else if (type == "video") {
             model.push('<div class="edit-content edit-content2 f11 full tc" type="' + type + '" partid="' + partid + '" src="' + text + '"><img src="../Back/Images/video.png" /></div>');
