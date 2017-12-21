@@ -2,7 +2,8 @@
 //var RootUrl = "http://www.xiaoweipian.com/";
 //var RootUrl = "http://www.xiaoweipian.com:3000/api";
 var RootUrl = "http://localhost:3000/api";
-
+var key = "";
+var xwp = "";
 var MusicID = 0;
 var MusicUrl = "";
 var ArticleID = 0;
@@ -46,23 +47,21 @@ function InitReady() {
 		window.location.href = GetRootUrl() + "/u/" + this.getAttribute("userid");
 	});
 
-	window.addEventListener('scroll', function(e) {
-		if(!CurrTemplateJson) {
-			return;
-		}
+	if(CurrTemplateJson) {
 		if(CurrTemplateJson.CoverFixed == 2) {
-			//背景滚动视差
-			var top = document.documentElement.scrollTop || document.body.scrollTop;
-			//var top = $wrapper.scrollTop;
-			if(top >= 150) {
-				$wrapper2.style.opacity = 0;
-				$wrapper21.style.opacity = 1;
-			} else {
-				$wrapper2.style.opacity = 1 - top / 150;
-				$wrapper21.style.opacity = top / 150;
-			}
+			window.addEventListener('scroll', function(e) {
+				var top = document.documentElement.scrollTop || document.body.scrollTop;
+				//var top = $wrapper.scrollTop;
+				if(top >= 150) {
+					$wrapper2.style.opacity = 0;
+					$wrapper21.style.opacity = 1;
+				} else {
+					$wrapper2.style.opacity = 1 - top / 150;
+					$wrapper21.style.opacity = top / 150;
+				}
+			});
 		}
-	});
+	}
 }
 
 function ChangeMusic(index) {

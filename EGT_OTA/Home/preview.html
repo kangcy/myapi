@@ -28,7 +28,7 @@
 		<!--漂浮特效-->
 		<div id="snowwrapper"></div>
 		<canvas id="snowcanvas"></canvas>
-		<div class="bounceIn" id="download-bar">
+		<div class="bounceIn fl" id="download-bar">
 			<img src="img/logo_blue.png">
 			<span class="download-bar-text">
 					<span class="download-bar-text-title f14">小微篇</span>
@@ -101,7 +101,7 @@
 <script src="min/mui.min.js"></script>
 <script src="min/base.min.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
-<script src="min/article.js"></script>
+<script src="min/article.min.js"></script>
 <script type="text/javascript">
 	mui.init();
 
@@ -113,8 +113,8 @@
 		//});
 		InitReady();
 
-		var key = GetParameter("key");
-		var xwp = GetParameter("xwp");
+		key = GetParameter("key");
+		xwp = GetParameter("xwp");
 		if(base.IsNullOrEmpty(key) || base.IsNullOrEmpty(xwp)) {
 			base.Get("errormsg").innerText = "参数异常";
 			base.Get("error").classList.remove("hide");

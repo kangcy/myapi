@@ -49,7 +49,7 @@
 		</div>
 		<div id="snowwrapper"></div>
 		<canvas id="snowcanvas"></canvas>
-		<div class="bounceIn" id="download-bar">
+		<div class="bounceIn fl" id="download-bar">
 			<img src="img/logo_blue.png">
 			<span class="download-bar-text">
 					<span class="download-bar-text-title f14">小微篇</span>
@@ -58,44 +58,49 @@
 			<a href="javascript:void(0);" onclick="Download();" class="download-button f11">免费下载</a>
 		</div>
 		<div id="x-bg" class="hide"></div>
+		<div id="x-bg-base" class="hide" style="height:100%;opacity:0;"></div>
 		<div id="wrapper" class="full fl hide" style="position:relative;">
 			<img id="music1" class="hide" src="img/btn_music.png" onclick="switchsound()" />
 			<div class="root" id="x-cover">
 				<div id="x-top" class="full fl hide"></div>
-				<div class="x-head mb10 full fl hide" id="x-head">
-					<div class="img-container" id="x-avatar">
-						<div class="avatar" id="x-avatar-sub">
-							<img id="useravatar0" src="../images/avatar.png" class="user">
+				<div class="full fl well2 mb10" id="x-body">
+					<div class="x-head full fl hide" id="x-head">
+						<div class="img-container" id="x-avatar">
+							<div class="avatar" id="x-avatar-sub">
+								<img id="useravatar0" src="../images/avatar.png" class="user">
+							</div>
+						</div>
+						<div class="article-meta full tc" id="x-article">
+							<p class="article-title thicker f20 well2" id="title0"></p>
+							<p class="time-read mt10 f13">
+								<span id="createdate0"></span>
+								<span id="nickname0" class="user hide"></span>
+								<span class="read-count" id="views0"></span>
+							</p>
+							<p class="nickname mt10 f13 hide" id="nickname1"></p>
+							<p id="music0" play="on" class="music mt10 mb0 hide" onclick="switchsound()">
+								<span id="musicname0" class="f11"></span>
+							</p>
 						</div>
 					</div>
-					<div class="article-meta well mt20 tc" id="x-article">
-						<p class="title thicker f20" id="title0"></p>
-						<p class="time-read mt10 f13">
-							<span id="createdate0"></span>
-							<span id="nickname0" class="user hide"></span>
-							<span class="read-count" id="views0"></span>
-						</p>
-						<p class="nickname user mt10 f13 hide" id="nickname1"></p>
-						<p id="music0" play="on" class="music mt10 mb0 hide" onclick="switchsound()">
-							<span id="musicname0" class="f11"></span>
-						</p>
-					</div>
-				</div>
-				<div class="x-content well mb10 mt10 full fl" id="x-content">
-					<div class="section full" id="desc"></div>
-					<div class="section fl tl">
-						<div class="full fl" id="bottom">
-							<div class="comment fl hide" id="comment">
-								<div class="title">
-									<i class="fl color-lump" id="color-lump"></i>
-									<h2 class="fl f16" id="color-lump-text">最新评论</h2>
-								</div>
-								<div class="list" id="commentlist">
+					<div class="x-content mt10 full fl" id="x-content">
+						<div class="section full" id="desc"></div>
+						<div class="section fl tl">
+							<div class="full fl" id="bottom">
+
+								<div class="comment fl hide" id="comment">
+									<div class="title">
+										<i class="fl color-lump" id="color-lump"></i>
+										<h2 class="fl f16" id="color-lump-text">最新评论</h2>
+									</div>
+									<div class="list" id="commentlist">
+									</div>
 								</div>
 							</div>
 						</div>
+						<div class="x-bg-blur full" id="x-bg-blur"></div>
 					</div>
-					<div class="x-bg-blur" id="x-bg-blur"></div>
+					<div class="x-bg-blur" id="x-bg-blur1"></div>
 				</div>
 				<img id="x-bottom" class="full fl hide" />
 			</div>
@@ -109,7 +114,7 @@
 <script src="min/jweixin-1.0.0.js"></script>
 <script src="min/WeixinApi.js"></script>
 <script type="text/javascript" src="http://player.youku.com/jsapi"></script>
-<script src="min/article.js"></script>
+<script src="min/article.min.js"></script>
 <script type="text/javascript">
 	mui.init();
 
@@ -121,11 +126,11 @@
 
 		InitReady();
 
-		var key = GetParameter("key");
+		key = GetParameter("key");
 		if(base.IsNullOrEmpty(key)) {
 			return mui.toast("参数异常");
 		}
-		var xwp = GetParameter("xwp");
+		xwp = GetParameter("xwp");
 
 		LoadArticle(key, xwp, "");
 
