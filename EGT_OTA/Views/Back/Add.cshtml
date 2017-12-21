@@ -1422,9 +1422,7 @@
             var $this = $(this);
             currEditID = $this.parents(".edit-body").find(".edit-content").attr("id");
             currEditPartID = $this.parents(".edit-body").find(".edit-content").attr("partid");
-            //var src = $this.parents(".edit-body").find(".edit-content").find(".edit").attr("src");
             CurrTxtBorder = CurrTxtBorder >= txtborders.length - 1 ? 0 : CurrTxtBorder + 1;
-            console.log(CurrTxtBorder);
             var name = txtborders[CurrTxtBorder].name;
             base.Get(currEditID).setAttribute("txtborder", name);
             $("#" + currEditID).find(".edit")[0].className = "edit f12 tl " + name;
@@ -1751,7 +1749,11 @@
         if (type == "pic") {
             model.push('<div class="edit-content full f11 ' + expand + '" type="' + type + '" partid="' + partid + '" src="' + base.ShowThumb(text, 0) + '"><img src="' + base.ShowThumb(text, 1) + '" class="full" /></div>');
         } else if (type == "text") {
-            model.push('<div class="edit-content edit-content2 full f11 tl" type="' + type + '" partid="' + partid + '">' + base.UnUnicodeText(text) + '</div>');
+            var html = document.createElement("div");
+            html.innerHTML = base.UnUnicodeText(text);
+            $(html).find(".edit").addClass(expand);
+            model.push('<div class="edit-content edit-content2 full f11 tl" type="' + type + '" partid="' + partid + '">' + html.innerHTML + '</div>');
+            //model.push('<div class="edit-content edit-content2 full f11 tl ' + expand + '" type="' + type + '" partid="' + partid + '">' + base.UnUnicodeText(text) + '</div>');
         } else if (type == "video") {
             model.push('<div class="edit-content edit-content2 f11 full tc" type="' + type + '" partid="' + partid + '" src="' + text + '"><img src="../Back/Images/video.png" /></div>');
         } else if (type == "line") {

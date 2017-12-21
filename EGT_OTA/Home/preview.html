@@ -84,7 +84,7 @@
 							</div>
 						</div>
 						<!--半透明蒙层-->
-						<div class="x-bg-blur" id="x-bg-blur"></div>
+						<div class="x-bg-blur full" id="x-bg-blur"></div>
 					</div>
 					<!--半透明蒙层-->
 					<div class="x-bg-blur" id="x-bg-blur1"></div>
@@ -147,7 +147,7 @@
 		//    event.preventDefault();
 		//});
 		var topheight = base.Get("download-bar").clientHeight;
-		$wrapper.style.paddingTop = $wrapper2.style.top = topheight + "px";
+		$wrapper.style.paddingTop = $wrapper2.style.top = $wrapper21.style.top = topheight + "px";
 		base.Get("music1").style.top = (topheight + 20) + "px";
 		if(window.innerWidth > 750) {
 			base.Get("music1").style.right = (window.innerWidth - 750) / 2 + 18 + "px";
@@ -230,7 +230,10 @@
 						if(part.Types == 1) {
 							html.push('<div class="full f13 fl mt10 ' + part.IntroExpand + '"><img onload="LazyImg(this)" src="img/default.png" data-lazyload="' + base.ShowThumb(part.Introduction, 1) + '" class="full fl" /></div>');
 						} else if(part.Types == 2) {
-							html.push('<div class="full f13 fl mt10">' + UnUnicodeText(part.Introduction) + '</div>');
+							var div = document.createElement("div");
+							div.innerHTML = UnUnicodeText(part.Introduction);
+							$(div).find(".edit").addClass(part.IntroExpand);
+							html.push('<div class="full f13 fl mt10 edit-content">' + div.innerHTML + '</div>');
 						} else if(part.Types == 3) {
 							html.push('<div class="full f13 fl mt10 hide" style="display:inline-block;">' + AppendVideo(part.Introduction) + '</div>');
 						} else if(part.Types == 4) {
@@ -347,7 +350,7 @@
 			$head.style.marginTop = "3rem";
 		}
 
-		mui.each(mui(".edit"), function(i, item) {
+		mui.each(mui(".edit-content"), function(i, item) {
 			item.classList.remove("well2");
 		})
 
@@ -368,7 +371,7 @@
 			case 3:
 				$body.classList.remove("well2");
 				$edit.classList.remove("temp");
-				mui.each(mui(".edit"), function(i, item) {
+				mui.each(mui(".edit-content"), function(i, item) {
 					item.classList.add("well2");
 				})
 				break;

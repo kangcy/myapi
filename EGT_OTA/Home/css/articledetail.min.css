@@ -15,15 +15,6 @@
   -moz-border-radius: 2em;
   border-radius: 2em;
 }
-#snowcanvas {
-  pointer-events: none;
-  position: fixed;
-  z-index: 20;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-}
 #music1 {
   width: 1.8rem;
   height: 1.8rem;
@@ -84,6 +75,7 @@ video {
   position: fixed;
   height: 100%;
   width: 100%;
+  max-width: 750px;
 }
 .root {
   width: 100%;
@@ -153,7 +145,18 @@ video {
 .root .x-content .section.temp {
   padding: 0px 3% 3% 3%;
 }
-.root .well {
+.root .x-content .x-bg-blur {
+  /*background: rgba(27, 62, 85, 0.6);*/
+  width: 94%;
+  height: 100%;
+  z-index: -1;
+  top: 0;
+  -webkit-backdrop-filter: blur(12px);
+  position: absolute;
+  border-radius: 8px;
+}
+.root .well,
+.root .well2 {
   padding: 0 3%;
 }
 .root.x-cover {
@@ -164,6 +167,19 @@ video {
   display: inline-block;
   height: auto !important;
   float: left;
+}
+#x-body {
+  position: relative;
+}
+#x-body .x-bg-blur {
+  /*background: rgba(27, 62, 85, 0.6);*/
+  width: 94%;
+  height: 100%;
+  z-index: -1;
+  top: 0;
+  -webkit-backdrop-filter: blur(12px);
+  position: absolute;
+  border-radius: 8px;
 }
 #snowwrapper {
   width: 100%;
@@ -511,7 +527,4 @@ img {
 .summary img {
   width: 1rem !important;
   vertical-align: middle;
-}
-#x-bg {
-  max-width: 750px;
 }
