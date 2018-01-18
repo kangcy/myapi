@@ -248,10 +248,6 @@ namespace EGT_OTA.Controllers
                 }
                 else
                 {
-                    if (model.ArticlePower == Enum_ArticlePower.Public)
-                    {
-                        model.ArticlePower = Enum_ArticlePower.Myself;
-                    }
                     result = db.Update<Article>(model) > 0;
 
                     //取消自定义模板启用

@@ -28,9 +28,17 @@
 
     mui.ready(function () {
         console.log("aa");
+        console.log(window.navigator.userAgent)
+        console.log(window.plus)
     })
 
+    //document.addEventListener("plusready", function () {
+    //    alert("cc")
+    //});
     mui.plusReady(function () {
         console.log("bb");
+        setTimeout(function () {
+            plus.webview.currentWebview().close();
+        }, 3000)
     })
 </script>

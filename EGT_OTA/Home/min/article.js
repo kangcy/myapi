@@ -47,9 +47,9 @@ function InitReady() {
 		window.location.href = GetRootUrl() + "/u/" + this.getAttribute("userid");
 	});
 
-	if(CurrTemplateJson) {
-		if(CurrTemplateJson.CoverFixed == 2) {
-			window.addEventListener('scroll', function(e) {
+	window.addEventListener('scroll', function(e) {
+		if(CurrTemplateJson) {
+			if(CurrTemplateJson.CoverFixed == 2) {
 				var top = document.documentElement.scrollTop || document.body.scrollTop;
 				//var top = $wrapper.scrollTop;
 				if(top >= 150) {
@@ -59,9 +59,9 @@ function InitReady() {
 					$wrapper2.style.opacity = 1 - top / 150;
 					$wrapper21.style.opacity = top / 150;
 				}
-			});
+			}
 		}
-	}
+	});
 }
 
 function ChangeMusic(index) {
